@@ -101,9 +101,13 @@
     if (!content || content.length == 0) {
         return 60;
     }
-    else{
-        CGSize size = [content sizeWithFont:[UIFont systemFontOfSize:14.0] constrainedToSize:CGSizeMake(320 - 60 - 120, CGFLOAT_MAX) lineBreakMode:NSLineBreakByCharWrapping];
-        return size.height > 20 ? (size.height + 40) : 60;
+    else {
+        NSDictionary *attributes = @{NSFontAttributeName :[UIFont systemFontOfSize:14.0f]};
+        CGRect rect = [content boundingRectWithSize:CGSizeMake(320 - 60 - 120, CGFLOAT_MAX)
+                                            options:NSStringDrawingUsesLineFragmentOrigin
+                                         attributes:attributes
+                                            context:nil];
+        return rect.size.height > 20 ? (rect.size.height + 40) : 60;
     }
 }
 

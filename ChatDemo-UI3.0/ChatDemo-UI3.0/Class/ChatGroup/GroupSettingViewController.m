@@ -14,11 +14,13 @@
 
 @interface GroupSettingViewController ()
 {
-    EMGroup *_group;
     BOOL _isOwner;
     UISwitch *_pushSwitch;
     UISwitch *_blockSwitch;
 }
+
+@property (nonatomic, strong) EMGroup *group;
+
 
 @end
 
@@ -37,7 +39,7 @@
 {
     self = [self initWithStyle:UITableViewStylePlain];
     if (self) {
-        _group = group;
+        self.group = group;
         
         NSString *loginUsername = [[EMClient sharedClient] currentUsername];
         _isOwner = [_group.owner isEqualToString:loginUsername];
@@ -65,11 +67,11 @@
     
     _pushSwitch = [[UISwitch alloc] init];
     [_pushSwitch addTarget:self action:@selector(pushSwitchChanged:) forControlEvents:UIControlEventValueChanged];
-    [_pushSwitch setOn:_group.isPushNotificationEnabled animated:YES];
+    [_pushSwitch setOn:self.group.isPushNotificationEnabled animated:YES];
     
     _blockSwitch = [[UISwitch alloc] init];
     [_blockSwitch addTarget:self action:@selector(blockSwitchChanged:) forControlEvents:UIControlEventValueChanged];
-    [_blockSwitch setOn:_group.isBlocked animated:YES];
+    [_blockSwitch setOn:self.group.isBlocked animated:YES];
     
     self.tableView.tableFooterView = [[UIView alloc] init];
     [self.tableView reloadData];
@@ -174,7 +176,7 @@
     
     __weak GroupSettingViewController *weakSelf = self;
     dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), ^{
-        EMError *error = [[EMClient sharedClient].groupManager ignoreGroupPush:_group.groupId ignore:isIgnore];
+        EMError *error = [[EMClient sharedClient].groupManager ignoreGroupPush:weakSelf.group.groupId ignore:isIgnore];
         dispatch_async(dispatch_get_main_queue(), ^{
             [weakSelf hideHud];
             if (!error) {
@@ -207,13 +209,13 @@
 
 - (void)saveAction:(id)sender
 {
-    if (_blockSwitch.isOn != _group.isBlocked) {
+    if (_blockSwitch.isOn != self.group.isBlocked) {
         __weak typeof(self) weakSelf = self;
         [self showHudInView:self.view hint:NSLocalizedString(@"group.setting.save", @"set properties")];
         if (_blockSwitch.isOn) {
             dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), ^{
                 EMError *error;
-                [[EMClient sharedClient].groupManager blockGroup:_group.groupId error:&error];
+                [[EMClient sharedClient].groupManager blockGroup:self.group.groupId error:&error];
                 dispatch_async(dispatch_get_main_queue(), ^{
                     if (error) {
                         [weakSelf hideHud];
@@ -228,7 +230,7 @@
         else{
             dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), ^{
                 EMError *error;
-                [[EMClient sharedClient].groupManager unblockGroup:_group.groupId error:&error];
+                [[EMClient sharedClient].groupManager unblockGroup:self.group.groupId error:&error];
                 dispatch_async(dispatch_get_main_queue(), ^{
                     if (error) {
                         [weakSelf hideHud];

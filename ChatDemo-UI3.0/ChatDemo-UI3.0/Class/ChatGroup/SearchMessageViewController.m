@@ -21,7 +21,6 @@
 
 @interface SearchMessageViewController () <UISearchBarDelegate, UISearchDisplayDelegate, UITextFieldDelegate>
 {
-    dispatch_queue_t _searchQueue;
     void* _queueTag;
 }
 
@@ -39,6 +38,8 @@
 
 @property (assign, nonatomic) BOOL hasMore;
 
+@property (strong, nonatomic) dispatch_queue_t searchQueue;
+
 @end
 
 @implementation SearchMessageViewController
@@ -49,9 +50,9 @@
     self = [super init];
     if (self) {
         _conversation = [[EMClient sharedClient].chatManager getConversation:conversationId type:conversationType createIfNotExist:NO];
-        _searchQueue = dispatch_queue_create("com.hyphenate.search.message", DISPATCH_QUEUE_SERIAL);
+        self.searchQueue = dispatch_queue_create("com.hyphenate.search.message", DISPATCH_QUEUE_SERIAL);
         _queueTag = &_queueTag;
-        dispatch_queue_set_specific(_searchQueue, _queueTag, _queueTag, NULL);
+        dispatch_queue_set_specific(self.searchQueue, _queueTag, _queueTag, NULL);
         
     }
     return self;
@@ -200,13 +201,16 @@
         }];
         
         [_searchController setDidSelectRowAtIndexPathCompletion:^(UITableView *tableView, NSIndexPath *indexPath) {
+            
             [tableView deselectRowAtIndexPath:indexPath animated:YES];
+            
             if (indexPath.section == 0) {
                 EMMessage *message = [weakSelf.searchController.resultsSource objectAtIndex:indexPath.row];
             
                 SearchChatViewController *chatView = [[SearchChatViewController alloc] initWithConversationChatter:weakSelf.conversation.conversationId conversationType:weakSelf.conversation.type fromMessageId:message.messageId];
                 [weakSelf.navigationController pushViewController:chatView animated:YES];
-            } else {
+            }
+            else {
                 dispatch_block_t block = ^{ @autoreleasepool {
                     EMMessage *message = [weakSelf.searchController.resultsSource objectAtIndex:[weakSelf.searchController.resultsSource count]-1];
                     NSArray *results = [weakSelf.conversation loadMoreMessagesContain:weakSelf.searchBar.text before:message.timestamp limit:SEARCHMESSAGE_PAGE_SIZE from:weakSelf.textField.text direction:EMMessageSearchDirectionUp];
@@ -222,7 +226,7 @@
                         [weakSelf.searchController.searchResultsTableView reloadData];
                     });
                 }};
-                dispatch_async(_searchQueue, block);
+                dispatch_async(weakSelf.searchQueue, block);
             }
         }];
         
@@ -274,7 +278,7 @@
         });
     }};
     
-    dispatch_async(_searchQueue, block);
+    dispatch_async(self.searchQueue, block);
 }
 
 - (BOOL)searchBarShouldEndEditing:(UISearchBar *)searchBar

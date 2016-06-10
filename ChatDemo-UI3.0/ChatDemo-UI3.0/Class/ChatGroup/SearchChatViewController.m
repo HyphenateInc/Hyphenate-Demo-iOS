@@ -106,12 +106,7 @@
             return;
         }
         
-        NSArray *formattedMessages;
-        if ([weakSelf respondsToSelector:@selector(formatMessages:)]) {
-            formattedMessages = [weakSelf performSelector:@selector(formatMessages:) withObject:moreMessages];
-        } else {
-            formattedMessages = moreMessages;
-        }
+        NSArray *formattedMessages = moreMessages;
         
         NSInteger scrollToIndex = 0;
         

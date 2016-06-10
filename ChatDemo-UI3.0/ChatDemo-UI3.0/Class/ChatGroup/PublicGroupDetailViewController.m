@@ -169,9 +169,12 @@
         return 50;
     }
     else{
-        CGSize size = [_group.description sizeWithFont:[UIFont systemFontOfSize:15.0] constrainedToSize:CGSizeMake(220, MAXFLOAT) lineBreakMode:NSLineBreakByCharWrapping];
-        
-        return size.height > 30 ? (20 + size.height) : 50;
+        NSDictionary *attributes = @{NSFontAttributeName :[UIFont systemFontOfSize:15.0f]};
+        CGRect rect = [_group.description boundingRectWithSize:CGSizeMake(220, MAXFLOAT)
+                                                       options:NSStringDrawingUsesLineFragmentOrigin
+                                                    attributes:attributes
+                                                       context:nil];
+        return rect.size.height > 30 ? (20 + rect.size.height) : 50;
     }
 }
 

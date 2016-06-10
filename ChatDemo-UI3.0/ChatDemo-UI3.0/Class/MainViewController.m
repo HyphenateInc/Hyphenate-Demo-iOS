@@ -114,31 +114,20 @@ static NSString *kGroupName = @"GroupName";
     self.tabBar.backgroundImage = [[UIImage imageNamed:@"tabbarBackground"] stretchableImageWithLeftCapWidth:25 topCapHeight:25];
     self.tabBar.selectionIndicatorImage = [[UIImage imageNamed:@"tabbarSelectBg"] stretchableImageWithLeftCapWidth:25 topCapHeight:25];
     
+    // Chats
     _chatListVC = [[ConversationListController alloc] initWithNibName:nil bundle:nil];
     [_chatListVC networkChanged:_connectionState];
-    _chatListVC.tabBarItem = [[UITabBarItem alloc] initWithTitle:NSLocalizedString(@"title.conversation", @"Chats")
-                                                           image:nil
-                                                             tag:0];
-    [_chatListVC.tabBarItem setFinishedSelectedImage:[UIImage imageNamed:@"tabbar_chatsHL"]
-                         withFinishedUnselectedImage:[UIImage imageNamed:@"tabbar_chats"]];
+    _chatListVC.tabBarItem = [[UITabBarItem alloc] initWithTitle:@"Chats" image:[UIImage imageNamed:@"tabbar_chats"] selectedImage:[UIImage imageNamed:@"tabbar_chatsHL"]];
     [self unSelectedTapTabBarItems:_chatListVC.tabBarItem];
     [self selectedTapTabBarItems:_chatListVC.tabBarItem];
     
     _contactsVC = [[ContactListViewController alloc] initWithNibName:nil bundle:nil];
-    _contactsVC.tabBarItem = [[UITabBarItem alloc] initWithTitle:NSLocalizedString(@"title.addressbook", @"Contacts")
-                                                           image:nil
-                                                             tag:1];
-    [_contactsVC.tabBarItem setFinishedSelectedImage:[UIImage imageNamed:@"tabbar_contactsHL"]
-                         withFinishedUnselectedImage:[UIImage imageNamed:@"tabbar_contacts"]];
+    _contactsVC.tabBarItem = [[UITabBarItem alloc] initWithTitle:@"Chats" image:[UIImage imageNamed:@"tabbar_contactsHL"] selectedImage:[UIImage imageNamed:@"tabbar_contacts"]];
     [self unSelectedTapTabBarItems:_contactsVC.tabBarItem];
     [self selectedTapTabBarItems:_contactsVC.tabBarItem];
     
     _settingsVC = [[SettingsViewController alloc] init];
-    _settingsVC.tabBarItem = [[UITabBarItem alloc] initWithTitle:NSLocalizedString(@"title.setting", @"Settings")
-                                                           image:nil
-                                                             tag:2];
-    [_settingsVC.tabBarItem setFinishedSelectedImage:[UIImage imageNamed:@"tabbar_settingHL"]
-                         withFinishedUnselectedImage:[UIImage imageNamed:@"tabbar_setting"]];
+    _settingsVC.tabBarItem = [[UITabBarItem alloc] initWithTitle:@"Chats" image:[UIImage imageNamed:@"tabbar_settingHL"] selectedImage:[UIImage imageNamed:@"tabbar_setting"]];
     _settingsVC.view.autoresizingMask = UIViewAutoresizingFlexibleHeight;
     [self unSelectedTapTabBarItems:_settingsVC.tabBarItem];
     [self selectedTapTabBarItems:_settingsVC.tabBarItem];
@@ -149,12 +138,12 @@ static NSString *kGroupName = @"GroupName";
 
 -(void)unSelectedTapTabBarItems:(UITabBarItem *)tabBarItem
 {
-    [tabBarItem setTitleTextAttributes:[NSDictionary dictionaryWithObjectsAndKeys:[UIFont systemFontOfSize:14], UITextAttributeFont, [UIColor whiteColor], UITextAttributeTextColor,nil] forState:UIControlStateNormal];
+    [tabBarItem setTitleTextAttributes:[NSDictionary dictionaryWithObjectsAndKeys:[UIFont systemFontOfSize:14], NSFontAttributeName, [UIColor whiteColor], NSForegroundColorAttributeName,nil] forState:UIControlStateNormal];
 }
 
 -(void)selectedTapTabBarItems:(UITabBarItem *)tabBarItem
 {
-    [tabBarItem setTitleTextAttributes:[NSDictionary dictionaryWithObjectsAndKeys:[UIFont systemFontOfSize:14], UITextAttributeFont, [UIColor HIColorGreenMajor], UITextAttributeTextColor, nil] forState:UIControlStateSelected];
+    [tabBarItem setTitleTextAttributes:[NSDictionary dictionaryWithObjectsAndKeys:[UIFont systemFontOfSize:14], NSFontAttributeName, [UIColor HIColorGreenMajor], NSForegroundColorAttributeName, nil] forState:UIControlStateSelected];
 }
 
 -(void)setupUnreadMessageCount

@@ -466,7 +466,7 @@ static ChatDemoHelper *helper = nil;
 
 - (void)didReceiveCallIncoming:(EMCallSession *)aSession
 {
-    if(_callSession && _callSession.status != EMCallSessionStatusDisconnected){
+    if(self.callSession && self.callSession.status != EMCallSessionStatusDisconnected){
         [[EMClient sharedClient].callManager endCall:aSession.sessionId reason:EMCallEndReasonBusy];
     }
     
@@ -474,11 +474,11 @@ static ChatDemoHelper *helper = nil;
         [[EMClient sharedClient].callManager endCall:aSession.sessionId reason:EMCallEndReasonFailed];
     }
     
-    _callSession = aSession;
-    if(_callSession){
+    self.callSession = aSession;
+    if(self.callSession){
         [self _startCallTimer];
         
-        _callController = [[CallViewController alloc] initWithSession:_callSession isCaller:NO status:NSLocalizedString(@"call.finished", "Establish call finished")];
+        _callController = [[CallViewController alloc] initWithSession:self.callSession isCaller:NO status:NSLocalizedString(@"call.finished", "Establish call finished")];
         _callController.modalPresentationStyle = UIModalPresentationOverFullScreen;
         [_mainVC presentViewController:_callController animated:NO completion:nil];
     }
@@ -486,7 +486,7 @@ static ChatDemoHelper *helper = nil;
 
 - (void)didReceiveCallConnected:(EMCallSession *)aSession
 {
-    if ([aSession.sessionId isEqualToString:_callSession.sessionId]) {
+    if ([aSession.sessionId isEqualToString:self.callSession.sessionId]) {
         _callController.statusLabel.text = NSLocalizedString(@"call.finished", "Establish call finished");
         
         AVAudioSession *audioSession = [AVAudioSession sharedInstance];
@@ -501,7 +501,7 @@ static ChatDemoHelper *helper = nil;
         [[EMClient sharedClient].callManager endCall:aSession.sessionId reason:EMCallEndReasonFailed];
     }
     
-    if ([aSession.sessionId isEqualToString:_callSession.sessionId]) {
+    if ([aSession.sessionId isEqualToString:self.callSession.sessionId]) {
         [self _stopCallTimer];
         
         NSString *connectStr = aSession.connectType == EMCallConnectTypeRelay ? @"Relay" : @"Direct";
@@ -519,10 +519,10 @@ static ChatDemoHelper *helper = nil;
                           reason:(EMCallEndReason)aReason
                            error:(EMError *)aError
 {
-    if ([aSession.sessionId isEqualToString:_callSession.sessionId]) {
+    if ([aSession.sessionId isEqualToString:self.callSession.sessionId]) {
         [self _stopCallTimer];
         
-        _callSession = nil;
+        self.callSession = nil;
         
         [_callController close];
         _callController = nil;
@@ -568,7 +568,7 @@ static ChatDemoHelper *helper = nil;
 
 - (void)didReceiveCallNetworkChanged:(EMCallSession *)aSession status:(EMCallNetworkStatus)aStatus
 {
-    if ([aSession.sessionId isEqualToString:_callSession.sessionId]) {
+    if ([aSession.sessionId isEqualToString:self.callSession.sessionId]) {
         [_callController setNetwork:aStatus];
     }
 }
@@ -617,16 +617,16 @@ static ChatDemoHelper *helper = nil;
     }
     
     if (aIsVideo) {
-        _callSession = [[EMClient sharedClient].callManager makeVideoCall:aUsername error:nil];
+        self.callSession = [[EMClient sharedClient].callManager makeVideoCall:aUsername error:nil];
     }
     else{
-        _callSession = [[EMClient sharedClient].callManager makeVoiceCall:aUsername error:nil];
+        self.callSession = [[EMClient sharedClient].callManager makeVoiceCall:aUsername error:nil];
     }
     
-    if(_callSession){
+    if(self.callSession){
         [self _startCallTimer];
         
-        _callController = [[CallViewController alloc] initWithSession:_callSession isCaller:YES status:NSLocalizedString(@"call.connecting", @"Connecting...")];
+        _callController = [[CallViewController alloc] initWithSession:self.callSession isCaller:YES status:NSLocalizedString(@"call.connecting", @"Connecting...")];
 //        _callController.modalPresentationStyle = UIModalPresentationOverFullScreen;
 //        AppDelegate *delegate = [UIApplication sharedApplication].delegate;
 //        [delegate.navigationController presentViewController:_callController animated:NO completion:nil];
@@ -643,20 +643,22 @@ static ChatDemoHelper *helper = nil;
 {
     [self _stopCallTimer];
     
-    if (_callSession) {
-        [[EMClient sharedClient].callManager endCall:_callSession.sessionId reason:aReason];
+    if (self.callSession) {
+        [[EMClient sharedClient].callManager endCall:self.callSession.sessionId reason:aReason];
     }
     
-    _callSession = nil;
+    self.callSession = nil;
     [_callController close];
     _callController = nil;
 }
 
 - (void)answerCall
 {
-    if (_callSession) {
+    __weak typeof(self) weakSelf = self;
+
+    if (self.callSession) {
         dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), ^{
-            EMError *error = [[EMClient sharedClient].callManager answerCall:_callSession.sessionId];
+            EMError *error = [[EMClient sharedClient].callManager answerCall:weakSelf.callSession.sessionId];
             if (error) {
                 dispatch_async(dispatch_get_main_queue(), ^{
                     if (error.code == EMErrorNetworkUnavailable) {
