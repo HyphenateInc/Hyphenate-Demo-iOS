@@ -92,11 +92,6 @@ static NSString *kGroupName = @"GroupName";
     [super didReceiveMemoryWarning];
 }
 
-- (void)dealloc
-{
-    
-}
-
 #pragma mark - UITabBarDelegate
 
 - (void)tabBar:(UITabBar *)tabBar didSelectItem:(UITabBarItem *)item
@@ -156,17 +151,12 @@ static NSString *kGroupName = @"GroupName";
 
 -(void)unSelectedTapTabBarItems:(UITabBarItem *)tabBarItem
 {
-    [tabBarItem setTitleTextAttributes:[NSDictionary dictionaryWithObjectsAndKeys:
-                                        [UIFont systemFontOfSize:14], UITextAttributeFont,[UIColor whiteColor],UITextAttributeTextColor,
-                                        nil] forState:UIControlStateNormal];
+    [tabBarItem setTitleTextAttributes:[NSDictionary dictionaryWithObjectsAndKeys:[UIFont systemFontOfSize:14], UITextAttributeFont, [UIColor whiteColor], UITextAttributeTextColor,nil] forState:UIControlStateNormal];
 }
 
 -(void)selectedTapTabBarItems:(UITabBarItem *)tabBarItem
 {
-    [tabBarItem setTitleTextAttributes:[NSDictionary dictionaryWithObjectsAndKeys:
-                                        [UIFont systemFontOfSize:14],
-                                        UITextAttributeFont,RGBACOLOR(0x00, 0xac, 0xff, 1),UITextAttributeTextColor,
-                                        nil] forState:UIControlStateSelected];
+    [tabBarItem setTitleTextAttributes:[NSDictionary dictionaryWithObjectsAndKeys:[UIFont systemFontOfSize:14], UITextAttributeFont, [UIColor HIColorGreenMajor], UITextAttributeTextColor, nil] forState:UIControlStateSelected];
 }
 
 -(void)setupUnreadMessageCount

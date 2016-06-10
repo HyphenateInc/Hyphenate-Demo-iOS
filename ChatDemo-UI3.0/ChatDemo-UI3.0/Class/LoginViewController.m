@@ -76,7 +76,7 @@
     // Dispose of any resources that can be recreated.
 }
 
-//Registered account
+//Register an account
 - (IBAction)doRegister:(id)sender {
     if (![self isEmpty]) {
         [self.view endEditing:YES];
