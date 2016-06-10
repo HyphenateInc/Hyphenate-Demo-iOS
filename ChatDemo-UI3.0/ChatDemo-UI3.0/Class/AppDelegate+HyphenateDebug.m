@@ -22,12 +22,7 @@
     
     NSNumber *specifyServer = [ud objectForKey:@"identifier_enable"];
     if ([specifyServer boolValue]) {
-        NSString *apnsCertName = nil;
-#if DEBUG
-        apnsCertName = @"DevelopmentCertificate";
-#else
-        apnsCertName = @"ProductionCertificate";
-#endif
+
         NSString *appkey = [ud stringForKey:@"identifier_appkey"];
         if (!appkey)
         {
@@ -62,7 +57,7 @@
             options.chatServer = [ud stringForKey:@"identifier_imserver"];
             options.restServer = [ud stringForKey:@"identifier_restserver"];
         }
-        options.apnsCertName = @"ProductionCertificate";
+        options.apnsCertName = @"DevelopmentCertificate";
         options.enableConsoleLog = YES;
         
         [[EMClient sharedClient] initializeSDKWithOptions:options];
