@@ -12,7 +12,7 @@
 
 + (UIColor *)HIColorGreenMajor
 {
-    return [[self class] colorFromHexString:@"#b2dd4c"];
+    return [[self class] colorFromHexString:@"#A3DC31"];
 }
 
 + (UIColor *)HIColorGreenDark

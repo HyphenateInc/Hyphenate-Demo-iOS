@@ -25,7 +25,6 @@
 
 - (IBAction)doRegister:(id)sender;
 - (IBAction)doLogin:(id)sender;
-- (IBAction)useIpAction:(id)sender;
 
 @end
 
@@ -206,12 +205,6 @@
         }
         [self loginWithUsername:_usernameTextField.text password:_passwordTextField.text];
     }
-}
-
-- (IBAction)useIpAction:(id)sender
-{
-//    UISwitch *ipSwitch = (UISwitch *)sender;
-//    [[EMClient sharedClient].options setEnableDnsConfig:ipSwitch.isOn];
 }
 
 - (BOOL)isEmpty{
