@@ -2,8 +2,8 @@
 //  UIColor+Hyphenate.m
 //  ChatDemo-UI3.0
 //
-//  Created by Jerry Wu on 6/3/16.
-//  Copyright © 2016 Jerry Wu. All rights reserved.
+//  Created by Hyphenate on 6/3/16.
+//  Copyright © 2016 Hyphenate. All rights reserved.
 //
 
 #import "UIColor+Hyphenate.h"
