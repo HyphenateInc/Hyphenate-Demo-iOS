@@ -55,9 +55,7 @@ static NSString *kGroupName = @"GroupName";
 {
     [super viewDidLoad];
     
-    if ([UIDevice currentDevice].systemVersion.floatValue >= 7) {
-        self.edgesForExtendedLayout = UIRectEdgeNone;
-    }
+    self.edgesForExtendedLayout = UIRectEdgeNone;
     self.title = NSLocalizedString(@"title.conversation", @"Chats");
     
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(setupUntreatedApplyCount) name:@"setupUntreatedApplyCount" object:nil];

@@ -102,13 +102,6 @@ didFinishLaunchingWithOptions:(NSDictionary *)launchOptions
         [self clearParse];
     }
     
-    if ([UIDevice currentDevice].systemVersion.floatValue < 7.0){
-        navigationController.navigationBar.barStyle = UIBarStyleDefault;
-        [navigationController.navigationBar setBackgroundImage:[UIImage imageNamed:@"titleBar"]
-                                                 forBarMetrics:UIBarMetricsDefault];
-        [navigationController.navigationBar.layer setMasksToBounds:YES];
-    }
-    
     self.window.rootViewController = navigationController;
 }
 
