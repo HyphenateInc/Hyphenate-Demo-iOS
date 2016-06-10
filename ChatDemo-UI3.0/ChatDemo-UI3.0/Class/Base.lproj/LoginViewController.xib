@@ -19,25 +19,22 @@
             <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
             <subviews>
                 <switch hidden="YES" opaque="NO" contentMode="scaleToFill" horizontalHuggingPriority="750" verticalHuggingPriority="750" fixedFrame="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" on="YES" translatesAutoresizingMaskIntoConstraints="NO" id="fVJ-uB-mAR">
-                    <rect key="frame" x="236" y="227" width="51" height="31"/>
+                    <rect key="frame" x="236" y="300" width="51" height="31"/>
                     <connections>
                         <action selector="useIpAction:" destination="-1" eventType="valueChanged" id="ETn-L4-jBg"/>
                     </connections>
                 </switch>
-                <label hidden="YES" opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" text="使用IP" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="fNP-mV-Qsn">
-                    <rect key="frame" x="35" y="232" width="50" height="21"/>
+                <label hidden="YES" opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" text="Use IP" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="fNP-mV-Qsn">
+                    <rect key="frame" x="35" y="306" width="50" height="21"/>
                     <fontDescription key="fontDescription" type="system" pointSize="17"/>
                     <color key="textColor" cocoaTouchSystemColor="darkTextColor"/>
                     <nil key="highlightedColor"/>
                 </label>
-                <view contentMode="scaleToFill" ambiguous="YES" misplaced="YES" translatesAutoresizingMaskIntoConstraints="NO" id="iqB-n0-4iR" userLabel="mainview">
+                <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="iqB-n0-4iR" userLabel="mainview">
                     <rect key="frame" x="0.0" y="0.0" width="320" height="480"/>
                     <subviews>
-                        <imageView opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" fixedFrame="YES" image="account.png" translatesAutoresizingMaskIntoConstraints="NO" id="uNL-2K-qWM">
-                            <rect key="frame" x="49" y="55" width="18" height="18"/>
-                        </imageView>
-                        <textField opaque="NO" clipsSubviews="YES" contentMode="scaleToFill" fixedFrame="YES" contentHorizontalAlignment="left" contentVerticalAlignment="center" placeholder="个人账号/手机" minimumFontSize="17" clearButtonMode="whileEditing" translatesAutoresizingMaskIntoConstraints="NO" id="AP7-GL-7yZ" userLabel="username - 个人账号/手机">
-                            <rect key="frame" x="82" y="49" width="193" height="30"/>
+                        <textField opaque="NO" clipsSubviews="YES" contentMode="scaleToFill" fixedFrame="YES" contentHorizontalAlignment="left" contentVerticalAlignment="center" placeholder="Username" minimumFontSize="17" clearButtonMode="whileEditing" translatesAutoresizingMaskIntoConstraints="NO" id="AP7-GL-7yZ" userLabel="username">
+                            <rect key="frame" x="64" y="49" width="226" height="30"/>
                             <fontDescription key="fontDescription" type="system" pointSize="15"/>
                             <textInputTraits key="textInputTraits" autocorrectionType="no" keyboardType="alphabet" returnKeyType="next"/>
                         </textField>
@@ -45,11 +42,11 @@
                             <rect key="frame" x="45" y="78" width="230" height="1"/>
                             <color key="backgroundColor" red="0.84313725490000002" green="0.84705882349999995" blue="0.84705882349999995" alpha="1" colorSpace="calibratedRGB"/>
                         </view>
-                        <imageView opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" fixedFrame="YES" image="password.png" translatesAutoresizingMaskIntoConstraints="NO" id="cRY-aM-hEH">
-                            <rect key="frame" x="49" y="95" width="18" height="18"/>
+                        <imageView opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" fixedFrame="YES" image="password" translatesAutoresizingMaskIntoConstraints="NO" id="cRY-aM-hEH">
+                            <rect key="frame" x="25" y="95" width="20" height="20"/>
                         </imageView>
-                        <textField opaque="NO" clipsSubviews="YES" contentMode="scaleToFill" fixedFrame="YES" contentHorizontalAlignment="left" contentVerticalAlignment="center" placeholder="密码" minimumFontSize="17" clearButtonMode="whileEditing" translatesAutoresizingMaskIntoConstraints="NO" id="PWC-Hd-cWJ" userLabel="password - 密码">
-                            <rect key="frame" x="82" y="89" width="193" height="30"/>
+                        <textField opaque="NO" clipsSubviews="YES" contentMode="scaleToFill" fixedFrame="YES" contentHorizontalAlignment="left" contentVerticalAlignment="center" placeholder="Password" minimumFontSize="17" clearButtonMode="whileEditing" translatesAutoresizingMaskIntoConstraints="NO" id="PWC-Hd-cWJ" userLabel="password">
+                            <rect key="frame" x="64" y="89" width="226" height="30"/>
                             <color key="tintColor" red="0.74977948588709675" green="0.18706713233925057" blue="0.19164996080266938" alpha="1" colorSpace="calibratedRGB"/>
                             <fontDescription key="fontDescription" type="system" pointSize="15"/>
                             <textInputTraits key="textInputTraits" returnKeyType="go" secureTextEntry="YES"/>
@@ -59,11 +56,11 @@
                             <color key="backgroundColor" red="0.84313725490000002" green="0.84705882349999995" blue="0.84705882349999995" alpha="1" colorSpace="calibratedRGB"/>
                         </view>
                         <button opaque="NO" contentMode="scaleToFill" fixedFrame="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="HP1-ku-0fl">
-                            <rect key="frame" x="35" y="148" width="80" height="44"/>
-                            <color key="backgroundColor" red="0.3411764705882353" green="0.72941176470588232" blue="0.81568627450980391" alpha="1" colorSpace="calibratedRGB"/>
+                            <rect key="frame" x="8" y="166" width="304" height="44"/>
+                            <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                             <fontDescription key="fontDescription" type="boldSystem" pointSize="18"/>
-                            <state key="normal" title="注册">
-                                <color key="titleColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
+                            <state key="normal" title="Register">
+                                <color key="titleColor" red="0.63921568627450975" green="0.86274509803921573" blue="0.19215686274509805" alpha="1" colorSpace="calibratedRGB"/>
                                 <color key="titleShadowColor" white="0.5" alpha="1" colorSpace="calibratedWhite"/>
                             </state>
                             <state key="highlighted">
@@ -74,10 +71,10 @@
                             </connections>
                         </button>
                         <button opaque="NO" contentMode="scaleToFill" fixedFrame="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="g7n-mh-wjo">
-                            <rect key="frame" x="125" y="148" width="160" height="43"/>
-                            <color key="backgroundColor" red="0.42745098039215684" green="0.55686274509803924" blue="0.18431372549019609" alpha="1" colorSpace="calibratedRGB"/>
+                            <rect key="frame" x="8" y="218" width="304" height="43"/>
+                            <color key="backgroundColor" red="0.63921568627450975" green="0.86274509803921573" blue="0.19215686274509805" alpha="1" colorSpace="calibratedRGB"/>
                             <fontDescription key="fontDescription" type="boldSystem" size="button"/>
-                            <state key="normal" title="登录">
+                            <state key="normal" title="Login">
                                 <color key="titleColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                                 <color key="titleShadowColor" white="0.5" alpha="1" colorSpace="calibratedWhite"/>
                             </state>
@@ -88,18 +85,25 @@
                                 <action selector="doLogin:" destination="-1" eventType="touchUpInside" id="7qQ-wk-5XS"/>
                             </connections>
                         </button>
+                        <imageView opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" fixedFrame="YES" image="account" translatesAutoresizingMaskIntoConstraints="NO" id="uNL-2K-qWM">
+                            <rect key="frame" x="25" y="52" width="20" height="20"/>
+                        </imageView>
                     </subviews>
-                    <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
+                    <color key="backgroundColor" red="0.97647058823529409" green="0.97647058823529409" blue="0.97647058823529409" alpha="1" colorSpace="calibratedRGB"/>
                 </view>
             </subviews>
             <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="calibratedWhite"/>
             <constraints>
+                <constraint firstAttribute="bottom" secondItem="iqB-n0-4iR" secondAttribute="bottom" constant="88" id="68n-65-sY0"/>
+                <constraint firstItem="iqB-n0-4iR" firstAttribute="leading" secondItem="i5M-Pr-FkT" secondAttribute="leading" id="gU3-nY-pKY"/>
+                <constraint firstItem="iqB-n0-4iR" firstAttribute="top" secondItem="i5M-Pr-FkT" secondAttribute="top" id="nzA-Jd-pld"/>
                 <constraint firstItem="iqB-n0-4iR" firstAttribute="centerX" secondItem="i5M-Pr-FkT" secondAttribute="centerX" id="wmG-qh-kq0"/>
             </constraints>
+            <point key="canvasLocation" x="309" y="488"/>
         </view>
     </objects>
     <resources>
-        <image name="account.png" width="18" height="18"/>
-        <image name="password.png" width="18" height="18"/>
+        <image name="account" width="40" height="40"/>
+        <image name="password" width="40" height="40"/>
     </resources>
 </document>

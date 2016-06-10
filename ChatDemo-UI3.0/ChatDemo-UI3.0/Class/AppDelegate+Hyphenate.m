@@ -31,20 +31,20 @@ didFinishLaunchingWithOptions:(NSDictionary *)launchOptions
                                                  name:KNOTIFICATION_LOGINCHANGE
                                                object:nil];
     
-    [[EaseSDKHelper shareHelper] easemobApplication:application
-                    didFinishLaunchingWithOptions:launchOptions
-                                           appkey:appkey
-                                     apnsCertName:apnsCertName
-                                      otherConfig:@{kSDKConfigEnableConsoleLogger:[NSNumber numberWithBool:YES],@"easeSandBox":[NSNumber numberWithBool:[self isSpecifyServer]]}];
+    EMOptions *options = [EMOptions optionsWithAppkey:appkey];
+    options.apnsCertName = apnsCertName;
+    options.isAutoAcceptGroupInvitation = NO;
+    // options.enableConsoleLog = YES;
     
-    [ChatDemoHelper shareHelper];
+    [[EMClient sharedClient] initializeSDKWithOptions:options];
+    
+    [self registerRemoteNotification];
     
     BOOL isAutoLogin = [EMClient sharedClient].isAutoLogin;
     if (isAutoLogin){
         [[NSNotificationCenter defaultCenter] postNotificationName:KNOTIFICATION_LOGINCHANGE object:@YES];
     }
-    else
-    {
+    else {
         [[NSNotificationCenter defaultCenter] postNotificationName:KNOTIFICATION_LOGINCHANGE object:@NO];
     }
 }
@@ -121,6 +121,32 @@ didFinishLaunchingWithOptions:(NSDictionary *)launchOptions
                                           otherButtonTitles:nil];
     [alert show];
     
+}
+
+#pragma mark - Push Notification
+
+- (void)registerRemoteNotification
+{
+    UIApplication *application = [UIApplication sharedApplication];
+    application.applicationIconBadgeNumber = 0;
+    
+    // iOS 8+
+    if([application respondsToSelector:@selector(registerUserNotificationSettings:)])
+    {
+        UIUserNotificationType notificationTypes = UIUserNotificationTypeBadge | UIUserNotificationTypeSound | UIUserNotificationTypeAlert;
+        UIUserNotificationSettings *settings = [UIUserNotificationSettings settingsForTypes:notificationTypes categories:nil];
+        [application registerUserNotificationSettings:settings];
+    }
+    
+#if !TARGET_IPHONE_SIMULATOR
+    if ([application respondsToSelector:@selector(registerForRemoteNotifications)]) {
+        [application registerForRemoteNotifications];
+    }
+    else {
+        UIRemoteNotificationType notificationTypes = UIRemoteNotificationTypeBadge | UIRemoteNotificationTypeSound | UIRemoteNotificationTypeAlert;
+        [[UIApplication sharedApplication] registerForRemoteNotificationTypes:notificationTypes];
+    }
+#endif
 }
 
 @end

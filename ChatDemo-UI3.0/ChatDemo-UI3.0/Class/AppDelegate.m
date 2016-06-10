@@ -31,12 +31,13 @@
     self.window = [[UIWindow alloc] initWithFrame:[[UIScreen mainScreen] bounds]];
     self.window.backgroundColor = [UIColor whiteColor];
     
-    [[UINavigationBar appearance] setBarTintColor:[UIColor HIColorGreenDark]];
+    [[UINavigationBar appearance] setBarTintColor:[UIColor HIColorGreenMajor]];
     [[UINavigationBar appearance] setTitleTextAttributes:
      [NSDictionary dictionaryWithObjectsAndKeys:[UIColor whiteColor], NSForegroundColorAttributeName, [UIFont fontWithName:@"HelveticaNeue" size:21.0], NSFontAttributeName, nil]];
     
     [self parseApplication:application didFinishLaunchingWithOptions:launchOptions];
     
+    // APNs Push Service
     NSString *apnsCertName = nil;
 #if DEBUG
     apnsCertName = @"DevelopmentCertificate";
@@ -44,20 +45,14 @@
     apnsCertName = @"ProductionCertificate";
 #endif
     
-    NSUserDefaults *ud = [NSUserDefaults standardUserDefaults];
-    NSString *appkey = [ud stringForKey:@"identifier_appkey"];
-    if (!appkey) {
-        appkey = @"hyphenate#hyphenatedemo";
-        [ud setObject:appkey forKey:@"identifier_appkey"];
-    }
+    // Hyphenate AppKey
+    NSString *appkey = @"hyphenate#hyphenatedemo";
 
     [self hyphenateApplication:application
-didFinishLaunchingWithOptions:launchOptions
-                      appkey:appkey
-                apnsCertName:apnsCertName
-                 otherConfig:@{kSDKConfigEnableConsoleLogger:[NSNumber numberWithBool:YES]}];
-
-    [self.window makeKeyAndVisible];
+ didFinishLaunchingWithOptions:launchOptions
+                        appkey:appkey
+                  apnsCertName:apnsCertName
+                   otherConfig:@{kSDKConfigEnableConsoleLogger:[NSNumber numberWithBool:YES]}];
     
     // Configure tracker from GoogleService-Info.plist.
     NSError *configureError;
@@ -68,6 +63,8 @@ didFinishLaunchingWithOptions:launchOptions
     GAI *gai = [GAI sharedInstance];
     gai.trackUncaughtExceptions = YES;  // report uncaught exceptions
     gai.logger.logLevel = kGAILogLevelVerbose;  // remove before app release
+    
+    [self.window makeKeyAndVisible];
     
     return YES;
 }
@@ -85,4 +82,15 @@ didFinishLaunchingWithOptions:launchOptions
         [_mainController didReceiveLocalNotification:notification];
     }
 }
+
+- (void)applicationDidEnterBackground:(UIApplication *)application
+{
+    [[EMClient sharedClient] applicationDidEnterBackground:application];
+}
+
+- (void)applicationWillEnterForeground:(UIApplication *)application
+{
+    [[EMClient sharedClient] applicationWillEnterForeground:application];
+}
+
 @end
