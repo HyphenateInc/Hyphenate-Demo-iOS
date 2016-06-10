@@ -2,11 +2,12 @@
   "images" : [
     {
       "idiom" : "universal",
+      "filename" : "tabbarSelectBg.png",
       "scale" : "1x"
     },
     {
       "idiom" : "universal",
-      "filename" : "delete@2x.png",
+      "filename" : "tabbarSelectBg@2x.png",
       "scale" : "2x"
     },
     {
