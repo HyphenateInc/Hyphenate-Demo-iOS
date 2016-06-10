@@ -60,12 +60,12 @@
     
     [self tableViewDidTriggerHeaderRefresh];
     
-//    [self.view addSubview:self.searchBar];
-//    self.tableView.frame = CGRectMake(0, self.searchBar.frame.size.height, self.view.frame.size.width, self.view.frame.size.height - self.searchBar.frame.size.height);
+    [self.view addSubview:self.searchBar];
+    self.tableView.frame = CGRectMake(0, self.searchBar.frame.size.height, self.view.frame.size.width, self.view.frame.size.height - self.searchBar.frame.size.height);
     
     [self networkStateView];
     
-//    [self searchController];
+    [self searchController];
     
     [self removeEmptyConversationsFromDB];
 }
@@ -138,7 +138,7 @@
     if (!_searchBar) {
         _searchBar = [[EMSearchBar alloc] initWithFrame: CGRectMake(0, 0, self.view.frame.size.width, 44)];
         _searchBar.delegate = self;
-        _searchBar.placeholder = NSLocalizedString(@"search", @"Search");
+        _searchBar.placeholder = @"Search Contacts";
         _searchBar.backgroundColor = [UIColor HIColorGreenDark];
     }
     
