@@ -10,7 +10,7 @@
 
 #import <UIKit/UIKit.h>
 #import "MainViewController.h"
-#import "ApplyViewController.h"
+#import "FriendRequestViewController.h"
 
 @interface AppDelegate : UIResponder <UIApplicationDelegate, EMChatManagerDelegate>
 {

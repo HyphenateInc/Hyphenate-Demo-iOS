@@ -10,7 +10,7 @@
 
 #import "SettingsViewController.h"
 
-#import "ApplyViewController.h"
+#import "FriendRequestViewController.h"
 #import "PushNotificationViewController.h"
 #import "BlackListViewController.h"
 #import "DebugViewController.h"
@@ -297,7 +297,7 @@
                 [weakSelf showHint:error.errorDescription];
             }
             else {
-                [[ApplyViewController shareController] clear];
+                [[FriendRequestViewController shareController] clear];
                 
                 [[NSNotificationCenter defaultCenter] postNotificationName:KNOTIFICATION_LOGINCHANGE object:@NO];
             }

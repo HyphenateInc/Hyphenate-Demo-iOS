@@ -15,7 +15,7 @@
 #import "ChatViewController.h"
 #import "RobotListViewController.h"
 #import "AddFriendViewController.h"
-#import "ApplyViewController.h"
+#import "FriendRequestViewController.h"
 #import "EMSearchBar.h"
 #import "EMSearchDisplayController.h"
 #import "UserProfileManager.h"
@@ -283,7 +283,7 @@
     NSInteger row = indexPath.row;
     if (section == 0) {
         if (row == 0) {
-            [self.navigationController pushViewController:[ApplyViewController shareController] animated:YES];
+            [self.navigationController pushViewController:[FriendRequestViewController shareController] animated:YES];
         }
         else if (row == 1)
         {
@@ -592,7 +592,7 @@
 
 - (void)reloadApplyView
 {
-    NSInteger count = [[[ApplyViewController shareController] dataSource] count];
+    NSInteger count = [[[FriendRequestViewController shareController] dataSource] count];
     self.unapplyCount = count;
     [self.tableView reloadData];
 }

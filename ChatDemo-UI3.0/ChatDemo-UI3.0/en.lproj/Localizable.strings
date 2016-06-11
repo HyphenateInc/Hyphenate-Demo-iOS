@@ -101,17 +101,17 @@
 "apns.content" = "Apns content";
 
 //friend
-"friend.add" = "add friend";
+"friend.add" = "Add friend";
 "friend.somebodyAddWithName" = "%@ added you as a friend";
-"friend.inputNameToSearch" = "input to find friends";
+"friend.inputNameToSearch" = "Enter friend's username";
 "friend.repeat" = "'%@' is already your friend!";
 "friend.repeatApply" = "you already sent fridend request to '%@'!";
 "friend.notAddSelf" = "can't add yourself as a friend";
 "friend.repeatInvite" = "%@ sent an invitation to you";
-"friend.somebodyInvite" = "%@ invites you as a friend";
-"friend.sendApply" = "sending request...";
-"friend.sendApplyFail" = "send request fails, please try again";
-"friend.sendApplySuccess" = "send successfully";
+"friend.somebodyInvite" = "%@ sent you a friend request";
+"friend.sendFriendRequest" = "sending friend request...";
+"friend.sendFriendRequestFail" = "send friend request fails, please try again";
+"friend.sendFriendRequestSuccess" = "Friend request sent";
 "friend.black" = "Black List";
 "friend.notChatSelf" = "can't talk to yourself";
 "friend.notDeleteSelf" = "can't delete self";

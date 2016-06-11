@@ -75,7 +75,7 @@ didFinishLaunchingWithOptions:(NSDictionary *)launchOptions
     BOOL loginSuccess = [notification.object boolValue];
     UINavigationController *navigationController = nil;
     if (loginSuccess) {
-        [[ApplyViewController shareController] loadDataSourceFromLocalDB];
+        [[FriendRequestViewController shareController] loadDataSourceFromLocalDB];
         if (self.mainController == nil) {
             self.mainController = [[MainViewController alloc] init];
             navigationController = [[UINavigationController alloc] initWithRootViewController:self.mainController];

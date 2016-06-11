@@ -11,7 +11,7 @@
 #import "MainViewController.h"
 
 #import "SettingsViewController.h"
-#import "ApplyViewController.h"
+#import "FriendRequestViewController.h"
 #import "ChatViewController.h"
 #import "UserProfileManager.h"
 #import "ConversationListController.h"
@@ -169,7 +169,7 @@ static NSString *kGroupName = @"GroupName";
 
 - (void)setupUntreatedApplyCount
 {
-    NSInteger unreadCount = [[[ApplyViewController shareController] dataSource] count];
+    NSInteger unreadCount = [[[FriendRequestViewController shareController] dataSource] count];
    
     if (self.contactsVC) {
         if (unreadCount > 0) {

@@ -16,7 +16,7 @@ typedef enum{
     ApplyStyleJoinGroup,
 }ApplyStyle;
 
-@interface ApplyViewController : UITableViewController
+@interface FriendRequestViewController : UITableViewController
 {
     NSMutableArray *_dataSource;
 }

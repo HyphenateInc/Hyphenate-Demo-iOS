@@ -13,7 +13,7 @@
 #import "ChatDemoHelper.h"
 
 #import "AppDelegate.h"
-#import "ApplyViewController.h"
+#import "FriendRequestViewController.h"
 #import "MBProgressHUD.h"
 
 
@@ -308,7 +308,7 @@ static ChatDemoHelper *helper = nil;
     
     NSMutableDictionary *dic = [NSMutableDictionary dictionaryWithDictionary:@{@"title":aGroup.subject, @"groupId":aGroup.groupId, @"username":aApplicant, @"groupname":aGroup.subject, @"applyMessage":aReason, @"applyStyle":[NSNumber numberWithInteger:ApplyStyleJoinGroup]}];
     
-    [[ApplyViewController shareController] addNewApply:dic];
+    [[FriendRequestViewController shareController] addNewApply:dic];
    
     if (self.mainVC) {
         
@@ -364,7 +364,7 @@ static ChatDemoHelper *helper = nil;
     
     NSMutableDictionary *dic = [NSMutableDictionary dictionaryWithDictionary:@{@"title":@"", @"groupId":aGroupId, @"username":aInviter, @"groupname":@"", @"applyMessage":aMessage, @"applyStyle":[NSNumber numberWithInteger:ApplyStyleGroupInvitation]}];
     
-    [[ApplyViewController shareController] addNewApply:dic];
+    [[FriendRequestViewController shareController] addNewApply:dic];
     
     if (self.mainVC) {
         
@@ -444,7 +444,7 @@ static ChatDemoHelper *helper = nil;
     
     NSMutableDictionary *dic = [NSMutableDictionary dictionaryWithDictionary:@{@"title":aUsername, @"username":aUsername, @"applyMessage":aMessage, @"applyStyle":[NSNumber numberWithInteger:ApplyStyleFriend]}];
   
-    [[ApplyViewController shareController] addNewApply:dic];
+    [[FriendRequestViewController shareController] addNewApply:dic];
    
     if (self.mainVC) {
         

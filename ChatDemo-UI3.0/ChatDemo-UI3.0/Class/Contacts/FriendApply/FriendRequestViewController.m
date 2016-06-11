@@ -8,18 +8,18 @@
 
   */
 
-#import "ApplyViewController.h"
+#import "FriendRequestViewController.h"
 
 #import "ApplyFriendCell.h"
 #import "InvitationManager.h"
 
-static ApplyViewController *controller = nil;
+static FriendRequestViewController *controller = nil;
 
-@interface ApplyViewController ()<ApplyFriendCellDelegate>
+@interface FriendRequestViewController ()<ApplyFriendCellDelegate>
 
 @end
 
-@implementation ApplyViewController
+@implementation FriendRequestViewController
 
 - (id)initWithStyle:(UITableViewStyle)style
 {
