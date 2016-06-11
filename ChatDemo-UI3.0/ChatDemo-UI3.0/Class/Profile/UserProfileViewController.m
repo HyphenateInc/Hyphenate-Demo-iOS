@@ -48,7 +48,12 @@
     self.tableView.tableFooterView = [[UIView alloc] init];
     self.tableView.allowsSelection = NO;
     
-    [self setupBarButtonItem];
+    UIBarButtonItem *backBarButtonItem = [[UIBarButtonItem alloc] initWithImage:[UIImage imageNamed:@"back"]
+                                                                          style:UIBarButtonItemStylePlain
+                                                                         target:self.navigationController
+                                                                         action:@selector(popViewControllerAnimated:)];
+    self.navigationItem.leftBarButtonItem = backBarButtonItem;
+    
     [self loadUserProfile];
 }
 
@@ -136,15 +141,6 @@
     [tableView deselectRowAtIndexPath:indexPath animated:YES];
 }
 
-- (void)setupBarButtonItem
-{
-    UIButton *backButton = [[UIButton alloc] initWithFrame:CGRectMake(0, 0, 44, 44)];
-    [backButton setImage:[UIImage imageNamed:@"back.png"] forState:UIControlStateNormal];
-    [backButton addTarget:self action:@selector(back) forControlEvents:UIControlEventTouchUpInside];
-    UIBarButtonItem *backItem = [[UIBarButtonItem alloc] initWithCustomView:backButton];
-    [self.navigationItem setLeftBarButtonItem:backItem];
-}
-
 - (void)loadUserProfile
 {
     [self hideHud];
@@ -156,11 +152,6 @@
             [weakself.tableView reloadData];
         }
     }];
-}
-
-- (void)back
-{
-    [self.navigationController popViewControllerAnimated:YES];
 }
 
 @end

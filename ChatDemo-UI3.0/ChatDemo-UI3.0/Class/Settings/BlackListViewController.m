@@ -48,6 +48,12 @@
     
     // Uncomment the following line to preserve selection between presentations.
     self.title = NSLocalizedString(@"friend.black", @"Black List");
+
+    UIBarButtonItem *backBarButtonItem = [[UIBarButtonItem alloc] initWithImage:[UIImage imageNamed:@"back"]
+                                                                          style:UIBarButtonItemStylePlain
+                                                                         target:self.navigationController
+                                                                         action:@selector(popViewControllerAnimated:)];
+    self.navigationItem.leftBarButtonItem = backBarButtonItem;
     
     _tableView = [[UITableView alloc] initWithFrame:CGRectZero style:UITableViewStylePlain];
     _tableView.frame = CGRectMake(0, 0, self.view.frame.size.width, self.view.frame.size.height);

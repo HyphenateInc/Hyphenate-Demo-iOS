@@ -67,18 +67,11 @@
     self.title = NSLocalizedString(@"title.groupSearchMessage", @"Search Message from History");
     self.view.backgroundColor = [UIColor whiteColor];
     
-    
-    UIButton *backButton = [[UIButton alloc] initWithFrame:CGRectMake(0, 0, 44, 44)];
-    [backButton setImage:[UIImage imageNamed:@"back.png"] forState:UIControlStateNormal];
-    [backButton addTarget:self action:@selector(backAction) forControlEvents:UIControlEventTouchUpInside];
-    UIBarButtonItem *backItem = [[UIBarButtonItem alloc] initWithCustomView:backButton];
-    [self.navigationItem setLeftBarButtonItem:backItem];
-    
-//    UIButton *timeButton = [[UIButton alloc] initWithFrame:CGRectMake(0, 0, 44, 44)];
-//    [timeButton setTitle:@"筛选" forState:UIControlStateNormal];
-//    [timeButton addTarget:self action:@selector(timeAction) forControlEvents:UIControlEventTouchUpInside];
-//    UIBarButtonItem *timeItem = [[UIBarButtonItem alloc] initWithCustomView:timeButton];
-//    [self.navigationItem setRightBarButtonItem:timeItem];
+    UIBarButtonItem *backBarButtonItem = [[UIBarButtonItem alloc] initWithImage:[UIImage imageNamed:@"back"]
+                                                                          style:UIBarButtonItemStylePlain
+                                                                         target:self.navigationController
+                                                                         action:@selector(popViewControllerAnimated:)];
+    self.navigationItem.leftBarButtonItem = backBarButtonItem;
     
     [self searchController];
     self.searchBar.frame = CGRectMake(0, 0, self.view.frame.size.width, 44);
@@ -344,11 +337,6 @@
 }
 
 #pragma mark - action
-
-- (void)backAction
-{
-    [self.navigationController popViewControllerAnimated:YES];
-}
 
 - (void)timeAction
 {

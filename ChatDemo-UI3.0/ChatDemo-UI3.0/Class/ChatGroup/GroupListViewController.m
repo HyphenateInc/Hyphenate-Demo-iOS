@@ -61,23 +61,11 @@
     [self.tableView addSubview:self.slimeView];
     [self searchController];
     
-//    UIButton *publicButton = [[UIButton alloc] initWithFrame:CGRectMake(0, 0, 50, 44)];
-//    [publicButton setImage:[UIImage imageNamed:@"nav_createGroup"] forState:UIControlStateNormal];
-//    [publicButton addTarget:self action:@selector(showPublicGroupList) forControlEvents:UIControlEventTouchUpInside];
-//    UIBarButtonItem *publicItem = [[UIBarButtonItem alloc] initWithCustomView:publicButton];
-//    
-//    UIButton *createButton = [[UIButton alloc] initWithFrame:CGRectMake(0, 0, 50, 44)];
-//    [createButton setImage:[UIImage imageNamed:@"add.png"] forState:UIControlStateNormal];
-//    [createButton addTarget:self action:@selector(createGroup) forControlEvents:UIControlEventTouchUpInside];
-//    UIBarButtonItem *createGroupItem = [[UIBarButtonItem alloc] initWithCustomView:createButton];
-//    
-//    [self.navigationItem setRightBarButtonItems:@[createGroupItem, publicItem]];
-    
-    UIButton *backButton = [[UIButton alloc] initWithFrame:CGRectMake(0, 0, 44, 44)];
-    [backButton setImage:[UIImage imageNamed:@"back.png"] forState:UIControlStateNormal];
-    [backButton addTarget:self.navigationController action:@selector(popViewControllerAnimated:) forControlEvents:UIControlEventTouchUpInside];
-    UIBarButtonItem *backItem = [[UIBarButtonItem alloc] initWithCustomView:backButton];
-    [self.navigationItem setLeftBarButtonItem:backItem];
+    UIBarButtonItem *backBarButtonItem = [[UIBarButtonItem alloc] initWithImage:[UIImage imageNamed:@"back"]
+                                                                          style:UIBarButtonItemStylePlain
+                                                                         target:self.navigationController
+                                                                         action:@selector(popViewControllerAnimated:)];
+    self.navigationItem.leftBarButtonItem = backBarButtonItem;
     
     [self reloadDataSource];
 }

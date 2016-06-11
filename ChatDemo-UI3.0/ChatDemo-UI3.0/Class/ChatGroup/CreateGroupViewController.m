@@ -63,11 +63,11 @@
     _rightItem = [[UIBarButtonItem alloc] initWithCustomView:addButton];
     [self.navigationItem setRightBarButtonItem:_rightItem];
     
-    UIButton *backButton = [[UIButton alloc] initWithFrame:CGRectMake(0, 0, 44, 44)];
-    [backButton setImage:[UIImage imageNamed:@"back.png"] forState:UIControlStateNormal];
-    [backButton addTarget:self.navigationController action:@selector(popViewControllerAnimated:) forControlEvents:UIControlEventTouchUpInside];
-    UIBarButtonItem *backItem = [[UIBarButtonItem alloc] initWithCustomView:backButton];
-    [self.navigationItem setLeftBarButtonItem:backItem];
+    UIBarButtonItem *backBarButtonItem = [[UIBarButtonItem alloc] initWithImage:[UIImage imageNamed:@"back"]
+                                                                          style:UIBarButtonItemStylePlain
+                                                                         target:self.navigationController
+                                                                         action:@selector(popViewControllerAnimated:)];
+    self.navigationItem.leftBarButtonItem = backBarButtonItem;
     
     [self.view addSubview:self.groupNameTextField];
     [self.view addSubview:self.groupDescriptionTextView];

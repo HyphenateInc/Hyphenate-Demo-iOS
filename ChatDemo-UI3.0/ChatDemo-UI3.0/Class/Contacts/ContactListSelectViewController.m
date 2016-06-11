@@ -30,11 +30,11 @@
     
     self.title = NSLocalizedString(@"title.chooseContact", @"select the contact");
     
-    UIButton *backButton = [[UIButton alloc] initWithFrame:CGRectMake(0, 0, 44, 44)];
-    [backButton setImage:[UIImage imageNamed:@"back.png"] forState:UIControlStateNormal];
-    [backButton addTarget:self action:@selector(backAction) forControlEvents:UIControlEventTouchUpInside];
-    UIBarButtonItem *backItem = [[UIBarButtonItem alloc] initWithCustomView:backButton];
-    [self.navigationItem setLeftBarButtonItem:backItem];
+    UIBarButtonItem *backBarButtonItem = [[UIBarButtonItem alloc] initWithImage:[UIImage imageNamed:@"back"]
+                                                                          style:UIBarButtonItemStylePlain
+                                                                         target:self.navigationController
+                                                                         action:@selector(popViewControllerAnimated:)];
+    self.navigationItem.leftBarButtonItem = backBarButtonItem;
 }
 
 - (void)viewWillAppear:(BOOL)animated
@@ -126,13 +126,6 @@
         model.avatarURLPath = profileEntity.imageUrl;
     }
     return model;
-}
-
-#pragma mark - action
-
-- (void)backAction
-{
-    [self.navigationController popViewControllerAnimated:YES];
 }
 
 @end

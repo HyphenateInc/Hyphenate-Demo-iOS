@@ -42,11 +42,11 @@
 
     self.title = NSLocalizedString(@"title.groupSubjectChanging", @"Change group name");
 
-    UIButton *backButton = [[UIButton alloc] initWithFrame:CGRectMake(0, 0, 44, 44)];
-    [backButton setImage:[UIImage imageNamed:@"back.png"] forState:UIControlStateNormal];
-    [backButton addTarget:self action:@selector(back) forControlEvents:UIControlEventTouchUpInside];
-    UIBarButtonItem *backItem = [[UIBarButtonItem alloc] initWithCustomView:backButton];
-    [self.navigationItem setLeftBarButtonItem:backItem];
+    UIBarButtonItem *backBarButtonItem = [[UIBarButtonItem alloc] initWithImage:[UIImage imageNamed:@"back"]
+                                                                          style:UIBarButtonItemStylePlain
+                                                                         target:self.navigationController
+                                                                         action:@selector(backAction)];
+    self.navigationItem.leftBarButtonItem = backBarButtonItem;
 
     if (_isOwner)
     {
@@ -106,12 +106,13 @@
 }
 
 #pragma mark - action
-- (void)back
+
+- (void)backAction
 {
-    if ([_subjectField isFirstResponder])
-    {
+    if ([_subjectField isFirstResponder]) {
         [_subjectField resignFirstResponder];
     }
+    
     [self.navigationController popViewControllerAnimated:YES];
 }
 
@@ -133,7 +134,8 @@
             conversation.ext = ext;
         }
     }
-    [self back];
+    
+    [self backAction];
 }
 
 @end

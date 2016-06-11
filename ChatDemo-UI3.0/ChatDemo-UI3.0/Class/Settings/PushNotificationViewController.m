@@ -45,6 +45,12 @@
     
     self.title = NSLocalizedString(@"title.apnsSetting", @"Push Notification");
     
+    UIBarButtonItem *backBarButtonItem = [[UIBarButtonItem alloc] initWithImage:[UIImage imageNamed:@"back"]
+                                                                          style:UIBarButtonItemStylePlain
+                                                                         target:self.navigationController
+                                                                         action:@selector(popViewControllerAnimated:)];
+    self.navigationItem.leftBarButtonItem = backBarButtonItem;
+    
     UIButton *saveButton = [[UIButton alloc] initWithFrame:CGRectMake(0, 0, 50, 40)];
     [saveButton setTitle:NSLocalizedString(@"save", @"Save") forState:UIControlStateNormal];
     [saveButton addTarget:self action:@selector(savePushOptions) forControlEvents:UIControlEventTouchUpInside];
@@ -53,6 +59,7 @@
     self.tableView.tableFooterView = [[UIView alloc] init];
     
     [self loadPushOptions];
+    
     [self.tableView reloadData];
 }
 

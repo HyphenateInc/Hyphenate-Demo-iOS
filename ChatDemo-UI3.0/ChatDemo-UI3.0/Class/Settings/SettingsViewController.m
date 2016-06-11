@@ -23,7 +23,6 @@
 @property (strong, nonatomic) UIView *footerView;
 
 @property (strong, nonatomic) UISwitch *autoLoginSwitch;
-@property (strong, nonatomic) UISwitch *ipSwitch;
 @property (strong, nonatomic) UISwitch *delConversationSwitch;
 @property (strong, nonatomic) UISwitch *showCallInfoSwitch;
 
@@ -31,8 +30,6 @@
 
 @implementation SettingsViewController
 
-@synthesize autoLoginSwitch = _autoLoginSwitch;
-@synthesize ipSwitch = _ipSwitch;
 
 - (id)initWithStyle:(UITableViewStyle)style
 {
@@ -46,8 +43,8 @@
 - (void)viewDidLoad
 {
     [super viewDidLoad];
+    
     self.title = NSLocalizedString(@"title.setting", @"Setting");
-    self.view.backgroundColor = [UIColor HIColorGreenDark];
     
     self.tableView.backgroundColor = [UIColor whiteColor];
     self.tableView.tableFooterView = self.footerView;
@@ -67,6 +64,7 @@
     [super didReceiveMemoryWarning];
 }
 
+
 #pragma mark - getter
 
 - (UISwitch *)autoLoginSwitch
@@ -77,16 +75,6 @@
     }
     
     return _autoLoginSwitch;
-}
-
-- (UISwitch *)ipSwitch
-{
-    if (_ipSwitch == nil) {
-        _ipSwitch = [[UISwitch alloc] init];
-        [_ipSwitch addTarget:self action:@selector(useIpChanged:) forControlEvents:UIControlEventValueChanged];
-    }
-    
-    return _ipSwitch;
 }
 
 - (UISwitch *)delConversationSwitch
@@ -111,91 +99,91 @@
     return _showCallInfoSwitch;
 }
 
+
 #pragma mark - Table view datasource
 
-- (NSInteger)numberOfSectionsInTableView:(UITableView *)tableView
-{
+- (NSInteger)numberOfSectionsInTableView:(UITableView *)tableView {
     return 1;
 }
 
-- (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section
-{
+- (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section {
     return 9;
 }
 
 - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath
 {
-    static NSString *cellIdentifier = @"Cell";
+    static NSString *cellIdentifier = @"SettingsCell";
+    
     UITableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:cellIdentifier];
     if (cell == nil) {
         cell = [[UITableViewCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:cellIdentifier];
     }
     
     if (indexPath.section == 0) {
-        if (indexPath.row == 0) {
-            cell.textLabel.text = NSLocalizedString(@"setting.autoLogin", @"Automatic Login");
-            cell.accessoryType = UITableViewCellAccessoryNone;
-            self.autoLoginSwitch.frame = CGRectMake(self.tableView.frame.size.width - (self.autoLoginSwitch.frame.size.width + 10), (cell.contentView.frame.size.height - self.autoLoginSwitch.frame.size.height) / 2, self.autoLoginSwitch.frame.size.width, self.autoLoginSwitch.frame.size.height);
-            [cell.contentView addSubview:self.autoLoginSwitch];
-        }
-        else if (indexPath.row == 1)
-        {
-            cell.textLabel.text = NSLocalizedString(@"title.apnsSetting", @"Apns Settings");
-            cell.accessoryType = UITableViewCellAccessoryDisclosureIndicator;
-        }
-        else if (indexPath.row == 2)
-        {
-            cell.textLabel.text = NSLocalizedString(@"title.buddyBlock", @"Black List");
-            cell.accessoryType = UITableViewCellAccessoryDisclosureIndicator;
-        }
-        else if (indexPath.row == 3)
-        {
-            cell.textLabel.text = NSLocalizedString(@"title.debug", @"Debug");
-            cell.accessoryType = UITableViewCellAccessoryDisclosureIndicator;
-        }/*
-        else if (indexPath.row == 4){
-            cell.textLabel.text = NSLocalizedString(@"setting.useIp", @"Use IP");
-            cell.accessoryType = UITableViewCellAccessoryNone;
-            self.ipSwitch.frame = CGRectMake(self.tableView.frame.size.width - (self.ipSwitch.frame.size.width + 10), (cell.contentView.frame.size.height - self.ipSwitch.frame.size.height) / 2, self.ipSwitch.frame.size.width, self.ipSwitch.frame.size.height);
-            [cell.contentView addSubview:self.ipSwitch];
-        }*/
-        else if (indexPath.row == 4){
-            cell.textLabel.text = NSLocalizedString(@"setting.deleteConWhenLeave", @"Delete conversation when leave a group");
-            cell.accessoryType = UITableViewCellAccessoryNone;
-            self.delConversationSwitch.frame = CGRectMake(self.tableView.frame.size.width - (self.delConversationSwitch.frame.size.width + 10), (cell.contentView.frame.size.height - self.delConversationSwitch.frame.size.height) / 2, self.delConversationSwitch.frame.size.width, self.delConversationSwitch.frame.size.height);
-            [self.delConversationSwitch setOn:NO animated:NO];
-            [cell.contentView addSubview:self.delConversationSwitch];
-        } else if (indexPath.row == 5){
-            cell.textLabel.text = NSLocalizedString(@"setting.iospushname", @"APNs Display Name");
-            cell.accessoryType = UITableViewCellAccessoryDisclosureIndicator;
-        } else if (indexPath.row == 6){
-            cell.textLabel.text = NSLocalizedString(@"setting.personalInfo", nil);
-            cell.accessoryType = UITableViewCellAccessoryDisclosureIndicator;
-            while (cell.contentView.subviews.count) {
-                UIView* child = cell.contentView.subviews.lastObject;
-                [child removeFromSuperview];
-            }
-        } else if (indexPath.row == 7){
-            cell.textLabel.text = NSLocalizedString(@"setting.showCallInfo", nil);
-            cell.accessoryType = UITableViewCellAccessoryNone;
-            self.showCallInfoSwitch.frame = CGRectMake(self.tableView.frame.size.width - (self.showCallInfoSwitch.frame.size.width + 10), (cell.contentView.frame.size.height - self.showCallInfoSwitch.frame.size.height) / 2, self.showCallInfoSwitch.frame.size.width, self.showCallInfoSwitch.frame.size.height);
-            [cell.contentView addSubview:self.showCallInfoSwitch];
+        
+        switch(indexPath.row) {
+            case 0:
+                cell.textLabel.text = NSLocalizedString(@"setting.autoLogin", @"Automatic Login");
+                cell.accessoryType = UITableViewCellAccessoryNone;
+                self.autoLoginSwitch.frame = CGRectMake(self.tableView.frame.size.width - (self.autoLoginSwitch.frame.size.width + 10), (cell.contentView.frame.size.height - self.autoLoginSwitch.frame.size.height) / 2, self.autoLoginSwitch.frame.size.width, self.autoLoginSwitch.frame.size.height);
+                [cell.contentView addSubview:self.autoLoginSwitch];
+                break;
+            case 1:
+                cell.textLabel.text = NSLocalizedString(@"title.apnsSetting", @"Apns Settings");
+                cell.accessoryType = UITableViewCellAccessoryDisclosureIndicator;
+                break;
+            case 2:
+                cell.textLabel.text = NSLocalizedString(@"title.buddyBlock", @"Black List");
+                cell.accessoryType = UITableViewCellAccessoryDisclosureIndicator;
+                break;
+            case 3:
+                cell.textLabel.text = NSLocalizedString(@"title.debug", @"Debug");
+                cell.accessoryType = UITableViewCellAccessoryDisclosureIndicator;
+                break;
+            case 4:
+                cell.textLabel.text = NSLocalizedString(@"setting.deleteConWhenLeave", @"Delete conversation when leave a group");
+                cell.accessoryType = UITableViewCellAccessoryNone;
+                self.delConversationSwitch.frame = CGRectMake(self.tableView.frame.size.width - (self.delConversationSwitch.frame.size.width + 10), (cell.contentView.frame.size.height - self.delConversationSwitch.frame.size.height) / 2, self.delConversationSwitch.frame.size.width, self.delConversationSwitch.frame.size.height);
+                [self.delConversationSwitch setOn:NO animated:NO];
+                [cell.contentView addSubview:self.delConversationSwitch];
+                break;
+            case 5:
+                cell.textLabel.text = NSLocalizedString(@"setting.iospushname", @"APNs Display Name");
+                cell.accessoryType = UITableViewCellAccessoryDisclosureIndicator;
+                break;
+            case 6:
+                cell.textLabel.text = NSLocalizedString(@"setting.personalInfo", nil);
+                cell.accessoryType = UITableViewCellAccessoryDisclosureIndicator;
+                while (cell.contentView.subviews.count) {
+                    UIView* child = cell.contentView.subviews.lastObject;
+                    [child removeFromSuperview];
+                }
+                break;
+            case 7:
+                cell.textLabel.text = NSLocalizedString(@"setting.showCallInfo", nil);
+                cell.accessoryType = UITableViewCellAccessoryNone;
+                self.showCallInfoSwitch.frame = CGRectMake(self.tableView.frame.size.width - (self.showCallInfoSwitch.frame.size.width + 10), (cell.contentView.frame.size.height - self.showCallInfoSwitch.frame.size.height) / 2, self.showCallInfoSwitch.frame.size.width, self.showCallInfoSwitch.frame.size.height);
+                [cell.contentView addSubview:self.showCallInfoSwitch];
+                break;
+            default:
+                break;
         }
     }
     
     return cell;
 }
 
+
 #pragma mark - Table view delegate
 
-- (CGFloat)tableView:(UITableView *)tableView heightForRowAtIndexPath:(NSIndexPath *)indexPath
-{
+- (CGFloat)tableView:(UITableView *)tableView heightForRowAtIndexPath:(NSIndexPath *)indexPath {
     return 50;
 }
 
 - (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath
 {
     [tableView deselectRowAtIndexPath:indexPath animated:YES];
+    
     if (indexPath.row == 1) {
         PushNotificationViewController *pushController = [[PushNotificationViewController alloc] initWithStyle:UITableViewStylePlain];
         [self.navigationController pushViewController:pushController animated:YES];
@@ -209,22 +197,31 @@
     {
         DebugViewController *debugController = [[DebugViewController alloc] initWithStyle:UITableViewStylePlain];
         [self.navigationController pushViewController:debugController animated:YES];
-    } else if (indexPath.row == 5) {
+    }
+    else if (indexPath.row == 5) {
         EditNicknameViewController *editName = [[EditNicknameViewController alloc] initWithNibName:nil bundle:nil];
         [self.navigationController pushViewController:editName animated:YES];
-    } else if (indexPath.row == 6){
+    }
+    else if (indexPath.row == 6){
         UserProfileEditViewController *userProfile = [[UserProfileEditViewController alloc] initWithStyle:UITableViewStylePlain];
         [self.navigationController pushViewController:userProfile animated:YES];
     }
 }
 
-- (void)alertView:(UIAlertView *)alertView clickedButtonAtIndex:(NSInteger)buttonIndex{
+- (void)alertView:(UIAlertView *)alertView clickedButtonAtIndex:(NSInteger)buttonIndex
+{
     if ([alertView cancelButtonIndex] != buttonIndex) {
+        
         UITextField *nameTextField = [alertView textFieldAtIndex:0];
+        
         BOOL flag = YES;
+        
         if(nameTextField.text.length > 0) {
+            
             NSScanner* scan = [NSScanner scannerWithString:nameTextField.text];
+            
             int val;
+            
             if ([scan scanInt:&val] && [scan isAtEnd]) {
                 if ([nameTextField.text intValue] >= 150 && [nameTextField.text intValue] <= 1000) {
                     [CallViewController saveBitrate:nameTextField.text];
@@ -232,17 +229,20 @@
                 }
             }
         }
+        
         if (flag) {
             [self showHint:NSLocalizedString(@"setting.setBitrateTips", @"Set Bitrate should be 150-1000")];
         }
     }
 }
 
-#pragma mark - getter
+
+#pragma mark - Views
 
 - (UIView *)footerView
 {
     if (_footerView == nil) {
+        
         _footerView = [[UIView alloc] initWithFrame:CGRectMake(0, 0, self.view.frame.size.width, 80)];
         _footerView.backgroundColor = [UIColor clearColor];
         
@@ -257,25 +257,19 @@
         [logoutButton setTitle:logoutButtonTitle forState:UIControlStateNormal];
         [logoutButton setTitleColor:[UIColor whiteColor] forState:UIControlStateNormal];
         [logoutButton addTarget:self action:@selector(logoutAction) forControlEvents:UIControlEventTouchUpInside];
+       
         [_footerView addSubview:logoutButton];
     }
     
     return _footerView;
 }
 
+
 #pragma mark - action
 
 - (void)autoLoginChanged:(UISwitch *)autoSwitch
 {
     [[EMClient sharedClient].options setIsAutoLogin:autoSwitch.isOn];
-}
-
-- (void)useIpChanged:(UISwitch *)ipSwitch
-{
-//    [[EMClient sharedClient].options performSelectorInBackground:@selector(setEnableDnsConfig) withObject:@(ipSwitch.on)];
-//    NSUserDefaults *ud = [NSUserDefaults standardUserDefaults];
-//    [ud setObject:[NSNumber numberWithBool:ipSwitch.isOn] forKey:@"identifier_userip_enable"];
-//    [ud synchronize];
 }
 
 - (void)delConversationChanged:(UISwitch *)control
@@ -293,7 +287,6 @@
 - (void)refreshConfig
 {
     [self.autoLoginSwitch setOn:[[EMClient sharedClient].options isAutoLogin] animated:YES];
-//    [self.ipSwitch setOn:[[EMClient sharedClient].options performSelector:@selector(enableDnsConfig)] animated:YES];
     
     [self.tableView reloadData];
 }
@@ -301,16 +294,23 @@
 - (void)logoutAction
 {
     __weak SettingsViewController *weakSelf = self;
+    
     [self showHudInView:self.view hint:NSLocalizedString(@"setting.logoutOngoing", @"loging out...")];
+    
     dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), ^{
+        
         EMError *error = [[EMClient sharedClient] logout:YES];
+        
         dispatch_async(dispatch_get_main_queue(), ^{
+            
             [weakSelf hideHud];
+            
             if (error != nil) {
                 [weakSelf showHint:error.errorDescription];
             }
-            else{
+            else {
                 [[ApplyViewController shareController] clear];
+                
                 [[NSNotificationCenter defaultCenter] postNotificationName:KNOTIFICATION_LOGINCHANGE object:@NO];
             }
         });
