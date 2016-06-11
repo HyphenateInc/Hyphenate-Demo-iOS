@@ -123,18 +123,21 @@ static NSString *kGroupName = @"GroupName";
     self.chatListVC = [[ConversationListController alloc] initWithNibName:nil bundle:nil];
     [self.chatListVC networkChanged:_connectionState];
     self.chatListVC.tabBarItem = [[UITabBarItem alloc] initWithTitle:@"Chats" image:[UIImage imageNamed:@"tabbar_chats"] selectedImage:[UIImage imageNamed:@"tabbar_chatsHL"]];
+    self.chatListVC.tabBarItem.tag = 0;
     [self unSelectedTapTabBarItems:self.chatListVC.tabBarItem];
     [self selectedTapTabBarItems:self.chatListVC.tabBarItem];
     
     // Contacts screen
     self.contactsVC = [[ContactListViewController alloc] initWithNibName:nil bundle:nil];
     self.contactsVC.tabBarItem = [[UITabBarItem alloc] initWithTitle:@"Contacts" image:[UIImage imageNamed:@"tabbar_contactsHL"] selectedImage:[UIImage imageNamed:@"tabbar_contacts"]];
+    self.contactsVC.tabBarItem.tag = 1;
     [self unSelectedTapTabBarItems:self.contactsVC.tabBarItem];
     [self selectedTapTabBarItems:self.contactsVC.tabBarItem];
     
     // Settings Screen
     self.settingsVC = [[SettingsViewController alloc] init];
     self.settingsVC.tabBarItem = [[UITabBarItem alloc] initWithTitle:@"Settings" image:[UIImage imageNamed:@"tabbar_settingHL"] selectedImage:[UIImage imageNamed:@"tabbar_setting"]];
+    self.settingsVC.tabBarItem.tag = 2;
     self.settingsVC.view.autoresizingMask = UIViewAutoresizingFlexibleHeight;
     [self unSelectedTapTabBarItems:self.settingsVC.tabBarItem];
     [self selectedTapTabBarItems:self.settingsVC.tabBarItem];
