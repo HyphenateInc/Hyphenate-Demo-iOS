@@ -16,7 +16,6 @@
 #import "SRRefreshView.h"
 
 #import "ChatDemoHelper.h"
-//#import "EaseChineseToPinyin.h"
 
 @interface BlackListViewController ()<UITableViewDataSource, UITableViewDelegate, SRRefreshDelegate>
 {

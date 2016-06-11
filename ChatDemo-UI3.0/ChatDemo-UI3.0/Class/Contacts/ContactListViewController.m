@@ -12,7 +12,6 @@
 
 #import "ContactListViewController.h"
 
-//#import "EaseChineseToPinyin.h"
 #import "ChatViewController.h"
 #import "RobotListViewController.h"
 #import "AddFriendViewController.h"
