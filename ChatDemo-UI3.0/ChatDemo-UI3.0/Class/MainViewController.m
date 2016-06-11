@@ -22,15 +22,9 @@ static NSString *kMessageType = @"MessageType";
 static NSString *kConversationChatter = @"ConversationChatter";
 static NSString *kGroupName = @"GroupName";
 
-#if DEMO_CALL == 1
 @interface MainViewController () <UIAlertViewDelegate, EMCallManagerDelegate>
-#else
-@interface MainViewController () <UIAlertViewDelegate>
-#endif
-{
-    UIBarButtonItem *_addFriendItem;
-}
 
+@property (strong, nonatomic) UIBarButtonItem *addFriendItem;
 @property (strong, nonatomic) NSDate *lastPlaySoundDate;
 @property (strong, nonatomic) ConversationListController *chatListVC;
 @property (strong, nonatomic) ContactListViewController *contactsVC;
@@ -63,10 +57,10 @@ static NSString *kGroupName = @"GroupName";
     self.selectedIndex = 0;
     [self selectedTapTabBarItems:self.chatListVC.tabBarItem];
     
-    UIButton *addButton = [[UIButton alloc] initWithFrame:CGRectMake(0, 0, 44, 44)];
-    [addButton setImage:[UIImage imageNamed:@"add.png"] forState:UIControlStateNormal];
-    [addButton addTarget:self.contactsVC action:@selector(addFriendAction) forControlEvents:UIControlEventTouchUpInside];
-    _addFriendItem = [[UIBarButtonItem alloc] initWithCustomView:addButton];
+    self.addFriendItem = [[UIBarButtonItem alloc] initWithImage:[UIImage imageNamed:@"add"]
+                                                                           style:UIBarButtonItemStylePlain
+                                                                          target:self
+                                                                          action:@selector(addFriendAction)];
     
     [self setupUnreadMessageCount];
     [self setupUntreatedApplyCount];
@@ -94,9 +88,10 @@ static NSString *kGroupName = @"GroupName";
 
 - (void)tabBar:(UITabBar *)tabBar didSelectItem:(UITabBarItem *)item
 {
+    self.navigationItem.rightBarButtonItem = nil;
+
     if (item.tag == 0) {
         self.title = NSLocalizedString(@"title.conversation", @"Chats");
-        self.navigationItem.rightBarButtonItem = nil;
     }
     else if (item.tag == 1) {
         self.title = NSLocalizedString(@"title.addressbook", @"Contacts");
@@ -104,7 +99,6 @@ static NSString *kGroupName = @"GroupName";
     }
     else if (item.tag == 2) {
         self.title = NSLocalizedString(@"title.setting", @"Settings");
-        self.navigationItem.rightBarButtonItem = nil;
         [self.settingsVC refreshConfig];
     }
 }

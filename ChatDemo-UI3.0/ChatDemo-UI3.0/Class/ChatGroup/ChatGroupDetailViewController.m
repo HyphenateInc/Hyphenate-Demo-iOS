@@ -603,7 +603,7 @@
 {
     __weak typeof(self) weakSelf = self;
     [EMAlertView showAlertWithTitle:NSLocalizedString(@"prompt", @"Prompt")
-                            message:NSLocalizedString(@"sureToDelete", @"please make sure to delete")
+                            message:NSLocalizedString(@"sureToDelete", @"Messages will not be able to retrive")
                     completionBlock:^(NSUInteger buttonIndex, EMAlertView *alertView) {
                         if (buttonIndex == 1) {
                             [[NSNotificationCenter defaultCenter] postNotificationName:@"RemoveAllMessages" object:weakSelf.chatGroup.groupId];

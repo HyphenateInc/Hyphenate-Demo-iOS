@@ -101,10 +101,12 @@
     self.navigationItem.leftBarButtonItem = backBarButtonItem;
     
     if (self.conversation.type == EMConversationTypeChat) {
-        UIButton *clearButton = [[UIButton alloc] initWithFrame:CGRectMake(0, 0, 44, 44)];
-        [clearButton setImage:[UIImage imageNamed:@"delete"] forState:UIControlStateNormal];
-        [clearButton addTarget:self action:@selector(deleteAllMessages:) forControlEvents:UIControlEventTouchUpInside];
-        self.navigationItem.rightBarButtonItem = [[UIBarButtonItem alloc] initWithCustomView:clearButton];
+        
+        UIBarButtonItem *rightBarButtonItem = [[UIBarButtonItem alloc] initWithImage:[UIImage imageNamed:@"delete"]
+                                                                              style:UIBarButtonItemStylePlain
+                                                                             target:self
+                                                                             action:@selector(deleteAllMessages:)];
+        self.navigationItem.rightBarButtonItem = rightBarButtonItem;
     }
     else {
         UIButton *detailButton = [[UIButton alloc] initWithFrame:CGRectMake(0, 0, 60, 44)];
@@ -291,8 +293,8 @@
             [self showHint:NSLocalizedString(@"message.noMessage", @"no messages")];
         }
     }
-    else if ([sender isKindOfClass:[UIButton class]]){
-        UIAlertView *alertView = [[UIAlertView alloc] initWithTitle:NSLocalizedString(@"prompt", @"Prompt") message:NSLocalizedString(@"sureToDelete", @"please make sure to delete") delegate:self cancelButtonTitle:NSLocalizedString(@"cancel", @"Cancel") otherButtonTitles:NSLocalizedString(@"ok", @"OK"), nil];
+    else {
+        UIAlertView *alertView = [[UIAlertView alloc] initWithTitle:@"Delete Messages?" message:NSLocalizedString(@"sureToDelete", @"Messages will not be able to retrive") delegate:self cancelButtonTitle:NSLocalizedString(@"cancel", @"Cancel") otherButtonTitles:NSLocalizedString(@"ok", @"OK"), nil];
         [alertView show];
     }
 }

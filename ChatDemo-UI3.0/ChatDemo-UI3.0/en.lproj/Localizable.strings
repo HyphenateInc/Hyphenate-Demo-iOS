@@ -51,7 +51,7 @@
 "saySomething" = "Say somthing";
 "searchResults" = "The search results";
 "doneWithCount" = "Done(%i)";
-"sureToDelete" = "Please make sure to delete";
+"sureToDelete" = "Messages will not be able to retrive";
 "receiveCmd" = "Receive cmd message";
 "receiveMessage" = "You have a new message";
 "loginAtOtherDevice" = "Your login account has been logged in other places";
