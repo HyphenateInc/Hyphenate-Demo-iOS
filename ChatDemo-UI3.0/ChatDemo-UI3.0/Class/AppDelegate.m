@@ -17,7 +17,15 @@
 #import "AppDelegate+Hyphenate.h"
 #import "AppDelegate+Parse.h"
 
+/** Google Analytics configuration constants **/
+static NSString *const kGaPropertyId = @"UA-78628613-1";
+static NSString *const kTrackingPreferenceKey = @"allowTracking";
+static BOOL const kGaDryRun = NO;
+static int const kGaDispatchPeriod = 30;
+
 @interface AppDelegate ()
+
+- (void)initializeGoogleAnalytics;
 
 @end
 
@@ -55,16 +63,8 @@
                   apnsCertName:apnsCertName
                    otherConfig:@{kSDKConfigEnableConsoleLogger:[NSNumber numberWithBool:YES]}];
     
-    // Configure tracker from GoogleService-Info.plist.
-    NSError *configureError;
-    [[GGLContext sharedInstance] configureWithError:&configureError];
-    NSAssert(!configureError, @"Error configuring Google services: %@", configureError);
-    
-    // Optional: configure GAI options.
-    GAI *gai = [GAI sharedInstance];
-    gai.trackUncaughtExceptions = YES;  // report uncaught exceptions
-    gai.logger.logLevel = kGAILogLevelVerbose;  // remove before app release
-    
+    [self initializeGoogleAnalytics];
+
     [self.window makeKeyAndVisible];
     
     return YES;
@@ -92,6 +92,26 @@
 - (void)applicationWillEnterForeground:(UIApplication *)application
 {
     [[EMClient sharedClient] applicationWillEnterForeground:application];
+}
+
+- (void)applicationDidBecomeActive:(UIApplication *)application {
+    [GAI sharedInstance].optOut =
+    ![[NSUserDefaults standardUserDefaults] boolForKey:kTrackingPreferenceKey];
+}
+
+
+#pragma mark - Google Analytics
+
+- (void)initializeGoogleAnalytics
+{
+    // Configure tracker from GoogleService-Info.plist.
+    NSError *configureError;
+    [[GGLContext sharedInstance] configureWithError:&configureError];
+    NSAssert(!configureError, @"Error configuring Google services: %@", configureError);
+    
+    [[GAI sharedInstance] setDispatchInterval:kGaDispatchPeriod];
+    [[GAI sharedInstance] setDryRun:kGaDryRun];
+    self.tracker = [[GAI sharedInstance] trackerWithTrackingId:kGaPropertyId];
 }
 
 @end

@@ -157,9 +157,8 @@ typedef NS_ENUM(NSInteger, GettingMoreFooterViewState){
 {
     [super viewWillAppear:animated];
     
-    id<GAITracker> tracker = [[GAI sharedInstance] defaultTracker];
-    [tracker set:NSStringFromClass(self.class) value:@""];
-    [tracker send:[[GAIDictionaryBuilder createScreenView] build]];
+    [[GAI sharedInstance].defaultTracker set:kGAIScreenName value:NSStringFromClass(self.class)];
+    [[GAI sharedInstance].defaultTracker send:[[GAIDictionaryBuilder createScreenView] build]];
 }
 
 - (void)didReceiveMemoryWarning
