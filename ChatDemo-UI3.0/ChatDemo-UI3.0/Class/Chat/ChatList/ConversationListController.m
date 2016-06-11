@@ -48,12 +48,13 @@
 
 @end
 
+
 @implementation ConversationListController
 
-- (void)viewDidLoad {
+- (void)viewDidLoad
+{
     [super viewDidLoad];
     
-    // Do any additional setup after loading the view.
     self.showRefreshHeader = YES;
     self.delegate = self;
     self.dataSource = self;
@@ -81,10 +82,14 @@
     [self refresh];
 }
 
-- (void)didReceiveMemoryWarning {
-    [super didReceiveMemoryWarning];
-    // Dispose of any resources that can be recreated.
+
+#pragma mark - Table view delegate
+
+- (CGFloat)tableView:(UITableView *)tableView heightForRowAtIndexPath:(NSIndexPath *)indexPath
+{
+    return 70;
 }
+
 
 #pragma mark - Data
 
@@ -107,7 +112,8 @@
     }
 }
 
-#pragma mark - getter
+
+#pragma mark - network state view
 
 - (UIView *)networkStateView
 {
@@ -197,6 +203,7 @@
     return _searchController;
 }
 
+
 #pragma mark - EaseConversationListViewControllerDelegate
 
 - (void)conversationListViewController:(EaseConversationListViewController *)conversationListViewController
@@ -219,6 +226,7 @@
         [self.tableView reloadData];
     }
 }
+
 
 #pragma mark - EaseConversationListViewControllerDataSource
 
@@ -310,6 +318,7 @@
     return latestMessageTime;
 }
 
+
 #pragma mark - UISearchBarDelegate
 
 - (BOOL)searchBarShouldBeginEditing:(UISearchBar *)searchBar
@@ -351,6 +360,7 @@
     [searchBar setShowsCancelButton:NO animated:YES];
 }
 
+
 #pragma mark - public
 
 -(void)refresh
@@ -363,14 +373,14 @@
     [self tableViewDidTriggerHeaderRefresh];
 }
 
-- (void)isConnect:(BOOL)isConnect{
+- (void)isConnect:(BOOL)isConnect
+{
     if (!isConnect) {
         self.tableView.tableHeaderView = _networkStateView;
     }
     else{
         self.tableView.tableHeaderView = nil;
     }
-    
 }
 
 - (void)networkChanged:(EMConnectionState)connectionState
@@ -378,7 +388,7 @@
     if (connectionState == EMConnectionDisconnected) {
         self.tableView.tableHeaderView = _networkStateView;
     }
-    else{
+    else {
         self.tableView.tableHeaderView = nil;
     }
 }
