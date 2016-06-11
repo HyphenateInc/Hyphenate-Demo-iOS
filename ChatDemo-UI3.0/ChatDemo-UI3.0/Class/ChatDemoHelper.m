@@ -92,8 +92,11 @@ static ChatDemoHelper *helper = nil;
 - (void)asyncGroupFromServer
 {
     __weak typeof(self) weakself = self;
+    
     dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), ^{
+        
         [[EMClient sharedClient].groupManager loadAllMyGroupsFromDB];
+        
         EMError *error = nil;
         [[EMClient sharedClient].groupManager getMyGroupsFromServerWithError:&error];
         if (!error) {

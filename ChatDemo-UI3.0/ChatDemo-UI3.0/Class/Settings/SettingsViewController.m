@@ -24,7 +24,6 @@
 
 @property (strong, nonatomic) UISwitch *autoLoginSwitch;
 @property (strong, nonatomic) UISwitch *delConversationSwitch;
-@property (strong, nonatomic) UISwitch *showCallInfoSwitch;
 
 @end
 
@@ -45,6 +44,8 @@
     [super viewDidLoad];
     
     self.title = NSLocalizedString(@"title.setting", @"Setting");
+    
+    self.view.backgroundColor = [UIColor HIColorLightGray];
     
     self.tableView.backgroundColor = [UIColor whiteColor];
     self.tableView.tableFooterView = self.footerView;
@@ -88,17 +89,6 @@
     return _delConversationSwitch;
 }
 
-- (UISwitch *)showCallInfoSwitch
-{
-    if (!_showCallInfoSwitch)
-    {
-        _showCallInfoSwitch = [[UISwitch alloc] init];
-        _showCallInfoSwitch.on = [[[NSUserDefaults standardUserDefaults] objectForKey:@"showCallInfo"] boolValue];
-        [_showCallInfoSwitch addTarget:self action:@selector(showCallInfoChanged:) forControlEvents:UIControlEventValueChanged];
-    }
-    return _showCallInfoSwitch;
-}
-
 
 #pragma mark - Table view datasource
 
@@ -107,7 +97,7 @@
 }
 
 - (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section {
-    return 9;
+    return 8;
 }
 
 - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath
@@ -158,12 +148,6 @@
                     UIView* child = cell.contentView.subviews.lastObject;
                     [child removeFromSuperview];
                 }
-                break;
-            case 7:
-                cell.textLabel.text = NSLocalizedString(@"setting.showCallInfo", nil);
-                cell.accessoryType = UITableViewCellAccessoryNone;
-                self.showCallInfoSwitch.frame = CGRectMake(self.tableView.frame.size.width - (self.showCallInfoSwitch.frame.size.width + 10), (cell.contentView.frame.size.height - self.showCallInfoSwitch.frame.size.height) / 2, self.showCallInfoSwitch.frame.size.width, self.showCallInfoSwitch.frame.size.height);
-                [cell.contentView addSubview:self.showCallInfoSwitch];
                 break;
             default:
                 break;
@@ -253,11 +237,11 @@
         CGRect buttonFrame = CGRectMake(0, 1, _footerView.frame.size.width, 45);
         
         UIButton *logoutButton = [[UIButton alloc] initWithFrame:buttonFrame];
-        [logoutButton setBackgroundColor:[UIColor whiteColor]];
+        [logoutButton setBackgroundColor:[UIColor HIColorRed]];
         NSString *username = [[EMClient sharedClient] currentUsername];
         NSString *logoutButtonTitle = [[NSString alloc] initWithFormat:NSLocalizedString(@"setting.loginUser", @"Logout as  (%@)"), username];
         [logoutButton setTitle:logoutButtonTitle forState:UIControlStateNormal];
-        [logoutButton setTitleColor:[UIColor HIColorRed] forState:UIControlStateNormal];
+        [logoutButton setTitleColor:[UIColor whiteColor] forState:UIControlStateNormal];
         [logoutButton addTarget:self action:@selector(logoutAction) forControlEvents:UIControlEventTouchUpInside];
         [_footerView addSubview:logoutButton];
 

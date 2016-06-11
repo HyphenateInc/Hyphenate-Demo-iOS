@@ -219,9 +219,9 @@
 "call.init"="Is init the call...";
 "call.dealloc"="Is hanging up the call...";
 "call.videoSize"="Width/Height: ";
-"call.videoTimedelay"="Timedelay: ";
+"call.videoTimedelay"="Time delay: ";
 "call.videoFramerate"="Framerate: ";
-"call.videoLostcnt"="Lostcnt: ";
+"call.videoLostcnt"="Lost cnt: ";
 "call.videoLocalBitrate"="Local Bitrate: ";
 "call.videoRemoteBitrate"="Remote Bitrate: ";
 "call.record" = "Record";

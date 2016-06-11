@@ -89,7 +89,7 @@
     
     if (_callSession.type == EMCallTypeVideo) {
         
-        [self _initializeVideoView];
+        [self initializeVideoView];
         
         [self.view bringSubviewToFront:self.topView];
         [self.view bringSubviewToFront:self.actionView];
@@ -109,15 +109,6 @@
 {
     [super didReceiveMemoryWarning];
     // Dispose of any resources that can be recreated.
-}
-
-
-#pragma mark - getter
-
-- (BOOL)isShowCallInfo
-{
-    id object = [[NSUserDefaults standardUserDefaults] objectForKey:@"showCallInfo"];
-    return [object boolValue];
 }
 
 
@@ -290,7 +281,7 @@
     }
 }
 
-- (void)_initializeVideoView
+- (void)initializeVideoView
 {
     // Recipient's window
     _callSession.remoteView = [[EMCallRemoteView alloc] initWithFrame:CGRectMake(0, 0, self.view.frame.size.width, self.view.frame.size.height)];
@@ -305,55 +296,56 @@
     // call info
     _propertyView = [[UIView alloc] initWithFrame:CGRectMake(10, CGRectGetMinY(self.actionView.frame) - 90, self.view.frame.size.width - 20, 90)];
     _propertyView.backgroundColor = [UIColor clearColor];
-    _propertyView.hidden = ![self isShowCallInfo];
+    _propertyView.hidden = NO;
     [self.view addSubview:_propertyView];
     
     width = (CGRectGetWidth(_propertyView.frame) - 20) / 2;
     height = CGRectGetHeight(_propertyView.frame) / 3;
     _sizeLabel = [[UILabel alloc] initWithFrame:CGRectMake(0, 0, width, height)];
     _sizeLabel.backgroundColor = [UIColor clearColor];
-    _sizeLabel.textColor = [UIColor redColor];
+    _sizeLabel.textColor = [UIColor whiteColor];
     [_propertyView addSubview:_sizeLabel];
     
     _timedelayLabel = [[UILabel alloc] initWithFrame:CGRectMake(width, 0, width, height)];
     _timedelayLabel.backgroundColor = [UIColor clearColor];
-    _timedelayLabel.textColor = [UIColor redColor];
+    _timedelayLabel.textColor = [UIColor whiteColor];
     [_propertyView addSubview:_timedelayLabel];
     
     _framerateLabel = [[UILabel alloc] initWithFrame:CGRectMake(0, height, width, height)];
     _framerateLabel.backgroundColor = [UIColor clearColor];
-    _framerateLabel.textColor = [UIColor redColor];
+    _framerateLabel.textColor = [UIColor whiteColor];
     [_propertyView addSubview:_framerateLabel];
     
     _lostcntLabel = [[UILabel alloc] initWithFrame:CGRectMake(width, height, width, height)];
     _lostcntLabel.backgroundColor = [UIColor clearColor];
-    _lostcntLabel.textColor = [UIColor redColor];
+    _lostcntLabel.textColor = [UIColor whiteColor];
     [_propertyView addSubview:_lostcntLabel];
     
     _localBitrateLabel = [[UILabel alloc] initWithFrame:CGRectMake(0, height * 2, width, height)];
     _localBitrateLabel.backgroundColor = [UIColor clearColor];
-    _localBitrateLabel.textColor = [UIColor redColor];
+    _localBitrateLabel.textColor = [UIColor whiteColor];
     [_propertyView addSubview:_localBitrateLabel];
     
     _remoteBitrateLabel = [[UILabel alloc] initWithFrame:CGRectMake(width, height * 2, width, height)];
     _remoteBitrateLabel.backgroundColor = [UIColor clearColor];
-    _remoteBitrateLabel.textColor = [UIColor redColor];
+    _remoteBitrateLabel.textColor = [UIColor whiteColor];
     [_propertyView addSubview:_remoteBitrateLabel];
 }
 
 
 #pragma mark - private
 
-- (void)_reloadPropertyData
+- (void)showPropertyData
 {
     if (_callSession) {
+        
         _sizeLabel.text = [NSString stringWithFormat:@"%@%i/%i", NSLocalizedString(@"call.videoSize", @"Width/Height: "), [_callSession getVideoWidth], [_callSession getVideoHeight]];
         
-        _timedelayLabel.text = [NSString stringWithFormat:@"%@%i", NSLocalizedString(@"call.videoTimedelay", @"Timedelay: "), [_callSession getVideoTimedelay]];
+        _timedelayLabel.text = [NSString stringWithFormat:@"%@%i", NSLocalizedString(@"call.videoTimedelay", @"Time delay: "), [_callSession getVideoTimedelay]];
         
         _framerateLabel.text = [NSString stringWithFormat:@"%@%i", NSLocalizedString(@"call.videoFramerate", @"Framerate: "), [_callSession getVideoFramerate]];
         
-        _lostcntLabel.text = [NSString stringWithFormat:@"%@%i", NSLocalizedString(@"call.videoLostcnt", @"Lostcnt: "), [_callSession getVideoLostcnt]];
+        _lostcntLabel.text = [NSString stringWithFormat:@"%@%i", NSLocalizedString(@"call.videoLostcnt", @"Lost cnt: "), [_callSession getVideoLostcnt]];
         
         _localBitrateLabel.text = [NSString stringWithFormat:@"%@%i", NSLocalizedString(@"call.videoLocalBitrate", @"Local Bitrate: "), [_callSession getVideoLocalBitrate]];
         
@@ -371,8 +363,8 @@
     _ringPlayer = [[AVAudioPlayer alloc] initWithContentsOfURL:url error:nil];
     [_ringPlayer setVolume:1];
     _ringPlayer.numberOfLoops = -1; //-1 is for infinite loop
-    if([_ringPlayer prepareToPlay])
-    {
+    
+    if([_ringPlayer prepareToPlay]) {
         [_ringPlayer play];
     }
 }
@@ -406,6 +398,7 @@
 {
     self.topView.hidden = !self.topView.hidden;
     self.actionView.hidden = !self.actionView.hidden;
+    _propertyView.hidden = !_propertyView.hidden;
 }
 
 #pragma mark - action
@@ -562,9 +555,11 @@
 
 - (void)showCallInfo
 {
-    if (_callSession.type == EMCallTypeVideo && [self isShowCallInfo]) {
-        [self _reloadPropertyData];
-        _propertyTimer = [NSTimer scheduledTimerWithTimeInterval:2.0 target:self selector:@selector(_reloadPropertyData) userInfo:nil repeats:YES];
+    if (_callSession.type == EMCallTypeVideo)
+    {
+        [self showPropertyData];
+        
+        _propertyTimer = [NSTimer scheduledTimerWithTimeInterval:2.0 target:self selector:@selector(showPropertyData) userInfo:nil repeats:YES];
     }
 }
 
@@ -572,22 +567,16 @@
 {
     switch (status) {
         case EMCallNetworkStatusNormal:
-        {
             _networkLabel.text = @"";
             _networkLabel.hidden = YES;
-        }
             break;
         case EMCallNetworkStatusUnstable:
-        {
             _networkLabel.text = NSLocalizedString(@"call.networkUnstable", @"Unstable network");
             _networkLabel.hidden = NO;
-        }
             break;
         case EMCallNetworkStatusNoData:
-        {
             _networkLabel.text = NSLocalizedString(@"call.noDate", @"No network data");
             _networkLabel.hidden = NO;
-        }
             break;
         default:
             break;
