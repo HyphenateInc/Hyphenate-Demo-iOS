@@ -1,5 +1,5 @@
 /************************************************************
- *  * Hyphenate  
+ *  * Hyphenate
  * __________________
  * Copyright (C) 2016 Hyphenate Inc. All rights reserved.
  *
@@ -47,7 +47,9 @@
                          status:(NSString *)statusString
 {
     self = [super init];
+    
     if (self) {
+        
         _callSession = session;
         _isCaller = isCaller;
         _timeLabel.text = @"";
@@ -63,32 +65,34 @@
     return self;
 }
 
-- (void)viewDidLoad {
+- (void)viewDidLoad
+{
     [super viewDidLoad];
-    // Do any additional setup after loading the view.
     
     [self.view addGestureRecognizer:self.tapRecognizer];
     
     [self _setupSubviews];
     
-    _nameLabel.text = _callSession.remoteUsername;
-    _statusLabel.text = _status;
+    self.nameLabel.text = _callSession.remoteUsername;
+    self.statusLabel.text = _status;
+    
     if (_isCaller) {
         self.rejectButton.hidden = YES;
         self.answerButton.hidden = YES;
         self.cancelButton.hidden = NO;
     }
-    else{
+    else {
         self.cancelButton.hidden = YES;
         self.rejectButton.hidden = NO;
         self.answerButton.hidden = NO;
     }
     
     if (_callSession.type == EMCallTypeVideo) {
+        
         [self _initializeVideoView];
         
-        [self.view bringSubviewToFront:_topView];
-        [self.view bringSubviewToFront:_actionView];
+        [self.view bringSubviewToFront:self.topView];
+        [self.view bringSubviewToFront:self.actionView];
     }
 }
 
@@ -101,10 +105,12 @@
     [tracker send:[[GAIDictionaryBuilder createScreenView] build]];
 }
 
-- (void)didReceiveMemoryWarning {
+- (void)didReceiveMemoryWarning
+{
     [super didReceiveMemoryWarning];
     // Dispose of any resources that can be recreated.
 }
+
 
 #pragma mark - getter
 
@@ -113,6 +119,7 @@
     id object = [[NSUserDefaults standardUserDefaults] objectForKey:@"showCallInfo"];
     return [object boolValue];
 }
+
 
 #pragma makr - property
 
@@ -124,6 +131,7 @@
     
     return _tapRecognizer;
 }
+
 
 #pragma mark - subviews
 
@@ -141,139 +149,161 @@
     bgImageView.image = [UIImage imageNamed:@"callBg.png"];
     [self.view addSubview:bgImageView];
     
-    _topView = [[UIView alloc] initWithFrame:CGRectMake(0, 0, self.view.frame.size.width, 150)];
-    _topView.backgroundColor = [UIColor clearColor];
-    [self.view addSubview:_topView];
+    self.topView = [[UIView alloc] initWithFrame:CGRectMake(0, 0, self.view.frame.size.width, 150)];
+    self.topView.backgroundColor = [UIColor clearColor];
+    [self.view addSubview:self.topView];
     
-    _statusLabel = [[UILabel alloc] initWithFrame:CGRectMake(10, 20, _topView.frame.size.width - 20, 20)];
-    _statusLabel.font = [UIFont systemFontOfSize:15.0];
-    _statusLabel.backgroundColor = [UIColor clearColor];
-    _statusLabel.textColor = [UIColor whiteColor];
-    _statusLabel.textAlignment = NSTextAlignmentCenter;
-    [_topView addSubview:self.statusLabel];
+    self.statusLabel = [[UILabel alloc] initWithFrame:CGRectMake(10, 20, self.topView.frame.size.width - 20, 20)];
+    self.statusLabel.font = [UIFont systemFontOfSize:15.0];
+    self.statusLabel.backgroundColor = [UIColor clearColor];
+    self.statusLabel.textColor = [UIColor whiteColor];
+    self.statusLabel.textAlignment = NSTextAlignmentCenter;
+    [self.topView addSubview:self.statusLabel];
     
-    _timeLabel = [[UILabel alloc] initWithFrame:CGRectMake(0, CGRectGetMaxY(_statusLabel.frame), _topView.frame.size.width, 15)];
+    _timeLabel = [[UILabel alloc] initWithFrame:CGRectMake(0, CGRectGetMaxY(self.statusLabel.frame), self.topView.frame.size.width, 15)];
     _timeLabel.font = [UIFont systemFontOfSize:12.0];
     _timeLabel.backgroundColor = [UIColor clearColor];
     _timeLabel.textColor = [UIColor whiteColor];
     _timeLabel.textAlignment = NSTextAlignmentCenter;
-    [_topView addSubview:_timeLabel];
+    [self.topView addSubview:_timeLabel];
     
-    _headerImageView = [[UIImageView alloc] initWithFrame:CGRectMake((_topView.frame.size.width - 50) / 2, CGRectGetMaxY(_statusLabel.frame) + 20, 50, 50)];
+    _headerImageView = [[UIImageView alloc] initWithFrame:CGRectMake((self.topView.frame.size.width - 50) / 2, CGRectGetMaxY(self.statusLabel.frame) + 20, 50, 50)];
     _headerImageView.image = [UIImage imageNamed:@"user"];
-    [_topView addSubview:_headerImageView];
+    [self.topView addSubview:_headerImageView];
     
-    _nameLabel = [[UILabel alloc] initWithFrame:CGRectMake(0, CGRectGetMaxY(_headerImageView.frame) + 5, _topView.frame.size.width, 20)];
-    _nameLabel.font = [UIFont systemFontOfSize:14.0];
-    _nameLabel.backgroundColor = [UIColor clearColor];
-    _nameLabel.textColor = [UIColor whiteColor];
-    _nameLabel.textAlignment = NSTextAlignmentCenter;
-    _nameLabel.text = _callSession.remoteUsername;
-    [_topView addSubview:_nameLabel];
+    self.nameLabel = [[UILabel alloc] initWithFrame:CGRectMake(0, CGRectGetMaxY(_headerImageView.frame) + 5, self.topView.frame.size.width, 20)];
+    self.nameLabel.font = [UIFont systemFontOfSize:14.0];
+    self.nameLabel.backgroundColor = [UIColor clearColor];
+    self.nameLabel.textColor = [UIColor whiteColor];
+    self.nameLabel.textAlignment = NSTextAlignmentCenter;
+    self.nameLabel.text = _callSession.remoteUsername;
+    [self.topView addSubview:self.nameLabel];
     
-    _networkLabel = [[UILabel alloc] initWithFrame:CGRectMake(0, CGRectGetMaxY(_nameLabel.frame) + 5, _topView.frame.size.width, 20)];
+    _networkLabel = [[UILabel alloc] initWithFrame:CGRectMake(0, CGRectGetMaxY(self.nameLabel.frame) + 5, self.topView.frame.size.width, 20)];
     _networkLabel.font = [UIFont systemFontOfSize:14.0];
     _networkLabel.backgroundColor = [UIColor clearColor];
     _networkLabel.textColor = [UIColor whiteColor];
     _networkLabel.textAlignment = NSTextAlignmentCenter;
     _networkLabel.hidden = YES;
-    [_topView addSubview:_networkLabel];
+    [self.topView addSubview:_networkLabel];
     
-    _actionView = [[UIView alloc] initWithFrame:CGRectMake(0, self.view.frame.size.height - 260, self.view.frame.size.width, 260)];
-    _actionView.backgroundColor = [UIColor clearColor];
-    [self.view addSubview:_actionView];
+    self.actionView = [[UIView alloc] initWithFrame:CGRectMake(0, self.view.frame.size.height - 260, self.view.frame.size.width, 260)];
+    self.actionView.backgroundColor = [UIColor clearColor];
+    [self.view addSubview:self.actionView];
     
-    CGFloat tmpWidth = _actionView.frame.size.width / 2;
-    _silenceButton = [[UIButton alloc] initWithFrame:CGRectMake((tmpWidth - 40) / 2, 80, 40, 40)];
-    [_silenceButton setImage:[UIImage imageNamed:@"call_silence"] forState:UIControlStateNormal];
-    [_silenceButton setImage:[UIImage imageNamed:@"call_silence_h"] forState:UIControlStateSelected];
-    [_silenceButton addTarget:self action:@selector(silenceAction) forControlEvents:UIControlEventTouchUpInside];
-        [_actionView addSubview:_silenceButton];
+    CGFloat tmpWidth = self.actionView.frame.size.width / 2;
+    self.silenceButton = [[UIButton alloc] initWithFrame:CGRectMake((tmpWidth - 40) / 2, 80, 40, 40)];
+    [self.silenceButton setImage:[UIImage imageNamed:@"call_silence"] forState:UIControlStateNormal];
+    [self.silenceButton setImage:[UIImage imageNamed:@"call_silence_h"] forState:UIControlStateSelected];
+    [self.silenceButton addTarget:self action:@selector(silenceAction) forControlEvents:UIControlEventTouchUpInside];
+    [self.actionView addSubview:self.silenceButton];
     
-    _silenceLabel = [[UILabel alloc] initWithFrame:CGRectMake(30, CGRectGetMaxY(_silenceButton.frame) + 5, tmpWidth - 60, 20)];
-    _silenceLabel.backgroundColor = [UIColor clearColor];
-    _silenceLabel.textColor = [UIColor whiteColor];
-    _silenceLabel.font = [UIFont systemFontOfSize:13.0];
-    _silenceLabel.textAlignment = NSTextAlignmentCenter;
-    _silenceLabel.text = NSLocalizedString(@"call.silence", @"Silence");
-        [_actionView addSubview:_silenceLabel];
+    self.silenceLabel = [[UILabel alloc] initWithFrame:CGRectMake(30, CGRectGetMaxY(self.silenceButton.frame) + 5, tmpWidth - 60, 20)];
+    self.silenceLabel.backgroundColor = [UIColor clearColor];
+    self.silenceLabel.textColor = [UIColor whiteColor];
+    self.silenceLabel.font = [UIFont systemFontOfSize:13.0];
+    self.silenceLabel.textAlignment = NSTextAlignmentCenter;
+    self.silenceLabel.text = NSLocalizedString(@"call.silence", @"Silence");
+    [self.actionView addSubview:self.silenceLabel];
     
-    _speakerOutButton = [[UIButton alloc] initWithFrame:CGRectMake(tmpWidth + (tmpWidth - 40) / 2, _silenceButton.frame.origin.y, 40, 40)];
-    [_speakerOutButton setImage:[UIImage imageNamed:@"call_out"] forState:UIControlStateNormal];
-    [_speakerOutButton setImage:[UIImage imageNamed:@"call_out_h"] forState:UIControlStateSelected];
-    [_speakerOutButton addTarget:self action:@selector(speakerOutAction) forControlEvents:UIControlEventTouchUpInside];
-        [_actionView addSubview:_speakerOutButton];
+    self.speakerOutButton = [[UIButton alloc] initWithFrame:CGRectMake(tmpWidth + (tmpWidth - 40) / 2, self.silenceButton.frame.origin.y, 40, 40)];
+    [self.speakerOutButton setImage:[UIImage imageNamed:@"call_out"] forState:UIControlStateNormal];
+    [self.speakerOutButton setImage:[UIImage imageNamed:@"call_out_h"] forState:UIControlStateSelected];
+    [self.speakerOutButton addTarget:self action:@selector(speakerOutAction) forControlEvents:UIControlEventTouchUpInside];
+    [self.actionView addSubview:self.speakerOutButton];
     
-    _speakerOutLabel = [[UILabel alloc] initWithFrame:CGRectMake(tmpWidth + 30, CGRectGetMaxY(_speakerOutButton.frame) + 5, tmpWidth - 60, 20)];
-    _speakerOutLabel.backgroundColor = [UIColor clearColor];
-    _speakerOutLabel.textColor = [UIColor whiteColor];
-    _speakerOutLabel.font = [UIFont systemFontOfSize:13.0];
-    _speakerOutLabel.textAlignment = NSTextAlignmentCenter;
-    _speakerOutLabel.text = NSLocalizedString(@"call.speaker", @"Speaker");
-        [_actionView addSubview:_speakerOutLabel];
+    self.speakerOutLabel = [[UILabel alloc] initWithFrame:CGRectMake(tmpWidth + 30, CGRectGetMaxY(self.speakerOutButton.frame) + 5, tmpWidth - 60, 20)];
+    self.speakerOutLabel.backgroundColor = [UIColor clearColor];
+    self.speakerOutLabel.textColor = [UIColor whiteColor];
+    self.speakerOutLabel.font = [UIFont systemFontOfSize:13.0];
+    self.speakerOutLabel.textAlignment = NSTextAlignmentCenter;
+    self.speakerOutLabel.text = NSLocalizedString(@"call.speaker", @"Speaker");
+    [self.actionView addSubview:self.speakerOutLabel];
     
-    _rejectButton = [[UIButton alloc] initWithFrame:CGRectMake((tmpWidth - 100) / 2, CGRectGetMaxY(_speakerOutLabel.frame) + 30, 100, 40)];
-    [_rejectButton setTitle:NSLocalizedString(@"call.reject", @"Reject") forState:UIControlStateNormal];
-    [_rejectButton setBackgroundColor:[UIColor HIColorRed]];
-    [_rejectButton addTarget:self action:@selector(rejectAction) forControlEvents:UIControlEventTouchUpInside];
-    [_actionView addSubview:_rejectButton];
+    // Reject Button
+    self.rejectButton = [[UIButton alloc] initWithFrame:CGRectMake((tmpWidth - 100) / 2, CGRectGetMaxY(_speakerOutLabel.frame) + 30, 100, 40)];
+    [self.rejectButton setTitle:NSLocalizedString(@"call.reject", @"Reject") forState:UIControlStateNormal];
+    [self.rejectButton setBackgroundColor:[UIColor HIColorRed]];
+    [self.rejectButton addTarget:self action:@selector(rejectAction) forControlEvents:UIControlEventTouchUpInside];
+    self.rejectButton.layer.cornerRadius = 6.0f;
+    self.rejectButton.layer.masksToBounds = YES;
+    [self.actionView addSubview:self.rejectButton];
     
-    _answerButton = [[UIButton alloc] initWithFrame:CGRectMake(tmpWidth + (tmpWidth - 100) / 2, _rejectButton.frame.origin.y, 100, 40)];
-    [_answerButton setTitle:NSLocalizedString(@"call.answer", @"Answer") forState:UIControlStateNormal];
-    [_answerButton setBackgroundColor:[UIColor HIColorGreenMajor]];
-    [_answerButton addTarget:self action:@selector(answerAction) forControlEvents:UIControlEventTouchUpInside];
-    [_actionView addSubview:_answerButton];
+    // Answer Button
+    self.answerButton = [[UIButton alloc] initWithFrame:CGRectMake(tmpWidth + (tmpWidth - 100) / 2, self.rejectButton.frame.origin.y, 100, 40)];
+    [self.answerButton setTitle:NSLocalizedString(@"call.answer", @"Answer") forState:UIControlStateNormal];
+    [self.answerButton setBackgroundColor:[UIColor HIColorGreenMajor]];
+    [self.answerButton addTarget:self action:@selector(answerAction) forControlEvents:UIControlEventTouchUpInside];
+    self.answerButton.layer.cornerRadius = 6.0f;
+    self.answerButton.layer.masksToBounds = YES;
+    [self.actionView addSubview:self.answerButton];
     
-    _cancelButton = [[UIButton alloc] initWithFrame:CGRectMake((self.view.frame.size.width - 200) / 2, _rejectButton.frame.origin.y, 200, 40)];
-    [_cancelButton setTitle:NSLocalizedString(@"call.hangup", @"Hangup") forState:UIControlStateNormal];
-    [_cancelButton setBackgroundColor:[UIColor HIColorRed]];
-    [_cancelButton addTarget:self action:@selector(hangupAction) forControlEvents:UIControlEventTouchUpInside];
-    [_actionView addSubview:_cancelButton];
+    // Cancel Button
+    self.cancelButton = [[UIButton alloc] initWithFrame:CGRectMake((self.view.frame.size.width - 200) / 2, self.rejectButton.frame.origin.y, 200, 40)];
+    [self.cancelButton setTitle:NSLocalizedString(@"call.hangup", @"End Call") forState:UIControlStateNormal];
+    [self.cancelButton setBackgroundColor:[UIColor HIColorRed]];
+    [self.cancelButton addTarget:self action:@selector(hangupAction) forControlEvents:UIControlEventTouchUpInside];
+    self.cancelButton.layer.cornerRadius = 6.0f;
+    self.cancelButton.layer.masksToBounds = YES;
+    [self.actionView addSubview:self.cancelButton];
     
     if (_callSession.type == EMCallTypeVideo) {
-        CGFloat tmpWidth = _actionView.frame.size.width / 3;
-        _recordButton = [[UIButton alloc] initWithFrame:CGRectMake((tmpWidth-40)/2, 20, 40, 40)];
-        _recordButton.layer.cornerRadius = 20.f;
-        [_recordButton setTitle:NSLocalizedString(@"call.record", @"Record") forState:UIControlStateNormal];
-        [_recordButton setTitle:NSLocalizedString(@"call.stopRecording", @"Stop Recording") forState:UIControlStateSelected];
-        [_recordButton.titleLabel setFont:[UIFont systemFontOfSize:10]];
-        [_recordButton setBackgroundColor:[UIColor grayColor]];
-        [_recordButton addTarget:self action:@selector(recordAction) forControlEvents:UIControlEventTouchUpInside];
-        [_actionView addSubview:_recordButton];
-        _videoButton = [[UIButton alloc] initWithFrame:CGRectMake(tmpWidth + (tmpWidth - 40) / 2, 20, 40, 40)];
-        _videoButton.layer.cornerRadius = 20.f;
-        [_videoButton setTitle:NSLocalizedString(@"call.startVideo", @"Start the video") forState:UIControlStateNormal];
-        [_videoButton setTitle:NSLocalizedString(@"call.pauseVideo", @"Pause the video") forState:UIControlStateSelected];
-        [_videoButton.titleLabel setFont:[UIFont systemFontOfSize:10]];
-        [_videoButton setBackgroundColor:[UIColor grayColor]];
-        [_videoButton addTarget:self action:@selector(videoPauseAction) forControlEvents:UIControlEventTouchUpInside];
-        [_actionView addSubview:_videoButton];
-        _voiceButton = [[UIButton alloc] initWithFrame:CGRectMake(tmpWidth * 2 + (tmpWidth - 40) / 2, 20, 40, 40)];
-        _voiceButton.layer.cornerRadius = 20.f;
-        [_voiceButton setTitle:NSLocalizedString(@"call.startAudio", @"Start the audio") forState:UIControlStateNormal];
-        [_voiceButton setTitle:NSLocalizedString(@"call.pauseAudio", @"Pause the audio") forState:UIControlStateSelected];
-        [_voiceButton.titleLabel setFont:[UIFont systemFontOfSize:10]];
-        [_voiceButton setBackgroundColor:[UIColor grayColor]];
-        [_voiceButton addTarget:self action:@selector(voicePauseAction) forControlEvents:UIControlEventTouchUpInside];
-        [_actionView addSubview:_voiceButton];
-        [_speakerOutButton sendActionsForControlEvents:UIControlEventTouchUpInside];
+        
+        CGFloat tmpWidth = self.actionView.frame.size.width / 3;
+        int buttonWidth = 80;
+        int buttonHeight = 50;
+        int topMargin = 20;
+        
+        // Record Button
+        self.recordButton = [[UIButton alloc] initWithFrame:CGRectMake((tmpWidth-buttonWidth)/2, topMargin, buttonWidth, buttonHeight)];
+        self.recordButton.layer.cornerRadius = 6.0f;
+        [self.recordButton setImage:[UIImage imageNamed:@"image.png"] forState:UIControlStateNormal];
+        [self.recordButton setImage:[UIImage imageNamed:@"image.png"] forState:UIControlStateSelected];
+        
+        [self.recordButton setTitle:NSLocalizedString(@"call.record", @"Record") forState:UIControlStateNormal];
+        [self.recordButton setTitle:NSLocalizedString(@"call.stopRecording", @"Stop Recording") forState:UIControlStateSelected];
+        [self.recordButton.titleLabel setFont:[UIFont systemFontOfSize:10]];
+        [self.recordButton setBackgroundColor:[UIColor HIColorLightGray]];
+        [self.recordButton addTarget:self action:@selector(recordAction) forControlEvents:UIControlEventTouchUpInside];
+        [self.actionView addSubview:self.recordButton];
+        
+        // Video Button
+        self.videoButton = [[UIButton alloc] initWithFrame:CGRectMake(tmpWidth + (tmpWidth - buttonWidth) / 2, topMargin, buttonWidth, buttonHeight)];
+        self.videoButton.layer.cornerRadius = 6.0f;
+        [self.videoButton setTitle:NSLocalizedString(@"call.startVideo", @"Start the video") forState:UIControlStateNormal];
+        [self.videoButton setTitle:NSLocalizedString(@"call.pauseVideo", @"Pause the video") forState:UIControlStateSelected];
+        [self.videoButton.titleLabel setFont:[UIFont systemFontOfSize:10]];
+        [self.videoButton setBackgroundColor:[UIColor HIColorLightGray]];
+        [self.videoButton addTarget:self action:@selector(videoPauseAction) forControlEvents:UIControlEventTouchUpInside];
+        [self.actionView addSubview:self.videoButton];
+        
+        // Voice Button
+        self.voiceButton = [[UIButton alloc] initWithFrame:CGRectMake(tmpWidth * 2 + (tmpWidth - buttonWidth) / 2, topMargin, buttonWidth, buttonHeight)];
+        self.voiceButton.layer.cornerRadius = 6.0f;
+        [self.voiceButton setTitle:NSLocalizedString(@"call.startAudio", @"Start the audio") forState:UIControlStateNormal];
+        [self.voiceButton setTitle:NSLocalizedString(@"call.pauseAudio", @"Pause the audio") forState:UIControlStateSelected];
+        [self.voiceButton.titleLabel setFont:[UIFont systemFontOfSize:10]];
+        [self.voiceButton setBackgroundColor:[UIColor HIColorLightGray]];
+        [self.voiceButton addTarget:self action:@selector(voicePauseAction) forControlEvents:UIControlEventTouchUpInside];
+        [self.actionView addSubview:self.voiceButton];
+        [self.speakerOutButton sendActionsForControlEvents:UIControlEventTouchUpInside];
     }
 }
 
 - (void)_initializeVideoView
 {
-    //1.对方窗口
+    // Recipient's window
     _callSession.remoteView = [[EMCallRemoteView alloc] initWithFrame:CGRectMake(0, 0, self.view.frame.size.width, self.view.frame.size.height)];
     [self.view addSubview:_callSession.remoteView];
     
-    //2.自己窗口
+    // my window
     CGFloat width = 80;
     CGFloat height = self.view.frame.size.height / self.view.frame.size.width * width;
-    _callSession.localView = [[EMCallLocalView alloc] initWithFrame:CGRectMake(self.view.frame.size.width - 90, CGRectGetMaxY(_statusLabel.frame), width, height)];
+    _callSession.localView = [[EMCallLocalView alloc] initWithFrame:CGRectMake(self.view.frame.size.width - 90, CGRectGetMaxY(self.statusLabel.frame), width, height)];
     [self.view addSubview:_callSession.localView];
     
-    //3、属性显示层
-    _propertyView = [[UIView alloc] initWithFrame:CGRectMake(10, CGRectGetMinY(_actionView.frame) - 90, self.view.frame.size.width - 20, 90)];
+    // call info
+    _propertyView = [[UIView alloc] initWithFrame:CGRectMake(10, CGRectGetMinY(self.actionView.frame) - 90, self.view.frame.size.width - 20, 90)];
     _propertyView.backgroundColor = [UIColor clearColor];
     _propertyView.hidden = ![self isShowCallInfo];
     [self.view addSubview:_propertyView];
@@ -311,16 +341,22 @@
     [_propertyView addSubview:_remoteBitrateLabel];
 }
 
+
 #pragma mark - private
 
 - (void)_reloadPropertyData
 {
     if (_callSession) {
         _sizeLabel.text = [NSString stringWithFormat:@"%@%i/%i", NSLocalizedString(@"call.videoSize", @"Width/Height: "), [_callSession getVideoWidth], [_callSession getVideoHeight]];
+        
         _timedelayLabel.text = [NSString stringWithFormat:@"%@%i", NSLocalizedString(@"call.videoTimedelay", @"Timedelay: "), [_callSession getVideoTimedelay]];
+        
         _framerateLabel.text = [NSString stringWithFormat:@"%@%i", NSLocalizedString(@"call.videoFramerate", @"Framerate: "), [_callSession getVideoFramerate]];
+        
         _lostcntLabel.text = [NSString stringWithFormat:@"%@%i", NSLocalizedString(@"call.videoLostcnt", @"Lostcnt: "), [_callSession getVideoLostcnt]];
+        
         _localBitrateLabel.text = [NSString stringWithFormat:@"%@%i", NSLocalizedString(@"call.videoLocalBitrate", @"Local Bitrate: "), [_callSession getVideoLocalBitrate]];
+        
         _remoteBitrateLabel.text = [NSString stringWithFormat:@"%@%i", NSLocalizedString(@"call.videoRemoteBitrate", @"Remote Bitrate: "), [_callSession getVideoRemoteBitrate]];
     }
 }
@@ -341,7 +377,7 @@
     }
 }
 
-- (void)_stopRing
+- (void)stopRing
 {
     [_ringPlayer stop];
 }
@@ -368,16 +404,16 @@
 
 - (void)viewTapAction:(UITapGestureRecognizer *)tap
 {
-    _topView.hidden = !_topView.hidden;
-    _actionView.hidden = !_actionView.hidden;
+    self.topView.hidden = !self.topView.hidden;
+    self.actionView.hidden = !self.actionView.hidden;
 }
 
 #pragma mark - action
 
 - (void)recordAction
 {
-    _recordButton.selected = !_recordButton.selected;
-    if (_recordButton.selected) {
+    self.recordButton.selected = !self.recordButton.selected;
+    if (self.recordButton.selected) {
         NSString *recordPath = NSHomeDirectory();
         recordPath = [NSString stringWithFormat:@"%@/Library/appdata/chatbuffer",recordPath];
         NSFileManager *fm = [NSFileManager defaultManager];
@@ -391,19 +427,19 @@
     } else {
         NSString *tempPath = [_callSession stopVideoRecord];
         if (tempPath.length > 0) {
-//            NSURL *videoURL = [NSURL fileURLWithPath:tempPath];
-//            MPMoviePlayerViewController *moviePlayerController = [[MPMoviePlayerViewController alloc] initWithContentURL:videoURL];
-//            [moviePlayerController.moviePlayer prepareToPlay];
-//            moviePlayerController.moviePlayer.movieSourceType = MPMovieSourceTypeFile;
-//            [self presentMoviePlayerViewControllerAnimated:moviePlayerController];
+            //            NSURL *videoURL = [NSURL fileURLWithPath:tempPath];
+            //            MPMoviePlayerViewController *moviePlayerController = [[MPMoviePlayerViewController alloc] initWithContentURL:videoURL];
+            //            [moviePlayerController.moviePlayer prepareToPlay];
+            //            moviePlayerController.moviePlayer.movieSourceType = MPMovieSourceTypeFile;
+            //            [self presentMoviePlayerViewControllerAnimated:moviePlayerController];
         }
     }
 }
 
 - (void)videoPauseAction
 {
-    _videoButton.selected = !_videoButton.selected;
-    if (_videoButton.selected) {
+    self.videoButton.selected = !self.videoButton.selected;
+    if (self.videoButton.selected) {
         [[EMClient sharedClient].callManager pauseVideoTransfer:_callSession.sessionId];
     } else {
         [[EMClient sharedClient].callManager resumeVideoTransfer:_callSession.sessionId];
@@ -412,8 +448,8 @@
 
 - (void)voicePauseAction
 {
-    _voiceButton.selected = !_voiceButton.selected;
-    if (_voiceButton.selected) {
+    self.voiceButton.selected = !self.voiceButton.selected;
+    if (self.voiceButton.selected) {
         [[EMClient sharedClient].callManager pauseVoiceAndVideoTransfer:_callSession.sessionId];
     } else {
         [[EMClient sharedClient].callManager resumeVoiceAndVideoTransfer:_callSession.sessionId];
@@ -422,27 +458,30 @@
 
 - (void)silenceAction
 {
-    _silenceButton.selected = !_silenceButton.selected;
-    [[EMClient sharedClient].callManager markCallSession:_callSession.sessionId isSilence:_silenceButton.selected];
+    self.silenceButton.selected = !self.silenceButton.selected;
+    [[EMClient sharedClient].callManager markCallSession:_callSession.sessionId isSilence:self.silenceButton.selected];
 }
 
 - (void)speakerOutAction
 {
     AVAudioSession *audioSession = [AVAudioSession sharedInstance];
-    if (_speakerOutButton.selected) {
+    if (self.speakerOutButton.selected) {
         [audioSession overrideOutputAudioPort:AVAudioSessionPortOverrideNone error:nil];
     }else {
         [audioSession overrideOutputAudioPort:AVAudioSessionPortOverrideSpeaker error:nil];
     }
     [audioSession setActive:YES error:nil];
-    _speakerOutButton.selected = !_speakerOutButton.selected;
+    self.speakerOutButton.selected = !self.speakerOutButton.selected;
 }
 
 - (void)answerAction
 {
 #if DEMO_CALL == 1
-    [self _stopRing];
+    
+    [self stopRing];
+    
     AVAudioSession *audioSession = [AVAudioSession sharedInstance];
+    
     _audioCategory = audioSession.category;
     if(![_audioCategory isEqualToString:AVAudioSessionCategoryPlayAndRecord]){
         [audioSession setCategory:AVAudioSessionCategoryPlayAndRecord error:nil];
@@ -456,8 +495,9 @@
 - (void)hangupAction
 {
 #if DEMO_CALL == 1
+    
     [_timeTimer invalidate];
-    [self _stopRing];
+    [self stopRing];
     AVAudioSession *audioSession = [AVAudioSession sharedInstance];
     [audioSession setCategory:_audioCategory error:nil];
     [audioSession setActive:YES error:nil];
@@ -470,7 +510,7 @@
 {
 #if DEMO_CALL == 1
     [_timeTimer invalidate];
-    [self _stopRing];
+    [self stopRing];
     AVAudioSession *audioSession = [AVAudioSession sharedInstance];
     [audioSession setCategory:_audioCategory error:nil];
     [audioSession setActive:YES error:nil];
@@ -507,7 +547,7 @@
 
 - (void)startTimer
 {
-    if (_callSession.type == EMCallTypeVideo && _speakerOutButton.selected) {
+    if (_callSession.type == EMCallTypeVideo && self.speakerOutButton.selected) {
         double delayInSeconds = 0.5;
         dispatch_time_t popTime = dispatch_time(DISPATCH_TIME_NOW, delayInSeconds * NSEC_PER_SEC);
         dispatch_after(popTime, dispatch_get_main_queue(), ^(void){
@@ -520,7 +560,7 @@
     _timeTimer = [NSTimer scheduledTimerWithTimeInterval:1.0 target:self selector:@selector(timeTimerAction:) userInfo:nil repeats:YES];
 }
 
-- (void)startShowInfo
+- (void)showCallInfo
 {
     if (_callSession.type == EMCallTypeVideo && [self isShowCallInfo]) {
         [self _reloadPropertyData];
@@ -539,13 +579,13 @@
             break;
         case EMCallNetworkStatusUnstable:
         {
-            _networkLabel.text = NSLocalizedString(@"call.networkUnstable", @"Current network is unstable");
+            _networkLabel.text = NSLocalizedString(@"call.networkUnstable", @"Unstable network");
             _networkLabel.hidden = NO;
         }
             break;
         case EMCallNetworkStatusNoData:
         {
-            _networkLabel.text = NSLocalizedString(@"call.noDate", @"No data");
+            _networkLabel.text = NSLocalizedString(@"call.noDate", @"No network data");
             _networkLabel.hidden = NO;
         }
             break;

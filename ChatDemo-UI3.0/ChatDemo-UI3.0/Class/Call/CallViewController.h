@@ -16,41 +16,33 @@
 #define kLocalCallBitrate @"HyphenateLocalCallBitrate"
 
 @class EMCallSession;
+
 @interface CallViewController : UIViewController
-{
-    NSTimer *_timeTimer;
-    AVAudioPlayer *_ringPlayer;
-    
-    UIView *_topView;
-    UILabel *_statusLabel;
-    UILabel *_timeLabel;
-    UILabel *_nameLabel;
-    UIImageView *_headerImageView;
-    
-    //操作按钮显示
-    UIView *_actionView;
-    UIButton *_silenceButton;
-    UILabel *_silenceLabel;
-    UIButton *_speakerOutButton;
-    UILabel *_speakerOutLabel;
-    UIButton *_rejectButton;
-    UIButton *_answerButton;
-    UIButton *_cancelButton;
-    
-    UIButton *_recordButton;
-    UIButton *_videoButton;
-    UIButton *_voiceButton;
-}
+
+@property (strong, nonatomic) NSTimer *timeTimer;
+@property (strong, nonatomic) AVAudioPlayer *ringPlayer;
 
 @property (strong, nonatomic) UILabel *statusLabel;
-
 @property (strong, nonatomic) UILabel *timeLabel;
 
+@property (strong, nonatomic) UIView *topView;
+@property (strong, nonatomic) UILabel *nameLabel;
+@property (strong, nonatomic) UIImageView *headerImageView;
+
 @property (strong, nonatomic) UIButton *rejectButton;
-
 @property (strong, nonatomic) UIButton *answerButton;
-
 @property (strong, nonatomic) UIButton *cancelButton;
+
+@property (strong, nonatomic) UIButton *recordButton;
+@property (strong, nonatomic) UIButton *videoButton;
+@property (strong, nonatomic) UIButton *voiceButton;
+
+@property (strong, nonatomic) UIView *actionView;
+@property (strong, nonatomic) UIButton *silenceButton;
+@property (strong, nonatomic) UILabel *silenceLabel;
+@property (strong, nonatomic) UIButton *speakerOutButton;
+@property (strong, nonatomic) UILabel *speakerOutLabel;
+
 
 - (instancetype)initWithSession:(EMCallSession *)session
                        isCaller:(BOOL)isCaller
@@ -62,7 +54,7 @@
 
 - (void)startTimer;
 
-- (void)startShowInfo;
+- (void)showCallInfo;
 
 - (void)close;
 

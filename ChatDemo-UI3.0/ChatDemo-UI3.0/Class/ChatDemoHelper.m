@@ -178,7 +178,7 @@ static ChatDemoHelper *helper = nil;
 - (void)didUpdateConversationList:(NSArray *)aConversationList
 {
     if (self.mainVC) {
-        [_mainVC setupUnreadMessageCount];
+        [self.mainVC setupUnreadMessageCount];
     }
     
     if (self.conversationListVC) {
@@ -189,7 +189,7 @@ static ChatDemoHelper *helper = nil;
 - (void)didReceiveCmdMessages:(NSArray *)aCmdMessages
 {
     if (self.mainVC) {
-        [_mainVC showHint:NSLocalizedString(@"receiveCmd", @"receive cmd message")];
+        [self.mainVC showHint:NSLocalizedString(@"receiveCmd", @"receive cmd message")];
     }
 }
 
@@ -230,7 +230,7 @@ static ChatDemoHelper *helper = nil;
             }
             
             if (self.mainVC) {
-                [_mainVC setupUnreadMessageCount];
+                [self.mainVC setupUnreadMessageCount];
             }
             return;
         }
@@ -246,7 +246,7 @@ static ChatDemoHelper *helper = nil;
         }
         
         if (self.mainVC) {
-            [_mainVC setupUnreadMessageCount];
+            [self.mainVC setupUnreadMessageCount];
         }
     }
 }
@@ -267,7 +267,7 @@ static ChatDemoHelper *helper = nil;
         TTAlertNoTitle(str);
     }
     
-    NSMutableArray *viewControllers = [NSMutableArray arrayWithArray:_mainVC.navigationController.viewControllers];
+    NSMutableArray *viewControllers = [NSMutableArray arrayWithArray:self.mainVC.navigationController.viewControllers];
     ChatViewController *chatViewContrller = nil;
     for (id viewController in viewControllers)
     {
@@ -281,9 +281,9 @@ static ChatDemoHelper *helper = nil;
     {
         [viewControllers removeObject:chatViewContrller];
         if ([viewControllers count] > 0) {
-            [_mainVC.navigationController setViewControllers:@[viewControllers[0]] animated:YES];
+            [self.mainVC.navigationController setViewControllers:@[viewControllers[0]] animated:YES];
         } else {
-            [_mainVC.navigationController setViewControllers:viewControllers animated:YES];
+            [self.mainVC.navigationController setViewControllers:viewControllers animated:YES];
         }
     }
 }
@@ -299,14 +299,18 @@ static ChatDemoHelper *helper = nil;
     if (!aReason || aReason.length == 0) {
         aReason = [NSString stringWithFormat:NSLocalizedString(@"group.applyJoin", @"%@ apply to join groups\'%@\'"), aApplicant, aGroup.subject];
     }
-    else{
+    else {
         aReason = [NSString stringWithFormat:NSLocalizedString(@"group.applyJoinWithName", @"%@ apply to join groups\'%@\'：%@"), aApplicant, aGroup.subject, aReason];
     }
     
     NSMutableDictionary *dic = [NSMutableDictionary dictionaryWithDictionary:@{@"title":aGroup.subject, @"groupId":aGroup.groupId, @"username":aApplicant, @"groupname":aGroup.subject, @"applyMessage":aReason, @"applyStyle":[NSNumber numberWithInteger:ApplyStyleJoinGroup]}];
+    
     [[ApplyViewController shareController] addNewApply:dic];
+   
     if (self.mainVC) {
+        
         [self.mainVC setupUntreatedApplyCount];
+        
 #if !TARGET_IPHONE_SIMULATOR
         [self.mainVC playSoundAndVibration];
 #endif
@@ -322,6 +326,7 @@ static ChatDemoHelper *helper = nil;
                message:(NSString *)aMessage
 {
     UIAlertView *alertView = [[UIAlertView alloc] initWithTitle:NSLocalizedString(@"prompt", @"Prompt") message:[NSString stringWithFormat:@"%@ invite you to group: %@ [%@]", aInviter, aGroup.subject, aGroup.groupId] delegate:nil cancelButtonTitle:NSLocalizedString(@"ok", @"OK") otherButtonTitles:nil, nil];
+    
     [alertView show];
 }
 
@@ -331,14 +336,18 @@ static ChatDemoHelper *helper = nil;
     if (!aReason || aReason.length == 0) {
         aReason = [NSString stringWithFormat:NSLocalizedString(@"group.beRefusedToJoin", @"be refused to join the group\'%@\'"), aGroupId];
     }
+    
     UIAlertView *alertView = [[UIAlertView alloc] initWithTitle:NSLocalizedString(@"prompt", @"Prompt") message:aReason delegate:nil cancelButtonTitle:NSLocalizedString(@"ok", @"OK") otherButtonTitles:nil, nil];
+   
     [alertView show];
 }
 
 - (void)didReceiveAcceptedJoinGroup:(EMGroup *)aGroup
 {
     NSString *message = [NSString stringWithFormat:NSLocalizedString(@"group.agreedAndJoined", @"agreed to join the group of \'%@\'"), aGroup.subject];
+   
     UIAlertView *alertView = [[UIAlertView alloc] initWithTitle:NSLocalizedString(@"prompt", @"Prompt") message:message delegate:nil cancelButtonTitle:NSLocalizedString(@"ok", @"OK") otherButtonTitles:nil, nil];
+   
     [alertView show];
 }
 
@@ -351,9 +360,13 @@ static ChatDemoHelper *helper = nil;
     }
     
     NSMutableDictionary *dic = [NSMutableDictionary dictionaryWithDictionary:@{@"title":@"", @"groupId":aGroupId, @"username":aInviter, @"groupname":@"", @"applyMessage":aMessage, @"applyStyle":[NSNumber numberWithInteger:ApplyStyleGroupInvitation]}];
+    
     [[ApplyViewController shareController] addNewApply:dic];
+    
     if (self.mainVC) {
+        
         [self.mainVC setupUntreatedApplyCount];
+        
 #if !TARGET_IPHONE_SIMULATOR
         [self.mainVC playSoundAndVibration];
 #endif
@@ -365,24 +378,27 @@ static ChatDemoHelper *helper = nil;
 }
 
 #pragma mark - EMContactManagerDelegate
+
 - (void)didReceiveAgreedFromUsername:(NSString *)aUsername
 {
-    NSString *msgstr = [NSString stringWithFormat:@"%@同意了加好友申请", aUsername];
+    NSString *msgstr = [NSString stringWithFormat:@"%@ accepted friend request", aUsername];
     UIAlertView *alertView = [[UIAlertView alloc] initWithTitle:nil message:msgstr delegate:nil cancelButtonTitle:@"确定" otherButtonTitles:nil, nil];
     [alertView show];
 }
 
 - (void)didReceiveDeclinedFromUsername:(NSString *)aUsername
 {
-    NSString *msgstr = [NSString stringWithFormat:@"%@拒绝了加好友申请", aUsername];
+    NSString *msgstr = [NSString stringWithFormat:@"%@ declined friend request", aUsername];
     UIAlertView *alertView = [[UIAlertView alloc] initWithTitle:nil message:msgstr delegate:nil cancelButtonTitle:@"确定" otherButtonTitles:nil, nil];
     [alertView show];
 }
 
 - (void)didReceiveDeletedFromUsername:(NSString *)aUsername
 {
-    NSMutableArray *viewControllers = [NSMutableArray arrayWithArray:_mainVC.navigationController.viewControllers];
+    NSMutableArray *viewControllers = [NSMutableArray arrayWithArray:self.mainVC.navigationController.viewControllers];
+    
     ChatViewController *chatViewContrller = nil;
+    
     for (id viewController in viewControllers)
     {
         if ([viewController isKindOfClass:[ChatViewController class]] && [aUsername isEqualToString:[(ChatViewController *)viewController conversation].conversationId])
@@ -391,16 +407,19 @@ static ChatDemoHelper *helper = nil;
             break;
         }
     }
+    
     if (chatViewContrller)
     {
         [viewControllers removeObject:chatViewContrller];
         if ([viewControllers count] > 0) {
-            [_mainVC.navigationController setViewControllers:@[viewControllers[0]] animated:YES];
+            [self.mainVC.navigationController setViewControllers:@[viewControllers[0]] animated:YES];
         } else {
-            [_mainVC.navigationController setViewControllers:viewControllers animated:YES];
+            [self.mainVC.navigationController setViewControllers:viewControllers animated:YES];
         }
     }
-    [_mainVC showHint:[NSString stringWithFormat:@"%@ %@", NSLocalizedString(@"delete", @"delete"), aUsername]];
+    
+    [self.mainVC showHint:[NSString stringWithFormat:@"%@ %@", NSLocalizedString(@"delete", @"delete"), aUsername]];
+   
     [_contactViewVC reloadDataSource];
 }
 
@@ -417,26 +436,31 @@ static ChatDemoHelper *helper = nil;
     }
     
     if (!aMessage) {
-        aMessage = [NSString stringWithFormat:NSLocalizedString(@"friend.somebodyAddWithName", @"%@ add you as a friend"), aUsername];
+        aMessage = [NSString stringWithFormat:NSLocalizedString(@"friend.somebodyAddWithName", @"%@ added you as a friend"), aUsername];
     }
+    
     NSMutableDictionary *dic = [NSMutableDictionary dictionaryWithDictionary:@{@"title":aUsername, @"username":aUsername, @"applyMessage":aMessage, @"applyStyle":[NSNumber numberWithInteger:ApplyStyleFriend]}];
+  
     [[ApplyViewController shareController] addNewApply:dic];
+   
     if (self.mainVC) {
+        
         [self.mainVC setupUntreatedApplyCount];
+        
 #if !TARGET_IPHONE_SIMULATOR
         [self.mainVC playSoundAndVibration];
         
         BOOL isAppActivity = [[UIApplication sharedApplication] applicationState] == UIApplicationStateActive;
         if (!isAppActivity) {
-            //发送本地推送
             UILocalNotification *notification = [[UILocalNotification alloc] init];
-            notification.fireDate = [NSDate date]; //触发通知的时间
-            notification.alertBody = [NSString stringWithFormat:NSLocalizedString(@"friend.somebodyAddWithName", @"%@ add you as a friend"), aUsername];
+            notification.fireDate = [NSDate date];
+            notification.alertBody = [NSString stringWithFormat:NSLocalizedString(@"friend.somebodyAddWithName", @"%@ added you as a friend"), aUsername];
             notification.alertAction = NSLocalizedString(@"open", @"Open");
             notification.timeZone = [NSTimeZone defaultTimeZone];
         }
 #endif
     }
+    
     [_contactViewVC reloadApplyView];
 }
 
@@ -475,19 +499,21 @@ static ChatDemoHelper *helper = nil;
     }
     
     self.callSession = aSession;
+    
     if(self.callSession){
-        [self _startCallTimer];
         
-        _callController = [[CallViewController alloc] initWithSession:self.callSession isCaller:NO status:NSLocalizedString(@"call.finished", "Establish call finished")];
-        _callController.modalPresentationStyle = UIModalPresentationOverFullScreen;
-        [_mainVC presentViewController:_callController animated:NO completion:nil];
+        [self startCallTimer];
+        
+        self.callController = [[CallViewController alloc] initWithSession:self.callSession isCaller:NO status:NSLocalizedString(@"call.finished", "Establish call finished")];
+        self.callController.modalPresentationStyle = UIModalPresentationOverFullScreen;
+        [self.mainVC presentViewController:self.callController animated:NO completion:nil];
     }
 }
 
 - (void)didReceiveCallConnected:(EMCallSession *)aSession
 {
     if ([aSession.sessionId isEqualToString:self.callSession.sessionId]) {
-        _callController.statusLabel.text = NSLocalizedString(@"call.finished", "Establish call finished");
+        self.callController.statusLabel.text = NSLocalizedString(@"call.finished", "Establish call finished");
         
         AVAudioSession *audioSession = [AVAudioSession sharedInstance];
         [audioSession setCategory:AVAudioSessionCategoryPlayAndRecord error:nil];
@@ -502,16 +528,21 @@ static ChatDemoHelper *helper = nil;
     }
     
     if ([aSession.sessionId isEqualToString:self.callSession.sessionId]) {
-        [self _stopCallTimer];
         
-        NSString *connectStr = aSession.connectType == EMCallConnectTypeRelay ? @"Relay" : @"Direct";
-        _callController.statusLabel.text = [NSString stringWithFormat:@"%@ %@",NSLocalizedString(@"call.speak", @"Can speak..."), connectStr];
-        _callController.timeLabel.hidden = NO;
-        [_callController startTimer];
-        [_callController startShowInfo];
-        _callController.cancelButton.hidden = NO;
-        _callController.rejectButton.hidden = YES;
-        _callController.answerButton.hidden = YES;
+        [self stopCallTimer];
+        
+        NSString *connectStr = aSession.connectType == EMCallConnectTypeRelay ? @"Relay connection" : @"Direct connection";
+        self.callController.statusLabel.text = [NSString stringWithFormat:@"%@", connectStr];
+        
+        self.callController.timeLabel.hidden = NO;
+        
+        [self.callController startTimer];
+        
+        [self.callController showCallInfo];
+        
+        self.callController.cancelButton.hidden = NO;
+        self.callController.rejectButton.hidden = YES;
+        self.callController.answerButton.hidden = YES;
     }
 }
 
@@ -520,35 +551,30 @@ static ChatDemoHelper *helper = nil;
                            error:(EMError *)aError
 {
     if ([aSession.sessionId isEqualToString:self.callSession.sessionId]) {
-        [self _stopCallTimer];
+        
+        [self stopCallTimer];
         
         self.callSession = nil;
         
-        [_callController close];
-        _callController = nil;
+        [self.callController close];
+        self.callController = nil;
         
         if (aReason != EMCallEndReasonHangup) {
+            
             NSString *reasonStr = @"";
+            
             switch (aReason) {
                 case EMCallEndReasonNoResponse:
-                {
                     reasonStr = NSLocalizedString(@"call.noResponse", @"NO response");
-                }
                     break;
                 case EMCallEndReasonDecline:
-                {
                     reasonStr = NSLocalizedString(@"call.rejected", @"Reject the call");
-                }
                     break;
                 case EMCallEndReasonBusy:
-                {
                     reasonStr = NSLocalizedString(@"call.in", @"In the call...");
-                }
                     break;
                 case EMCallEndReasonFailed:
-                {
                     reasonStr = NSLocalizedString(@"call.connectFailed", @"Connect failed");
-                }
                     break;
                 default:
                     break;
@@ -558,7 +584,7 @@ static ChatDemoHelper *helper = nil;
                 UIAlertView *alertView = [[UIAlertView alloc] initWithTitle:@"Error" message:aError.errorDescription delegate:nil cancelButtonTitle:NSLocalizedString(@"ok", @"OK") otherButtonTitles:nil, nil];
                 [alertView show];
             }
-            else{
+            else {
                 UIAlertView *alertView = [[UIAlertView alloc] initWithTitle:nil message:reasonStr delegate:nil cancelButtonTitle:NSLocalizedString(@"ok", @"OK") otherButtonTitles:nil, nil];
                 [alertView show];
             }
@@ -569,7 +595,7 @@ static ChatDemoHelper *helper = nil;
 - (void)didReceiveCallNetworkChanged:(EMCallSession *)aSession status:(EMCallNetworkStatus)aStatus
 {
     if ([aSession.sessionId isEqualToString:self.callSession.sessionId]) {
-        [_callController setNetwork:aStatus];
+        [self.callController setNetwork:aStatus];
     }
 }
 
@@ -586,12 +612,12 @@ static ChatDemoHelper *helper = nil;
     }
 }
 
-- (void)_startCallTimer
+- (void)startCallTimer
 {
     _callTimer = [NSTimer scheduledTimerWithTimeInterval:50 target:self selector:@selector(_cancelCall) userInfo:nil repeats:NO];
 }
 
-- (void)_stopCallTimer
+- (void)stopCallTimer
 {
     if (_callTimer == nil) {
         return;
@@ -624,13 +650,12 @@ static ChatDemoHelper *helper = nil;
     }
     
     if(self.callSession){
-        [self _startCallTimer];
         
-        _callController = [[CallViewController alloc] initWithSession:self.callSession isCaller:YES status:NSLocalizedString(@"call.connecting", @"Connecting...")];
-//        _callController.modalPresentationStyle = UIModalPresentationOverFullScreen;
-//        AppDelegate *delegate = [UIApplication sharedApplication].delegate;
-//        [delegate.navigationController presentViewController:_callController animated:NO completion:nil];
-        [_mainVC presentViewController:_callController animated:NO completion:nil];
+        [self startCallTimer];
+        
+        self.callController = [[CallViewController alloc] initWithSession:self.callSession isCaller:YES status:NSLocalizedString(@"call.connecting", @"Connecting...")];
+
+        [self.mainVC presentViewController:self.callController animated:NO completion:nil];
     }
     else{
         UIAlertView *alertView = [[UIAlertView alloc] initWithTitle:nil message:NSLocalizedString(@"call.initFailed", @"Establish call failure") delegate:nil cancelButtonTitle:NSLocalizedString(@"ok", @"OK") otherButtonTitles:nil, nil];
@@ -641,15 +666,15 @@ static ChatDemoHelper *helper = nil;
 
 - (void)hangupCallWithReason:(EMCallEndReason)aReason
 {
-    [self _stopCallTimer];
+    [self stopCallTimer];
     
     if (self.callSession) {
         [[EMClient sharedClient].callManager endCall:self.callSession.sessionId reason:aReason];
     }
     
     self.callSession = nil;
-    [_callController close];
-    _callController = nil;
+    [self.callController close];
+    self.callController = nil;
 }
 
 - (void)answerCall
@@ -692,7 +717,7 @@ static ChatDemoHelper *helper = nil;
 
 - (ChatViewController*)_getCurrentChatView
 {
-    NSMutableArray *viewControllers = [NSMutableArray arrayWithArray:_mainVC.navigationController.viewControllers];
+    NSMutableArray *viewControllers = [NSMutableArray arrayWithArray:self.mainVC.navigationController.viewControllers];
     ChatViewController *chatViewContrller = nil;
     for (id viewController in viewControllers)
     {

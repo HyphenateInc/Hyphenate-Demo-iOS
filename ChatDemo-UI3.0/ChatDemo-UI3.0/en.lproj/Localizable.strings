@@ -102,11 +102,10 @@
 
 //friend
 "friend.add" = "add friend";
-"friend.somebodyAddWithName" = "%@ add you as a friend";
-"friend.beRefusedToAdd" = "you are shameless refused by '%@'";
+"friend.somebodyAddWithName" = "%@ added you as a friend";
 "friend.inputNameToSearch" = "input to find friends";
-"friend.repeat" = "'%@'has been your friend!";
-"friend.repeatApply" = "you have send fridend request to '%@'!";
+"friend.repeat" = "'%@' is already your friend!";
+"friend.repeatApply" = "you already sent fridend request to '%@'!";
 "friend.notAddSelf" = "can't add yourself as a friend";
 "friend.repeatInvite" = "%@ sent an invitation to you";
 "friend.somebodyInvite" = "%@ invites you as a friend";
@@ -116,7 +115,7 @@
 "friend.black" = "Black List";
 "friend.notChatSelf" = "can't talk to yourself";
 "friend.notDeleteSelf" = "can't delete self";
-"friend.block" = "Move to blacklist";
+"friend.block" = "block";
 
 //group
 "group.somebodyInvite" = "%@ invites you to join group \'%@\'";
@@ -203,7 +202,7 @@
 "call.speaker"="Speaker";
 "call.reject"="Reject";
 "call.answer"="Answer";
-"call.hangup"="Hangup";
+"call.hangup"="End Call";
 "call.finished"="Establish call finished";
 "call.autoHangup"="No response and Hang up";
 "call.noResponse"="NO response";
@@ -215,8 +214,8 @@
 "call.rejected"="Reject the call";
 "call.in"="In the call...";
 "call.speak"="Can speak...";
-"call.speak.relay"="Can speak...Relay";
-"call.speak.direct"="Can speak...Direct";
+"call.speak.relay"="Can speak... Relay connection";
+"call.speak.direct"="Can speak... Direct connection";
 "call.init"="Is init the call...";
 "call.dealloc"="Is hanging up the call...";
 "call.videoSize"="Width/Height: ";
@@ -231,8 +230,8 @@
 "call.pauseVideo" = "Pause the video";
 "call.startAudio" = "Start the audio";
 "call.pauseAudio" = "Pause the audio";
-"call.noDate" = "There is no data";
-"call.networkUnstable" = "Current network is unstable";
+"call.noDate" = "No data to show";
+"call.networkUnstable" = "Unstable network";
 
 //message
 "message.image" = "image";

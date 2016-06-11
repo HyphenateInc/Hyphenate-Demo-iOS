@@ -209,7 +209,7 @@
     }
     else{
         NSMutableArray * existTitles = [NSMutableArray array];
-        //section数组为空的title过滤掉，不显示
+
         for (int i = 0; i < [self.sectionTitles count]; i++) {
             if ([[self.dataSource objectAtIndex:i] count] > 0) {
                 [existTitles addObject:[self.sectionTitles objectAtIndex:i]];
@@ -262,19 +262,19 @@
     [self.sectionTitles removeAllObjects];
     [self.sectionTitles addObjectsFromArray:[_indexCollation sectionTitles]];
     
-    //返回27，是a－z和＃
+    // return 27， a~z and ＃
     NSInteger highSection = [self.sectionTitles count];
-    //tableView 会被分成27个section
+    // tableView in 27 sections
     NSMutableArray *sortedArray = [NSMutableArray arrayWithCapacity:highSection];
     for (int i = 0; i <= highSection; i++) {
         NSMutableArray *sectionArray = [NSMutableArray arrayWithCapacity:1];
         [sortedArray addObject:sectionArray];
     }
     
-    //名字分section
+    // section based name
     if (_objectComparisonStringBlock) {
         for (id object in recordArray) {
-            //getUserName是实现中文拼音检索的核心，见NameIndex类
+            // getUserName for sorting NameIndex
             NSString *objStr = _objectComparisonStringBlock(object);
             NSInteger section = [_indexCollation sectionForObject:objStr collationStringSelector:@selector(uppercaseString)];
             
@@ -283,7 +283,7 @@
         }
     }
     
-    //每个section内的数组排序
+    // sort sections
     if (_comparisonObjectSelector) {
         __weak typeof(self) weakSelf = self;
         for (int i = 0; i < [sortedArray count]; i++) {
