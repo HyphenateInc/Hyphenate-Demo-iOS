@@ -17,6 +17,8 @@
 #import "ConversationListController.h"
 #import "ContactListViewController.h"
 #import "ChatDemoHelper.h"
+#import "AddFriendViewController.h"
+
 static const CGFloat kDefaultPlaySoundInterval = 3.0;
 static NSString *kMessageType = @"MessageType";
 static NSString *kConversationChatter = @"ConversationChatter";
@@ -58,9 +60,9 @@ static NSString *kGroupName = @"GroupName";
     [self selectedTapTabBarItems:self.chatListVC.tabBarItem];
     
     self.addFriendItem = [[UIBarButtonItem alloc] initWithImage:[UIImage imageNamed:@"add"]
-                                                                           style:UIBarButtonItemStylePlain
-                                                                          target:self
-                                                                          action:@selector(addFriendAction)];
+                                                                            style:UIBarButtonItemStylePlain
+                                                                            target:self
+                                                                            action:@selector(addFriendAction)];
     
     [self setupUnreadMessageCount];
     [self setupUntreatedApplyCount];
@@ -95,7 +97,7 @@ static NSString *kGroupName = @"GroupName";
     }
     else if (item.tag == 1) {
         self.title = NSLocalizedString(@"title.addressbook", @"Contacts");
-        self.navigationItem.rightBarButtonItem = _addFriendItem;
+        self.navigationItem.rightBarButtonItem = self.addFriendItem;
     }
     else if (item.tag == 2) {
         self.title = NSLocalizedString(@"title.setting", @"Settings");
@@ -279,6 +281,13 @@ static NSString *kGroupName = @"GroupName";
     notification.userInfo = userInfo;
     
     [[UIApplication sharedApplication] scheduleLocalNotification:notification];
+}
+
+- (void)addFriendAction
+{
+    AddFriendViewController *addController = [[AddFriendViewController alloc] initWithStyle:UITableViewStylePlain];
+    
+    [self.navigationController pushViewController:addController animated:YES];
 }
 
 #pragma mark - Auto Reconnect

@@ -610,6 +610,7 @@
 - (void)addFriendAction
 {
     AddFriendViewController *addController = [[AddFriendViewController alloc] initWithStyle:UITableViewStylePlain];
+    
     [self.navigationController pushViewController:addController animated:YES];
 }
 
