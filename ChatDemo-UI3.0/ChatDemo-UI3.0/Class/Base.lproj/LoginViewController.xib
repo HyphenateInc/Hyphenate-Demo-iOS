@@ -158,7 +158,7 @@
                 </view>
                 <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="g7n-mh-wjo">
                     <rect key="frame" x="0.0" y="226" width="320" height="44"/>
-                    <color key="backgroundColor" red="0.63921568627450975" green="0.86274509803921573" blue="0.19215686274509805" alpha="1" colorSpace="calibratedRGB"/>
+                    <color key="backgroundColor" red="0.62745098039215685" green="0.84705882352941175" blue="0.18823529411764706" alpha="1" colorSpace="calibratedRGB"/>
                     <constraints>
                         <constraint firstAttribute="height" constant="44" id="VgU-W1-7GN"/>
                     </constraints>
