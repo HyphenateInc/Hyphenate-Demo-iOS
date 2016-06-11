@@ -67,7 +67,7 @@
 		95044E5D35685C8AD0ACB20B /* libPods-ChatDemo-UI3.0.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 32CBCB7300651224AD5C95CF /* libPods-ChatDemo-UI3.0.a */; };
 		C035E8151AEA40F400283EE9 /* CoreData.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 3C36CA691A1EDB6200CDDD48 /* CoreData.framework */; };
 		C431E9A21D0B33F200F748C5 /* UIColor+Hyphenate.m in Sources */ = {isa = PBXBuildFile; fileRef = C431E9A11D0B33F200F748C5 /* UIColor+Hyphenate.m */; };
-		C47808411D0A42A4000418E5 /* GoogleService-Info.plist in Resources */ = {isa = PBXBuildFile; fileRef = C47808401D0A42A4000418E5 /* GoogleService-Info.plist */; };
+		C4AFB9361D0C0EE100ADF58B /* GoogleService-Info.plist in Resources */ = {isa = PBXBuildFile; fileRef = C4AFB9351D0C0EE100ADF58B /* GoogleService-Info.plist */; };
 		D257873C1B43EC7000B0E69F /* RobotListViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = D257873B1B43EC7000B0E69F /* RobotListViewController.m */; };
 		D25978A11BCD072100148BF6 /* ContactListSelectViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = D25978A01BCD072100148BF6 /* ContactListSelectViewController.m */; };
 		D26CE39B1C2BD37700697F48 /* Settings.bundle in Resources */ = {isa = PBXBuildFile; fileRef = D26CE39A1C2BD37700697F48 /* Settings.bundle */; };
@@ -264,7 +264,7 @@
 		A99F9D3A4E67DBEFC8FB0AA1 /* Pods-ChatDemo-UI3.0.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-ChatDemo-UI3.0.debug.xcconfig"; path = "Pods/Target Support Files/Pods-ChatDemo-UI3.0/Pods-ChatDemo-UI3.0.debug.xcconfig"; sourceTree = "<group>"; };
 		C431E9A01D0B33F200F748C5 /* UIColor+Hyphenate.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "UIColor+Hyphenate.h"; sourceTree = "<group>"; };
 		C431E9A11D0B33F200F748C5 /* UIColor+Hyphenate.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "UIColor+Hyphenate.m"; sourceTree = "<group>"; };
-		C47808401D0A42A4000418E5 /* GoogleService-Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = "GoogleService-Info.plist"; sourceTree = "<group>"; };
+		C4AFB9351D0C0EE100ADF58B /* GoogleService-Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = "GoogleService-Info.plist"; sourceTree = "<group>"; };
 		D24A4A9B1BCE4B830007BB00 /* ChatDemo-UI3.0-Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = "ChatDemo-UI3.0-Info.plist"; sourceTree = "<group>"; };
 		D24A4A9C1BCE4B830007BB00 /* ChatDemo-UI3.0-Prefix.pch */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "ChatDemo-UI3.0-Prefix.pch"; sourceTree = "<group>"; };
 		D257873A1B43EC7000B0E69F /* RobotListViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = RobotListViewController.h; sourceTree = "<group>"; };
@@ -608,7 +608,7 @@
 		9091102E192EEA70008A48AA /* Supporting Files */ = {
 			isa = PBXGroup;
 			children = (
-				C47808401D0A42A4000418E5 /* GoogleService-Info.plist */,
+				C4AFB9351D0C0EE100ADF58B /* GoogleService-Info.plist */,
 				D26CE39A1C2BD37700697F48 /* Settings.bundle */,
 				EBD2AA341A7CDABF00D16528 /* Resources */,
 				3C9B158D1A6D157E00D09FD6 /* InfoPlist.strings */,
@@ -886,7 +886,6 @@
 				D2B3DAE01BF1D7B700913BD5 /* icon_030.gif in Resources */,
 				EBD2AB3B1A7CDAC000D16528 /* call_out_h.png in Resources */,
 				EBD2AB401A7CDAC000D16528 /* call_silence_h@2x.png in Resources */,
-				C47808411D0A42A4000418E5 /* GoogleService-Info.plist in Resources */,
 				EBD2ABA71A7CDAC000D16528 /* group_participant_add@2x.png in Resources */,
 				EBD2AB3D1A7CDAC000D16528 /* call_silence.png in Resources */,
 				D2B3DAD31BF1D7B700913BD5 /* icon_020_cover.png in Resources */,
@@ -897,6 +896,7 @@
 				D2B3DADD1BF1D7B700913BD5 /* icon_029_cover.png in Resources */,
 				EBD2AB581A7CDAC000D16528 /* messageSendFail@2x.png in Resources */,
 				D2B3DACA1BF1D7B700913BD5 /* icon_010.gif in Resources */,
+				C4AFB9361D0C0EE100ADF58B /* GoogleService-Info.plist in Resources */,
 				D2B3DACF1BF1D7B700913BD5 /* icon_018_cover.png in Resources */,
 				D2B3DACC1BF1D7B700913BD5 /* icon_012.gif in Resources */,
 				D2BF97501AEB566B009E0D5C /* group_header@2x.png in Resources */,
