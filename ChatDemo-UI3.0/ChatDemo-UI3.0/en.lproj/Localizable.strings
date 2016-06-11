@@ -307,7 +307,7 @@
 
 //setting
 "setting.autoLogin" = "Automatic Login";
-"setting.loginUser" = "log out(%@)";
+"setting.loginUser" = "Logout as (%@)";
 "setting.logoutOngoing" = "loging out...";
 
 "setting.notDisturb" = "Do Not Disturb";
@@ -332,8 +332,8 @@
 "setting.edittips" = "After setting this nickname, chat with the iOS client demo project, iOS will display this nickname is not a Hyphenate ID, if the other party to use the Android client this setting is not effective";
 "setting.iospushname" = "APNs Display Name";
 "setting.useIp" = "Use IP";
-"setting.deleteConWhenLeave" = "Delete conversation when leave a group";
-"setting.showCallInfo" = "Show video call info";
+"setting.deleteConWhenLeave" = "Delete Messages When Leave Group";
+"setting.showCallInfo" = "Show Video Call Info";
 "setting.microphoneNoAuthority" = "No microphone permissions";
 "setting.microphoneAuthority" = "Please open in \"Setting\"-\"Privacy\"-\"Microphone\".";
 "setting.cameraNoAuthority" = "No camera permissions";

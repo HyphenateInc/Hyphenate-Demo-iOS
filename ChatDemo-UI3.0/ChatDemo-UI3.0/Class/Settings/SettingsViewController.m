@@ -246,19 +246,24 @@
         _footerView = [[UIView alloc] initWithFrame:CGRectMake(0, 0, self.view.frame.size.width, 80)];
         _footerView.backgroundColor = [UIColor clearColor];
         
-        UIView *line = [[UIView alloc] initWithFrame:CGRectMake(10, 0, _footerView.frame.size.width - 10, 0.5)];
-        line.backgroundColor = [UIColor lightGrayColor];
+        UIView *line = [[UIView alloc] initWithFrame:CGRectMake(0, 0, _footerView.frame.size.width, 1)];
+        line.backgroundColor = [UIColor HIColorLightGray];
         [_footerView addSubview:line];
         
-        UIButton *logoutButton = [[UIButton alloc] initWithFrame:CGRectMake(10, 20, _footerView.frame.size.width - 20, 45)];
-        [logoutButton setBackgroundColor:[UIColor HIColorRed]];
+        CGRect buttonFrame = CGRectMake(0, 1, _footerView.frame.size.width, 45);
+        
+        UIButton *logoutButton = [[UIButton alloc] initWithFrame:buttonFrame];
+        [logoutButton setBackgroundColor:[UIColor whiteColor]];
         NSString *username = [[EMClient sharedClient] currentUsername];
-        NSString *logoutButtonTitle = [[NSString alloc] initWithFormat:NSLocalizedString(@"setting.loginUser", @"log out(%@)"), username];
+        NSString *logoutButtonTitle = [[NSString alloc] initWithFormat:NSLocalizedString(@"setting.loginUser", @"Logout as  (%@)"), username];
         [logoutButton setTitle:logoutButtonTitle forState:UIControlStateNormal];
-        [logoutButton setTitleColor:[UIColor whiteColor] forState:UIControlStateNormal];
+        [logoutButton setTitleColor:[UIColor HIColorRed] forState:UIControlStateNormal];
         [logoutButton addTarget:self action:@selector(logoutAction) forControlEvents:UIControlEventTouchUpInside];
-       
         [_footerView addSubview:logoutButton];
+
+        UIView *borderBottom = [[UIView alloc] initWithFrame:CGRectMake(0, logoutButton.frame.origin.y + logoutButton.frame.size.height + 2, _footerView.frame.size.width, 1)];
+        borderBottom.backgroundColor = [UIColor HIColorLightGray];
+        [_footerView addSubview:borderBottom];
     }
     
     return _footerView;
