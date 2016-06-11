@@ -48,7 +48,7 @@ static ApplyViewController *controller = nil;
     [super viewDidLoad];
     
     // Uncomment the following line to preserve selection between presentations.
-    self.title = NSLocalizedString(@"title.apply", @"Application and notification");
+    self.title = NSLocalizedString(@"title.apply", @"Requests and Notifications");
     self.tableView.tableFooterView = [[UIView alloc] init];
     self.tableView.separatorStyle = UITableViewCellSeparatorStyleNone;
     

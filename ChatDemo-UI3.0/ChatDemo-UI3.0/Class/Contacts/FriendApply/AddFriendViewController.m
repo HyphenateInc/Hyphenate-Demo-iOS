@@ -164,7 +164,7 @@
     self.selectedIndexPath = indexPath;
     NSString *buddyName = [self.dataSource objectAtIndex:indexPath.row];
     if ([self didBuddyExist:buddyName]) {
-        NSString *message = [NSString stringWithFormat:NSLocalizedString(@"friend.repeat", @"'%@'has been your friend!"), buddyName];
+        NSString *message = [NSString stringWithFormat:NSLocalizedString(@"friend.repeat", @"'%@' is already your friend"), buddyName];
         
         [EMAlertView showAlertWithTitle:message
                                 message:nil
@@ -175,14 +175,15 @@
     }
     else if([self hasSendBuddyRequest:buddyName])
     {
-        NSString *message = [NSString stringWithFormat:NSLocalizedString(@"friend.repeatApply", @"you have send fridend request to '%@'!"), buddyName];
+        NSString *message = [NSString stringWithFormat:NSLocalizedString(@"friend.repeatApply", @"Send the friend request to '%@' again"), buddyName];
         [EMAlertView showAlertWithTitle:message
                                 message:nil
                         completionBlock:nil
                       cancelButtonTitle:NSLocalizedString(@"ok", @"OK")
                       otherButtonTitles:nil];
         
-    }else{
+    }
+    else {
         [self showMessageAlertView];
     }
 }
@@ -216,7 +217,7 @@
                 ApplyStyle style = [entity.style intValue];
                 BOOL isGroup = style == ApplyStyleFriend ? NO : YES;
                 if (!isGroup && [entity.applicantUsername isEqualToString:_textField.text]) {
-                    NSString *str = [NSString stringWithFormat:NSLocalizedString(@"friend.repeatInvite", @"%@ have sent the application to you"), _textField.text];
+                    NSString *str = [NSString stringWithFormat:NSLocalizedString(@"friend.repeatInvite", @"%@ sent an invitation to you"), _textField.text];
                     UIAlertView *alertView = [[UIAlertView alloc] initWithTitle:NSLocalizedString(@"prompt", @"Prompt") message:str delegate:nil cancelButtonTitle:NSLocalizedString(@"ok", @"OK") otherButtonTitles:nil, nil];
                     [alertView show];
                     
@@ -256,7 +257,7 @@
 - (void)showMessageAlertView
 {
     UIAlertView *alert = [[UIAlertView alloc] initWithTitle:nil
-                                                    message:NSLocalizedString(@"saySomething", @"say somthing")
+                                                    message:NSLocalizedString(@"saySomething", @"say hello!")
                                                    delegate:self
                                           cancelButtonTitle:NSLocalizedString(@"cancel", @"Cancel")
                                           otherButtonTitles:NSLocalizedString(@"ok", @"OK"), nil];
@@ -264,7 +265,8 @@
     [alert show];
 }
 
-- (void)alertView:(UIAlertView *)alertView clickedButtonAtIndex:(NSInteger)buttonIndex{
+- (void)alertView:(UIAlertView *)alertView clickedButtonAtIndex:(NSInteger)buttonIndex
+{
     if ([alertView cancelButtonIndex] != buttonIndex) {
         UITextField *messageTextField = [alertView textFieldAtIndex:0];
         
@@ -274,7 +276,7 @@
             messageStr = [NSString stringWithFormat:@"%@：%@", username, messageTextField.text];
         }
         else{
-            messageStr = [NSString stringWithFormat:NSLocalizedString(@"friend.somebodyInvite", @"%@ invite you as a friend"), username];
+            messageStr = [NSString stringWithFormat:NSLocalizedString(@"friend.somebodyInvite", @"%@ invites you as a friend"), username];
         }
         [self sendFriendApplyAtIndexPath:self.selectedIndexPath
                                  message:messageStr];
@@ -285,12 +287,13 @@
                            message:(NSString *)message
 {
     NSString *buddyName = [self.dataSource objectAtIndex:indexPath.row];
+    
     if (buddyName && buddyName.length > 0) {
-        [self showHudInView:self.view hint:NSLocalizedString(@"friend.sendApply", @"sending application...")];
+        [self showHudInView:self.view hint:NSLocalizedString(@"friend.sendApply", @"sending request...")];
         EMError *error = [[EMClient sharedClient].contactManager addContact:buddyName message:message];
         [self hideHud];
         if (error) {
-            [self showHint:NSLocalizedString(@"friend.sendApplyFail", @"send application fails, please operate again")];
+            [self showHint:NSLocalizedString(@"friend.sendApplyFail", @"send request fails, please try again")];
         }
         else{
             [self showHint:NSLocalizedString(@"friend.sendApplySuccess", @"send successfully")];

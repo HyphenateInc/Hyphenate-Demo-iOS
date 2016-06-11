@@ -194,7 +194,7 @@
                 cell = [[EaseUserCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:CellIdentifier];
             }
             cell.avatarView.image = [UIImage imageNamed:@"newFriends"];
-            cell.titleLabel.text = NSLocalizedString(@"title.apply", @"Application and notification");
+            cell.titleLabel.text = NSLocalizedString(@"title.apply", @"Requests and Notifications");
             cell.avatarView.badge = self.unapplyCount;
             return cell;
         }

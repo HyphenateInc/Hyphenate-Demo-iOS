@@ -249,7 +249,7 @@
     
     __weak CreateGroupViewController *weakSelf = self;
     NSString *username = [[EMClient sharedClient] currentUsername];
-    NSString *messageStr = [NSString stringWithFormat:NSLocalizedString(@"group.somebodyInvite", @"%@ invite you to join groups \'%@\'"), username, self.groupNameTextField.text];
+    NSString *messageStr = [NSString stringWithFormat:NSLocalizedString(@"group.somebodyInvite", @"%@ invites you to join groups \'%@\'"), username, self.groupNameTextField.text];
     dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), ^{
         EMError *error = nil;
         EMGroup *group = [[EMClient sharedClient].groupManager createGroupWithSubject:self.groupNameTextField.text description:self.groupDescriptionTextView.text invitees:source message:messageStr setting:setting error:&error];
