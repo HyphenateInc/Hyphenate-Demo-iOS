@@ -24,6 +24,7 @@
 - (void)viewDidLoad
 {
     [super viewDidLoad];
+    
     self.delegate = self;
     self.dataSource = self;
     
@@ -46,6 +47,7 @@
 }
 
 #pragma mark - EMUserListViewControllerDelegate
+
 - (void)userListViewController:(EaseUsersListViewController *)userListViewController
             didSelectUserModel:(id<IUserModel>)userModel
 {
@@ -99,6 +101,7 @@
 }
 
 #pragma mark - EMUserListViewControllerDataSource
+
 - (id<IUserModel>)userListViewController:(EaseUsersListViewController *)userListViewController
                            modelForBuddy:(NSString *)buddy
 {
@@ -126,6 +129,7 @@
 }
 
 #pragma mark - action
+
 - (void)backAction
 {
     [self.navigationController popViewControllerAnimated:YES];

@@ -32,7 +32,7 @@
 
 @end
 
-@interface ContactListViewController ()<UISearchBarDelegate, UISearchDisplayDelegate,BaseTableCellDelegate,UIActionSheetDelegate,EaseUserCellDelegate>
+@interface ContactListViewController () <UISearchBarDelegate, UISearchDisplayDelegate,BaseTableCellDelegate,UIActionSheetDelegate,EaseUserCellDelegate>
 {
     NSIndexPath *_currentLongPressIndex;
 }
@@ -106,8 +106,8 @@
     if (_searchBar == nil) {
         _searchBar = [[EMSearchBar alloc] init];
         _searchBar.delegate = self;
-        _searchBar.placeholder = NSLocalizedString(@"search", @"Search");
-        _searchBar.backgroundColor = [UIColor whiteColor];
+        _searchBar.placeholder = NSLocalizedString(@"search", @"Search Contacts");
+        _searchBar.barTintColor = [UIColor HIColorLightGray];
     }
     
     return _searchBar;
@@ -262,7 +262,7 @@
     }
     
     UIView *contentView = [[UIView alloc] init];
-    [contentView setBackgroundColor:[UIColor HIColorGreenLight]];
+    [contentView setBackgroundColor:[UIColor HIColorLightGray]];
     
     UILabel *label = [[UILabel alloc] initWithFrame:CGRectMake(10, 0, 100, 22)];
     label.backgroundColor = [UIColor clearColor];

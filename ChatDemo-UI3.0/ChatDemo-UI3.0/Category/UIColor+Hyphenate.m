@@ -30,6 +30,11 @@
     return [[self class] colorFromHexString:@"#cc0000"];
 }
 
++ (UIColor *)HIColorLightGray
+{
+    return [[self class] colorFromHexString:@"#EFEFEF"];
+}
+
 
 
 + (UIColor *)colorFromHexString:(NSString *)hexString
