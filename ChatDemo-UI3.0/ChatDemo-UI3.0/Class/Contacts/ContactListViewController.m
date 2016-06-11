@@ -205,11 +205,11 @@
         }
         
         if (indexPath.row == 1) {
-            cell.avatarView.image = [UIImage imageNamed:@"EaseUIResource.bundle/group"];
+            cell.avatarView.image = [UIImage imageNamed:@"group"];
             cell.titleLabel.text = NSLocalizedString(@"title.group", @"Group");
         }
         else if (indexPath.row == 2) {
-            cell.avatarView.image = [UIImage imageNamed:@"EaseUIResource.bundle/group"];
+            cell.avatarView.image = [UIImage imageNamed:@"group"];
             cell.titleLabel.text = NSLocalizedString(@"title.robotlist",@"robot list");
         }
         return cell;
@@ -453,7 +453,7 @@
     for (NSString *buddy in contactsSource) {
         EaseUserModel *model = [[EaseUserModel alloc] initWithBuddy:buddy];
         if (model) {
-            model.avatarImage = [UIImage imageNamed:@"EaseUIResource.bundle/user"];
+            model.avatarImage = [UIImage imageNamed:@"user"];
             model.nickname = [[UserProfileManager sharedInstance] getNickNameWithUsername:buddy];
             
             NSString *firstLetter = [EaseChineseToPinyin pinyinFromChineseString:[[UserProfileManager sharedInstance] getNickNameWithUsername:buddy]];
