@@ -11,6 +11,9 @@
  */
 
 #import "AppDelegate.h"
+#import <Fabric/Fabric.h>
+#import <Crashlytics/Crashlytics.h>
+
 #import "MainViewController.h"
 #import "LoginViewController.h"
 
@@ -63,7 +66,11 @@ static int const kGaDispatchPeriod = 30;
                   apnsCertName:apnsCertName
                    otherConfig:@{kSDKConfigEnableConsoleLogger:[NSNumber numberWithBool:YES]}];
     
+    // Google Analytics
     [self initializeGoogleAnalytics];
+
+    // Crashlytics
+    [Fabric with:@[[Crashlytics class]]];
 
     [self.window makeKeyAndVisible];
     
