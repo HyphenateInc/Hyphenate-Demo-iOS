@@ -20,6 +20,11 @@
 #import "AppDelegate+Hyphenate.h"
 #import "AppDelegate+Parse.h"
 
+/** Hyphenate configuration constants **/
+static NSString *const kHyphenateAppKey = @"hyphenate#hyphenatedemo";
+static NSString *const kHyphenatePushServiceDevelopment = @"DevelopmentCertificate";
+static NSString *const kHyphenatePushServiceProduction = @"ProductionCertificate";
+
 /** Google Analytics configuration constants **/
 static NSString *const kGaPropertyId = @"UA-78628613-1";
 static NSString *const kTrackingPreferenceKey = @"allowTracking";
@@ -52,17 +57,15 @@ static int const kGaDispatchPeriod = 30;
     // APNs Push Service
     NSString *apnsCertName = nil;
 #if DEBUG
-    apnsCertName = @"DevelopmentCertificate";
+    apnsCertName = kHyphenatePushServiceDevelopment;
 #else
-    apnsCertName = @"ProductionCertificate";
+    apnsCertName = kHyphenatePushServiceProduction;
 #endif
     
-    // Hyphenate AppKey
-    NSString *appkey = @"hyphenate#hyphenatedemo";
-
+    // Hyphenate init
     [self hyphenateApplication:application
  didFinishLaunchingWithOptions:launchOptions
-                        appkey:appkey
+                        appkey:kHyphenateAppKey
                   apnsCertName:apnsCertName
                    otherConfig:@{kSDKConfigEnableConsoleLogger:[NSNumber numberWithBool:YES]}];
     

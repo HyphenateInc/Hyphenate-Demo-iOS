@@ -247,10 +247,8 @@
 "message.toolBar.inputPlaceHolder" = "input a new message";
 "message.toolBar.record.upCancel" = "slide up to cancel sending";
 "message.toolBar.record.loosenCancel" = "release the fingers, to cancel sending";
-"message.toolBar.record.touch" = "hold down to talk";
-"message.toolBar.record.send" = "loosen to send";
-"DXMessageToolBarDelegate.record" = "hold down to talk";
-"DXMessageToolBarDelegate.send" = "loosen to send";
+"message.toolBar.record.touch" = "Hold to Record Audio";
+"message.toolBar.record.send" = "Release to Send";
 
 "message.downloadingAudio" = "downloading voice, click later";
 "message.downloadingVideo" = "downloading video...";
