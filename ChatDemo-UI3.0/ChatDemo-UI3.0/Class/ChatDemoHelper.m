@@ -385,14 +385,14 @@ static ChatDemoHelper *helper = nil;
 - (void)didReceiveAgreedFromUsername:(NSString *)aUsername
 {
     NSString *msgstr = [NSString stringWithFormat:@"%@ accepted friend request", aUsername];
-    UIAlertView *alertView = [[UIAlertView alloc] initWithTitle:nil message:msgstr delegate:nil cancelButtonTitle:@"确定" otherButtonTitles:nil, nil];
+    UIAlertView *alertView = [[UIAlertView alloc] initWithTitle:nil message:msgstr delegate:nil cancelButtonTitle:NSLocalizedString(@"ok", @"ok") otherButtonTitles:nil, nil];
     [alertView show];
 }
 
 - (void)didReceiveDeclinedFromUsername:(NSString *)aUsername
 {
     NSString *msgstr = [NSString stringWithFormat:@"%@ declined friend request", aUsername];
-    UIAlertView *alertView = [[UIAlertView alloc] initWithTitle:nil message:msgstr delegate:nil cancelButtonTitle:@"确定" otherButtonTitles:nil, nil];
+    UIAlertView *alertView = [[UIAlertView alloc] initWithTitle:nil message:msgstr delegate:nil cancelButtonTitle:NSLocalizedString(@"ok", @"ok") otherButtonTitles:nil, nil];
     [alertView show];
 }
 
