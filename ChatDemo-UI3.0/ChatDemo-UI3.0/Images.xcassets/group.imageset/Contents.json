@@ -2,7 +2,7 @@
   "images" : [
     {
       "idiom" : "universal",
-      "filename" : "chartroom_tool_emoji.png",
+      "filename" : "contact_group.png",
       "scale" : "1x"
     },
     {
@@ -11,7 +11,6 @@
     },
     {
       "idiom" : "universal",
-      "filename" : "chartroom_tool_emoji@3x.png",
       "scale" : "3x"
     }
   ],

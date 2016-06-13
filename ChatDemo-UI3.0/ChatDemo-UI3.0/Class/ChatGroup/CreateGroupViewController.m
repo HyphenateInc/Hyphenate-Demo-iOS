@@ -103,7 +103,7 @@
         _groupNameTextField.clearButtonMode = UITextFieldViewModeWhileEditing;
         _groupNameTextField.font = [UIFont systemFontOfSize:15.0];
         _groupNameTextField.backgroundColor = [UIColor whiteColor];
-        _groupNameTextField.placeholder = NSLocalizedString(@"group.create.inputName", @"please enter the group name");
+        _groupNameTextField.placeholder = NSLocalizedString(@"group.create.inputName", @"Enter a group name");
         _groupNameTextField.returnKeyType = UIReturnKeyDone;
         _groupNameTextField.delegate = self;
     }
@@ -120,7 +120,7 @@
         _groupDescriptionTextView.layer.cornerRadius = 3;
         _groupDescriptionTextView.font = [UIFont systemFontOfSize:14.0];
         _groupDescriptionTextView.backgroundColor = [UIColor whiteColor];
-        _groupDescriptionTextView.placeholder = NSLocalizedString(@"group.create.inputDescribe", @"please enter a group description");
+        _groupDescriptionTextView.placeholder = NSLocalizedString(@"group.create.inputDescribe", @"Enter a group description");
         _groupDescriptionTextView.returnKeyType = UIReturnKeyDone;
         _groupDescriptionTextView.delegate = self;
     }
@@ -310,7 +310,7 @@
 - (void)addContacts:(id)sender
 {
     if (self.groupNameTextField.text.length == 0) {
-        UIAlertView *alertView = [[UIAlertView alloc] initWithTitle:NSLocalizedString(@"prompt", @"Prompt") message:NSLocalizedString(@"group.create.inputName", @"please enter the group name") delegate:nil cancelButtonTitle:NSLocalizedString(@"ok", @"OK") otherButtonTitles:nil, nil];
+        UIAlertView *alertView = [[UIAlertView alloc] initWithTitle:NSLocalizedString(@"prompt", @"Prompt") message:NSLocalizedString(@"group.create.inputName", @"Enter a group name") delegate:nil cancelButtonTitle:NSLocalizedString(@"ok", @"OK") otherButtonTitles:nil, nil];
         [alertView show];
         return;
     }

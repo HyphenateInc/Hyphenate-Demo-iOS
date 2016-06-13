@@ -136,8 +136,8 @@
 
 //Create Group
 "group.create.addOccupant" = "add member";
-"group.create.inputName" = "please enter the group name";
-"group.create.inputDescribe" = "please enter a group description";
+"group.create.inputName" = "Enter a group name";
+"group.create.inputDescribe" = "Enter a group description";
 "group.create.groupPermission" = "Group permission";
 "group.create.private" = "private group";
 "group.create.occupantPermissions" = "members invite permissions";

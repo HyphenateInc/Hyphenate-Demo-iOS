@@ -125,12 +125,12 @@ static FriendRequestViewController *controller = nil;
             ApplyStyle applyStyle = [entity.style intValue];
             if (applyStyle == ApplyStyleGroupInvitation) {
                 cell.titleLabel.text = NSLocalizedString(@"title.groupApply", @"Group Notification");
-                cell.headerImageView.image = [UIImage imageNamed:@"groupPrivateHeader"];
+                cell.headerImageView.image = [UIImage imageNamed:@"group"];
             }
             else if (applyStyle == ApplyStyleJoinGroup)
             {
                 cell.titleLabel.text = NSLocalizedString(@"title.groupApply", @"Group Notification");
-                cell.headerImageView.image = [UIImage imageNamed:@"groupPrivateHeader"];
+                cell.headerImageView.image = [UIImage imageNamed:@"group"];
             }
             else if(applyStyle == ApplyStyleFriend){
                 cell.titleLabel.text = entity.applicantUsername;

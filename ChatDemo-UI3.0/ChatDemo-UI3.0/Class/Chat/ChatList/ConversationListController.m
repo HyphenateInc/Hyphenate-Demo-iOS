@@ -243,7 +243,7 @@
             }
         }
     } else if (model.conversation.type == EMConversationTypeGroupChat) {
-        NSString *imageName = @"groupPublicHeader";
+        NSString *imageName = @"group";
         if (![conversation.ext objectForKey:@"subject"])
         {
             NSArray *groupArray = [[EMClient sharedClient].groupManager getAllGroups];
@@ -258,7 +258,7 @@
             }
         }
         model.title = [conversation.ext objectForKey:@"subject"];
-        imageName = [[conversation.ext objectForKey:@"isPublic"] boolValue] ? @"groupPublicHeader" : @"groupPrivateHeader";
+        imageName = [[conversation.ext objectForKey:@"isPublic"] boolValue] ? @"group" : @"group";
         model.avatarImage = [UIImage imageNamed:imageName];
     }
     return model;

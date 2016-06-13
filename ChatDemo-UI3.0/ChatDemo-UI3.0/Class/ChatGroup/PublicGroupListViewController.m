@@ -235,7 +235,7 @@ typedef NS_ENUM(NSInteger, GettingMoreFooterViewState){
             }
             
             EMGroup *group = [weakSelf.searchController.resultsSource objectAtIndex:indexPath.row];
-            NSString *imageName = group.isPublic ? @"groupPublicHeader" : @"groupPrivateHeader";
+            NSString *imageName = group.isPublic ? @"group" : @"group";
             cell.imageView.image = [UIImage imageNamed:imageName];
             cell.textLabel.text = group.subject;
             
@@ -285,7 +285,7 @@ typedef NS_ENUM(NSInteger, GettingMoreFooterViewState){
     }
     
     EMGroup *group = [self.dataSource objectAtIndex:indexPath.row];
-    cell.imageView.image = [UIImage imageNamed:@"groupPublicHeader"];
+    cell.imageView.image = [UIImage imageNamed:@"group"];
     if (group.subject && group.subject.length > 0) {
         cell.textLabel.text = group.subject;
     }

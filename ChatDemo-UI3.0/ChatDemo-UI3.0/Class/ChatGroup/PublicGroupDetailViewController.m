@@ -85,7 +85,7 @@
         _headerView.backgroundColor = [UIColor whiteColor];
         
         UIImageView *imageView = [[UIImageView alloc] initWithFrame:CGRectMake(20, 20, 50, 50)];
-        imageView.image = [UIImage imageNamed:@"groupPublicHeader"];
+        imageView.image = [UIImage imageNamed:@"group"];
         [_headerView addSubview:imageView];
         
         _nameLabel = [[UILabel alloc] initWithFrame:CGRectMake(80, 20, _headerView.frame.size.width - 80 - 20, 30)];

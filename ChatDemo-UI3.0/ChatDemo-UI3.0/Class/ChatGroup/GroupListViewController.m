@@ -139,7 +139,7 @@
             }
             
             EMGroup *group = [weakSelf.searchController.resultsSource objectAtIndex:indexPath.row];
-            NSString *imageName = group.isPublic ? @"groupPublicHeader" : @"groupPrivateHeader";
+            NSString *imageName = group.isPublic ? @"group" : @"group";
             cell.imageView.image = [UIImage imageNamed:imageName];
             cell.textLabel.text = group.subject;
             
@@ -196,19 +196,18 @@
         switch (indexPath.row) {
             case 0:
                 cell.textLabel.text = NSLocalizedString(@"group.create.group",@"Create a group");
-                cell.imageView.image = [UIImage imageNamed:@"group_creategroup"];
+                cell.imageView.image = [UIImage imageNamed:@"addIcon"];
                 break;
             case 1:
                 cell.textLabel.text = NSLocalizedString(@"group.create.join",@"Join public group");
-                cell.imageView.image = [UIImage imageNamed:@"group_joinpublicgroup"];
+                cell.imageView.image = [UIImage imageNamed:@"addIcon"];
                 break;
             default:
                 break;
         }
     } else {
         EMGroup *group = [self.dataSource objectAtIndex:indexPath.row];
-        NSString *imageName = @"group_header";
-//        NSString *imageName = group.isPublic ? @"groupPublicHeader" : @"groupPrivateHeader";
+        NSString *imageName = @"group";
         cell.imageView.image = [UIImage imageNamed:imageName];
         if (group.subject && group.subject.length > 0) {
             cell.textLabel.text = group.subject;
