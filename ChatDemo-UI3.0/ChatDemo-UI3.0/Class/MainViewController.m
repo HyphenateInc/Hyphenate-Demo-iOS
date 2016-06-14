@@ -48,6 +48,8 @@ static NSString *kGroupName = @"GroupName";
 {
     [super viewDidLoad];
     
+    self.navigationController.navigationBar.tintColor = [UIColor whiteColor];
+    
     self.edgesForExtendedLayout = UIRectEdgeNone;
     self.title = NSLocalizedString(@"title.conversation", @"Chats");
     

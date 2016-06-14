@@ -108,8 +108,10 @@
 {
     [super viewDidLoad];
     
+    self.navigationController.navigationBar.tintColor = [UIColor whiteColor];
+
     self.title = @"Group Settings";
-    
+        
     UIBarButtonItem *backBarButtonItem = [[UIBarButtonItem alloc] initWithImage:[UIImage imageNamed:@"back"]
                                                                           style:UIBarButtonItemStylePlain
                                                                          target:self.navigationController

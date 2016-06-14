@@ -33,9 +33,12 @@
 
 @implementation ChatViewController
 
-- (void)viewDidLoad {
+- (void)viewDidLoad
+{
     [super viewDidLoad];
-    // Do any additional setup after loading the view.
+    
+    self.navigationController.navigationBar.tintColor = [UIColor whiteColor];
+    
     self.showRefreshHeader = YES;
     self.delegate = self;
     self.dataSource = self;
