@@ -108,11 +108,12 @@
         self.navigationItem.rightBarButtonItem = rightBarButtonItem;
     }
     else {
-        UIButton *detailButton = [[UIButton alloc] initWithFrame:CGRectMake(0, 0, 60, 44)];
-        [detailButton setImage:[UIImage imageNamed:@"group_detail"] forState:UIControlStateNormal];
-        [detailButton addTarget:self action:@selector(showGroupDetailAction) forControlEvents:UIControlEventTouchUpInside];
-        
-        self.navigationItem.rightBarButtonItem = [[UIBarButtonItem alloc] initWithCustomView:detailButton];
+        UIBarButtonItem *detailButton = [[UIBarButtonItem alloc] initWithImage:[UIImage imageNamed:@"tabbar_setting"]
+                                                                         style:UIBarButtonItemStylePlain
+                                                                        target:self
+                                                                        action:@selector(showGroupDetailAction)];
+        self.navigationItem.rightBarButtonItem = detailButton;
+
     }
 }
 
