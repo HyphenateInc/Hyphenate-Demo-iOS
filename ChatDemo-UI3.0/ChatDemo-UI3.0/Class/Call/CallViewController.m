@@ -181,6 +181,7 @@
     self.actionView.backgroundColor = [UIColor clearColor];
     [self.view addSubview:self.actionView];
     
+    // Mute
     CGFloat tmpWidth = self.actionView.frame.size.width / 2;
     self.silenceButton = [[UIButton alloc] initWithFrame:CGRectMake((tmpWidth - 40) / 2, 80, 40, 40)];
     [self.silenceButton setImage:[UIImage imageNamed:@"call_silence"] forState:UIControlStateNormal];
@@ -211,72 +212,81 @@
     [self.actionView addSubview:self.speakerOutLabel];
     
     // Reject Button
-    self.rejectButton = [[UIButton alloc] initWithFrame:CGRectMake((tmpWidth - 100) / 2, CGRectGetMaxY(_speakerOutLabel.frame) + 30, 100, 40)];
-    [self.rejectButton setTitle:NSLocalizedString(@"call.reject", @"Reject") forState:UIControlStateNormal];
+    int rejectButtonSize = 60;
+    self.rejectButton = [[UIButton alloc] initWithFrame:CGRectMake((tmpWidth - rejectButtonSize) / 2, CGRectGetMaxY(_speakerOutLabel.frame) + 10, rejectButtonSize, rejectButtonSize)];
+    [self.rejectButton setImage:[UIImage imageNamed:@"call_end"] forState:UIControlStateNormal];
     [self.rejectButton setBackgroundColor:[UIColor HIColorRed]];
     [self.rejectButton addTarget:self action:@selector(rejectAction) forControlEvents:UIControlEventTouchUpInside];
-    self.rejectButton.layer.cornerRadius = 6.0f;
+    self.rejectButton.layer.cornerRadius = rejectButtonSize/2;
     self.rejectButton.layer.masksToBounds = YES;
     [self.actionView addSubview:self.rejectButton];
     
     // Answer Button
-    self.answerButton = [[UIButton alloc] initWithFrame:CGRectMake(tmpWidth + (tmpWidth - 100) / 2, self.rejectButton.frame.origin.y, 100, 40)];
-    [self.answerButton setTitle:NSLocalizedString(@"call.answer", @"Answer") forState:UIControlStateNormal];
+    int answerButtonSize = 80;
+    self.answerButton = [[UIButton alloc] initWithFrame:CGRectMake(tmpWidth - answerButtonSize / 2, self.rejectButton.frame.origin.y, answerButtonSize, answerButtonSize)];
+    [self.answerButton setImage:[UIImage imageNamed:@"call_pickup"] forState:UIControlStateNormal];
     [self.answerButton setBackgroundColor:[UIColor HIColorGreenMajor]];
     [self.answerButton addTarget:self action:@selector(answerAction) forControlEvents:UIControlEventTouchUpInside];
-    self.answerButton.layer.cornerRadius = 6.0f;
+    self.answerButton.layer.cornerRadius = answerButtonSize/2;
     self.answerButton.layer.masksToBounds = YES;
     [self.actionView addSubview:self.answerButton];
     
     // Cancel Button
-    self.cancelButton = [[UIButton alloc] initWithFrame:CGRectMake((self.view.frame.size.width - 200) / 2, self.rejectButton.frame.origin.y, 200, 40)];
-    [self.cancelButton setTitle:NSLocalizedString(@"call.hangup", @"End Call") forState:UIControlStateNormal];
+    int cancelButtonSize = 80;
+    self.cancelButton = [[UIButton alloc] initWithFrame:CGRectMake(tmpWidth - cancelButtonSize / 2, self.rejectButton.frame.origin.y, cancelButtonSize, cancelButtonSize)];
+    [self.cancelButton setImage:[UIImage imageNamed:@"call_end"] forState:UIControlStateNormal];
     [self.cancelButton setBackgroundColor:[UIColor HIColorRed]];
     [self.cancelButton addTarget:self action:@selector(hangupAction) forControlEvents:UIControlEventTouchUpInside];
-    self.cancelButton.layer.cornerRadius = 6.0f;
+    self.cancelButton.layer.cornerRadius = cancelButtonSize/2;
     self.cancelButton.layer.masksToBounds = YES;
     [self.actionView addSubview:self.cancelButton];
     
     if (_callSession.type == EMCallTypeVideo) {
         
         CGFloat tmpWidth = self.actionView.frame.size.width / 3;
-        int buttonWidth = 80;
-        int buttonHeight = 50;
+        int buttonWidth = 40;
+        int buttonHeight = 40;
         int topMargin = 20;
         
         // Record Button
         self.recordButton = [[UIButton alloc] initWithFrame:CGRectMake((tmpWidth-buttonWidth)/2, topMargin, buttonWidth, buttonHeight)];
         self.recordButton.layer.cornerRadius = 6.0f;
-        [self.recordButton setImage:[UIImage imageNamed:@"image.png"] forState:UIControlStateNormal];
-        [self.recordButton setImage:[UIImage imageNamed:@"image.png"] forState:UIControlStateSelected];
+        [self.recordButton setImage:[UIImage imageNamed:@"call_record_start"] forState:UIControlStateNormal];
+        [self.recordButton setImage:[UIImage imageNamed:@"call_record_stop"] forState:UIControlStateSelected];
         
         [self.recordButton setTitle:NSLocalizedString(@"call.record", @"Record") forState:UIControlStateNormal];
         [self.recordButton setTitle:NSLocalizedString(@"call.stopRecording", @"Stop Recording") forState:UIControlStateSelected];
         [self.recordButton.titleLabel setFont:[UIFont systemFontOfSize:10]];
-        [self.recordButton setBackgroundColor:[UIColor HIColorLightGray]];
+        [self.recordButton setBackgroundColor:[UIColor clearColor]];
         [self.recordButton addTarget:self action:@selector(recordAction) forControlEvents:UIControlEventTouchUpInside];
         [self.actionView addSubview:self.recordButton];
         
         // Video Button
         self.videoButton = [[UIButton alloc] initWithFrame:CGRectMake(tmpWidth + (tmpWidth - buttonWidth) / 2, topMargin, buttonWidth, buttonHeight)];
         self.videoButton.layer.cornerRadius = 6.0f;
-        [self.videoButton setTitle:NSLocalizedString(@"call.startVideo", @"Start the video") forState:UIControlStateNormal];
-        [self.videoButton setTitle:NSLocalizedString(@"call.pauseVideo", @"Pause the video") forState:UIControlStateSelected];
+        [self.videoButton setImage:[UIImage imageNamed:@"call_video_on"] forState:UIControlStateNormal];
+        [self.videoButton setImage:[UIImage imageNamed:@"call_video_off"] forState:UIControlStateSelected];
+//        [self.videoButton setTitle:NSLocalizedString(@"call.startVideo", @"Start the video") forState:UIControlStateNormal];
+//        [self.videoButton setTitle:NSLocalizedString(@"call.pauseVideo", @"Pause the video") forState:UIControlStateSelected];
         [self.videoButton.titleLabel setFont:[UIFont systemFontOfSize:10]];
-        [self.videoButton setBackgroundColor:[UIColor HIColorLightGray]];
+        [self.videoButton setBackgroundColor:[UIColor clearColor]];
         [self.videoButton addTarget:self action:@selector(videoPauseAction) forControlEvents:UIControlEventTouchUpInside];
+        self.videoButton.selected = YES;
         [self.actionView addSubview:self.videoButton];
         
-        // Voice Button
-        self.voiceButton = [[UIButton alloc] initWithFrame:CGRectMake(tmpWidth * 2 + (tmpWidth - buttonWidth) / 2, topMargin, buttonWidth, buttonHeight)];
-        self.voiceButton.layer.cornerRadius = 6.0f;
-        [self.voiceButton setTitle:NSLocalizedString(@"call.startAudio", @"Start the audio") forState:UIControlStateNormal];
-        [self.voiceButton setTitle:NSLocalizedString(@"call.pauseAudio", @"Pause the audio") forState:UIControlStateSelected];
-        [self.voiceButton.titleLabel setFont:[UIFont systemFontOfSize:10]];
-        [self.voiceButton setBackgroundColor:[UIColor HIColorLightGray]];
-        [self.voiceButton addTarget:self action:@selector(voicePauseAction) forControlEvents:UIControlEventTouchUpInside];
-        [self.actionView addSubview:self.voiceButton];
-        [self.speakerOutButton sendActionsForControlEvents:UIControlEventTouchUpInside];
+//        // Voice Button
+//        self.voiceButton = [[UIButton alloc] initWithFrame:CGRectMake(tmpWidth * 2 + (tmpWidth - buttonWidth) / 2, topMargin, buttonWidth, buttonHeight)];
+//        self.voiceButton.layer.cornerRadius = 6.0f;
+//        [self.voiceButton setImage:[UIImage imageNamed:@"call_audio_on"] forState:UIControlStateNormal];
+//        [self.voiceButton setImage:[UIImage imageNamed:@"call_audio_off"] forState:UIControlStateSelected];
+////        [self.voiceButton setTitle:NSLocalizedString(@"call.startAudio", @"Start the audio") forState:UIControlStateNormal];
+////        [self.voiceButton setTitle:NSLocalizedString(@"call.pauseAudio", @"Pause the audio") forState:UIControlStateSelected];
+//        [self.voiceButton.titleLabel setFont:[UIFont systemFontOfSize:10]];
+//        [self.voiceButton setBackgroundColor:[UIColor clearColor]];
+//        [self.voiceButton addTarget:self action:@selector(voicePauseAction) forControlEvents:UIControlEventTouchUpInside];
+//        self.voiceButton.selected = YES;
+//        [self.actionView addSubview:self.voiceButton];
+//        [self.speakerOutButton sendActionsForControlEvents:UIControlEventTouchUpInside];
     }
 }
 
@@ -430,22 +440,25 @@
 
 - (void)videoPauseAction
 {
-    self.videoButton.selected = !self.videoButton.selected;
     if (self.videoButton.selected) {
         [[EMClient sharedClient].callManager pauseVideoTransfer:_callSession.sessionId];
-    } else {
+    }
+    else {
         [[EMClient sharedClient].callManager resumeVideoTransfer:_callSession.sessionId];
     }
+    self.videoButton.selected = !self.videoButton.selected;
 }
 
 - (void)voicePauseAction
 {
-    self.voiceButton.selected = !self.voiceButton.selected;
     if (self.voiceButton.selected) {
         [[EMClient sharedClient].callManager pauseVoiceAndVideoTransfer:_callSession.sessionId];
-    } else {
+    }
+    else {
         [[EMClient sharedClient].callManager resumeVoiceAndVideoTransfer:_callSession.sessionId];
     }
+    self.voiceButton.selected = !self.voiceButton.selected;
+
 }
 
 - (void)silenceAction
