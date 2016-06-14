@@ -28,7 +28,7 @@
 "error" = "Error";
 "delete" = "Delete";
 "copy" = "Copy";
-"transpond" = "Forward";
+"forward" = "Forward";
 "save" = "Save";
 "prompt" = "Prompt";
 "add" = "Add";
@@ -43,8 +43,8 @@
 "sendingRequest" = "Sending request...";
 "requestAcceptFailure" = "Failed to accept request";
 "requestDeclineFailure" = "Failed to decline request";
-"transponding" = "Forwarding...";
-"transpondFail" = "Forward failed";
+"forwarding" = "Forwarding...";
+"forwardFail" = "Failed to forward the message";
 "refreshData" = "Refresh data...";
 "loadData" = "Loading data...";
 "loadDataFailed" = "Failed to Load more data";

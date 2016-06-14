@@ -67,12 +67,12 @@
                     [array addObject:chatController];
                     [weakself.navigationController setViewControllers:array animated:YES];
                 } else {
-                    [self showHudInView:self.view hint:NSLocalizedString(@"transpondFail", @"Forward Fail")];
+                    [self showHudInView:self.view hint:NSLocalizedString(@"forwardFail", @"")];
                 }
             }];
         } else if (self.messageModel.bodyType == EMMessageBodyTypeImage) {
 
-            [self showHudInView:self.view hint:NSLocalizedString(@"transponding", @"Forwarding...")];
+            [self showHudInView:self.view hint:NSLocalizedString(@"forwarding", @"Forwarding...")];
             
             UIImage *image = self.messageModel.image;
             if (image) {
@@ -92,7 +92,7 @@
                     [array addObject:chatController];
                     [self.navigationController setViewControllers:array animated:YES];
                 } else {
-                    [self showHudInView:self.view hint:NSLocalizedString(@"transpondFail", @"Forward faieled")];
+                    [self showHudInView:self.view hint:NSLocalizedString(@"forwardFail", @"")];
                 }
             }];
         }

@@ -61,13 +61,21 @@
 {
     if (self.conversation.type == EMConversationTypeChatRoom)
     {
-        NSString *chatter = [self.conversation.conversationId copy];
+        NSString *conversationID = self.conversation.conversationId;
+        
         dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), ^{
+            
             EMError *error = nil;
-            [[EMClient sharedClient].roomManager leaveChatroom:chatter error:&error];
-            if (error !=nil) {
+            [[EMClient sharedClient].roomManager leaveChatroom:conversationID error:&error];
+            
+            if (error != nil) {
                 dispatch_async(dispatch_get_main_queue(), ^{
-                    UIAlertView *alertView = [[UIAlertView alloc] initWithTitle:@"Error" message:[NSString stringWithFormat:@"Leave chatroom '%@' failed [%@]", chatter, error.errorDescription] delegate:nil cancelButtonTitle:NSLocalizedString(@"ok", @"ok") otherButtonTitles:nil, nil];
+                    
+                    UIAlertView *alertView = [[UIAlertView alloc] initWithTitle:@"Error"
+                                                                        message:[NSString stringWithFormat:@"Failed to leave chatroom '%@': [%@]", conversationID, error.errorDescription]
+                                                                       delegate:nil
+                                                              cancelButtonTitle:NSLocalizedString(@"ok", @"ok")
+                                                              otherButtonTitles:nil, nil];
                     [alertView show];
                 });
             }
@@ -85,8 +93,8 @@
     [[GAI sharedInstance].defaultTracker send:[[GAIDictionaryBuilder createScreenView] build]];
     
     if (self.conversation.type == EMConversationTypeGroupChat) {
-        if ([[self.conversation.ext objectForKey:@"subject"] length])
-        {
+        
+        if ([[self.conversation.ext objectForKey:@"subject"] length]) {
             self.title = [self.conversation.ext objectForKey:@"subject"];
         }
     }
@@ -111,6 +119,7 @@
         self.navigationItem.rightBarButtonItem = rightBarButtonItem;
     }
     else {
+        
         UIBarButtonItem *detailButton = [[UIBarButtonItem alloc] initWithImage:[UIImage imageNamed:@"tabbar_setting"]
                                                                          style:UIBarButtonItemStylePlain
                                                                         target:self
@@ -125,6 +134,7 @@
 - (void)alertView:(UIAlertView *)alertView clickedButtonAtIndex:(NSInteger)buttonIndex
 {
     if (alertView.cancelButtonIndex != buttonIndex) {
+        
         self.messageTimeIntervalTag = -1;
         [self.conversation deleteAllMessages];
         [self.dataArray removeAllObjects];
@@ -146,12 +156,14 @@
    didLongPressRowAtIndexPath:(NSIndexPath *)indexPath
 {
     id object = [self.dataArray objectAtIndex:indexPath.row];
+    
     if (![object isKindOfClass:[NSString class]]) {
         EaseMessageCell *cell = (EaseMessageCell *)[self.tableView cellForRowAtIndexPath:indexPath];
         [cell becomeFirstResponder];
         self.menuIndexPath = indexPath;
-        [self _showMenuViewController:cell.bubbleView andIndexPath:indexPath messageType:cell.model.bodyType];
+        [self showMenuViewController:cell.bubbleView indexPath:indexPath messageType:cell.model.bodyType];
     }
+    
     return YES;
 }
 
@@ -168,40 +180,52 @@
                            modelForMessage:(EMMessage *)message
 {
     id<IMessageModel> model = nil;
+    
     model = [[EaseMessageModel alloc] initWithMessage:message];
     model.avatarImage = [UIImage imageNamed:@"user"];
+    
     UserProfileEntity *profileEntity = [[UserProfileManager sharedInstance] getUserProfileByUsername:model.nickname];
     if (profileEntity) {
         model.avatarURLPath = profileEntity.imageUrl;
         model.nickname = profileEntity.nickname;
     }
+    
     model.failImageName = @"imageDownloadFail";
+    
     return model;
 }
 
 - (NSArray*)emotionFormessageViewController:(EaseMessageViewController *)viewController
 {
-    NSMutableArray *emotions = [NSMutableArray array];
+    NSMutableArray *emojis = [NSMutableArray array];
+  
     for (NSString *name in [EaseEmoji allEmoji]) {
         EaseEmotion *emotion = [[EaseEmotion alloc] initWithName:@"" emotionId:name emotionThumbnail:name emotionOriginal:name emotionOriginalURL:@"" emotionType:EMEmotionDefault];
-        [emotions addObject:emotion];
+        [emojis addObject:emotion];
     }
-    EaseEmotion *temp = [emotions objectAtIndex:0];
-    EaseEmotionManager *managerDefault = [[EaseEmotionManager alloc] initWithType:EMEmotionDefault emotionRow:3 emotionCol:7 emotions:emotions tagImage:[UIImage imageNamed:temp.emotionId]];
+    
+    EaseEmotion *temp = [emojis objectAtIndex:0];
+   
+    EaseEmotionManager *managerDefault = [[EaseEmotionManager alloc] initWithType:EMEmotionDefault emotionRow:3 emotionCol:7 emotions:emojis tagImage:[UIImage imageNamed:temp.emotionId]];
     
     NSMutableArray *emotionGifs = [NSMutableArray array];
-    _emotionDic = [NSMutableDictionary dictionary];
+   
+    self.emotionDic = [NSMutableDictionary dictionary];
+    
     NSArray *names = @[@"icon_002",@"icon_007",@"icon_010",@"icon_012",@"icon_013",@"icon_018",@"icon_019",@"icon_020",@"icon_021",@"icon_022",@"icon_024",@"icon_027",@"icon_029",@"icon_030",@"icon_035",@"icon_040"];
+    
     int index = 0;
+    
     for (NSString *name in names) {
         index++;
         EaseEmotion *emotion = [[EaseEmotion alloc] initWithName:@"" emotionId:[NSString stringWithFormat:@"em%d",(1000 + index)] emotionThumbnail:[NSString stringWithFormat:@"%@_cover",name] emotionOriginal:[NSString stringWithFormat:@"%@",name] emotionOriginalURL:@"" emotionType:EMEmotionGif];
         [emotionGifs addObject:emotion];
         [_emotionDic setObject:emotion forKey:[NSString stringWithFormat:@"em%d",(1000 + index)]];
     }
-    EaseEmotionManager *managerGif= [[EaseEmotionManager alloc] initWithType:EMEmotionGif emotionRow:2 emotionCol:4 emotions:emotionGifs tagImage:[UIImage imageNamed:@"icon_002_cover"]];
     
-    return @[managerDefault,managerGif];
+    EaseEmotionManager *managerGif = [[EaseEmotionManager alloc] initWithType:EMEmotionGif emotionRow:2 emotionCol:4 emotions:emotionGifs tagImage:[UIImage imageNamed:@"icon_002_cover"]];
+    
+    return @[managerDefault, managerGif];
 }
 
 - (BOOL)isEmotionMessageFormessageViewController:(EaseMessageViewController *)viewController
@@ -218,7 +242,7 @@
                                       messageModel:(id<IMessageModel>)messageModel
 {
     NSString *emotionId = [messageModel.message.ext objectForKey:MESSAGE_ATTR_EXPRESSION_ID];
-    EaseEmotion *emotion = [_emotionDic objectForKey:emotionId];
+    EaseEmotion *emotion = [self.emotionDic objectForKey:emotionId];
     if (emotion == nil) {
         emotion = [[EaseEmotion alloc] initWithName:@"" emotionId:emotionId emotionThumbnail:@"" emotionOriginal:@"" emotionOriginalURL:@"" emotionType:EMEmotionGif];
     }
@@ -255,6 +279,7 @@
 {
     [[EMClient sharedClient].chatManager removeDelegate:self];
     [[EMClient sharedClient].roomManager removeDelegate:self];
+    
     [[ChatDemoHelper shareHelper] setChatVC:nil];
     
     if (self.deleteConversationIfNull) {
@@ -297,7 +322,7 @@
         }
     }
     else {
-        UIAlertView *alertView = [[UIAlertView alloc] initWithTitle:@"Delete Messages?" message:NSLocalizedString(@"confirmDeleteMessage", @"Messages will not be able to retrive") delegate:self cancelButtonTitle:NSLocalizedString(@"cancel", @"Cancel") otherButtonTitles:NSLocalizedString(@"ok", @"OK"), nil];
+        UIAlertView *alertView = [[UIAlertView alloc] initWithTitle:@"Delete Messages?" message:NSLocalizedString(@"confirmDeleteMessage", @"Messages will not be able to be retrived") delegate:self cancelButtonTitle:NSLocalizedString(@"cancel", @"Cancel") otherButtonTitles:NSLocalizedString(@"ok", @"OK"), nil];
         [alertView show];
     }
 }
@@ -305,12 +330,14 @@
 - (void)transpondMenuAction:(id)sender
 {
     if (self.menuIndexPath && self.menuIndexPath.row > 0) {
+        
         id<IMessageModel> model = [self.dataArray objectAtIndex:self.menuIndexPath.row];
         ContactListSelectViewController *listViewController = [[ContactListSelectViewController alloc] initWithNibName:nil bundle:nil];
         listViewController.messageModel = model;
         [listViewController tableViewDidTriggerHeaderRefresh];
         [self.navigationController pushViewController:listViewController animated:YES];
     }
+    
     self.menuIndexPath = nil;
 }
 
@@ -328,6 +355,7 @@
 - (void)deleteMenuAction:(id)sender
 {
     if (self.menuIndexPath && self.menuIndexPath.row > 0) {
+        
         id<IMessageModel> model = [self.dataArray objectAtIndex:self.menuIndexPath.row];
         NSMutableIndexSet *indexs = [NSMutableIndexSet indexSetWithIndex:self.menuIndexPath.row];
         NSMutableArray *indexPaths = [NSMutableArray arrayWithObjects:self.menuIndexPath, nil];
@@ -336,11 +364,14 @@
         [self.messsagesSource removeObject:model.message];
         
         if (self.menuIndexPath.row - 1 >= 0) {
+            
             id nextMessage = nil;
             id prevMessage = [self.dataArray objectAtIndex:(self.menuIndexPath.row - 1)];
+            
             if (self.menuIndexPath.row + 1 < [self.dataArray count]) {
                 nextMessage = [self.dataArray objectAtIndex:(self.menuIndexPath.row + 1)];
             }
+            
             if ((!nextMessage || [nextMessage isKindOfClass:[NSString class]]) && [prevMessage isKindOfClass:[NSString class]]) {
                 [indexs addIndex:self.menuIndexPath.row - 1];
                 [indexPaths addObject:[NSIndexPath indexPathForRow:(self.menuIndexPath.row - 1) inSection:0]];
@@ -361,6 +392,7 @@
 }
 
 #pragma mark - notification
+
 - (void)exitGroup
 {
     [self.navigationController popToViewController:self animated:NO];
@@ -380,18 +412,20 @@
 - (void)handleCallNotification:(NSNotification *)notification
 {
     id object = notification.object;
+   
     if ([object isKindOfClass:[NSDictionary class]]) {
         self.isViewDidAppear = NO;
-    } else {
+    }
+    else {
         self.isViewDidAppear = YES;
     }
 }
 
 #pragma mark - private
 
-- (void)_showMenuViewController:(UIView *)showInView
-                   andIndexPath:(NSIndexPath *)indexPath
-                    messageType:(EMMessageBodyType)messageType
+- (void)showMenuViewController:(UIView *)showInView
+                     indexPath:(NSIndexPath *)indexPath
+                   messageType:(EMMessageBodyType)messageType
 {
     if (self.menuController == nil) {
         self.menuController = [UIMenuController sharedMenuController];
@@ -406,16 +440,19 @@
     }
     
     if (_transpondMenuItem == nil) {
-        _transpondMenuItem = [[UIMenuItem alloc] initWithTitle:NSLocalizedString(@"transpond", @"Transpond") action:@selector(transpondMenuAction:)];
+        _transpondMenuItem = [[UIMenuItem alloc] initWithTitle:NSLocalizedString(@"forward", @"Forward") action:@selector(transpondMenuAction:)];
     }
     
     if (messageType == EMMessageBodyTypeText) {
         [self.menuController setMenuItems:@[_copyMenuItem, _deleteMenuItem,_transpondMenuItem]];
-    } else if (messageType == EMMessageBodyTypeImage){
+    }
+    else if (messageType == EMMessageBodyTypeImage){
         [self.menuController setMenuItems:@[_deleteMenuItem,_transpondMenuItem]];
-    } else {
+    }
+    else {
         [self.menuController setMenuItems:@[_deleteMenuItem]];
     }
+    
     [self.menuController setTargetRect:showInView.frame inView:showInView.superview];
     [self.menuController setMenuVisible:YES animated:YES];
 }
