@@ -499,6 +499,8 @@
 		C36F1B11D97958AF92A49EA0CA94F39E /* EaseLocationViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 011A0C5EC889A8A2FE8E11CCF857F96E /* EaseLocationViewController.m */; };
 		C37A266BA6B164A6660AFF07D98A7A49 /* PFAnonymousUtils.h in Headers */ = {isa = PBXBuildFile; fileRef = 38ACCDD82F3B069605B9A47316C04C3C /* PFAnonymousUtils.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		C39CE98EB6527A1BF960FA30E180E6DB /* ParseModule.m in Sources */ = {isa = PBXBuildFile; fileRef = 902826C995AD03D8EC07F305A5F4C344 /* ParseModule.m */; };
+		C4B93AD81D10C41C0080B9CA /* UIColor+EaseUI.h in Headers */ = {isa = PBXBuildFile; fileRef = C4B93AD61D10C41C0080B9CA /* UIColor+EaseUI.h */; };
+		C4B93AD91D10C41C0080B9CA /* UIColor+EaseUI.m in Sources */ = {isa = PBXBuildFile; fileRef = C4B93AD71D10C41C0080B9CA /* UIColor+EaseUI.m */; };
 		C4D9FF0E707A6B1153DAE5B8363EEA06 /* PFPropertyInfo_Private.h in Headers */ = {isa = PBXBuildFile; fileRef = 82538E83159D1084011440A4B03A2194 /* PFPropertyInfo_Private.h */; settings = {ATTRIBUTES = (Project, ); }; };
 		C54E05CB894E685680CE7D38D0086782 /* PFEncoder.h in Headers */ = {isa = PBXBuildFile; fileRef = 922C021642B736485356763957A2022A /* PFEncoder.h */; settings = {ATTRIBUTES = (Project, ); }; };
 		C563B8B74F9C59D0FD725AE4427B55B6 /* BFTask.m in Sources */ = {isa = PBXBuildFile; fileRef = 33F2FA8B35E6287728843F78AB6D8C1F /* BFTask.m */; };
@@ -1245,7 +1247,7 @@
 		B24264D787F5F6315557F23636AF2C47 /* EaseLocalDefine.h */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.h; path = EaseLocalDefine.h; sourceTree = "<group>"; };
 		B340769AAB6952B9293B00CDEB039E3A /* PFUserAuthenticationController.m */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.objc; name = PFUserAuthenticationController.m; path = Parse/Internal/User/AuthenticationProviders/Controller/PFUserAuthenticationController.m; sourceTree = "<group>"; };
 		B3604B90E137BBC4953C2CAB1E2D2C06 /* CFNetwork.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CFNetwork.framework; path = Platforms/iPhoneOS.platform/Developer/SDKs/iPhoneOS9.3.sdk/System/Library/Frameworks/CFNetwork.framework; sourceTree = DEVELOPER_DIR; };
-		B4186E625F258F149253F6DDAA66B3B9 /* EaseUIResource.bundle */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = "wrapper.plug-in"; path = EaseUIResource.bundle; sourceTree = "<group>"; };
+		B4186E625F258F149253F6DDAA66B3B9 /* EaseUIResource.bundle */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = "wrapper.plug-in"; name = EaseUIResource.bundle; path = export/resources/EaseUIResource.bundle; sourceTree = "<group>"; };
 		B41BDD11A63D645E97DDAC770554A2BC /* PFConstants.m */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.objc; name = PFConstants.m; path = Parse/PFConstants.m; sourceTree = "<group>"; };
 		B48133F2365FFDA978EB37C7E7837B39 /* PFCommandRunningConstants.h */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.h; name = PFCommandRunningConstants.h; path = Parse/Internal/Commands/CommandRunner/PFCommandRunningConstants.h; sourceTree = "<group>"; };
 		B4B7822E7F83371C0A96AA7F9FF6AF32 /* PFQuery.m */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.objc; name = PFQuery.m; path = Parse/PFQuery.m; sourceTree = "<group>"; };
@@ -1291,6 +1293,8 @@
 		C30454EE24711E7D5969334F896C5DF1 /* MJRefreshAutoStateFooter.h */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.h; path = MJRefreshAutoStateFooter.h; sourceTree = "<group>"; };
 		C35D4CA9FAF51FFD2CEE55DB61C94450 /* PFPushState.h */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.h; name = PFPushState.h; path = Parse/Internal/Push/State/PFPushState.h; sourceTree = "<group>"; };
 		C412B0B117DDA2C24D0D8D39C3419142 /* EMImageMessageBody.h */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.h; name = EMImageMessageBody.h; path = HyphenateFullSDK/include/EMImageMessageBody.h; sourceTree = "<group>"; };
+		C4B93AD61D10C41C0080B9CA /* UIColor+EaseUI.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "UIColor+EaseUI.h"; sourceTree = "<group>"; };
+		C4B93AD71D10C41C0080B9CA /* UIColor+EaseUI.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "UIColor+EaseUI.m"; sourceTree = "<group>"; };
 		C4CD41ED952EA18E262B94C889976AD5 /* EaseViewController.m */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.objc; path = EaseViewController.m; sourceTree = "<group>"; };
 		C4D664394E3B13C5AE1D0B6F82D55378 /* PFOfflineStore.h */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.h; name = PFOfflineStore.h; path = Parse/Internal/LocalDataStore/OfflineStore/PFOfflineStore.h; sourceTree = "<group>"; };
 		C53A189153A239AD5B8311E4FC42BBF3 /* GAIEcommerceFields.h */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.h; name = GAIEcommerceFields.h; path = Headers/Public/GAIEcommerceFields.h; sourceTree = "<group>"; };
@@ -1783,18 +1787,10 @@
 			path = Bolts;
 			sourceTree = "<group>";
 		};
-		5B5C9EA6402F33F769116BE31605368B /* export */ = {
-			isa = PBXGroup;
-			children = (
-				D5FB6EA39ABFAAA0B1693390A733E618 /* resources */,
-			);
-			path = export;
-			sourceTree = "<group>";
-		};
 		60130FDBC21D02527A945BAB275D5196 /* Resources */ = {
 			isa = PBXGroup;
 			children = (
-				5B5C9EA6402F33F769116BE31605368B /* export */,
+				B4186E625F258F149253F6DDAA66B3B9 /* EaseUIResource.bundle */,
 			);
 			name = Resources;
 			sourceTree = "<group>";
@@ -2735,14 +2731,6 @@
 			path = Parse;
 			sourceTree = "<group>";
 		};
-		D5FB6EA39ABFAAA0B1693390A733E618 /* resources */ = {
-			isa = PBXGroup;
-			children = (
-				B4186E625F258F149253F6DDAA66B3B9 /* EaseUIResource.bundle */,
-			);
-			path = resources;
-			sourceTree = "<group>";
-		};
 		D776A386DEDC21EF34AF619438ADC527 /* GoogleCloudMessaging */ = {
 			isa = PBXGroup;
 			children = (
@@ -2985,6 +2973,8 @@
 			children = (
 				785251A2E31B47E25283E50907A8958E /* EaseSDKHelper.h */,
 				B124461F3EF80B8A339B11B8C8619484 /* EaseSDKHelper.m */,
+				C4B93AD61D10C41C0080B9CA /* UIColor+EaseUI.h */,
+				C4B93AD71D10C41C0080B9CA /* UIColor+EaseUI.m */,
 			);
 			path = Helper;
 			sourceTree = "<group>";
@@ -3007,6 +2997,7 @@
 			files = (
 				4D433CC21617167F3EA0823DFD3F64AC /* BFCancellationToken.h in Headers */,
 				740AC457E1413C5968A2414AD51723D5 /* BFCancellationTokenRegistration.h in Headers */,
+				C4B93AD81D10C41C0080B9CA /* UIColor+EaseUI.h in Headers */,
 				D35AB221E8F39195527A8D48C6630565 /* BFCancellationTokenSource.h in Headers */,
 				C7A112ED74CD5D642BAC8B1AC0FBAF71 /* BFExecutor.h in Headers */,
 				687D841A5038E9ED04A8518C2EFCDD8B /* BFTask.h in Headers */,
@@ -3642,6 +3633,7 @@
 				FB5A4DBBC067C9F52907D067D56FC361 /* BFExecutor.m in Sources */,
 				C563B8B74F9C59D0FD725AE4427B55B6 /* BFTask.m in Sources */,
 				3EBD0CF2234FEA7BDECAF72FC576BC02 /* BFTaskCompletionSource.m in Sources */,
+				C4B93AD91D10C41C0080B9CA /* UIColor+EaseUI.m in Sources */,
 				4287C19EEA870D344A54F233090E23A8 /* Bolts-dummy.m in Sources */,
 				E2F885F53CD632015F7248CE886275E7 /* Bolts.m in Sources */,
 			);
