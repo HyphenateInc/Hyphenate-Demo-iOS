@@ -30,9 +30,9 @@
     if (self) {
         
         self.group = group;
+        
         NSString *loginUsername = [[EMClient sharedClient] currentUsername];
         self.isOwner = [self.group.owner isEqualToString:loginUsername];
-        self.view.backgroundColor = [UIColor whiteColor];
     }
 
     return self;
@@ -42,18 +42,24 @@
 {
     [super viewDidLoad];
     
+    self.view.backgroundColor = [UIColor whiteColor];
+    
     self.title = NSLocalizedString(@"title.groupSubjectChanging", @"Change Group Name");
 
     UIBarButtonItem *backBarButtonItem = [[UIBarButtonItem alloc] initWithImage:[UIImage imageNamed:@"back"]
                                                                           style:UIBarButtonItemStylePlain
                                                                          target:self.navigationController
-                                                                         action:@selector(backAction)];
+                                                                         action:@selector(popViewControllerAnimated:)];
     self.navigationItem.leftBarButtonItem = backBarButtonItem;
 
     if (self.isOwner)
     {
-        UIBarButtonItem *saveItem = [[UIBarButtonItem alloc] initWithTitle:NSLocalizedString(@"save", @"Save") style:UIBarButtonItemStylePlain target:self action:@selector(save:)];
+        UIBarButtonItem *saveItem = [[UIBarButtonItem alloc] initWithTitle:NSLocalizedString(@"save", @"Save")
+                                                                     style:UIBarButtonItemStylePlain
+                                                                    target:self
+                                                                    action:@selector(save:)];
         saveItem.tintColor = [UIColor HIColorGreenDark];
+        
         [self.navigationItem setRightBarButtonItem:saveItem];
     }
 
@@ -89,16 +95,6 @@
     [[GAI sharedInstance].defaultTracker send:[[GAIDictionaryBuilder createScreenView] build]];
 }
 
-- (void)didReceiveMemoryWarning
-{
-    [super didReceiveMemoryWarning];
-    // Dispose of any resources that can be recreated.
-}
-
-- (void)viewWillDisappear:(BOOL)animated
-{
-    [super viewWillDisappear:animated];
-}
 
 #pragma mark - UITextFieldDelegate
 
@@ -110,21 +106,7 @@
 
 #pragma mark - action
 
-- (void)backAction
-{
-    if ([self.subjectField isFirstResponder]) {
-        [self.subjectField resignFirstResponder];
-    }
-    
-    [self.navigationController popViewControllerAnimated:YES];
-}
-
 - (void)save:(id)sender
-{
-    [self saveSubject];
-}
-
-- (void)saveSubject
 {
     EMConversation *conversation = [[EMClient sharedClient].chatManager getConversation:self.group.groupId type:EMConversationTypeGroupChat createIfNotExist:NO];
     
@@ -143,7 +125,7 @@
         }
     }
     
-    [self backAction];
+    [self.navigationController popViewControllerAnimated:YES];
 }
 
 @end

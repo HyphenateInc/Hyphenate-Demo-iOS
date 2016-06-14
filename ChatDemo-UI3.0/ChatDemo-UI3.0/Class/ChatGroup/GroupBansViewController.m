@@ -50,14 +50,15 @@
     return self;
 }
 
-- (void)viewDidLoad {
+- (void)viewDidLoad
+{
     [super viewDidLoad];
-    // Do any additional setup after loading the view.
+
     self.title = NSLocalizedString(@"title.groupBlackList", @"Group black list");
     
     UIBarButtonItem *backBarButtonItem = [[UIBarButtonItem alloc] initWithImage:[UIImage imageNamed:@"back"]
                                                                           style:UIBarButtonItemStylePlain
-                                                                         target:self.navigationController
+                                                                         target:self
                                                                          action:@selector(backAction)];
     self.navigationItem.leftBarButtonItem = backBarButtonItem;
     
@@ -66,6 +67,7 @@
     [self.view addGestureRecognizer:tap];
     
     [self.view addSubview:self.scrollView];
+    
     [self fetchGroupBans];
 }
 

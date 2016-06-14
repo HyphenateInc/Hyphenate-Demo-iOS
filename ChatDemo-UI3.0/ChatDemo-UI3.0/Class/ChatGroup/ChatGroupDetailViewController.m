@@ -279,17 +279,14 @@
     }
     else if (indexPath.row == 3)
     {
-//        cell.textLabel.text = NSLocalizedString(@"title.groupSetting", @"Group Setting");
-//        cell.accessoryType = UITableViewCellAccessoryDisclosureIndicator;
-        
-        //        if(!self.isOwner) {
+//        if(!self.isOwner) {
         
         self.blockSwitch.frame = CGRectMake(self.tableView.frame.size.width - (self.blockSwitch.frame.size.width + 10), (cell.contentView.frame.size.height - self.blockSwitch.frame.size.height) / 2, self.blockSwitch.frame.size.width, self.blockSwitch.frame.size.height);
         
         cell.textLabel.text = NSLocalizedString(@"group.setting.blockMessage", @"shielding of the message");
         [cell.contentView addSubview:self.blockSwitch];
         [cell.contentView bringSubviewToFront:self.blockSwitch];
-        //        }
+//        }
     }
     else if (indexPath.row == 4)
     {
@@ -343,8 +340,7 @@
 {
     [tableView deselectRowAtIndexPath:indexPath animated:YES];
     
-    if (indexPath.row == 4)
-    {
+    if (indexPath.row == 4) {
         GroupSubjectChangingViewController *changingController = [[GroupSubjectChangingViewController alloc] initWithGroup:self.chatGroup];
         [self.navigationController pushViewController:changingController animated:YES];
     }
