@@ -47,11 +47,6 @@
 
 @property (nonatomic, assign) BOOL isOwner;
 
-- (void)dissolveAction;
-- (void)clearAction;
-- (void)exitAction;
-- (void)configureAction;
-
 @end
 
 @implementation ChatGroupDetailViewController
@@ -131,11 +126,6 @@
     
     [self fetchGroupInfo];
     
-    if (!self.isOwner) {
-        UIBarButtonItem *saveItem = [[UIBarButtonItem alloc] initWithTitle:NSLocalizedString(@"save", @"Save") style:UIBarButtonItemStylePlain target:self action:@selector(saveAction:)];
-        [self.navigationItem setRightBarButtonItem:saveItem];
-    }
-    
     self.pushSwitch = [[UISwitch alloc] init];
     [self.pushSwitch addTarget:self action:@selector(pushSwitchChanged:) forControlEvents:UIControlEventValueChanged];
     [self.pushSwitch setOn:self.chatGroup.isPushNotificationEnabled animated:YES];
@@ -208,7 +198,7 @@
 {
     if (_exitButton == nil) {
         _exitButton = [[UIButton alloc] init];
-        [_exitButton setTitle:NSLocalizedString(@"group.leave", @"quit the group") forState:UIControlStateNormal];
+        [_exitButton setTitle:NSLocalizedString(@"group.leave", @"Leave the group") forState:UIControlStateNormal];
         [_exitButton setTitleColor:[UIColor whiteColor] forState:UIControlStateNormal];
         [_exitButton addTarget:self action:@selector(exitAction) forControlEvents:UIControlEventTouchUpInside];
         [_exitButton setBackgroundColor:[UIColor HIColorRed]];
@@ -246,16 +236,13 @@
 
 - (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section
 {
-    // Return the number of rows in the section.
-//    if (self.occupantType == GroupOccupantTypeOwner)
-//    {
-        return 9;
-//    }
+    return 9;
 }
 
 - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath
 {
     static NSString *CellIdentifier = @"GroupDetailCell";
+    
     UITableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:CellIdentifier];
     if (cell == nil) {
         cell = [[UITableViewCell alloc] initWithStyle:UITableViewCellStyleValue1 reuseIdentifier:CellIdentifier];
@@ -273,24 +260,24 @@
     }
     else if (indexPath.row == 2)
     {
-        cell.textLabel.text = NSLocalizedString(@"group.occupantCount", @"members count");
+        cell.textLabel.text = NSLocalizedString(@"group.occupantCount", @"Members Count");
         cell.accessoryType = UITableViewCellAccessoryNone;
         cell.detailTextLabel.text = [NSString stringWithFormat:@"%i / %i", (int)[self.chatGroup.occupants count], (int)self.chatGroup.setting.maxUsersCount];
     }
     else if (indexPath.row == 3)
     {
+        // Only none group owner can block messages
 //        if(!self.isOwner) {
-        
         self.blockSwitch.frame = CGRectMake(self.tableView.frame.size.width - (self.blockSwitch.frame.size.width + 10), (cell.contentView.frame.size.height - self.blockSwitch.frame.size.height) / 2, self.blockSwitch.frame.size.width, self.blockSwitch.frame.size.height);
         
-        cell.textLabel.text = NSLocalizedString(@"group.setting.blockMessage", @"shielding of the message");
+        cell.textLabel.text = NSLocalizedString(@"group.setting.blockMessage", @"Block Messages");
         [cell.contentView addSubview:self.blockSwitch];
         [cell.contentView bringSubviewToFront:self.blockSwitch];
 //        }
     }
     else if (indexPath.row == 4)
     {
-        cell.textLabel.text = NSLocalizedString(@"title.groupSubjectChanging", @"Change group name");
+        cell.textLabel.text = NSLocalizedString(@"title.groupSubjectChanging", @"Change Group Name");
         cell.accessoryType = UITableViewCellAccessoryDisclosureIndicator;
     }
     else if (indexPath.row == 5)
@@ -300,19 +287,20 @@
     }
     else if (indexPath.row == 6)
     {
-        cell.textLabel.text = NSLocalizedString(@"title.groupBlackList", @"Group black list");
+        cell.textLabel.text = NSLocalizedString(@"title.groupBlackList", @"Group's BlackList");
         cell.accessoryType = UITableViewCellAccessoryDisclosureIndicator;
     }
     else if (indexPath.row == 7)
     {
-//        if (self.isOwner) {
+        // Only none group owner can turn of push notification service
+//        if (!self.isOwner) {
             self.pushSwitch.frame = CGRectMake(self.tableView.frame.size.width - (self.pushSwitch.frame.size.width + 10), (cell.contentView.frame.size.height - self.pushSwitch.frame.size.height) / 2, self.pushSwitch.frame.size.width, self.pushSwitch.frame.size.height);
             
             if (self.pushSwitch.isOn) {
-                cell.textLabel.text = NSLocalizedString(@"group.setting.receiveAndPrompt", @"receive and prompt group of messages");
+                cell.textLabel.text = NSLocalizedString(@"group.setting.receiveAndPrompt", @"Push Service ON");
             }
             else {
-                cell.textLabel.text = NSLocalizedString(@"group.setting.receiveAndUnprompt", @"receive not only hint of messages");
+                cell.textLabel.text = NSLocalizedString(@"group.setting.receiveAndUnprompt", @"Push Service OFF");
             }
             
             [cell.contentView addSubview:self.pushSwitch];
@@ -341,8 +329,23 @@
     [tableView deselectRowAtIndexPath:indexPath animated:YES];
     
     if (indexPath.row == 4) {
-        GroupSubjectChangingViewController *changingController = [[GroupSubjectChangingViewController alloc] initWithGroup:self.chatGroup];
-        [self.navigationController pushViewController:changingController animated:YES];
+        
+        if (self.isOwner) {
+            
+            GroupSubjectChangingViewController *changingController = [[GroupSubjectChangingViewController alloc] initWithGroup:self.chatGroup];
+            [self.navigationController pushViewController:changingController animated:YES];
+        }
+        else {
+            UIAlertController* alert = [UIAlertController alertControllerWithTitle:@"Change Group Name Setting"
+                                                                           message:@"Only group owner can change group name"
+                                                                    preferredStyle:UIAlertControllerStyleAlert];
+            
+            UIAlertAction* defaultAction = [UIAlertAction actionWithTitle:@"OK" style:UIAlertActionStyleDefault
+                                                                  handler:^(UIAlertAction * action) {}];
+            
+            [alert addAction:defaultAction];
+            [self presentViewController:alert animated:YES completion:nil];
+        }
     }
     else if (indexPath.row == 5) {
         SearchMessageViewController *searchController = [[SearchMessageViewController alloc] initWithConversationId:self.chatGroup.groupId conversationType:EMConversationTypeGroupChat];
@@ -633,6 +636,7 @@
 - (void)clearAction
 {
     __weak typeof(self) weakSelf = self;
+    
     [EMAlertView showAlertWithTitle:NSLocalizedString(@"prompt", @"Prompt")
                             message:NSLocalizedString(@"sureToDelete", @"Messages will not be able to retrive")
                     completionBlock:^(NSUInteger buttonIndex, EMAlertView *alertView) {
@@ -647,12 +651,18 @@
 - (void)dissolveAction
 {
     __weak typeof(self) weakSelf = self;
+    
     [self showHudInView:self.view hint:NSLocalizedString(@"group.destroy", @"dissolution of the group")];
+  
     dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), ^(){
+     
         EMError *error = nil;
         [[EMClient sharedClient].groupManager destroyGroup:weakSelf.chatGroup.groupId error:&error];
+      
         dispatch_async(dispatch_get_main_queue(), ^{
+         
             [weakSelf hideHud];
+           
             if (error) {
                 [weakSelf showHint:NSLocalizedString(@"group.destroyFail", @"dissolution of group failure")];
             }
@@ -663,42 +673,38 @@
     });
 }
 
-- (void)configureAction {
-    // todo
-    __weak typeof(self) weakSelf = self;
-    dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), ^(){
-        [[EMClient sharedClient].groupManager ignoreGroupPush:weakSelf.chatGroup.groupId ignore:weakSelf.chatGroup.isPushNotificationEnabled];
-    });
-}
-
 - (void)exitAction
 {
     __weak typeof(self) weakSelf = self;
-    [self showHudInView:self.view hint:NSLocalizedString(@"group.leave", @"quit the group")];
+    
+    [self showHudInView:self.view hint:NSLocalizedString(@"group.leave", @"Leave the group")];
+    
     dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), ^(){
+       
         EMError *error = nil;
         [[EMClient sharedClient].groupManager leaveGroup:weakSelf.chatGroup.groupId error:&error];
+        
         dispatch_async(dispatch_get_main_queue(), ^{
+           
             [weakSelf hideHud];
+           
             if (error) {
                 [weakSelf showHint:NSLocalizedString(@"group.leaveFail", @"exit the group failure")];
             }
-            else{
+            else {
                 [[NSNotificationCenter defaultCenter] postNotificationName:@"ExitGroup" object:nil];
             }
         });
     });
 }
 
-- (void)didIgnoreGroupPushNotification:(NSArray *)ignoredGroupList error:(EMError *)error {
-    // todo
-}
 
 #pragma mark - UIActionSheetDelegate
 
 - (void)actionSheet:(UIActionSheet *)actionSheet clickedButtonAtIndex:(NSInteger)buttonIndex
 {
     NSInteger index = _selectedContact.index;
+    
     if (buttonIndex == 0)
     {
         //delete
@@ -741,22 +747,51 @@
 
 - (void)pushSwitchChanged:(id)sender
 {
+    // Only None Group Owner can block messages
+    if (self.isOwner) {
+        self.pushSwitch.on = YES;
+        
+        UIAlertController* alert = [UIAlertController alertControllerWithTitle:@"Push Service Setting"
+                                                                       message:@"Only none group owner can turn off push notification"
+                                                                preferredStyle:UIAlertControllerStyleAlert];
+        
+        UIAlertAction* defaultAction = [UIAlertAction actionWithTitle:@"OK" style:UIAlertActionStyleDefault
+                                                              handler:^(UIAlertAction * action) {}];
+        
+        [alert addAction:defaultAction];
+        [self presentViewController:alert animated:YES completion:nil];
+        
+        return;
+    }
+    
     [self isIgnoreGroup:![self.pushSwitch isOn]];
     [self.tableView reloadData];
 }
 
 - (void)blockSwitchChanged:(id)sender
 {
-    [self.tableView reloadData];
-}
-
-- (void)saveAction:(id)sender
-{
+    // Only None Group Owner can block messages
+    if (self.isOwner) {
+        self.blockSwitch.on = NO;
+        
+        UIAlertController* alert = [UIAlertController alertControllerWithTitle:@"Block Messages Setting"
+                                                                       message:@"Only none group owner can block messages"
+                                                                preferredStyle:UIAlertControllerStyleAlert];
+        
+        UIAlertAction* defaultAction = [UIAlertAction actionWithTitle:@"OK" style:UIAlertActionStyleDefault
+                                                              handler:^(UIAlertAction * action) {}];
+        
+        [alert addAction:defaultAction];
+        [self presentViewController:alert animated:YES completion:nil];
+        
+        return;
+    }
+    
     if (self.blockSwitch.isOn != self.chatGroup.isBlocked) {
         
         __weak typeof(self) weakSelf = self;
         
-        [self showHudInView:self.view hint:NSLocalizedString(@"group.setting.save", @"set properties")];
+        [self showHudInView:self.view hint:NSLocalizedString(@"group.setting.save", @"Saving Properties")];
         
         if (self.blockSwitch.isOn) {
             
@@ -767,13 +802,13 @@
                 
                 dispatch_async(dispatch_get_main_queue(), ^{
                     
+                    [weakSelf hideHud];
+
                     if (error) {
-                        [weakSelf hideHud];
-                        [weakSelf showHint:NSLocalizedString(@"group.setting.fail", @"set failure")];
+                        [weakSelf showHint:NSLocalizedString(@"group.setting.fail", @"Setting Failed")];
                     }
                     else {
-                        [weakSelf hideHud];
-                        [weakSelf showHint:NSLocalizedString(@"group.setting.success", @"set success")];
+                        [weakSelf showHint:NSLocalizedString(@"group.setting.success", @"Settings Saved")];
                     }
                 });
             });
@@ -787,13 +822,13 @@
                 
                 dispatch_async(dispatch_get_main_queue(), ^{
                     
+                    [weakSelf hideHud];
+
                     if (error) {
-                        [weakSelf hideHud];
-                        [weakSelf showHint:NSLocalizedString(@"group.setting.fail", @"set failure")];
+                        [weakSelf showHint:NSLocalizedString(@"group.setting.fail", @"Setting Failed")];
                     }
                     else {
-                        [weakSelf hideHud];
-                        [weakSelf showHint:NSLocalizedString(@"group.setting.success", @"set success")];
+                        [weakSelf showHint:NSLocalizedString(@"group.setting.success", @"Settings Saved")];
                     }
                 });
             });

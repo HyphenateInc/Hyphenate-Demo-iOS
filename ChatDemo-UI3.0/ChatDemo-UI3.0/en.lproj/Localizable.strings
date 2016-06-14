@@ -155,17 +155,17 @@
 "group.maxUserCount" = "Group members more than the upper limit";
 
 //Group Bans
-"group.ban.removing" = "members are removing from the blacklist...";
+"group.ban.removing" = "Members are removing from the blacklist...";
 "group.ban.adding" = "Adding to black list...";
-"group.ban.fetching" = "getting group blacklist...";
-"group.ban.fetchFail" = "fail to get blacklist: %@";
+"group.ban.fetching" = "Getting group blacklist...";
+"group.ban.fetchFail" = "Failed to get blacklist: %@";
 
 //Group Detail
-"group.removeAllMessages" = "Clear all messages";
-"group.destroy" = "Dismiss the group";
+"group.removeAllMessages" = "Clear All Messages";
+"group.destroy" = "Dismiss the Group";
 "group.leave" = "Leave the group";
 "group.id" = "Group ID";
-"group.occupantCount" = "members count";
+"group.occupantCount" = "Members Count";
 "group.addingOccupant" = "Add a group member...";
 "group.fetchInfoFail" = "Failed to get the group details, please try again";
 "group.removingOccupant" = "Deleting member...";
@@ -174,9 +174,9 @@
 "group.addOccupantFail" = "Failed to add group member, please try again";
 
 //Group Setting
-"group.setting.receiveAndPrompt" = "recv and notification group messages";
-"group.setting.receiveAndUnprompt" = "receive message without apns";
-"group.setting.blockMessage" = "block message";
+"group.setting.receiveAndPrompt" = "Push Service ON";
+"group.setting.receiveAndUnprompt" = "Push Service OFF";
+"group.setting.blockMessage" = "Block Messages";
 "group.setting.save" = "set properties";
 "group.setting.success" = "set success";
 "group.setting.fail" = "set failure";
@@ -287,9 +287,9 @@
 "title.group" = "Group";
 "title.chatroom" = "Chatroom";
 "title.mychatroom" = "My Chatroom";
-"title.chooseContact" = "select the contact";
+"title.chooseContact" = "Select the contact";
 "title.debug" = "Debug";
-"title.groupBlackList" = "Group black list";
+"title.groupBlackList" = "Group's Blacklist";
 "title.createGroup" = "Create a group";
 "title.publicGroup" = "Public group";
 "title.groupSetting" = "Group Setting";
@@ -297,7 +297,7 @@
 "title.buddyBlock" = "Black List";
 "title.apply" = "Requests and Notifications";
 "title.groupApply" = "Group Notification";
-"title.groupSubjectChanging" = "Change group name";
+"title.groupSubjectChanging" = "Change Group Name";
 "title.groupSearchMessage" = "Search Message from History";
 "title.robotlist" = "Robot List";
 "title.profile" = "Profile";
