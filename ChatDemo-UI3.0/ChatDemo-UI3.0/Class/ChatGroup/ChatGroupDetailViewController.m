@@ -13,7 +13,6 @@
 #import "ChatGroupDetailViewController.h"
 
 #import "ContactSelectionViewController.h"
-#import "GroupSettingViewController.h"
 #import "EMGroup.h"
 #import "ContactView.h"
 #import "GroupBansViewController.h"
@@ -43,6 +42,11 @@
 @property (strong, nonatomic) UILongPressGestureRecognizer *longPress;
 @property (strong, nonatomic) ContactView *selectedContact;
 
+@property (nonatomic, strong) UISwitch *pushSwitch;
+@property (nonatomic, strong) UISwitch *blockSwitch;
+
+@property (nonatomic, assign) BOOL isOwner;
+
 - (void)dissolveAction;
 - (void)clearAction;
 - (void)exitAction;
@@ -68,12 +72,16 @@
 - (instancetype)initWithGroup:(EMGroup *)chatGroup
 {
     self = [super init];
+    
     if (self) {
-        // Custom initialization
+
         self.chatGroup = chatGroup;
         _dataSource = [NSMutableArray array];
         _occupantType = GroupOccupantTypeMember;
         [self registerNotifications];
+        
+        NSString *loginUsername = [[EMClient sharedClient] currentUsername];
+        self.isOwner = [self.chatGroup.owner isEqualToString:loginUsername];
     }
     return self;
 }
@@ -105,6 +113,8 @@
 {
     [super viewDidLoad];
     
+    self.title = @"Group Settings";
+    
     UIBarButtonItem *backBarButtonItem = [[UIBarButtonItem alloc] initWithImage:[UIImage imageNamed:@"back"]
                                                                           style:UIBarButtonItemStylePlain
                                                                          target:self.navigationController
@@ -120,6 +130,19 @@
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(groupBansChanged) name:@"GroupBansChanged" object:nil];
     
     [self fetchGroupInfo];
+    
+    if (!self.isOwner) {
+        UIBarButtonItem *saveItem = [[UIBarButtonItem alloc] initWithTitle:NSLocalizedString(@"save", @"Save") style:UIBarButtonItemStylePlain target:self action:@selector(saveAction:)];
+        [self.navigationItem setRightBarButtonItem:saveItem];
+    }
+    
+    self.pushSwitch = [[UISwitch alloc] init];
+    [self.pushSwitch addTarget:self action:@selector(pushSwitchChanged:) forControlEvents:UIControlEventValueChanged];
+    [self.pushSwitch setOn:self.chatGroup.isPushNotificationEnabled animated:YES];
+    
+    self.blockSwitch = [[UISwitch alloc] init];
+    [self.blockSwitch addTarget:self action:@selector(blockSwitchChanged:) forControlEvents:UIControlEventValueChanged];
+    [self.blockSwitch setOn:self.chatGroup.isBlocked animated:YES];
 }
 
 - (void)viewWillAppear:(BOOL)animated
@@ -130,16 +153,6 @@
     [[GAI sharedInstance].defaultTracker send:[[GAIDictionaryBuilder createScreenView] build]];
 }
 
-- (void)didReceiveMemoryWarning
-{
-    [super didReceiveMemoryWarning];
-    // Dispose of any resources that can be recreated.
-}
-
-- (void)viewDidDisappear:(BOOL)animated
-{
-    [super viewDidDisappear:animated];
-}
 
 #pragma mark - getter
 
@@ -234,14 +247,10 @@
 - (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section
 {
     // Return the number of rows in the section.
-    if (self.occupantType == GroupOccupantTypeOwner)
-    {
-        return 7;
-    }
-    else
-    {
-        return 6;
-    }
+//    if (self.occupantType == GroupOccupantTypeOwner)
+//    {
+        return 9;
+//    }
 }
 
 - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath
@@ -270,8 +279,17 @@
     }
     else if (indexPath.row == 3)
     {
-        cell.textLabel.text = NSLocalizedString(@"title.groupSetting", @"Group Setting");
-        cell.accessoryType = UITableViewCellAccessoryDisclosureIndicator;
+//        cell.textLabel.text = NSLocalizedString(@"title.groupSetting", @"Group Setting");
+//        cell.accessoryType = UITableViewCellAccessoryDisclosureIndicator;
+        
+        //        if(!self.isOwner) {
+        
+        self.blockSwitch.frame = CGRectMake(self.tableView.frame.size.width - (self.blockSwitch.frame.size.width + 10), (cell.contentView.frame.size.height - self.blockSwitch.frame.size.height) / 2, self.blockSwitch.frame.size.width, self.blockSwitch.frame.size.height);
+        
+        cell.textLabel.text = NSLocalizedString(@"group.setting.blockMessage", @"shielding of the message");
+        [cell.contentView addSubview:self.blockSwitch];
+        [cell.contentView bringSubviewToFront:self.blockSwitch];
+        //        }
     }
     else if (indexPath.row == 4)
     {
@@ -287,6 +305,22 @@
     {
         cell.textLabel.text = NSLocalizedString(@"title.groupBlackList", @"Group black list");
         cell.accessoryType = UITableViewCellAccessoryDisclosureIndicator;
+    }
+    else if (indexPath.row == 7)
+    {
+//        if (self.isOwner) {
+            self.pushSwitch.frame = CGRectMake(self.tableView.frame.size.width - (self.pushSwitch.frame.size.width + 10), (cell.contentView.frame.size.height - self.pushSwitch.frame.size.height) / 2, self.pushSwitch.frame.size.width, self.pushSwitch.frame.size.height);
+            
+            if (self.pushSwitch.isOn) {
+                cell.textLabel.text = NSLocalizedString(@"group.setting.receiveAndPrompt", @"receive and prompt group of messages");
+            }
+            else {
+                cell.textLabel.text = NSLocalizedString(@"group.setting.receiveAndUnprompt", @"receive not only hint of messages");
+            }
+            
+            [cell.contentView addSubview:self.pushSwitch];
+            [cell.contentView bringSubviewToFront:self.pushSwitch];
+//        }
     }
     
     return cell;
@@ -309,11 +343,7 @@
 {
     [tableView deselectRowAtIndexPath:indexPath animated:YES];
     
-    if (indexPath.row == 3) {
-        GroupSettingViewController *settingController = [[GroupSettingViewController alloc] initWithGroup:self.chatGroup];
-        [self.navigationController pushViewController:settingController animated:YES];
-    }
-    else if (indexPath.row == 4)
+    if (indexPath.row == 4)
     {
         GroupSubjectChangingViewController *changingController = [[GroupSubjectChangingViewController alloc] initWithGroup:self.chatGroup];
         [self.navigationController pushViewController:changingController animated:YES];
@@ -669,6 +699,7 @@
 }
 
 #pragma mark - UIActionSheetDelegate
+
 - (void)actionSheet:(UIActionSheet *)actionSheet clickedButtonAtIndex:(NSInteger)buttonIndex
 {
     NSInteger index = _selectedContact.index;
@@ -707,6 +738,101 @@
 - (void)actionSheetCancel:(UIActionSheet *)actionSheet
 {
     _selectedContact = nil;
+}
+
+
+#pragma mark - action
+
+- (void)pushSwitchChanged:(id)sender
+{
+    [self isIgnoreGroup:![self.pushSwitch isOn]];
+    [self.tableView reloadData];
+}
+
+- (void)blockSwitchChanged:(id)sender
+{
+    [self.tableView reloadData];
+}
+
+- (void)saveAction:(id)sender
+{
+    if (self.blockSwitch.isOn != self.chatGroup.isBlocked) {
+        
+        __weak typeof(self) weakSelf = self;
+        
+        [self showHudInView:self.view hint:NSLocalizedString(@"group.setting.save", @"set properties")];
+        
+        if (self.blockSwitch.isOn) {
+            
+            dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), ^{
+                
+                EMError *error;
+                [[EMClient sharedClient].groupManager blockGroup:self.chatGroup.groupId error:&error];
+                
+                dispatch_async(dispatch_get_main_queue(), ^{
+                    
+                    if (error) {
+                        [weakSelf hideHud];
+                        [weakSelf showHint:NSLocalizedString(@"group.setting.fail", @"set failure")];
+                    }
+                    else {
+                        [weakSelf hideHud];
+                        [weakSelf showHint:NSLocalizedString(@"group.setting.success", @"set success")];
+                    }
+                });
+            });
+        }
+        else {
+            
+            dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), ^{
+                
+                EMError *error;
+                [[EMClient sharedClient].groupManager unblockGroup:self.chatGroup.groupId error:&error];
+                
+                dispatch_async(dispatch_get_main_queue(), ^{
+                    
+                    if (error) {
+                        [weakSelf hideHud];
+                        [weakSelf showHint:NSLocalizedString(@"group.setting.fail", @"set failure")];
+                    }
+                    else {
+                        [weakSelf hideHud];
+                        [weakSelf showHint:NSLocalizedString(@"group.setting.success", @"set success")];
+                    }
+                });
+            });
+        }
+    }
+    
+    if (self.pushSwitch.isOn != self.chatGroup.isPushNotificationEnabled) {
+        [self isIgnoreGroup:!self.pushSwitch.isOn];
+    }
+}
+
+#pragma mark - private
+
+- (void)isIgnoreGroup:(BOOL)isIgnore
+{
+    [self showHudInView:self.view hint:NSLocalizedString(@"group.setting.save", @"set properties")];
+    
+    __weak ChatGroupDetailViewController *weakSelf = self;
+    
+    dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), ^{
+        
+        EMError *error = [[EMClient sharedClient].groupManager ignoreGroupPush:weakSelf.chatGroup.groupId ignore:isIgnore];
+        
+        dispatch_async(dispatch_get_main_queue(), ^{
+            
+            [weakSelf hideHud];
+            
+            if (!error) {
+                [weakSelf showHint:NSLocalizedString(@"group.setting.success", @"set success")];
+            }
+            else{
+                [weakSelf showHint:NSLocalizedString(@"group.setting.fail", @"set failure")];
+            }
+        });
+    });
 }
 
 @end

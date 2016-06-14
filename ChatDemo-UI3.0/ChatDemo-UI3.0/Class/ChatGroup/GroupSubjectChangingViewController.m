@@ -26,7 +26,9 @@
 - (instancetype)initWithGroup:(EMGroup *)group
 {
     self = [self init];
+    
     if (self) {
+        
         self.group = group;
         NSString *loginUsername = [[EMClient sharedClient] currentUsername];
         self.isOwner = [self.group.owner isEqualToString:loginUsername];
@@ -39,7 +41,7 @@
 - (void)viewDidLoad
 {
     [super viewDidLoad];
-
+    
     self.title = NSLocalizedString(@"title.groupSubjectChanging", @"Change Group Name");
 
     UIBarButtonItem *backBarButtonItem = [[UIBarButtonItem alloc] initWithImage:[UIImage imageNamed:@"back"]
@@ -99,6 +101,7 @@
 }
 
 #pragma mark - UITextFieldDelegate
+
 - (BOOL)textFieldShouldReturn:(UITextField *)textField
 {
     [textField resignFirstResponder];
