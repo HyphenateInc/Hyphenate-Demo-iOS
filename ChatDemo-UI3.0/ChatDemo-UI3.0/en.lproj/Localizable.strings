@@ -40,50 +40,48 @@
 "reject" = "Reject";
 "wait" = "Please wait...";
 
-"sendingApply" = "Sending apply...";
-"acceptFail" = "Accept failed";
-"rejectFail" = "Reject failed";
+"sendingRequest" = "Sending request...";
+"requestAcceptFailure" = "Failed to accept request";
+"requestDeclineFailure" = "Failed to decline request";
 "transponding" = "Forwarding...";
 "transpondFail" = "Forward failed";
 "refreshData" = "Refresh data...";
-"loadData" = "Load data...";
-"loadDataFailed" = "Load more failed";
-"saySomething" = "Say somthing";
+"loadData" = "Loading data...";
+"loadDataFailed" = "Failed to Load more data";
+"greetingMessage" = "Say hello!";
 "searchResults" = "The search results";
 "doneWithCount" = "Done(%i)";
-"sureToDelete" = "Messages will not be able to retrive";
-"receiveCmd" = "Receive cmd message";
+"confirmDeleteMessage" = "Messages will not be able to be retrived";
+"receiveCmd" = "Receive command message";
 "receiveMessage" = "You have a new message";
-"loginAtOtherDevice" = "Your login account has been logged in other places";
+"loggedIntoAnotherDevice" = "Your login account has been logged in other places";
 "loginUserRemoveFromServer" = "Your account has been removed from the server side";
-"deleteFailed" = "Delete failed:%@";
-"notFound" = "Can't found";
-"noMore" = "No more data";
+"deleteFailed" = "Failed to delete: %@";
+"notFound" = "No found";
+"noMoreData" = "No more data to show";
 "hasRead" = "Read";
 
 //app
 "AppName" = "Hyphenate Demo";
 
-//error des
+//error description
 "error.connectServerFail" = "Connect to the server failed!";
-"error.connectServerTimeout" = "Connect to the server timed out!";
+"error.connectServerTimeout" = "Connection to the server timed out!";
 "error.connectNetworkFail" = "No network connection!";
 "error.notFound" = "File path not exist";
 "error.initPlayerFail" = "Failed to initialize AVAudioPlayer!";
 "error.palyFail" = "Play failure!";
 "error.initRecorderFail" = "Failed to initialize AVAudioRecorder";
 "error.initRecorderFail" = "File format conversion failed";
-"error.recordStoping" = "Record voice is not over yet";
+"error.recordStoping" = "Audio recording is still in progress";
 "error.recordNotBegin" = "Recording has not yet begun";
 "error.recordTooShort" = "Recording time is too short";
-"error.save" = "Fail to save";
+"error.save" = "Failed to save";
 
 //login
-"login.beginAutoLogin" = "Start automatic login...";
-"login.endAutoLogin" = "End automatic login...";
-"login.errorAutoLogin" = "Auto-login fails, please try to login again";
-"login.nameNotSupportZh" = "Name does not support Chinese";
-"login.ongoing" = "Login...";
+"login.errorAutoLogin" = "Auto-login failed, please try to login again";
+"login.nameNotSupportZh" = "Does not support Chinese characters";
+"login.inProgress" = "Login...";
 "login.fail" = "Logon failure";
 "login.inputNameAndPswd" = "Please enter username and password";
 "login.inputApnsNickname" = "Please enter nickname for apns";
@@ -96,9 +94,9 @@
 "register.confirmPassword" = "The two input password does not match, please input again";
 
 //apns
-"apns.failToRegisterApns" = "Fail to register apns";
-"apns.failToBindDeviceToken" = "Fail to bind device token";
-"apns.content" = "Apns content";
+"apns.failToRegisterApns" = "Failed to register APNs";
+"apns.failToBindDeviceToken" = "Failed to bind device token";
+"apns.content" = "APNs content";
 
 //friend
 "friend.add" = "Add friend";
@@ -119,20 +117,18 @@
 
 //group
 "group.somebodyInvite" = "%@ invites you to join group \'%@\'";
-"group.applyJoin" = "%@ apply to join groups\'%@\'";
-"group.applyJoinWithName" = "%@ apply to join groups\'%@\'：%@";
-"group.sendApplyFail" = "send application failure:%@\nreason：%@";
-"group.beRefusedToJoin" = "be refused to join the group\'%@\'";
-"group.beKicked" = "you have been kicked out from the group of \'%@\'";
+"group.joinRequest" = "%@ requested to join the group\'%@\'";
+"group.joinRequestWithName" = "%@ requested to join the group\'%@\'：%@";
+"group.joinRequestDeclined" = "Request to join the group declined\'%@\'";
 "group.agreedAndJoined" = "agreed and joined the group of \'%@\'";
 "group.join" = "join the group";
 "group.joined" = "joined";
 "group.owner" = "Owner";
 "group.describe" = "Describe";
 "group.join.ongoing" = "join the group...";
-"group.join.fail" = "again failed to join the group, please";
-"group.sendingApply" = "send group of application...";
-"group.sendApplyRepeat" = "application has been sent";
+"group.join.fail" = "Failed to join the group";
+"group.sendingRequest" = "Sending group request...";
+"group.sendRequestRepeat" = "Request to join the group already sent";
 
 //Create Group
 "group.create.addOccupant" = "add member";
@@ -195,7 +191,7 @@
 "chatroom.remove" = "be removed from chatroom\'%@\'";
 
 //call
-"call.initFailed"="Establish call failure";
+"call.initFailed"="Failed to establish the call";
 "call.waiting"="Waiting to answer...";
 "call.connecting"="Connecting...";
 "call.silence"="Silence";
@@ -203,17 +199,15 @@
 "call.reject"="Reject";
 "call.answer"="Answer";
 "call.hangup"="End Call";
-"call.finished"="Establish call finished";
+"call.established"="Call connection established";
 "call.autoHangup"="No response and Hang up";
 "call.noResponse"="NO response";
-"call.connectFailed"="Connect failed";
+"call.connectFailed"="Call connect failed";
 "call.failed"="Call failed";
 "call.suspended"="Call has been suspended";
-"call.over"="Call end";
-"call.cancel"="Cancel the call";
+"call.over"="Call ended";
 "call.rejected"="Reject the call";
-"call.in"="In the call...";
-"call.speak"="Can speak...";
+"call.inProgress"="In the call...";
 "call.speak.relay"="Can speak... Relay connection";
 "call.speak.direct"="Can speak... Direct connection";
 "call.init"="Is init the call...";
@@ -273,7 +267,7 @@
 "reconnection.ongoing" = "reconnecting...";
 "reconnection.fail" = "reconnection failure, later will continue to reconnection";
 "reconnection.success" = "reconnection successful！";
-"reconnection.wait" = "continue to wait";
+"reconnection.wait" = "Wait for connection";
 
 //location
 "location.messageType" = "location message";
@@ -319,21 +313,21 @@
 "setting.uploadSuccess" = "uploaded successfully";
 "setting.uploadFail" = "uploaded failed";
 "setting.editName" = "Edit NickName";
-"setting.inputName" = "Please input nickname";
+"setting.inputName" = "Please enter a nickname";
 "setting.saveName" = "Save";
 "setting.namenotempty" = "Name cannot be empty";
 "setting.personalInfo" = "User Profile";
 "setting.setBitrate" = "Set Bitrate";
 "setting.setBitrateTips" = "Set Bitrate should be 150-1000";
 "setting.personalInfoUpload" = "Profile Image";
-"setting.edittips" = "After setting this nickname, chat with the iOS client demo project, iOS will display this nickname is not a Hyphenate ID, if the other party to use the Android client this setting is not effective";
+"setting.edittips" = "iOS push service will display the nickname instead of Hyphenate ID";
 "setting.iospushname" = "APNs Display Name";
 "setting.useIp" = "Use IP";
 "setting.deleteConWhenLeave" = "Delete Messages When Leave Group";
 "setting.showCallInfo" = "Show Video Call Info";
-"setting.microphoneNoAuthority" = "No microphone permissions";
+"setting.microphoneNoAuthority" = "No microphone access permission";
 "setting.microphoneAuthority" = "Please open in \"Setting\"-\"Privacy\"-\"Microphone\".";
-"setting.cameraNoAuthority" = "No camera permissions";
+"setting.cameraNoAuthority" = "No camera access permission";
 "setting.cameraAuthority" = "Please open in \"Setting\"-\"Privacy\"-\"Camera\".";
 "setting.cameraUpload" = "Take photo";
 "setting.localUpload" = "Images";

@@ -69,7 +69,7 @@
         [self.view endEditing:YES];
         
         if ([self.usernameTextField.text isChinese]) {
-            UIAlertView *alert = [[UIAlertView alloc] initWithTitle:NSLocalizedString(@"login.nameNotSupportZh", @"Name does not support Chinese")
+            UIAlertView *alert = [[UIAlertView alloc] initWithTitle:NSLocalizedString(@"login.nameNotSupportZh", @"")
                                                             message:nil
                                                            delegate:nil
                                                   cancelButtonTitle:NSLocalizedString(@"ok", @"OK")
@@ -129,7 +129,7 @@
 
 - (void)loginWithUsername:(NSString *)username password:(NSString *)password
 {
-    [self showHudInView:self.view hint:NSLocalizedString(@"login.ongoing", @"Is Login...")];
+    [self showHudInView:self.view hint:NSLocalizedString(@"login.inProgress", @"")];
     
     __weak typeof(self) weakself = self;
     

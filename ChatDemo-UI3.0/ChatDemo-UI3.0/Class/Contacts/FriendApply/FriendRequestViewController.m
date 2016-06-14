@@ -168,7 +168,7 @@ static FriendRequestViewController *controller = nil;
 - (void)applyCellAddFriendAtIndexPath:(NSIndexPath *)indexPath
 {
     if (indexPath.row < [self.dataSource count]) {
-        [self showHudInView:self.view hint:NSLocalizedString(@"sendingApply", @"sending apply...")];
+        [self showHudInView:self.view hint:NSLocalizedString(@"sendingRequest", @"sending request...")];
         
         ApplyEntity *entity = [self.dataSource objectAtIndex:indexPath.row];
         ApplyStyle applyStyle = [entity.style intValue];
@@ -203,7 +203,7 @@ static FriendRequestViewController *controller = nil;
 - (void)applyCellRefuseFriendAtIndexPath:(NSIndexPath *)indexPath
 {
     if (indexPath.row < [self.dataSource count]) {
-        [self showHudInView:self.view hint:NSLocalizedString(@"sendingApply", @"sending apply...")];
+        [self showHudInView:self.view hint:NSLocalizedString(@"sendingRequest", @"sending request...")];
         ApplyEntity *entity = [self.dataSource objectAtIndex:indexPath.row];
         ApplyStyle applyStyle = [entity.style intValue];
         EMError *error;
@@ -228,7 +228,7 @@ static FriendRequestViewController *controller = nil;
             [self.tableView reloadData];
         }
         else{
-            [self showHint:NSLocalizedString(@"rejectFail", @"reject failure")];
+            [self showHint:NSLocalizedString(@"requestDeclineFailure", @"")];
             [self.dataSource removeObject:entity];
             NSString *loginUsername = [[EMClient sharedClient] currentUsername];
             [[InvitationManager sharedInstance] removeInvitation:entity loginUser:loginUsername];
@@ -241,7 +241,7 @@ static FriendRequestViewController *controller = nil;
 
 #pragma mark - public
 
-- (void)addNewApply:(NSDictionary *)dictionary
+- (void)addNewRequest:(NSDictionary *)dictionary
 {
     if (dictionary && [dictionary count] > 0) {
         NSString *applyUsername = [dictionary objectForKey:@"username"];

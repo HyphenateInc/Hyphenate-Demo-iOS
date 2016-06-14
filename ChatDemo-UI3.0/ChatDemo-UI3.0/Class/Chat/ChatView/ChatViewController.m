@@ -297,7 +297,7 @@
         }
     }
     else {
-        UIAlertView *alertView = [[UIAlertView alloc] initWithTitle:@"Delete Messages?" message:NSLocalizedString(@"sureToDelete", @"Messages will not be able to retrive") delegate:self cancelButtonTitle:NSLocalizedString(@"cancel", @"Cancel") otherButtonTitles:NSLocalizedString(@"ok", @"OK"), nil];
+        UIAlertView *alertView = [[UIAlertView alloc] initWithTitle:@"Delete Messages?" message:NSLocalizedString(@"confirmDeleteMessage", @"Messages will not be able to retrive") delegate:self cancelButtonTitle:NSLocalizedString(@"cancel", @"Cancel") otherButtonTitles:NSLocalizedString(@"ok", @"OK"), nil];
         [alertView show];
     }
 }

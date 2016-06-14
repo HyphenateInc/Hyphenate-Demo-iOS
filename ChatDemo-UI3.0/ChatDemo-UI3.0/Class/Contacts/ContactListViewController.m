@@ -559,7 +559,7 @@
         }
         if (error) {
             dispatch_async(dispatch_get_main_queue(), ^{
-                [weakself showHint:NSLocalizedString(@"loadDataFailed", @"Load data failed.")];
+                [weakself showHint:NSLocalizedString(@"loadDataFailed", @"")];
                 [weakself reloadDataSource];
             });
         }

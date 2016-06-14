@@ -25,7 +25,7 @@ typedef enum{
 
 + (instancetype)shareController;
 
-- (void)addNewApply:(NSDictionary *)dictionary;
+- (void)addNewRequest:(NSDictionary *)dictionary;
 
 - (void)loadDataSourceFromLocalDB;
 

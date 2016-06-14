@@ -111,7 +111,7 @@
     self.navigationController.navigationBar.tintColor = [UIColor whiteColor];
 
     self.title = @"Group Settings";
-        
+    
     UIBarButtonItem *backBarButtonItem = [[UIBarButtonItem alloc] initWithImage:[UIImage imageNamed:@"back"]
                                                                           style:UIBarButtonItemStylePlain
                                                                          target:self.navigationController
@@ -154,10 +154,10 @@
         _scrollView = [[UIScrollView alloc] initWithFrame:CGRectMake(10, 10, self.view.frame.size.width - 20, kContactSize)];
         _scrollView.tag = 0;
         
-        _addButton = [[UIButton alloc] initWithFrame:CGRectMake(0, 0, kContactSize - 10, kContactSize - 10)];
-        [_addButton setImage:[UIImage imageNamed:@"addIcon"] forState:UIControlStateNormal];
-        [_addButton setImage:[UIImage imageNamed:@"addIcon"] forState:UIControlStateHighlighted];
-        [_addButton addTarget:self action:@selector(addContact:) forControlEvents:UIControlEventTouchUpInside];
+        self.addButton = [[UIButton alloc] initWithFrame:CGRectMake(0, 0, kContactSize - 10, kContactSize - 10)];
+        [self.addButton setImage:[UIImage imageNamed:@"addIcon"] forState:UIControlStateNormal];
+        [self.addButton setImage:[UIImage imageNamed:@"addIcon"] forState:UIControlStateHighlighted];
+        [self.addButton addTarget:self action:@selector(addContact:) forControlEvents:UIControlEventTouchUpInside];
         
         _longPress = [[UILongPressGestureRecognizer alloc] initWithTarget:self action:@selector(deleteContactBegin:)];
         _longPress.minimumPressDuration = 0.5;
@@ -232,7 +232,6 @@
 
 - (NSInteger)numberOfSectionsInTableView:(UITableView *)tableView
 {
-    // Return the number of sections.
     return 1;
 }
 
@@ -640,12 +639,13 @@
     __weak typeof(self) weakSelf = self;
     
     [EMAlertView showAlertWithTitle:NSLocalizedString(@"prompt", @"Prompt")
-                            message:NSLocalizedString(@"sureToDelete", @"Messages will not be able to retrive")
+                            message:NSLocalizedString(@"confirmDeleteMessage", @"Messages will not be able to be retrived")
                     completionBlock:^(NSUInteger buttonIndex, EMAlertView *alertView) {
                         if (buttonIndex == 1) {
                             [[NSNotificationCenter defaultCenter] postNotificationName:@"RemoveAllMessages" object:weakSelf.chatGroup.groupId];
                         }
-                    } cancelButtonTitle:NSLocalizedString(@"cancel", @"Cancel")
+                    }
+                  cancelButtonTitle:NSLocalizedString(@"cancel", @"Cancel")
                   otherButtonTitles:NSLocalizedString(@"ok", @"OK"), nil];
     
 }
@@ -668,7 +668,7 @@
             if (error) {
                 [weakSelf showHint:NSLocalizedString(@"group.destroyFail", @"dissolution of group failure")];
             }
-            else{
+            else {
                 [[NSNotificationCenter defaultCenter] postNotificationName:@"ExitGroup" object:nil];
             }
         });

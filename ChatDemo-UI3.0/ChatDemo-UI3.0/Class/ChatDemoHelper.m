@@ -141,7 +141,7 @@ static ChatDemoHelper *helper = nil;
 - (void)didAutoLoginWithError:(EMError *)error
 {
     if (error) {
-        UIAlertView *alertView = [[UIAlertView alloc] initWithTitle:nil message:NSLocalizedString(@"login.errorAutoLogin", @"Auto-login fails, please try to login again") delegate:self cancelButtonTitle:NSLocalizedString(@"ok", @"ok") otherButtonTitles:nil, nil];
+        UIAlertView *alertView = [[UIAlertView alloc] initWithTitle:nil message:NSLocalizedString(@"login.errorAutoLogin", @"") delegate:self cancelButtonTitle:NSLocalizedString(@"ok", @"ok") otherButtonTitles:nil, nil];
         alertView.tag = 100;
         [alertView show];
     } else if([[EMClient sharedClient] isConnected]){
@@ -163,7 +163,7 @@ static ChatDemoHelper *helper = nil;
 - (void)didLoginFromOtherDevice
 {
     [self _clearHelper];
-    UIAlertView *alertView = [[UIAlertView alloc] initWithTitle:NSLocalizedString(@"prompt", @"Prompt") message:NSLocalizedString(@"loginAtOtherDevice", @"your login account has been in other places") delegate:self cancelButtonTitle:NSLocalizedString(@"ok", @"OK") otherButtonTitles:nil, nil];
+    UIAlertView *alertView = [[UIAlertView alloc] initWithTitle:NSLocalizedString(@"prompt", @"Prompt") message:NSLocalizedString(@"loggedIntoAnotherDevice", @"your login account has been in other places") delegate:self cancelButtonTitle:NSLocalizedString(@"ok", @"OK") otherButtonTitles:nil, nil];
     [alertView show];
     [[NSNotificationCenter defaultCenter] postNotificationName:KNOTIFICATION_LOGINCHANGE object:@NO];
 }
@@ -300,15 +300,15 @@ static ChatDemoHelper *helper = nil;
     }
     
     if (!aReason || aReason.length == 0) {
-        aReason = [NSString stringWithFormat:NSLocalizedString(@"group.applyJoin", @"%@ apply to join groups\'%@\'"), aApplicant, aGroup.subject];
+        aReason = [NSString stringWithFormat:NSLocalizedString(@"group.joinRequest", @"%@ requested to join the group\'%@\'"), aApplicant, aGroup.subject];
     }
     else {
-        aReason = [NSString stringWithFormat:NSLocalizedString(@"group.applyJoinWithName", @"%@ apply to join groups\'%@\'：%@"), aApplicant, aGroup.subject, aReason];
+        aReason = [NSString stringWithFormat:NSLocalizedString(@"group.joinRequestWithName", @"%@ requested to join the group\'%@\'：%@"), aApplicant, aGroup.subject, aReason];
     }
     
     NSMutableDictionary *dic = [NSMutableDictionary dictionaryWithDictionary:@{@"title":aGroup.subject, @"groupId":aGroup.groupId, @"username":aApplicant, @"groupname":aGroup.subject, @"applyMessage":aReason, @"applyStyle":[NSNumber numberWithInteger:ApplyStyleJoinGroup]}];
     
-    [[FriendRequestViewController shareController] addNewApply:dic];
+    [[FriendRequestViewController shareController] addNewRequest:dic];
    
     if (self.mainVC) {
         
@@ -337,7 +337,7 @@ static ChatDemoHelper *helper = nil;
                              reason:(NSString *)aReason
 {
     if (!aReason || aReason.length == 0) {
-        aReason = [NSString stringWithFormat:NSLocalizedString(@"group.beRefusedToJoin", @"be refused to join the group\'%@\'"), aGroupId];
+        aReason = [NSString stringWithFormat:NSLocalizedString(@"group.joinRequestDeclined", @"be refused to join the group\'%@\'"), aGroupId];
     }
     
     UIAlertView *alertView = [[UIAlertView alloc] initWithTitle:NSLocalizedString(@"prompt", @"Prompt") message:aReason delegate:nil cancelButtonTitle:NSLocalizedString(@"ok", @"OK") otherButtonTitles:nil, nil];
@@ -364,7 +364,7 @@ static ChatDemoHelper *helper = nil;
     
     NSMutableDictionary *dic = [NSMutableDictionary dictionaryWithDictionary:@{@"title":@"", @"groupId":aGroupId, @"username":aInviter, @"groupname":@"", @"applyMessage":aMessage, @"applyStyle":[NSNumber numberWithInteger:ApplyStyleGroupInvitation]}];
     
-    [[FriendRequestViewController shareController] addNewApply:dic];
+    [[FriendRequestViewController shareController] addNewRequest:dic];
     
     if (self.mainVC) {
         
@@ -444,7 +444,7 @@ static ChatDemoHelper *helper = nil;
     
     NSMutableDictionary *dic = [NSMutableDictionary dictionaryWithDictionary:@{@"title":aUsername, @"username":aUsername, @"applyMessage":aMessage, @"applyStyle":[NSNumber numberWithInteger:ApplyStyleFriend]}];
   
-    [[FriendRequestViewController shareController] addNewApply:dic];
+    [[FriendRequestViewController shareController] addNewRequest:dic];
    
     if (self.mainVC) {
         
@@ -481,11 +481,6 @@ static ChatDemoHelper *helper = nil;
 
 }
 
-- (void)didReceiveKickedFromChatroom:(EMChatroom *)aChatroom
-                              reason:(EMChatroomBeKickedReason)aReason
-{
-    
-}
 
 #pragma mark - EMCallManagerDelegate
 
@@ -507,7 +502,7 @@ static ChatDemoHelper *helper = nil;
         
         [self startCallTimer];
         
-        self.callController = [[CallViewController alloc] initWithSession:self.callSession isCaller:NO status:NSLocalizedString(@"call.finished", "Establish call finished")];
+        self.callController = [[CallViewController alloc] initWithSession:self.callSession isCaller:NO status:NSLocalizedString(@"call.established", "Call connection established")];
         self.callController.modalPresentationStyle = UIModalPresentationOverFullScreen;
         [self.mainVC presentViewController:self.callController animated:NO completion:nil];
     }
@@ -516,7 +511,7 @@ static ChatDemoHelper *helper = nil;
 - (void)didReceiveCallConnected:(EMCallSession *)aSession
 {
     if ([aSession.sessionId isEqualToString:self.callSession.sessionId]) {
-        self.callController.statusLabel.text = NSLocalizedString(@"call.finished", "Establish call finished");
+        self.callController.statusLabel.text = NSLocalizedString(@"call.established", "Establish call");
         
         AVAudioSession *audioSession = [AVAudioSession sharedInstance];
         [audioSession setCategory:AVAudioSessionCategoryPlayAndRecord error:nil];
@@ -574,7 +569,7 @@ static ChatDemoHelper *helper = nil;
                     reasonStr = NSLocalizedString(@"call.rejected", @"Reject the call");
                     break;
                 case EMCallEndReasonBusy:
-                    reasonStr = NSLocalizedString(@"call.in", @"In the call...");
+                    reasonStr = NSLocalizedString(@"call.inProgress", @"In the call...");
                     break;
                 case EMCallEndReasonFailed:
                     reasonStr = NSLocalizedString(@"call.connectFailed", @"Connect failed");
@@ -648,11 +643,11 @@ static ChatDemoHelper *helper = nil;
     if (aIsVideo) {
         self.callSession = [[EMClient sharedClient].callManager makeVideoCall:aUsername error:nil];
     }
-    else{
+    else {
         self.callSession = [[EMClient sharedClient].callManager makeVoiceCall:aUsername error:nil];
     }
     
-    if(self.callSession){
+    if (self.callSession) {
         
         [self startCallTimer];
         
@@ -660,8 +655,8 @@ static ChatDemoHelper *helper = nil;
 
         [self.mainVC presentViewController:self.callController animated:NO completion:nil];
     }
-    else{
-        UIAlertView *alertView = [[UIAlertView alloc] initWithTitle:nil message:NSLocalizedString(@"call.initFailed", @"Establish call failure") delegate:nil cancelButtonTitle:NSLocalizedString(@"ok", @"OK") otherButtonTitles:nil, nil];
+    else {
+        UIAlertView *alertView = [[UIAlertView alloc] initWithTitle:nil message:NSLocalizedString(@"call.initFailed", @"Failed to establish the call") delegate:nil cancelButtonTitle:NSLocalizedString(@"ok", @"OK") otherButtonTitles:nil, nil];
         [alertView show];
     }
     

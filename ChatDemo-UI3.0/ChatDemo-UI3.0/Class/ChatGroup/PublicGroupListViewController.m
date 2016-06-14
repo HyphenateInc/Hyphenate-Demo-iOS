@@ -44,7 +44,7 @@ typedef NS_ENUM(NSInteger, GettingMoreFooterViewState){
         
         _label = [[UILabel alloc] init];
         _label.textAlignment = NSTextAlignmentCenter;
-        _label.text = NSLocalizedString(@"noMore", @"No more data");
+        _label.text = NSLocalizedString(@"noMoreData", @"No more data");
         _label.hidden = YES;
         [self addSubview:_label];
         
@@ -84,7 +84,7 @@ typedef NS_ENUM(NSInteger, GettingMoreFooterViewState){
         case eGettingMoreFooterViewStateComplete:
             _activity.hidden = YES;
             _label.hidden = NO;
-            _label.text = NSLocalizedString(@"noMore", @"No more data");
+            _label.text = NSLocalizedString(@"noMoreData", @"No more data");
             break;
         case eGettingMoreFooterViewStateFailed:
             _activity.hidden = YES;
@@ -405,22 +405,27 @@ typedef NS_ENUM(NSInteger, GettingMoreFooterViewState){
         else
         {
             __weak typeof(self) weakSelf = self;
+            
             [self showHudInView:self.view hint:NSLocalizedString(@"searching", @"Searching")];
+            
             dispatch_async(dispatch_get_main_queue(), ^{
+                
                 EMError *error = nil;
                 EMGroup *group = [[EMClient sharedClient].groupManager searchPublicGroupWithId:searchBar.text error:&error];
+                
                 if (weakSelf)
                 {
                     PublicGroupListViewController *strongSelf = weakSelf;
+                    
                     [strongSelf hideHud];
+                    
                     if (!error) {
                         [strongSelf.searchController.resultsSource removeAllObjects];
                         [strongSelf.searchController.resultsSource addObject:group];
                         [strongSelf.searchController.searchResultsTableView reloadData];
                     }
-                    else
-                    {
-                        [strongSelf showHint:NSLocalizedString(@"notFound", @"Can't found")];
+                    else {
+                        [strongSelf showHint:NSLocalizedString(@"notFound", @"No group is found")];
                     }
                 }
             });
@@ -467,7 +472,7 @@ typedef NS_ENUM(NSInteger, GettingMoreFooterViewState){
 - (void)reloadDataSource
 {
     [self hideHud];
-    [self showHudInView:self.view hint:NSLocalizedString(@"loadData", @"Load data...")];
+    [self showHudInView:self.view hint:NSLocalizedString(@"loadData", @"Loading data...")];
     _cursor = nil;
     
     __weak typeof(self) weakSelf = self;

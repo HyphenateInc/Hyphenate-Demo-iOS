@@ -241,7 +241,7 @@
 
 - (void)showMessageAlertView
 {
-    UIAlertView *alert = [[UIAlertView alloc] initWithTitle:nil message:NSLocalizedString(@"saySomething", @"say somthing") delegate:self cancelButtonTitle:NSLocalizedString(@"cancel", @"Cancel") otherButtonTitles:NSLocalizedString(@"ok", @"OK"), nil];
+    UIAlertView *alert = [[UIAlertView alloc] initWithTitle:nil message:NSLocalizedString(@"greetingMessage", @"") delegate:self cancelButtonTitle:NSLocalizedString(@"cancel", @"Cancel") otherButtonTitles:NSLocalizedString(@"ok", @"OK"), nil];
     [alert setAlertViewStyle:UIAlertViewStylePlainTextInput];
     [alert show];
 }
@@ -277,7 +277,7 @@
 
 - (void)applyJoinGroup:(NSString *)groupId withGroupname:(NSString *)groupName message:(NSString *)message
 {
-    [self showHudInView:self.view hint:NSLocalizedString(@"group.sendingApply", @"send group of application...")];
+    [self showHudInView:self.view hint:NSLocalizedString(@"group.sendingRequest", @"send group of application...")];
     __weak typeof(self) weakSelf = self;
     dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), ^{
         EMError *error = nil;
@@ -285,7 +285,7 @@
         dispatch_async(dispatch_get_main_queue(), ^{
             [weakSelf hideHud];
             if (!error) {
-                [weakSelf showHint:NSLocalizedString(@"group.sendApplyRepeat", @"application has been sent")];
+                [weakSelf showHint:NSLocalizedString(@"group.sendRequestRepeat", @"Request to join the group already sent")];
             }
             else{
                 [weakSelf showHint:error.errorDescription];
