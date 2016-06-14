@@ -161,17 +161,17 @@
 "group.ban.fetchFail" = "fail to get blacklist: %@";
 
 //Group Detail
-"group.removeAllMessages" = "clear all messages";
-"group.destroy" = "dismiss group";
-"group.leave" = "quit the group";
-"group.id" = "groupID";
+"group.removeAllMessages" = "Clear all messages";
+"group.destroy" = "Dismiss the group";
+"group.leave" = "Leave the group";
+"group.id" = "Group ID";
 "group.occupantCount" = "members count";
-"group.addingOccupant" = "add a group member...";
-"group.fetchInfoFail" = "failed to get the group details, please try again later";
-"group.removingOccupant" = "deleting member...";
-"group.destroyFail" = "dessolve group failed";
-"group.leaveFail" = "exit the group failure";
-"group.addOccupantFail" = "Failed to add group member, please try again later";
+"group.addingOccupant" = "Add a group member...";
+"group.fetchInfoFail" = "Failed to get the group details, please try again";
+"group.removingOccupant" = "Deleting member...";
+"group.destroyFail" = "Failed to dismiss the group";
+"group.leaveFail" = "Failed to leave the group";
+"group.addOccupantFail" = "Failed to add group member, please try again";
 
 //Group Setting
 "group.setting.receiveAndPrompt" = "recv and notification group messages";
@@ -180,7 +180,7 @@
 "group.setting.save" = "set properties";
 "group.setting.success" = "set success";
 "group.setting.fail" = "set failure";
-"group.setting.subject" = "Please input group name";
+"group.setting.subject" = "Please enter a group name";
 
 //Chatroom detail
 "chatroom.somebodyInvite" = "%@ invites you to join chatroom \'%@\'";

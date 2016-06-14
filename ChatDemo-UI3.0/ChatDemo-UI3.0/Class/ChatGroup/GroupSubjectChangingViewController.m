@@ -13,11 +13,11 @@
 #import "GroupSubjectChangingViewController.h"
 
 @interface GroupSubjectChangingViewController () <UITextFieldDelegate>
-{
-    EMGroup         *_group;
-    BOOL            _isOwner;
-    UITextField     *_subjectField;
-}
+
+@property (nonatomic, strong) IBOutlet UITextField *subjectField;
+
+@property (nonatomic, strong) EMGroup *group;
+@property (nonatomic, assign) BOOL isOwner;
 
 @end
 
@@ -27,9 +27,9 @@
 {
     self = [self init];
     if (self) {
-        _group = group;
+        self.group = group;
         NSString *loginUsername = [[EMClient sharedClient] currentUsername];
-        _isOwner = [_group.owner isEqualToString:loginUsername];
+        self.isOwner = [self.group.owner isEqualToString:loginUsername];
         self.view.backgroundColor = [UIColor whiteColor];
     }
 
@@ -40,7 +40,7 @@
 {
     [super viewDidLoad];
 
-    self.title = NSLocalizedString(@"title.groupSubjectChanging", @"Change group name");
+    self.title = NSLocalizedString(@"title.groupSubjectChanging", @"Change Group Name");
 
     UIBarButtonItem *backBarButtonItem = [[UIBarButtonItem alloc] initWithImage:[UIImage imageNamed:@"back"]
                                                                           style:UIBarButtonItemStylePlain
@@ -48,7 +48,7 @@
                                                                          action:@selector(backAction)];
     self.navigationItem.leftBarButtonItem = backBarButtonItem;
 
-    if (_isOwner)
+    if (self.isOwner)
     {
         UIBarButtonItem *saveItem = [[UIBarButtonItem alloc] initWithTitle:NSLocalizedString(@"save", @"Save") style:UIBarButtonItemStylePlain target:self action:@selector(save:)];
         saveItem.tintColor = [UIColor HIColorGreenDark];
@@ -56,26 +56,27 @@
     }
 
     CGRect frame = CGRectMake(20, 80, self.view.frame.size.width - 40, 40);
-    _subjectField = [[UITextField alloc] initWithFrame:frame];
-    _subjectField.layer.cornerRadius = 5.0;
-    _subjectField.layer.borderWidth = 1.0;
-    _subjectField.placeholder = NSLocalizedString(@"group.setting.subject", @"Please input group name");
-    _subjectField.text = _group.subject;
-    if (!_isOwner)
-    {
-        _subjectField.enabled = NO;
+    self.subjectField = [[UITextField alloc] initWithFrame:frame];
+    self.subjectField.layer.cornerRadius = 5.0;
+    self.subjectField.layer.borderWidth = 1.0;
+    self.subjectField.placeholder = NSLocalizedString(@"group.setting.subject", @"Please enter a group name");
+    self.subjectField.text = self.group.subject;
+  
+    if (!self.isOwner) {
+        self.subjectField.enabled = NO;
     }
+    
     frame.origin = CGPointMake(frame.size.width - 5.0, 0.0);
     frame.size = CGSizeMake(5.0, 40.0);
     UIView *holder = [[UIView alloc] initWithFrame:frame];
-    _subjectField.rightView = holder;
-    _subjectField.rightViewMode = UITextFieldViewModeAlways;
+    self.subjectField.rightView = holder;
+    self.subjectField.rightViewMode = UITextFieldViewModeAlways;
     frame.origin = CGPointMake(0.0, 0.0);
     holder = [[UIView alloc] initWithFrame:frame];
-    _subjectField.leftView = holder;
-    _subjectField.leftViewMode = UITextFieldViewModeAlways;
-    _subjectField.delegate = self;
-    [self.view addSubview:_subjectField];
+    self.subjectField.leftView = holder;
+    self.subjectField.leftViewMode = UITextFieldViewModeAlways;
+    self.subjectField.delegate = self;
+    [self.view addSubview:self.subjectField];
 }
 
 - (void)viewWillAppear:(BOOL)animated
@@ -108,8 +109,8 @@
 
 - (void)backAction
 {
-    if ([_subjectField isFirstResponder]) {
-        [_subjectField resignFirstResponder];
+    if ([self.subjectField isFirstResponder]) {
+        [self.subjectField resignFirstResponder];
     }
     
     [self.navigationController popViewControllerAnimated:YES];
@@ -122,14 +123,19 @@
 
 - (void)saveSubject
 {
-    EMConversation *conversation = [[EMClient sharedClient].chatManager getConversation:_group.groupId type:EMConversationTypeGroupChat createIfNotExist:NO];
+    EMConversation *conversation = [[EMClient sharedClient].chatManager getConversation:self.group.groupId type:EMConversationTypeGroupChat createIfNotExist:NO];
+    
     EMError *error = nil;
-    [[EMClient sharedClient].groupManager changeGroupSubject:_subjectField.text forGroup:_group.groupId error:&error];
+    
+    [[EMClient sharedClient].groupManager changeGroupSubject:self.subjectField.text forGroup:self.group.groupId error:&error];
+   
     if (!error) {
-        if ([_group.groupId isEqualToString:conversation.conversationId]) {
+        
+        if ([self.group.groupId isEqualToString:conversation.conversationId]) {
+            
             NSMutableDictionary *ext = [NSMutableDictionary dictionaryWithDictionary:conversation.ext];
-            [ext setObject:_group.subject forKey:@"subject"];
-            [ext setObject:[NSNumber numberWithBool:_group.isPublic] forKey:@"isPublic"];
+            [ext setObject:self.group.subject forKey:@"subject"];
+            [ext setObject:[NSNumber numberWithBool:self.group.isPublic] forKey:@"isPublic"];
             conversation.ext = ext;
         }
     }

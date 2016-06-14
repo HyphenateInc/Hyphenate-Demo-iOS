@@ -70,7 +70,7 @@
     self = [super init];
     if (self) {
         // Custom initialization
-        _chatGroup = chatGroup;
+        self.chatGroup = chatGroup;
         _dataSource = [NSMutableArray array];
         _occupantType = GroupOccupantTypeMember;
         [self registerNotifications];
@@ -165,10 +165,12 @@
 {
     if (_clearButton == nil) {
         _clearButton = [[UIButton alloc] init];
-        [_clearButton setTitle:NSLocalizedString(@"group.removeAllMessages", @"remove all messages") forState:UIControlStateNormal];
+        [_clearButton setTitle:NSLocalizedString(@"group.removeAllMessages", @"Clear all messages") forState:UIControlStateNormal];
         [_clearButton setTitleColor:[UIColor whiteColor] forState:UIControlStateNormal];
         [_clearButton addTarget:self action:@selector(clearAction) forControlEvents:UIControlEventTouchUpInside];
         [_clearButton setBackgroundColor:[UIColor HIColorRed]];
+        _clearButton.layer.cornerRadius = 6.0f;
+        _clearButton.layer.masksToBounds = YES;
     }
     
     return _clearButton;
@@ -178,10 +180,12 @@
 {
     if (_dissolveButton == nil) {
         _dissolveButton = [[UIButton alloc] init];
-        [_dissolveButton setTitle:NSLocalizedString(@"group.destroy", @"dissolution of the group") forState:UIControlStateNormal];
+        [_dissolveButton setTitle:NSLocalizedString(@"group.destroy", @"Dismiss the group") forState:UIControlStateNormal];
         [_dissolveButton setTitleColor:[UIColor whiteColor] forState:UIControlStateNormal];
         [_dissolveButton addTarget:self action:@selector(dissolveAction) forControlEvents:UIControlEventTouchUpInside];
         [_dissolveButton setBackgroundColor: [UIColor HIColorRed]];
+        _dissolveButton.layer.cornerRadius = 6.0f;
+        _dissolveButton.layer.masksToBounds = YES;
     }
     
     return _dissolveButton;
@@ -195,6 +199,8 @@
         [_exitButton setTitleColor:[UIColor whiteColor] forState:UIControlStateNormal];
         [_exitButton addTarget:self action:@selector(exitAction) forControlEvents:UIControlEventTouchUpInside];
         [_exitButton setBackgroundColor:[UIColor HIColorRed]];
+        _exitButton.layer.cornerRadius = 6.0f;
+        _exitButton.layer.masksToBounds = YES;
     }
     
     return _exitButton;
@@ -240,9 +246,8 @@
 
 - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath
 {
-    static NSString *CellIdentifier = @"Cell";
+    static NSString *CellIdentifier = @"GroupDetailCell";
     UITableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:CellIdentifier];
-    // Configure the cell...
     if (cell == nil) {
         cell = [[UITableViewCell alloc] initWithStyle:UITableViewCellStyleValue1 reuseIdentifier:CellIdentifier];
     }
@@ -255,13 +260,13 @@
     {
         cell.textLabel.text = NSLocalizedString(@"group.id", @"group ID");
         cell.accessoryType = UITableViewCellAccessoryNone;
-        cell.detailTextLabel.text = _chatGroup.groupId;
+        cell.detailTextLabel.text = self.chatGroup.groupId;
     }
     else if (indexPath.row == 2)
     {
         cell.textLabel.text = NSLocalizedString(@"group.occupantCount", @"members count");
         cell.accessoryType = UITableViewCellAccessoryNone;
-        cell.detailTextLabel.text = [NSString stringWithFormat:@"%i / %i", (int)[_chatGroup.occupants count], (int)_chatGroup.setting.maxUsersCount];
+        cell.detailTextLabel.text = [NSString stringWithFormat:@"%i / %i", (int)[self.chatGroup.occupants count], (int)self.chatGroup.setting.maxUsersCount];
     }
     else if (indexPath.row == 3)
     {
@@ -305,29 +310,30 @@
     [tableView deselectRowAtIndexPath:indexPath animated:YES];
     
     if (indexPath.row == 3) {
-        GroupSettingViewController *settingController = [[GroupSettingViewController alloc] initWithGroup:_chatGroup];
+        GroupSettingViewController *settingController = [[GroupSettingViewController alloc] initWithGroup:self.chatGroup];
         [self.navigationController pushViewController:settingController animated:YES];
     }
     else if (indexPath.row == 4)
     {
-        GroupSubjectChangingViewController *changingController = [[GroupSubjectChangingViewController alloc] initWithGroup:_chatGroup];
+        GroupSubjectChangingViewController *changingController = [[GroupSubjectChangingViewController alloc] initWithGroup:self.chatGroup];
         [self.navigationController pushViewController:changingController animated:YES];
     }
     else if (indexPath.row == 5) {
-        SearchMessageViewController *bansController = [[SearchMessageViewController alloc] initWithConversationId:_chatGroup.groupId conversationType:EMConversationTypeGroupChat];
-        [self.navigationController pushViewController:bansController animated:YES];
+        SearchMessageViewController *searchController = [[SearchMessageViewController alloc] initWithConversationId:self.chatGroup.groupId conversationType:EMConversationTypeGroupChat];
+        [self.navigationController pushViewController:searchController animated:YES];
     }
     else if (indexPath.row == 6) {
-        GroupBansViewController *bansController = [[GroupBansViewController alloc] initWithGroup:_chatGroup];
+        GroupBansViewController *bansController = [[GroupBansViewController alloc] initWithGroup:self.chatGroup];
         [self.navigationController pushViewController:bansController animated:YES];
     }
 }
 
 #pragma mark - EMChooseViewDelegate
+
 - (BOOL)viewController:(EMChooseViewController *)viewController didFinishSelectedSources:(NSArray *)selectedSources
 {
-    NSInteger maxUsersCount = _chatGroup.setting.maxUsersCount;
-    if (([selectedSources count] + _chatGroup.occupantsCount) > maxUsersCount) {
+    NSInteger maxUsersCount = self.chatGroup.setting.maxUsersCount;
+    if (([selectedSources count] + self.chatGroup.occupantsCount) > maxUsersCount) {
         UIAlertView *alertView = [[UIAlertView alloc] initWithTitle:NSLocalizedString(@"group.maxUserCount", nil) message:nil delegate:nil cancelButtonTitle:NSLocalizedString(@"ok", @"OK") otherButtonTitles:nil, nil];
         [alertView show];
         
@@ -593,7 +599,7 @@
 
 - (void)addContact:(id)sender
 {
-    ContactSelectionViewController *selectionController = [[ContactSelectionViewController alloc] initWithBlockSelectedUsernames:_chatGroup.occupants];
+    ContactSelectionViewController *selectionController = [[ContactSelectionViewController alloc] initWithBlockSelectedUsernames:self.chatGroup.occupants];
     selectionController.delegate = self;
     [self.navigationController pushViewController:selectionController animated:YES];
 }
