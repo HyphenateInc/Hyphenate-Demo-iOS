@@ -1,1 +1,1 @@
-../../../EaseUI/EaseUI/EMUIKit/3rdparty/MWPhotoBrowser/Classes/MWCaptionView.h
+../../../../../../easeui_ios/EaseUI/EMUIKit/3rdparty/MWPhotoBrowser/Classes/MWCaptionView.h

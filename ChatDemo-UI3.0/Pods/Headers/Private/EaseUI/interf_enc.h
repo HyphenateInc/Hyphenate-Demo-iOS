@@ -1,1 +1,1 @@
-../../../EaseUI/EaseUI/EMUIKit/3rdparty/DeviceHelper/VoiceConvert/opencore-amrnb/interf_enc.h
+../../../../../../easeui_ios/EaseUI/EMUIKit/3rdparty/DeviceHelper/VoiceConvert/opencore-amrnb/interf_enc.h

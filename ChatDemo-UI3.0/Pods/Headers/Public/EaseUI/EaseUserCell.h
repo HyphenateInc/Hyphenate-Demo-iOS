@@ -1,1 +1,1 @@
-../../../EaseUI/EaseUI/EMUIKit/Views/contact/EaseUserCell.h
+../../../../../../easeui_ios/EaseUI/EMUIKit/Views/contact/EaseUserCell.h

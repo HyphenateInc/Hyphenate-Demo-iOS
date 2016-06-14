@@ -1,1 +1,1 @@
-../../../EaseUI/EaseUI/EMUIKit/3rdparty/MWPhotoBrowser/Libraries/EMSDWebImage/EMSDWebImagePrefetcher.h
+../../../../../../easeui_ios/EaseUI/EMUIKit/3rdparty/MWPhotoBrowser/Libraries/EMSDWebImage/EMSDWebImagePrefetcher.h

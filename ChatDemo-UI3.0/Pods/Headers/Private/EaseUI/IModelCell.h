@@ -1,1 +1,1 @@
-../../../EaseUI/EaseUI/EMUIKit/Model/IModelCell.h
+../../../../../../easeui_ios/EaseUI/EMUIKit/Model/IModelCell.h

@@ -1,1 +1,1 @@
-../../../EaseUI/EaseUI/EMUIKit/3rdparty/MWPhotoBrowser/Libraries/PSTCollectionView/NSIndexPath+PSTCollectionViewAdditions.h
+../../../../../../easeui_ios/EaseUI/EMUIKit/3rdparty/MWPhotoBrowser/Libraries/PSTCollectionView/NSIndexPath+PSTCollectionViewAdditions.h

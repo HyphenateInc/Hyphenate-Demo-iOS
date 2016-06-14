@@ -1,1 +1,1 @@
-../../../EaseUI/EaseUI/EMUIKit/Util/EaseChineseToPinyin.h
+../../../../../../easeui_ios/EaseUI/EMUIKit/Util/EaseChineseToPinyin.h

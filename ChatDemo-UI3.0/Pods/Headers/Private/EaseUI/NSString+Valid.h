@@ -1,1 +1,1 @@
-../../../EaseUI/EaseUI/EMUIKit/Util/Category/NSString+Valid.h
+../../../../../../easeui_ios/EaseUI/EMUIKit/Util/Category/NSString+Valid.h

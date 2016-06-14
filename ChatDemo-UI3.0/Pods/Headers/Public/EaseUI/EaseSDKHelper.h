@@ -1,1 +1,1 @@
-../../../EaseUI/EaseUI/EMUIKit/Helper/EaseSDKHelper.h
+../../../../../../easeui_ios/EaseUI/EMUIKit/Helper/EaseSDKHelper.h
