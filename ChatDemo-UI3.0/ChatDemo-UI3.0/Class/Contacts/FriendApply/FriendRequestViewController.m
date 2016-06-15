@@ -217,7 +217,6 @@ static FriendRequestViewController *controller = nil;
         [self showHudInView:self.view hint:NSLocalizedString(@"sendingApply", @"sending apply...")];
         ApplyEntity *entity = [self.dataSource objectAtIndex:indexPath.row];
         ApplyStyle applyStyle = [entity.style intValue];
-        EMError *error;
         
         __weak typeof(self) weakSelf = self;
         dispatch_block_t successBlock = ^{
