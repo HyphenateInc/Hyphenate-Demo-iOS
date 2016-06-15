@@ -17,7 +17,7 @@
 
 #import "ChatDemoHelper.h"
 
-@interface BlackListViewController ()<UITableViewDataSource, UITableViewDelegate, SRRefreshDelegate>
+@interface BlackListViewController () <UITableViewDataSource, UITableViewDelegate, SRRefreshDelegate>
 
 @property (strong, nonatomic) NSMutableArray *dataSource;
 @property (strong, nonatomic) NSMutableArray *sectionTitles;
@@ -33,7 +33,7 @@
     self = [super initWithNibName:nibNameOrNil bundle:nibBundleOrNil];
     if (self) {
         self.dataSource = [NSMutableArray array];
-        _sectionTitles = [NSMutableArray array];
+        self.sectionTitles = [NSMutableArray array];
     }
     return self;
 }
@@ -105,12 +105,17 @@
 
 - (NSInteger)numberOfSectionsInTableView:(UITableView *)tableView
 {
-    return [_dataSource count];
+    if ([self.dataSource count] > 0) {
+        return 1;
+    }
+    else {
+        return 0;
+    }
 }
 
 - (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section
 {
-    return [[_dataSource objectAtIndex:section] count];
+    return [self.dataSource count];
 }
 
 - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath
@@ -122,7 +127,7 @@
         cell = [[BaseTableViewCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:cellIdentifier];
     }
     
-    NSString *username = [[self.dataSource objectAtIndex:indexPath.section] objectAtIndex:indexPath.row];
+    NSString *username = [self.dataSource objectAtIndex:indexPath.row];
     cell.imageView.image = [UIImage imageNamed:@"chatListCellHead.png"];
     cell.textLabel.text = username;
     cell.username = username;
@@ -141,11 +146,11 @@
 - (void)tableView:(UITableView *)tableView commitEditingStyle:(UITableViewCellEditingStyle)editingStyle forRowAtIndexPath:(NSIndexPath *)indexPath
 {
     if (editingStyle == UITableViewCellEditingStyleDelete) {
-        NSString *username = [[self.dataSource objectAtIndex:indexPath.section] objectAtIndex:indexPath.row];
+        NSString *username = [self.dataSource objectAtIndex:indexPath.row];
         __weak typeof(self) weakself = self;
         [[EMClient sharedClient].contactManager asyncRemoveUserFromBlackList:username success:^{
             [[ChatDemoHelper shareHelper].contactViewVC reloadDataSource];
-            [[weakself.dataSource objectAtIndex:indexPath.section] removeObjectAtIndex:indexPath.row];
+            [self.dataSource removeObjectAtIndex:indexPath.row];
             [tableView reloadData];
         } failure:^(EMError *aError) {
             [weakself showHint:aError.errorDescription];
@@ -160,35 +165,38 @@
     return 50;
 }
 
-- (CGFloat)tableView:(UITableView *)tableView heightForHeaderInSection:(NSInteger)section
-{
-    return 22;
-}
-
-- (UIView *)tableView:(UITableView *)tableView viewForHeaderInSection:(NSInteger)section
-{
-    UIView *contentView = [[UIView alloc] init];
-    [contentView setBackgroundColor:[UIColor HIGreenDarkColor]];
-    
-    UILabel *label = [[UILabel alloc] initWithFrame:CGRectMake(10, 0, 100, 22)];
-    label.backgroundColor = [UIColor whiteColor];
-    label.text = [self.sectionTitles objectAtIndex:section];
-    
-    [contentView addSubview:label];
-    
-    return contentView;
-}
-
-- (NSArray *)sectionIndexTitlesForTableView:(UITableView *)tableView
-{
-    NSMutableArray * existTitles = [NSMutableArray array];
-    for (int i = 0; i < [self.sectionTitles count]; i++) {
-        if ([[self.dataSource objectAtIndex:i] count] > 0) {
-            [existTitles addObject:[self.sectionTitles objectAtIndex:i]];
-        }
-    }
-    return existTitles;
-}
+//- (CGFloat)tableView:(UITableView *)tableView heightForHeaderInSection:(NSInteger)section
+//{
+//    return 22;
+//}
+//
+//- (UIView *)tableView:(UITableView *)tableView viewForHeaderInSection:(NSInteger)section
+//{
+//    UIView *contentView = [[UIView alloc] init];
+//    [contentView setBackgroundColor:[UIColor HIGreenDarkColor]];
+//    
+//    UILabel *label = [[UILabel alloc] initWithFrame:CGRectMake(10, 0, 100, 22)];
+//    label.backgroundColor = [UIColor whiteColor];
+//    
+//    if (self.sectionTitles.count > 0) {
+//        label.text = [self.sectionTitles objectAtIndex:section];
+//    }
+//    
+//    [contentView addSubview:label];
+//    
+//    return contentView;
+//}
+//
+//- (NSArray *)sectionIndexTitlesForTableView:(UITableView *)tableView
+//{
+//    NSMutableArray * existTitles = [NSMutableArray array];
+//    for (int i = 0; i < [self.sectionTitles count]; i++) {
+//        if ([[self.dataSource objectAtIndex:i] count] > 0) {
+//            [existTitles addObject:[self.sectionTitles objectAtIndex:i]];
+//        }
+//    }
+//    return existTitles;
+//}
 
 - (UITableViewCellEditingStyle)tableView:(UITableView *)tableView editingStyleForRowAtIndexPath:(NSIndexPath *)indexPath
 {
@@ -221,26 +229,24 @@
 
 - (void)loadBlacklistData
 {
-    __weak typeof(self) weakself = self;
-    
     dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), ^{
         
-        [weakself.dataSource removeAllObjects];
+        [self.dataSource removeAllObjects];
         
         [[EMClient sharedClient].contactManager asyncGetBlackListFromServer:^(NSArray *aList) {
             
-            [weakself.dataSource addObjectsFromArray:aList];
+            [self.dataSource addObjectsFromArray:aList];
 
             dispatch_async(dispatch_get_main_queue(), ^{
                 
-                [weakself.tableView reloadData];
+                [self.tableView reloadData];
                 
                 [self.slimeView endRefresh];
             });
         } failure:^(EMError *aError) {
             dispatch_async(dispatch_get_main_queue(), ^{
                 
-                [weakself.tableView reloadData];
+                [self.tableView reloadData];
                 
                 [self.slimeView endRefresh];
             });

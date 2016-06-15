@@ -47,7 +47,7 @@
 "forwardFail" = "Failed to forward the message";
 "refreshData" = "Refresh data...";
 "loadData" = "Loading data...";
-"loadDataFailed" = "Failed to Load more data";
+"loadDataFailed" = "Failed to load data";
 "greetingMessage" = "Say hello!";
 "searchResults" = "The search results";
 "doneWithCount" = "Done(%i)";
