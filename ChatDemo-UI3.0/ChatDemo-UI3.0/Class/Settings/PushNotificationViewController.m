@@ -1,27 +1,25 @@
 /************************************************************
- *  * EaseMob CONFIDENTIAL
+ *  * Hyphenate  
  * __________________
- * Copyright (C) 2013-2014 EaseMob Technologies. All rights reserved.
+ * Copyright (C) 2016 Hyphenate Inc. All rights reserved.
  *
  * NOTICE: All information contained herein is, and remains
- * the property of EaseMob Technologies.
+ * the property of Hyphenate Inc.
  * Dissemination of this information or reproduction of this material
  * is strictly forbidden unless prior written permission is obtained
- * from EaseMob Technologies.
+ * from Hyphenate Inc.
  */
 
 #import "PushNotificationViewController.h"
 
 @interface PushNotificationViewController ()
-{
-    EMPushNotificationDisplayStyle _pushDisplayStyle;
-    EMPushNotificationNoDisturbStatus _noDisturbingStatus;
-    NSInteger _noDisturbingStart;
-    NSInteger _noDisturbingEnd;
-    NSString *_nickName;
-}
 
 @property (strong, nonatomic) UISwitch *pushDisplaySwitch;
+@property (assign, nonatomic) EMPushDisplayStyle pushDisplayStyle;
+@property (assign, nonatomic) EMPushNoDisturbStatus noDisturbingStatus;
+@property (assign, nonatomic) NSInteger noDisturbingStart;
+@property (assign, nonatomic) NSInteger noDisturbingEnd;
+@property (strong, nonatomic) NSString *nickName;
 
 @end
 
@@ -32,9 +30,9 @@
     self = [super initWithStyle:style];
     if (self) {
         // Custom initialization
-        _noDisturbingStart = -1;
-        _noDisturbingEnd = -1;
-        _noDisturbingStatus = -1;
+        self.noDisturbingStart = -1;
+        self.noDisturbingEnd = -1;
+        self.noDisturbingStatus = -1;
     }
     return self;
 }
@@ -43,17 +41,27 @@
 {
     [super viewDidLoad];
     
-    self.title = NSLocalizedString(@"title.apnsSetting", @"Apns Settings");
+    self.title = NSLocalizedString(@"title.apnsSetting", @"Push Notification");
     
-    UIButton *saveButton = [[UIButton alloc] initWithFrame:CGRectMake(0, 0, 50, 40)];
-    [saveButton setTitle:NSLocalizedString(@"save", @"Save") forState:UIControlStateNormal];
-    [saveButton addTarget:self action:@selector(savePushOptions) forControlEvents:UIControlEventTouchUpInside];
-    self.navigationItem.rightBarButtonItem = [[UIBarButtonItem alloc] initWithCustomView:saveButton];
+    UIBarButtonItem *backBarButtonItem = [[UIBarButtonItem alloc] initWithImage:[UIImage imageNamed:@"back"]
+                                                                          style:UIBarButtonItemStylePlain
+                                                                         target:self.navigationController
+                                                                         action:@selector(popViewControllerAnimated:)];
+    self.navigationItem.leftBarButtonItem = backBarButtonItem;
     
     self.tableView.tableFooterView = [[UIView alloc] init];
     
-    [self refreshPushOptions];
+    [self loadPushOptions];
+    
     [self.tableView reloadData];
+}
+
+- (void)viewWillAppear:(BOOL)animated
+{
+    [super viewWillAppear:animated];
+    
+    [[GAI sharedInstance].defaultTracker set:kGAIScreenName value:NSStringFromClass(self.class)];
+    [[GAI sharedInstance].defaultTracker send:[[GAIDictionaryBuilder createScreenView] build]];
 }
 
 - (void)didReceiveMemoryWarning
@@ -79,13 +87,11 @@
 
 - (NSInteger)numberOfSectionsInTableView:(UITableView *)tableView
 {
-    // Return the number of sections.
     return 2;
 }
 
 - (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section
 {
-    // Return the number of rows in the section.
     if (section == 0) {
         return 1;
     }
@@ -109,7 +115,7 @@
 - (NSString *)tableView:(UITableView *)tableView titleForHeaderInSection:(NSInteger)section
 {
     if (section == 1) {
-        return NSLocalizedString(@"setting.notDisturb", @"No disturbing");
+        return NSLocalizedString(@"setting.notDisturb", @"Do Not Disturb");
     }
     return nil;
 }
@@ -134,18 +140,18 @@
     else if (indexPath.section == 1)
     {
         if (indexPath.row == 0) {
-            cell.textLabel.text = NSLocalizedString(@"setting.open", @"Open");
-            cell.accessoryType = _noDisturbingStatus == ePushNotificationNoDisturbStatusDay ? UITableViewCellAccessoryCheckmark : UITableViewCellAccessoryNone;
+            cell.textLabel.text = NSLocalizedString(@"setting.open", @"On");
+            cell.accessoryType = self.noDisturbingStatus == EMPushNoDisturbStatusDay ? UITableViewCellAccessoryCheckmark : UITableViewCellAccessoryNone;
         }
         else if (indexPath.row == 1)
         {
-            cell.textLabel.text = NSLocalizedString(@"setting.nightOpen", @"only open at night (22:00 - 7:00)");
-            cell.accessoryType = _noDisturbingStatus == ePushNotificationNoDisturbStatusCustom ? UITableViewCellAccessoryCheckmark : UITableViewCellAccessoryNone;
+            cell.textLabel.text = NSLocalizedString(@"setting.nightOpen", @"On only from 10pm to 7am.");
+            cell.accessoryType = self.noDisturbingStatus == EMPushNoDisturbStatusCustom ? UITableViewCellAccessoryCheckmark : UITableViewCellAccessoryNone;
         }
         else if (indexPath.row == 2)
         {
-            cell.textLabel.text = NSLocalizedString(@"setting.close", @"Close");
-            cell.accessoryType = _noDisturbingStatus == ePushNotificationNoDisturbStatusClose ? UITableViewCellAccessoryCheckmark : UITableViewCellAccessoryNone;
+            cell.textLabel.text = NSLocalizedString(@"setting.close", @"Off");
+            cell.accessoryType = self.noDisturbingStatus == EMPushNoDisturbStatusClose ? UITableViewCellAccessoryCheckmark : UITableViewCellAccessoryNone;
         }
     }
     
@@ -187,9 +193,9 @@
                                         case 0: {
                                         } break;
                                         default: {
-                                            self->_noDisturbingStart = 0;
-                                            self->_noDisturbingEnd = 24;
-                                            self->_noDisturbingStatus = ePushNotificationNoDisturbStatusDay;
+                                            self.noDisturbingStart = 0;
+                                            self.noDisturbingEnd = 24;
+                                            self.noDisturbingStatus = EMPushNoDisturbStatusDay;
                                             [tableView reloadData];
                                         } break;
                                     }
@@ -200,16 +206,16 @@
             } break;
             case 1:
             {
-                _noDisturbingStart = 22;
-                _noDisturbingEnd = 7;
-                _noDisturbingStatus = ePushNotificationNoDisturbStatusCustom;
+                self.noDisturbingStart = 22;
+                self.noDisturbingEnd = 7;
+                self.noDisturbingStatus = EMPushNoDisturbStatusCustom;
             }
                 break;
             case 2:
             {
-                _noDisturbingStart = -1;
-                _noDisturbingEnd = -1;
-                _noDisturbingStatus = ePushNotificationNoDisturbStatusClose;
+                self.noDisturbingStart = -1;
+                self.noDisturbingEnd = -1;
+                self.noDisturbingStatus = EMPushNoDisturbStatusClose;
             }
                 break;
                 
@@ -220,63 +226,102 @@
         if (needReload) {
             [tableView reloadData];
         }
+        
+        [self savePushOptions];
     }
 }
+
 
 #pragma mark - action
 
 - (void)savePushOptions
 {
-    BOOL isUpdate = NO;
-    EMPushNotificationOptions *options = [[EaseMob sharedInstance].chatManager pushNotificationOptions];
-    if (_pushDisplayStyle != options.displayStyle) {
-        options.displayStyle = _pushDisplayStyle;
-        isUpdate = YES;
+    BOOL isUpdated = NO;
+    
+    // push summery vs detailed
+    EMPushOptions *options = [[EMClient sharedClient] pushOptions];
+    if (self.pushDisplayStyle != options.displayStyle) {
+        options.displayStyle = self.pushDisplayStyle;
+        isUpdated = YES;
     }
     
-    if (_nickName && _nickName.length > 0 && ![_nickName isEqualToString:options.nickname])
-    {
-        options.nickname = _nickName;
-        isUpdate = YES;
-    }
-    if (options.noDisturbingStartH != _noDisturbingStart || options.noDisturbingEndH != _noDisturbingEnd){
-        isUpdate = YES;
-        options.noDisturbStatus = _noDisturbingStatus;
-        options.noDisturbingStartH = _noDisturbingStart;
-        options.noDisturbingEndH = _noDisturbingEnd;
+    // APNs nickname
+    if (self.nickName && self.nickName.length > 0 && ![self.nickName isEqualToString:options.nickname]) {
+        options.nickname = self.nickName;
+        isUpdated = YES;
     }
     
-    if (isUpdate) {
-        [[EaseMob sharedInstance].chatManager asyncUpdatePushOptions:options];
+    // Do Not Disturb option
+    if (options.noDisturbingStartH != self.noDisturbingStart || options.noDisturbingEndH != self.noDisturbingEnd){
+        options.noDisturbStatus = self.noDisturbingStatus;
+        options.noDisturbingStartH = self.noDisturbingStart;
+        options.noDisturbingEndH = self.noDisturbingEnd;
+        isUpdated = YES;
     }
     
-    [self.navigationController popViewControllerAnimated:YES];
+    __weak typeof(self) weakself = self;
+    dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), ^{
+        
+        EMError *error = nil;
+        if (isUpdated) {
+            [[EMClient sharedClient] asyncUpdatePushOptionsToServer:^{
+                
+                dispatch_async(dispatch_get_main_queue(), ^{
+                    [weakself.navigationController popViewControllerAnimated:YES];
+                });
+                
+            } failure:^(EMError *aError) {
+                
+                dispatch_async(dispatch_get_main_queue(), ^{
+                    [weakself showHint:[NSString stringWithFormat:@"%@:%@", NSLocalizedString(@"error.save", @"Failed to save"), error.errorDescription]];
+                });
+                
+            }];
+        }
+    });
 }
 
 - (void)pushDisplayChanged:(UISwitch *)pushDisplaySwitch
 {
     if (pushDisplaySwitch.isOn) {
-#warning 此处设置详情显示时的昵称，比如_nickName = @"环信";
-        _pushDisplayStyle = ePushNotificationDisplayStyle_messageSummary;
+        self.pushDisplayStyle = EMPushDisplayStyleMessageSummary;
     }
-    else{
-        _pushDisplayStyle = ePushNotificationDisplayStyle_simpleBanner;
+    else {
+        self.pushDisplayStyle = EMPushDisplayStyleSimpleBanner;
     }
+    
+    [self savePushOptions];
+}
+
+- (void)loadPushOptions
+{
+    __weak typeof(self) weakself = self;
+    
+    [[EMClient sharedClient] asyncGetPushOptionsFromServer:^(EMPushOptions *aOptions) {
+        dispatch_async(dispatch_get_main_queue(), ^{
+            [weakself refreshPushOptions];
+        });
+    } failure:^(EMError *aError) {
+        
+    }];
 }
 
 - (void)refreshPushOptions
 {
-    EMPushNotificationOptions *options = [[EaseMob sharedInstance].chatManager pushNotificationOptions];
-    _nickName = options.nickname;
-    _pushDisplayStyle = options.displayStyle;
-    _noDisturbingStatus = options.noDisturbStatus;
-    if (_noDisturbingStatus != ePushNotificationNoDisturbStatusClose) {
-        _noDisturbingStart = options.noDisturbingStartH;
-        _noDisturbingEnd = options.noDisturbingEndH;
+    EMPushOptions *options = [[EMClient sharedClient] pushOptions];
+    self.nickName = options.nickname;
+    self.pushDisplayStyle = options.displayStyle;
+    self.noDisturbingStatus = options.noDisturbStatus;
+    if (self.noDisturbingStatus != EMPushNoDisturbStatusClose) {
+        self.noDisturbingStart = options.noDisturbingStartH;
+        self.noDisturbingEnd = options.noDisturbingEndH;
     }
     
-    BOOL isDisplayOn = _pushDisplayStyle == ePushNotificationDisplayStyle_simpleBanner ? NO : YES;
+    BOOL isDisplayOn = self.pushDisplayStyle == EMPushDisplayStyleSimpleBanner ? NO : YES;
+    
     [self.pushDisplaySwitch setOn:isDisplayOn animated:YES];
+    
+    [self.tableView reloadData];
 }
 
 @end

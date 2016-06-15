@@ -1,13 +1,17 @@
-//
-//  EditNicknameViewController.m
-//  ChatDemo-UI2.0
-//
-//  Created by EaseMob on 15/4/16.
-//  Copyright (c) 2015年 EaseMob. All rights reserved.
-//
+/************************************************************
+ *  * Hyphenate  
+ * __________________
+ * Copyright (C) 2016 Hyphenate Inc. All rights reserved.
+ *
+ * NOTICE: All information contained herein is, and remains
+ * the property of Hyphenate Inc.
+ * Dissemination of this information or reproduction of this material
+ * is strictly forbidden unless prior written permission is obtained
+ * from Hyphenate Inc.
+ */
 
 #import "EditNicknameViewController.h"
-
+#import "UserProfileManager.h"
 #define kTextFieldWidth 290.0
 #define kTextFieldHeight 40.0
 #define kButtonHeight 40.0
@@ -24,17 +28,33 @@
 
 @implementation EditNicknameViewController
 
-- (void)viewDidLoad {
+- (void)viewDidLoad
+{
     [super viewDidLoad];
+    
     self.title = NSLocalizedString(@"setting.editName", @"Edit NickName");
     
+    UIBarButtonItem *backBarButtonItem = [[UIBarButtonItem alloc] initWithImage:[UIImage imageNamed:@"back"]
+                                                                          style:UIBarButtonItemStylePlain
+                                                                         target:self.navigationController
+                                                                         action:@selector(popViewControllerAnimated:)];
+    self.navigationItem.leftBarButtonItem = backBarButtonItem;
+    
     self.view.backgroundColor = [UIColor whiteColor];
-    // Do any additional setup after loading the view.
+    
     [self setupTextField];
     [self setupButton];
     [self setupLabel];
     
     [self setupForDismissKeyboard];
+}
+
+- (void)viewWillAppear:(BOOL)animated
+{
+    [super viewWillAppear:animated];
+    
+    [[GAI sharedInstance].defaultTracker set:kGAIScreenName value:NSStringFromClass(self.class)];
+    [[GAI sharedInstance].defaultTracker send:[[GAIDictionaryBuilder createScreenView] build]];
 }
 
 - (void)didReceiveMemoryWarning {
@@ -71,8 +91,8 @@
 {
     _saveButton = [UIButton buttonWithType:UIButtonTypeCustom];
     _saveButton.frame = CGRectMake((CGRectGetWidth(self.view.bounds)-kTextFieldWidth)/2, CGRectGetMaxY(_nickTextField.frame) + 10.0, kTextFieldWidth, kButtonHeight);
-    [_saveButton setBackgroundColor:RGBACOLOR(0x00, 0xac, 0xff, 1)];
-    [_saveButton setTitle:NSLocalizedString(@"setting.saveName", @"Save Nickname") forState:UIControlStateNormal];
+    [_saveButton setBackgroundColor:[UIColor HIPrimaryColor]];
+    [_saveButton setTitle:NSLocalizedString(@"setting.saveName", @"Save") forState:UIControlStateNormal];
     [_saveButton addTarget:self action:@selector(doSave:) forControlEvents:UIControlEventTouchUpInside];
     [self.view addSubview:_saveButton];
 }
@@ -82,13 +102,14 @@
     _tipLabel = [[UILabel alloc] initWithFrame:CGRectMake((CGRectGetWidth(self.view.bounds)-kTextFieldWidth)/2, CGRectGetMaxY(_saveButton.frame) + 10.0, kTextFieldWidth, 60)];
     _tipLabel.textAlignment = NSTextAlignmentLeft;
     _tipLabel.font = [UIFont systemFontOfSize:14];
-    _tipLabel.text = NSLocalizedString(@"setting.edittips", @"After setting this nickname, chat with the iOS client demo project, iOS will display this nickname is not a EaseMob ID, if the other party to use the Android client this setting is not effective");
+    _tipLabel.text = NSLocalizedString(@"setting.edittips", @"After setting this nickname, chat with the iOS client demo project, iOS will display this nickname is not a Hyphenate ID, if the other party to use the Android client this setting is not effective");
     CGFloat height = 0;
     NSDictionary *attributes = @{NSFontAttributeName :[UIFont systemFontOfSize:14.0f]};
     CGRect rect = [_tipLabel.text boundingRectWithSize:CGSizeMake(kTextFieldWidth, MAXFLOAT)
-                                             options:NSStringDrawingUsesLineFragmentOrigin
-                                          attributes:attributes
-                                             context:nil];
+                                            options:NSStringDrawingUsesLineFragmentOrigin
+                                         attributes:attributes
+                                            context:nil];
+    
     height = CGRectGetHeight(rect);
     CGRect frame = _tipLabel.frame;
     frame.size.height = height;
@@ -102,8 +123,13 @@
 {
     if(_nickTextField.text.length > 0)
     {
-        //设置推送设置
-        [[EaseMob sharedInstance].chatManager setApnsNickname:_nickTextField.text];
+        [[EMClient sharedClient] asyncSetApnsNickname:_nickTextField.text success:^{
+            
+        } failure:^(EMError *aError) {
+            
+        }];
+        
+        [[UserProfileManager sharedInstance] updateUserProfileInBackground:@{kPARSE_HXUSER_NICKNAME:_nickTextField.text} completion:^(BOOL success, NSError *error){}];
         [self.navigationController popViewControllerAnimated:YES];
     } else {
         [EMAlertView showAlertWithTitle:NSLocalizedString(@"prompt", @"Prompt")
@@ -113,14 +139,5 @@
                       otherButtonTitles:nil];
     }
 }
-/*
-#pragma mark - Navigation
-
-// In a storyboard-based application, you will often want to do a little preparation before navigation
-- (void)prepareForSegue:(UIStoryboardSegue *)segue sender:(id)sender {
-    // Get the new view controller using [segue destinationViewController].
-    // Pass the selected object to the new view controller.
-}
-*/
 
 @end

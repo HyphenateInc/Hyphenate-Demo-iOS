@@ -1,13 +1,11 @@
 /************************************************************
-  *  * EaseMob CONFIDENTIAL 
+  *  * Hyphenate   
   * __________________ 
-  * Copyright (C) 2013-2014 EaseMob Technologies. All rights reserved. 
+  * Copyright (C) 2016 Hyphenate Inc. All rights reserved. 
   *  
   * NOTICE: All information contained herein is, and remains 
-  * the property of EaseMob Technologies.
-  * Dissemination of this information or reproduction of this material 
-  * is strictly forbidden unless prior written permission is obtained
-  * from EaseMob Technologies.
+  * the property of Hyphenate Inc.
+
   */
 
 #import "XHMessageTextView.h"
@@ -65,11 +63,6 @@
     [super setAttributedText:attributedText];
     [self setNeedsDisplay];
 }
-
-//- (void)setContentInset:(UIEdgeInsets)contentInset {
-//    [super setContentInset:contentInset];
-//    [self setNeedsDisplay];
-//}
 
 - (void)setFont:(UIFont *)font {
     [super setFont:font];
@@ -142,22 +135,15 @@
         
         [self.placeHolderTextColor set];
         
-        if (NSFoundationVersionNumber > NSFoundationVersionNumber_iOS_7_0) {
-            NSMutableParagraphStyle *paragraphStyle = [[NSMutableParagraphStyle alloc] init];
-            paragraphStyle.lineBreakMode = NSLineBreakByTruncatingTail;
-            paragraphStyle.alignment = self.textAlignment;
-            
-            [self.placeHolder drawInRect:placeHolderRect
-                          withAttributes:@{ NSFontAttributeName : self.font,
-                                            NSForegroundColorAttributeName : self.placeHolderTextColor,
-                                            NSParagraphStyleAttributeName : paragraphStyle }];
-        }
-        else {
-            [self.placeHolder drawInRect:placeHolderRect
-                                withFont:self.font
-                           lineBreakMode:NSLineBreakByTruncatingTail
-                               alignment:self.textAlignment];
-        }
+        NSMutableParagraphStyle *paragraphStyle = [[NSMutableParagraphStyle alloc] init];
+        paragraphStyle.lineBreakMode = NSLineBreakByTruncatingTail;
+        paragraphStyle.alignment = self.textAlignment;
+        
+        [self.placeHolder drawInRect:placeHolderRect
+                      withAttributes:@{ NSFontAttributeName : self.font,
+                                        NSForegroundColorAttributeName : self.placeHolderTextColor,
+                                        NSParagraphStyleAttributeName : paragraphStyle }];
+
     }
 }
 

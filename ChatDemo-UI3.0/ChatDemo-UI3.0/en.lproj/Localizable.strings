@@ -1,13 +1,13 @@
 /************************************************************
- *  * EaseMob CONFIDENTIAL
+ *  * Hyphenate  
  * __________________
- * Copyright (C) 2013-2014 EaseMob Technologies. All rights reserved.
+ * Copyright (C) 2016 Hyphenate Inc. All rights reserved.
  *
  * NOTICE: All information contained herein is, and remains
- * the property of EaseMob Technologies.
+ * the property of Hyphenate Inc.
  * Dissemination of this information or reproduction of this material
  * is strictly forbidden unless prior written permission is obtained
- * from EaseMob Technologies.
+ * from Hyphenate Inc.
  */
 
 //general
@@ -28,7 +28,7 @@
 "error" = "Error";
 "delete" = "Delete";
 "copy" = "Copy";
-"transpond" = "Transpond";
+"forward" = "Forward";
 "save" = "Save";
 "prompt" = "Prompt";
 "add" = "Add";
@@ -40,109 +40,105 @@
 "reject" = "Reject";
 "wait" = "Please wait...";
 
-"sendingApply" = "sending apply...";
-"acceptFail" = "accept failure";
-"rejectFail" = "reject failure";
-"transponding" = "transponding...";
-"transpondFail" = "transpond Fail";
+"sendingRequest" = "Sending request...";
+"requestAcceptFailure" = "Failed to accept request";
+"requestDeclineFailure" = "Failed to decline request";
+"forwarding" = "Forwarding...";
+"forwardFail" = "Failed to forward the message";
 "refreshData" = "Refresh data...";
-"loadData" = "Load data...";
-"loadDataFailed" = "Load more failed";
-"saySomething" = "Say somthing";
+"loadData" = "Loading data...";
+"loadDataFailed" = "Failed to Load more data";
+"greetingMessage" = "Say hello!";
 "searchResults" = "The search results";
 "doneWithCount" = "Done(%i)";
-"sureToDelete" = "please make sure to delete";
-"receiveCmd" = "receive cmd message";
-"receiveMessage" = "you have a new message";
-"loginAtOtherDevice" = "your login account has been logged in other places";
-"loginUserRemoveFromServer" = "your account has been removed from the server side";
-"deleteFailed" = "Delete failed:%@";
-"notFound" = "Can't found";
-"noMore" = "No more data";
+"confirmDeleteMessage" = "Messages will not be able to be retrived";
+"receiveCmd" = "Receive command message";
+"receiveMessage" = "You have a new message";
+"loggedIntoAnotherDevice" = "Your login account has been logged in other places";
+"loginUserRemoveFromServer" = "Your account has been removed from the server side";
+"deleteFailed" = "Failed to delete: %@";
+"notFound" = "No found";
+"noMoreData" = "No more data to show";
 "hasRead" = "Read";
 
 //app
-"AppName" = "EaseMobDemo";
+"AppName" = "Hyphenate Demo";
 
-//error des
+//error description
 "error.connectServerFail" = "Connect to the server failed!";
-"error.connectServerTimeout" = "Connect to the server timed out!";
+"error.connectServerTimeout" = "Connection to the server timed out!";
 "error.connectNetworkFail" = "No network connection!";
 "error.notFound" = "File path not exist";
 "error.initPlayerFail" = "Failed to initialize AVAudioPlayer!";
 "error.palyFail" = "Play failure!";
 "error.initRecorderFail" = "Failed to initialize AVAudioRecorder";
 "error.initRecorderFail" = "File format conversion failed";
-"error.recordStoping" = "Record voice is not over yet";
+"error.recordStoping" = "Audio recording is still in progress";
 "error.recordNotBegin" = "Recording has not yet begun";
 "error.recordTooShort" = "Recording time is too short";
+"error.save" = "Failed to save";
 
 //login
-"login.beginAutoLogin" = "Start automatic login...";
-"login.endAutoLogin" = "End automatic login...";
-"login.errorAutoLogin" = "Automatic logon failure.";
-"login.nameNotSupportZh" = "Name does not support Chinese";
-"login.ongoing" = "Is Login...";
+"login.errorAutoLogin" = "Auto-login failed, please try to login again";
+"login.nameNotSupportZh" = "Does not support Chinese characters";
+"login.inProgress" = "Login...";
 "login.fail" = "Logon failure";
 "login.inputNameAndPswd" = "Please enter username and password";
 "login.inputApnsNickname" = "Please enter nickname for apns";
 
 //register
-"register.ongoing" = "Is to register...";
+"register.ongoing" = "Registering...";
 "register.fail" = "Registration failed";
-"register.success" = "Registered successfully, please log in";
+"register.success" = "Register successfully";
 "register.repeat" = "You registered user already exists!";
 "register.confirmPassword" = "The two input password does not match, please input again";
 
 //apns
-"apns.failToRegisterApns" = "Fail to register apns";
-"apns.failToBindDeviceToken" = "Fail to bind device token";
-"apns.content" = "Apns content";
+"apns.failToRegisterApns" = "Failed to register APNs";
+"apns.failToBindDeviceToken" = "Failed to bind device token";
+"apns.content" = "APNs content";
 
 //friend
-"friend.add" = "add friend";
-"friend.somebodyAddWithName" = "%@ add you as a friend";
-"friend.beRefusedToAdd" = "you are shameless refused by '%@'";
-"friend.inputNameToSearch" = "input to find friends";
-"friend.repeat" = "'%@'has been your friend!";
-"friend.repeatApply" = "you have send fridend request to '%@'!";
+"friend.add" = "Add friend";
+"friend.somebodyAddWithName" = "%@ added you as a friend";
+"friend.inputNameToSearch" = "Enter friend's username";
+"friend.repeat" = "'%@' is already your friend!";
+"friend.repeatApply" = "you already sent fridend request to '%@'!";
 "friend.notAddSelf" = "can't add yourself as a friend";
-"friend.repeatInvite" = "%@ have sent the application to you";
-"friend.somebodyInvite" = "%@ invite you as a friend";
-"friend.sendApply" = "sending application...";
-"friend.sendApplyFail" = "send application fails, please operate again";
-"friend.sendApplySuccess" = "send successfully";
+"friend.repeatInvite" = "%@ sent an invitation to you";
+"friend.somebodyInvite" = "%@ sent you a friend request";
+"friend.sendFriendRequest" = "sending friend request...";
+"friend.sendFriendRequestFail" = "send friend request fails, please try again";
+"friend.sendFriendRequestSuccess" = "Friend request sent";
 "friend.black" = "Black List";
 "friend.notChatSelf" = "can't talk to yourself";
 "friend.notDeleteSelf" = "can't delete self";
-"friend.block" = "Move to blacklist";
+"friend.block" = "block";
 
 //group
-"group.somebodyInvite" = "%@ invite you to join group \'%@\'";
-"group.applyJoin" = "%@ apply to join groups\'%@\'";
-"group.applyJoinWithName" = "%@ apply to join groups\'%@\'：%@";
-"group.sendApplyFail" = "send application failure:%@\nreason：%@";
-"group.beRefusedToJoin" = "be refused to join the group\'%@\'";
-"group.beKicked" = "you have been kicked out from the group of \'%@\'";
+"group.somebodyInvite" = "%@ invites you to join group \'%@\'";
+"group.joinRequest" = "%@ requested to join the group\'%@\'";
+"group.joinRequestWithName" = "%@ requested to join the group\'%@\'：%@";
+"group.joinRequestDeclined" = "Request to join the group declined\'%@\'";
 "group.agreedAndJoined" = "agreed and joined the group of \'%@\'";
 "group.join" = "join the group";
 "group.joined" = "joined";
 "group.owner" = "Owner";
 "group.describe" = "Describe";
 "group.join.ongoing" = "join the group...";
-"group.join.fail" = "again failed to join the group, please";
-"group.sendingApply" = "send group of application...";
-"group.sendApplyRepeat" = "application has been sent";
+"group.join.fail" = "Failed to join the group";
+"group.sendingRequest" = "Sending group request...";
+"group.sendRequestRepeat" = "Request to join the group already sent";
 
 //Create Group
-"group.create.addOccupant" = "add members";
-"group.create.inputName" = "please enter the group name";
-"group.create.inputDescribe" = "please enter a group description";
-"group.create.groupPermission" = "group permission";
+"group.create.addOccupant" = "add member";
+"group.create.inputName" = "Enter a group name";
+"group.create.inputDescribe" = "Enter a group description";
+"group.create.groupPermission" = "Group permission";
 "group.create.private" = "private group";
 "group.create.occupantPermissions" = "members invite permissions";
 "group.create.allowedOccupantInvite" = "allows group members to invite others";
-"group.create.unallowedOccupantInvite" = "don't allow group members to invite others";
+"group.create.unallowedOccupantInvite" = "Only group owner can invite new member";
 "group.create.ongoing" = "create a group...";
 "group.create.success" = "create group success";
 "group.create.fail" = "Failed to create a group, please operate again";
@@ -155,35 +151,35 @@
 "group.maxUserCount" = "Group members more than the upper limit";
 
 //Group Bans
-"group.ban.removing" = "members are removing from the blacklist...";
+"group.ban.removing" = "Members are removing from the blacklist...";
 "group.ban.adding" = "Adding to black list...";
-"group.ban.fetching" = "getting group blacklist...";
-"group.ban.fetchFail" = "fail to get blacklist: %@";
+"group.ban.fetching" = "Getting group blacklist...";
+"group.ban.fetchFail" = "Failed to get blacklist: %@";
 
 //Group Detail
-"group.removeAllMessages" = "clear all messages";
-"group.destroy" = "dismiss group";
-"group.leave" = "quit the group";
-"group.id" = "groupID";
-"group.occupantCount" = "members count";
-"group.addingOccupant" = "add a group member...";
-"group.fetchInfoFail" = "failed to get the group details, please try again later";
-"group.removingOccupant" = "deleting member...";
-"group.destroyFail" = "dessolve group failed";
-"group.leaveFail" = "exit the group failure";
-"group.addOccupantFail" = "Failed to add group member, please try again later";
+"group.removeAllMessages" = "Clear All Messages";
+"group.destroy" = "Dismiss the Group";
+"group.leave" = "Leave the group";
+"group.id" = "Group ID";
+"group.occupantCount" = "Members Count";
+"group.addingOccupant" = "Add a group member...";
+"group.fetchInfoFail" = "Failed to get the group details, please try again";
+"group.removingOccupant" = "Deleting member...";
+"group.destroyFail" = "Failed to dismiss the group";
+"group.leaveFail" = "Failed to leave the group";
+"group.addOccupantFail" = "Failed to add group member, please try again";
 
 //Group Setting
-"group.setting.receiveAndPrompt" = "recv and notification group messages";
-"group.setting.receiveAndUnprompt" = "receive message without apns";
-"group.setting.blockMessage" = "block message";
+"group.setting.receiveAndPrompt" = "Push Service ON";
+"group.setting.receiveAndUnprompt" = "Push Service OFF";
+"group.setting.blockMessage" = "Block Messages";
 "group.setting.save" = "set properties";
 "group.setting.success" = "set success";
 "group.setting.fail" = "set failure";
-"group.setting.subject" = "Please input group name";
+"group.setting.subject" = "Please enter a group name";
 
 //Chatroom detail
-"chatroom.somebodyInvite" = "%@ invite you to join chatroom \'%@\'";
+"chatroom.somebodyInvite" = "%@ invites you to join chatroom \'%@\'";
 "chatroom.id" = "chatroomId";
 "chatroom.occupantCount" = "members count";
 "chatroom.description" = "description";
@@ -195,32 +191,41 @@
 "chatroom.remove" = "be removed from chatroom\'%@\'";
 
 //call
-"call.initFailed"="Establish call failure";
+"call.initFailed"="Failed to establish the call";
 "call.waiting"="Waiting to answer...";
 "call.connecting"="Connecting...";
 "call.silence"="Silence";
 "call.speaker"="Speaker";
 "call.reject"="Reject";
 "call.answer"="Answer";
-"call.hangup"="Hangup";
-"call.connectFailed"="Connect failed";
+"call.hangup"="End Call";
+"call.established"="Call connection established";
+"call.autoHangup"="No response and Hang up";
+"call.noResponse"="NO response";
+"call.connectFailed"="Call connect failed";
 "call.failed"="Call failed";
 "call.suspended"="Call has been suspended";
-"call.over"="Call end";
-"call.cancel"="Cancel the call";
+"call.over"="Call ended";
 "call.rejected"="Reject the call";
-"call.in"="In the call...";
-"call.speak"="Can speak...";
-"call.speak.relay"="Can speak...Relay";
-"call.speak.direct"="Can speak...Direct";
+"call.inProgress"="In the call...";
+"call.speak.relay"="Can speak... Relay connection";
+"call.speak.direct"="Can speak... Direct connection";
 "call.init"="Is init the call...";
 "call.dealloc"="Is hanging up the call...";
 "call.videoSize"="Width/Height: ";
-"call.videoTimedelay"="Timedelay: ";
+"call.videoTimedelay"="Time delay: ";
 "call.videoFramerate"="Framerate: ";
-"call.videoLostcnt"="Lostcnt: ";
+"call.videoLostcnt"="Lost cnt: ";
 "call.videoLocalBitrate"="Local Bitrate: ";
 "call.videoRemoteBitrate"="Remote Bitrate: ";
+"call.record" = "Record";
+"call.stopRecording" = "Stop Recording";
+"call.startVideo" = "Start the video";
+"call.pauseVideo" = "Pause the video";
+"call.startAudio" = "Start the audio";
+"call.pauseAudio" = "Pause the audio";
+"call.noDate" = "No data to show";
+"call.networkUnstable" = "Unstable network";
 
 //message
 "message.image" = "image";
@@ -236,10 +241,8 @@
 "message.toolBar.inputPlaceHolder" = "input a new message";
 "message.toolBar.record.upCancel" = "slide up to cancel sending";
 "message.toolBar.record.loosenCancel" = "release the fingers, to cancel sending";
-"message.toolBar.record.touch" = "hold down to talk";
-"message.toolBar.record.send" = "loosen to send";
-"DXMessageToolBarDelegate.record" = "hold down to talk";
-"DXMessageToolBarDelegate.send" = "loosen to send";
+"message.toolBar.record.touch" = "Hold to Record Audio";
+"message.toolBar.record.send" = "Release to Send";
 
 "message.downloadingAudio" = "downloading voice, click later";
 "message.downloadingVideo" = "downloading video...";
@@ -264,7 +267,7 @@
 "reconnection.ongoing" = "reconnecting...";
 "reconnection.fail" = "reconnection failure, later will continue to reconnection";
 "reconnection.success" = "reconnection successful！";
-"reconnection.wait" = "continue to wait";
+"reconnection.wait" = "Wait for connection";
 
 //location
 "location.messageType" = "location message";
@@ -272,66 +275,71 @@
 "location.ongoning" = "locating...";
 
 //title
-"title.conversation" = "Conversations";
-"title.addressbook" = "AddressBook";
-"title.setting" = "Setting";
+"title.conversation" = "Chats";
+"title.addressbook" = "Contacts";
+"title.setting" = "Settings";
 "title.group" = "Group";
 "title.chatroom" = "Chatroom";
 "title.mychatroom" = "My Chatroom";
-"title.chooseContact" = "select the contact";
+"title.chooseContact" = "Select the contact";
 "title.debug" = "Debug";
-"title.groupBlackList" = "Group black list";
+"title.groupBlackList" = "Group's Blacklist";
 "title.createGroup" = "Create a group";
 "title.publicGroup" = "Public group";
 "title.groupSetting" = "Group Setting";
-"title.apnsSetting" = "Apns Settings";
+"title.apnsSetting" = "Push Notification";
 "title.buddyBlock" = "Black List";
-"title.apply" = "Application and notification";
+"title.apply" = "Requests and Notifications";
 "title.groupApply" = "Group Notification";
-"title.groupSubjectChanging" = "Change group name";
-"title.chatroomlist" = "Chatroom List";
+"title.groupSubjectChanging" = "Change Group Name";
+"title.groupSearchMessage" = "Search Message from History";
 "title.robotlist" = "Robot List";
 "title.profile" = "Profile";
 
 //setting
-"setting.autoLogin" = "automatic login";
-"setting.loginUser" = "log out(%@)";
-"setting.logoutOngoing" = "loging out...";
+"setting.autoLogin" = "Automatic Login";
+"setting.loginUser" = "Logout as (%@)";
+"setting.logoutInProgress" = "Logging out...";
 
-"setting.notDisturb" = "No disturbing";
-"setting.showDetail" = "display message details in apns";
-"setting.open" = "open";
-"setting.nightOpen" = "only open at night (22:00 - 7:00)";
-"setting.close" = "close";
+"setting.notDisturb" = "Do Not Disturb";
+"setting.showDetail" = "Show Message Details on Lock Screen";
+"setting.open" = "On";
+"setting.nightOpen" = "On only from 10pm to 7am.";
+"setting.close" = "Off";
 "setting.sureNotDisturb" = "this setting will cause all day in the don't disturb mode, will no longer receive push messages. Whether or not to continue?";
 
-"setting.uploadLog" = "upload run log";
 "setting.sdkVersion" = "SDK version";
 "setting.uploading" = "uploading...";
 "setting.uploadSuccess" = "uploaded successfully";
 "setting.uploadFail" = "uploaded failed";
 "setting.editName" = "Edit NickName";
-"setting.inputName" = "Please input nickname";
-"setting.saveName" = "Save Nickname";
+"setting.inputName" = "Please enter a nickname";
+"setting.saveName" = "Save";
 "setting.namenotempty" = "Name cannot be empty";
-"setting.personalInfo" = "Personal Information";
+"setting.personalInfo" = "User Profile";
 "setting.setBitrate" = "Set Bitrate";
 "setting.setBitrateTips" = "Set Bitrate should be 150-1000";
-"setting.personalInfoUpload" = "HeadImage";
-"setting.edittips" = "After setting this nickname, chat with the iOS client demo project, iOS will display this nickname is not a EaseMob ID, if the other party to use the Android client this setting is not effective";
-"setting.iospushname" = "iOS push nickname";
+"setting.personalInfoUpload" = "Profile Image";
+"setting.edittips" = "iOS push service will display the nickname instead of Hyphenate ID";
+"setting.iospushname" = "APNs Display Name";
 "setting.useIp" = "Use IP";
-"setting.deleteConWhenLeave" = "Delete conversation when leave a group";
-"setting.showCallInfo" = "Show video call info";
-"setting.microphoneNoAuthority" = "No microphone permissions";
+"setting.deleteConWhenLeave" = "Delete Messages When Leave Group";
+"setting.showCallInfo" = "Show Video Call Info";
+"setting.microphoneNoAuthority" = "No microphone access permission";
 "setting.microphoneAuthority" = "Please open in \"Setting\"-\"Privacy\"-\"Microphone\".";
-"setting.cameraNoAuthority" = "No camera permissions";
+"setting.cameraNoAuthority" = "No camera access permission";
 "setting.cameraAuthority" = "Please open in \"Setting\"-\"Privacy\"-\"Camera\".";
 "setting.cameraUpload" = "Take photo";
 "setting.localUpload" = "Images";
 "setting.profileNickname" = "NickName";
 "setting.saving" = "saving...";
 "setting.saveFailed" = "save failed";
+
+//search
+"search.sender" = "Sender:";
+"search.sentTime" = "Sent time:";
+"search.loadMore" = "Load more";
+"search.emoji" = "Emoji";
 
 //NSDateCategory
 "NSDateCategory.text1" = "one minute";

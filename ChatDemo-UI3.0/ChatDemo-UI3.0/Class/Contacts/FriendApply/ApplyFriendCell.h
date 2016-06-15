@@ -1,13 +1,11 @@
 /************************************************************
-  *  * EaseMob CONFIDENTIAL 
+  *  * Hyphenate   
   * __________________ 
-  * Copyright (C) 2013-2014 EaseMob Technologies. All rights reserved. 
+  * Copyright (C) 2016 Hyphenate Inc. All rights reserved. 
   *  
   * NOTICE: All information contained herein is, and remains 
-  * the property of EaseMob Technologies.
-  * Dissemination of this information or reproduction of this material 
-  * is strictly forbidden unless prior written permission is obtained
-  * from EaseMob Technologies.
+  * the property of Hyphenate Inc.
+
   */
 
 #import <UIKit/UIKit.h>
@@ -20,11 +18,11 @@
 
 @property (strong, nonatomic) NSIndexPath *indexPath;
 
-@property (strong, nonatomic) UIImageView *headerImageView;//头像
-@property (strong, nonatomic) UILabel *titleLabel;//标题
-@property (strong, nonatomic) UILabel *contentLabel;//详情
-@property (strong, nonatomic) UIButton *addButton;//接受按钮
-@property (strong, nonatomic) UIButton *refuseButton;//拒绝按钮
+@property (strong, nonatomic) UIImageView *headerImageView;
+@property (strong, nonatomic) UILabel *titleLabel;
+@property (strong, nonatomic) UILabel *contentLabel;
+@property (strong, nonatomic) UIButton *addButton;
+@property (strong, nonatomic) UIButton *refuseButton;
 @property (strong, nonatomic) UIView *bottomLineView;
 
 + (CGFloat)heightWithContent:(NSString *)content;

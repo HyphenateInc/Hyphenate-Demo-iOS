@@ -1,13 +1,11 @@
 /************************************************************
-  *  * EaseMob CONFIDENTIAL 
+  *  * Hyphenate   
   * __________________ 
-  * Copyright (C) 2013-2014 EaseMob Technologies. All rights reserved. 
+  * Copyright (C) 2016 Hyphenate Inc. All rights reserved. 
   *  
   * NOTICE: All information contained herein is, and remains 
-  * the property of EaseMob Technologies.
-  * Dissemination of this information or reproduction of this material 
-  * is strictly forbidden unless prior written permission is obtained
-  * from EaseMob Technologies.
+  * the property of Hyphenate Inc.
+
   */
 
 #import "ApplyFriendCell.h"
@@ -39,25 +37,27 @@
         [self.contentView addSubview:_contentLabel];
         
         _addButton = [[UIButton alloc] initWithFrame:CGRectMake(self.frame.size.width - 60, 0, 50, 30)];
-        [_addButton setBackgroundColor:[UIColor colorWithRed:10 / 255.0 green:82 / 255.0 blue:104 / 255.0 alpha:1.0]];
+        [_addButton setBackgroundColor:[UIColor HIPrimaryColor]];
         [_addButton setTitle:NSLocalizedString(@"accept", @"Accept") forState:UIControlStateNormal];
         _addButton.clipsToBounds = YES;
         [_addButton setTitleColor:[UIColor whiteColor] forState:UIControlStateNormal];
         _addButton.titleLabel.font = [UIFont systemFontOfSize:14.0];
         [_addButton addTarget:self action:@selector(addFriend) forControlEvents:UIControlEventTouchUpInside];
+        _addButton.layer.cornerRadius = 5.0f;
         [self.contentView addSubview:_addButton];
         
         _refuseButton = [[UIButton alloc] initWithFrame:CGRectMake(self.frame.size.width - 120, 0, 50, 30)];
-        [_refuseButton setBackgroundColor:[UIColor colorWithRed:87 / 255.0 green:186 / 255.0 blue:205 / 255.0 alpha:1.0]];
+        [_refuseButton setBackgroundColor:[UIColor HIRedColor]];
         [_refuseButton setTitle:NSLocalizedString(@"reject", @"Reject") forState:UIControlStateNormal];
         _refuseButton.clipsToBounds = YES;
         [_refuseButton setTitleColor:[UIColor whiteColor] forState:UIControlStateNormal];
         _refuseButton.titleLabel.font = [UIFont systemFontOfSize:14.0];
         [_refuseButton addTarget:self action:@selector(refuseFriend) forControlEvents:UIControlEventTouchUpInside];
+        _refuseButton.layer.cornerRadius = 5.0f;
         [self.contentView addSubview:_refuseButton];
         
         _bottomLineView = [[UIView alloc] init];
-        _bottomLineView.backgroundColor = [UIColor colorWithRed:207 / 255.0 green:210 /255.0 blue:213 / 255.0 alpha:0.7];
+        _bottomLineView.backgroundColor = [UIColor HIPrimaryColor];
         [self.contentView addSubview:_bottomLineView];
     }
     return self;
@@ -101,9 +101,13 @@
     if (!content || content.length == 0) {
         return 60;
     }
-    else{
-        CGSize size = [content sizeWithFont:[UIFont systemFontOfSize:14.0] constrainedToSize:CGSizeMake(320 - 60 - 120, CGFLOAT_MAX) lineBreakMode:NSLineBreakByCharWrapping];
-        return size.height > 20 ? (size.height + 40) : 60;
+    else {
+        NSDictionary *attributes = @{NSFontAttributeName :[UIFont systemFontOfSize:14.0f]};
+        CGRect rect = [content boundingRectWithSize:CGSizeMake(320 - 60 - 120, CGFLOAT_MAX)
+                                            options:NSStringDrawingUsesLineFragmentOrigin
+                                         attributes:attributes
+                                            context:nil];
+        return rect.size.height > 20 ? (rect.size.height + 40) : 60;
     }
 }
 

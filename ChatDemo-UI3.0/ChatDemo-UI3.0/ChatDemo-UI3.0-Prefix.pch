@@ -14,14 +14,17 @@
     #import <UIKit/UIKit.h>
     #import <Foundation/Foundation.h>
 
+    #import <Google/Analytics.h>
+
     #import "ChatDemoUIDefine.h"
     #import "EMAlertView.h"
     #import "TTGlobalUICommon.h"
-//    #import "UIViewController+HUD.h"
-    #import "UIViewController+DismissKeyboard.h"
-    #import "NSString+Valid.h"
+
+    #import "EMSDKFull.h"
     #import "EaseUI.h"
 
-    #import "EaseMob.h"
+    #import "UIColor+Hyphenate.h"
+
+#define DEMO_CALL 1
 
 #endif

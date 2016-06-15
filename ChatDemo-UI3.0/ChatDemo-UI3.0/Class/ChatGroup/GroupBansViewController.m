@@ -1,13 +1,13 @@
 /************************************************************
- *  * EaseMob CONFIDENTIAL
+ *  * Hyphenate  
  * __________________
- * Copyright (C) 2013-2014 EaseMob Technologies. All rights reserved.
+ * Copyright (C) 2016 Hyphenate Inc. All rights reserved.
  *
  * NOTICE: All information contained herein is, and remains
- * the property of EaseMob Technologies.
+ * the property of Hyphenate Inc.
  * Dissemination of this information or reproduction of this material
  * is strictly forbidden unless prior written permission is obtained
- * from EaseMob Technologies.
+ * from Hyphenate Inc.
  */
 
 #import "GroupBansViewController.h"
@@ -18,61 +18,71 @@
 #define kColOfRow 5
 #define kContactSize 60
 
-@interface GroupBansViewController ()<IChatManagerDelegate>
-{
-    BOOL _isEditing;
-}
+@interface GroupBansViewController ()<EMGroupManagerDelegate>
 
 @property (strong, nonatomic) EMGroup *group;
 @property (strong, nonatomic) UIScrollView *scrollView;
 @property (strong, nonatomic) UILongPressGestureRecognizer *longPress;
 @property (nonatomic) BOOL isUpdate;
+@property (nonatomic) BOOL isEditing;
 
 @end
 
 @implementation GroupBansViewController
 
-@synthesize group = _group;
 @synthesize scrollView = _scrollView;
 @synthesize longPress = _longPress;
-@synthesize isUpdate = _isUpdate;
 
 - (instancetype)initWithGroup:(EMGroup *)group
 {
     self = [self init];
+    
     if (self) {
-        _group = group;
-        _isEditing = NO;
-        _isUpdate = NO;
+        
+        self.group = group;
+        self.isEditing = NO;
+        self.isUpdate = NO;
+        
         self.view.backgroundColor = [UIColor whiteColor];
     }
     
     return self;
 }
 
-- (void)viewDidLoad {
+- (void)viewDidLoad
+{
     [super viewDidLoad];
-    // Do any additional setup after loading the view.
-    self.title = NSLocalizedString(@"title.groupBlackList", @"Group black list");
+
+    self.title = NSLocalizedString(@"title.groupBlackList", @"Group's Blacklist");
     
-    UIButton *backButton = [[UIButton alloc] initWithFrame:CGRectMake(0, 0, 44, 44)];
-    [backButton setImage:[UIImage imageNamed:@"back.png"] forState:UIControlStateNormal];
-    [backButton addTarget:self action:@selector(back) forControlEvents:UIControlEventTouchUpInside];
-    UIBarButtonItem *backItem = [[UIBarButtonItem alloc] initWithCustomView:backButton];
-    [self.navigationItem setLeftBarButtonItem:backItem];
+    UIBarButtonItem *backBarButtonItem = [[UIBarButtonItem alloc] initWithImage:[UIImage imageNamed:@"back"]
+                                                                          style:UIBarButtonItemStylePlain
+                                                                         target:self
+                                                                         action:@selector(backAction)];
+    self.navigationItem.leftBarButtonItem = backBarButtonItem;
     
     UITapGestureRecognizer *tap = [[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(tapView:)];
     tap.cancelsTouchesInView = NO;
     [self.view addGestureRecognizer:tap];
     
     [self.view addSubview:self.scrollView];
+    
     [self fetchGroupBans];
+}
+
+- (void)viewWillAppear:(BOOL)animated
+{
+    [super viewWillAppear:animated];
+    
+    [[GAI sharedInstance].defaultTracker set:kGAIScreenName value:NSStringFromClass(self.class)];
+    [[GAI sharedInstance].defaultTracker send:[[GAIDictionaryBuilder createScreenView] build]];
 }
 
 - (void)didReceiveMemoryWarning {
     [super didReceiveMemoryWarning];
     // Dispose of any resources that can be recreated.
 }
+
 
 #pragma mark - getter
 
@@ -93,9 +103,9 @@
 
 #pragma mark - action
 
-- (void)back
+- (void)backAction
 {
-    if (_isUpdate) {
+    if (self.isUpdate) {
         [[NSNotificationCenter defaultCenter] postNotificationName:@"GroupBansChanged" object:nil];
     }
     
@@ -104,11 +114,12 @@
 
 - (void)tapView:(UITapGestureRecognizer *)tap
 {
-    if (tap.state == UIGestureRecognizerStateEnded)
-    {
-        if (_isEditing) {
+    if (tap.state == UIGestureRecognizerStateEnded) {
+        
+        if (self.isEditing) {
+        
             [self setScrollViewEditing:NO];
-            _isEditing = NO;
+            self.isEditing = NO;
         }
     }
 }
@@ -117,17 +128,16 @@
 {
     if (longPress.state == UIGestureRecognizerStateBegan)
     {
-        if (!_isEditing) {
+        if (!self.isEditing) {
             [self setScrollViewEditing:YES];
-            _isEditing = YES;
+            self.isEditing = YES;
         }
     }
 }
 
 - (void)setScrollViewEditing:(BOOL)isEditing
 {
-    NSDictionary *loginInfo = [[[EaseMob sharedInstance] chatManager] loginInfo];
-    NSString *loginUsername = [loginInfo objectForKey:kSDKUsername];
+    NSString *loginUsername = [[EMClient sharedClient] currentUsername];
     
     for (ContactView *contactView in self.scrollView.subviews)
     {
@@ -146,7 +156,7 @@
 - (void)refreshScrollView
 {
     [self.scrollView.subviews makeObjectsPerformSelector:@selector(removeFromSuperview)];
-//    [self.scrollView removeGestureRecognizer:_longPress];
+    //    [self.scrollView removeGestureRecognizer:_longPress];
     
     int tmp = (int)([_group.bans count] + 1) % kColOfRow;
     int row = (int)([_group.bans count] + 1) / kColOfRow;
@@ -159,8 +169,7 @@
         return;
     }
     
-    NSDictionary *loginInfo = [[[EaseMob sharedInstance] chatManager] loginInfo];
-    NSString *loginUsername = [loginInfo objectForKey:kSDKUsername];
+    NSString *loginUsername = [[EMClient sharedClient] currentUsername];
     
     int i = 0;
     int j = 0;
@@ -182,16 +191,14 @@
                     weakSelf.isUpdate = YES;
                     [weakSelf showHudInView:weakSelf.view hint:NSLocalizedString(@"group.ban.removing", @"members are removing from the blacklist...")];
                     NSArray *occupants = [NSArray arrayWithObject:[weakSelf.group.bans objectAtIndex:index]];
-                    [[EaseMob sharedInstance].chatManager asyncUnblockOccupants:occupants forGroup:weakSelf.group.groupId completion:^(EMGroup *group, EMError *error) {
+                    [[EMClient sharedClient].groupManager asyncUnblockOccupants:occupants forGroup:self.group.groupId success:^(EMGroup *aGroup) {
                         [weakSelf hideHud];
-                        if (!error) {
-                            weakSelf.group = group;
-                            [weakSelf refreshScrollView];
-                        }
-                        else{
-                            [weakSelf showHint:error.description];
-                        }
-                    } onQueue:nil];
+                        weakSelf.group = aGroup;
+                        [weakSelf refreshScrollView];
+                    } failure:^(EMError *aError) {
+                        [weakSelf hideHud];
+                        [weakSelf showHint:aError.errorDescription];
+                    }];
                 }];
                 
                 [self.scrollView addSubview:contactView];
@@ -204,16 +211,14 @@
 {
     __weak typeof(self) weakSelf = self;
     [self showHudInView:weakSelf.view hint:NSLocalizedString(@"group.ban.fetching", @"getting group blacklist...")];
-    [[EaseMob sharedInstance].chatManager asyncFetchGroupBansList:_group.groupId completion:^(NSArray *groupBans, EMError *error) {
+    [[EMClient sharedClient].groupManager asyncFetchGroupBansList:self.group.groupId success:^(NSArray *aList) {
         [weakSelf hideHud];
-        if (!error) {
-            [weakSelf refreshScrollView];
-        }
-        else{
-            NSString *errorStr = [NSString stringWithFormat:NSLocalizedString(@"group.ban.fetchFail", @"fail to get blacklist: %@"), error.description];
-            [weakSelf showHint:errorStr];
-        }
-    } onQueue:nil];
+        [weakSelf refreshScrollView];
+    } failure:^(EMError *aError) {
+        [weakSelf hideHud];
+        NSString *errorStr = [NSString stringWithFormat:NSLocalizedString(@"group.ban.fetchFail", @"fail to get blacklist: %@"), aError.errorDescription];
+        [weakSelf showHint:errorStr];
+    }];
 }
 
 @end

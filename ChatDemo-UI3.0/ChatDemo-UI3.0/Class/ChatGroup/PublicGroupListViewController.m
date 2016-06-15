@@ -1,13 +1,11 @@
 /************************************************************
-  *  * EaseMob CONFIDENTIAL 
+  *  * Hyphenate   
   * __________________ 
-  * Copyright (C) 2013-2014 EaseMob Technologies. All rights reserved. 
+  * Copyright (C) 2016 Hyphenate Inc. All rights reserved. 
   *  
   * NOTICE: All information contained herein is, and remains 
-  * the property of EaseMob Technologies.
-  * Dissemination of this information or reproduction of this material 
-  * is strictly forbidden unless prior written permission is obtained
-  * from EaseMob Technologies.
+  * the property of Hyphenate Inc.
+
   */
 
 #import "PublicGroupListViewController.h"
@@ -46,7 +44,7 @@ typedef NS_ENUM(NSInteger, GettingMoreFooterViewState){
         
         _label = [[UILabel alloc] init];
         _label.textAlignment = NSTextAlignmentCenter;
-        _label.text = NSLocalizedString(@"noMore", @"No more data");
+        _label.text = NSLocalizedString(@"noMoreData", @"No more data");
         _label.hidden = YES;
         [self addSubview:_label];
         
@@ -86,7 +84,7 @@ typedef NS_ENUM(NSInteger, GettingMoreFooterViewState){
         case eGettingMoreFooterViewStateComplete:
             _activity.hidden = YES;
             _label.hidden = NO;
-            _label.text = NSLocalizedString(@"noMore", @"No more data");
+            _label.text = NSLocalizedString(@"noMoreData", @"No more data");
             break;
         case eGettingMoreFooterViewStateFailed:
             _activity.hidden = YES;
@@ -146,13 +144,21 @@ typedef NS_ENUM(NSInteger, GettingMoreFooterViewState){
     [self.tableView addSubview:self.slimeView];
     [self searchController];
     
-    UIButton *backButton = [[UIButton alloc] initWithFrame:CGRectMake(0, 0, 44, 44)];
-    [backButton setImage:[UIImage imageNamed:@"back.png"] forState:UIControlStateNormal];
-    [backButton addTarget:self.navigationController action:@selector(popViewControllerAnimated:) forControlEvents:UIControlEventTouchUpInside];
-    UIBarButtonItem *backItem = [[UIBarButtonItem alloc] initWithCustomView:backButton];
-    [self.navigationItem setLeftBarButtonItem:backItem];
+    UIBarButtonItem *backBarButtonItem = [[UIBarButtonItem alloc] initWithImage:[UIImage imageNamed:@"back"]
+                                                                          style:UIBarButtonItemStylePlain
+                                                                         target:self.navigationController
+                                                                         action:@selector(popViewControllerAnimated:)];
+    self.navigationItem.leftBarButtonItem = backBarButtonItem;
 
     [self reloadDataSource];
+}
+
+- (void)viewWillAppear:(BOOL)animated
+{
+    [super viewWillAppear:animated];
+    
+    [[GAI sharedInstance].defaultTracker set:kGAIScreenName value:NSStringFromClass(self.class)];
+    [[GAI sharedInstance].defaultTracker send:[[GAIDictionaryBuilder createScreenView] build]];
 }
 
 - (void)didReceiveMemoryWarning
@@ -163,7 +169,6 @@ typedef NS_ENUM(NSInteger, GettingMoreFooterViewState){
 
 - (void)dealloc
 {
-    //由于可能有大量公有群在退出页面时需要释放，所以把释放操作放到其它线程避免卡UI
     NSMutableArray *publicGroups = [self.dataSource mutableCopy];
     [self.dataSource removeAllObjects];
     dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), ^{
@@ -206,7 +211,7 @@ typedef NS_ENUM(NSInteger, GettingMoreFooterViewState){
         _searchBar = [[EMSearchBar alloc] initWithFrame: CGRectMake(0, 0, self.view.frame.size.width, 44)];
         _searchBar.delegate = self;
         _searchBar.placeholder = NSLocalizedString(@"search", @"Search");
-        _searchBar.backgroundColor = [UIColor colorWithRed:0.747 green:0.756 blue:0.751 alpha:1.000];
+        _searchBar.barTintColor = [UIColor HIGrayLightColor];
     }
     
     return _searchBar;
@@ -230,9 +235,9 @@ typedef NS_ENUM(NSInteger, GettingMoreFooterViewState){
             }
             
             EMGroup *group = [weakSelf.searchController.resultsSource objectAtIndex:indexPath.row];
-            NSString *imageName = group.isPublic ? @"groupPublicHeader" : @"groupPrivateHeader";
+            NSString *imageName = group.isPublic ? @"group" : @"group";
             cell.imageView.image = [UIImage imageNamed:imageName];
-            cell.textLabel.text = group.groupSubject;
+            cell.textLabel.text = group.subject;
             
             return cell;
         }];
@@ -247,7 +252,7 @@ typedef NS_ENUM(NSInteger, GettingMoreFooterViewState){
             
             EMGroup *group = [weakSelf.searchController.resultsSource objectAtIndex:indexPath.row];
             PublicGroupDetailViewController *detailController = [[PublicGroupDetailViewController alloc] initWithGroupId:group.groupId];
-            detailController.title = group.groupSubject;
+            detailController.title = group.subject;
             [weakSelf.navigationController pushViewController:detailController animated:YES];
         }];
     }
@@ -280,9 +285,9 @@ typedef NS_ENUM(NSInteger, GettingMoreFooterViewState){
     }
     
     EMGroup *group = [self.dataSource objectAtIndex:indexPath.row];
-    cell.imageView.image = [UIImage imageNamed:@"groupPublicHeader"];
-    if (group.groupSubject && group.groupSubject.length > 0) {
-        cell.textLabel.text = group.groupSubject;
+    cell.imageView.image = [UIImage imageNamed:@"group"];
+    if (group.subject && group.subject.length > 0) {
+        cell.textLabel.text = group.subject;
     }
     else {
         cell.textLabel.text = group.groupId;
@@ -304,7 +309,7 @@ typedef NS_ENUM(NSInteger, GettingMoreFooterViewState){
     
     EMGroup *group = [self.dataSource objectAtIndex:indexPath.row];
     PublicGroupDetailViewController *detailController = [[PublicGroupDetailViewController alloc] initWithGroupId:group.groupId];
-    detailController.title = group.groupSubject;
+    detailController.title = group.subject;
     [self.navigationController pushViewController:detailController animated:YES];
 }
 
@@ -315,32 +320,23 @@ typedef NS_ENUM(NSInteger, GettingMoreFooterViewState){
         __weak typeof(self) weakSelf = self;
         self.footerView.state = eGettingMoreFooterViewStateGetting;
         _isGettingMore = YES;
-        [[EaseMob sharedInstance].chatManager asyncFetchPublicGroupsFromServerWithCursor:_cursor pageSize:FetchPublicGroupsPageSize andCompletion:^(EMCursorResult *result, EMError *error){
-            if (weakSelf)
+        [[EMClient sharedClient].groupManager asyncGetPublicGroupsFromServerWithCursor:self.cursor pageSize:FetchPublicGroupsPageSize success:^(EMCursorResult *aCursor) {
+            weakSelf.isGettingMore = NO;
+            [weakSelf.dataSource addObjectsFromArray:aCursor.list];
+            [weakSelf.tableView reloadData];
+            weakSelf.cursor = aCursor.cursor;
+            if ([aCursor.cursor length])
             {
-                PublicGroupListViewController *strongSelf = weakSelf;
-                strongSelf.isGettingMore = NO;
-                if (!error)
-                {
-                    [strongSelf.dataSource addObjectsFromArray:result.list];
-                    [strongSelf.tableView reloadData];
-                    strongSelf.cursor = result.cursor;
-                    if ([result.cursor length])
-                    {
-                        self.footerView.state = eGettingMoreFooterViewStateIdle;
-                    }
-                    else
-                    {
-                        self.footerView.state = eGettingMoreFooterViewStateComplete;
-                    }
-                }
-                else
-                {
-                    self.footerView.state = eGettingMoreFooterViewStateFailed;
-                }
+                weakSelf.footerView.state = eGettingMoreFooterViewStateIdle;
             }
+            else
+            {
+                weakSelf.footerView.state = eGettingMoreFooterViewStateComplete;
+            }
+        } failure:^(EMError *aError) {
+            weakSelf.isGettingMore = NO;
+            weakSelf.footerView.state = eGettingMoreFooterViewStateFailed;
         }];
-
     }
 }
 
@@ -356,7 +352,7 @@ typedef NS_ENUM(NSInteger, GettingMoreFooterViewState){
 - (void)searchBar:(UISearchBar *)searchBar textDidChange:(NSString *)searchText
 {
     __weak typeof(self) weakSelf = self;
-    [[RealtimeSearchUtil currentUtil] realtimeSearchWithSource:self.dataSource searchText:(NSString *)searchText collationStringSelector:@selector(groupSubject) resultBlock:^(NSArray *results) {
+    [[RealtimeSearchUtil currentUtil] realtimeSearchWithSource:self.dataSource searchText:(NSString *)searchText collationStringSelector:@selector(subject) resultBlock:^(NSArray *results) {
         if (results) {
             dispatch_async(dispatch_get_main_queue(), ^{
                 [weakSelf.searchController.resultsSource removeAllObjects];
@@ -400,22 +396,15 @@ typedef NS_ENUM(NSInteger, GettingMoreFooterViewState){
         {
             __weak typeof(self) weakSelf = self;
             [self showHudInView:self.view hint:NSLocalizedString(@"searching", @"Searching")];
-            [[EaseMob sharedInstance].chatManager asyncSearchPublicGroupWithGroupId:searchBar.text completion:^(EMGroup *group, EMError *error) {
-                if (weakSelf)
-                {
-                    PublicGroupListViewController *strongSelf = weakSelf;
-                    [strongSelf hideHud];
-                    if (!error) {
-                        [strongSelf.searchController.resultsSource removeAllObjects];
-                        [strongSelf.searchController.resultsSource addObject:group];
-                        [strongSelf.searchController.searchResultsTableView reloadData];
-                    }
-                    else
-                    {
-                        [strongSelf showHint:NSLocalizedString(@"notFound", @"Can't found")];
-                    }
-                }
-            } onQueue:nil];
+            [[EMClient sharedClient].groupManager asyncSearchPublicGroupWithId:searchBar.text success:^(EMGroup *aGroup) {
+                [weakSelf hideHud];
+                [weakSelf.searchController.resultsSource removeAllObjects];
+                [weakSelf.searchController.resultsSource addObject:aGroup];
+                [weakSelf.searchController.searchResultsTableView reloadData];
+            } failure:^(EMError *aError) {
+                [weakSelf hideHud];
+                [weakSelf showHint:NSLocalizedString(@"notFound", @"Can't found")];
+            }];
         }
     }
 }
@@ -459,39 +448,27 @@ typedef NS_ENUM(NSInteger, GettingMoreFooterViewState){
 - (void)reloadDataSource
 {
     [self hideHud];
-    [self showHudInView:self.view hint:NSLocalizedString(@"loadData", @"Load data...")];
+    [self showHudInView:self.view hint:NSLocalizedString(@"loadData", @"Loading data...")];
     _cursor = nil;
     
     __weak typeof(self) weakSelf = self;
-    [[EaseMob sharedInstance].chatManager asyncFetchPublicGroupsFromServerWithCursor:_cursor pageSize:FetchPublicGroupsPageSize andCompletion:^(EMCursorResult *result, EMError *error){
-        if (weakSelf)
+    [[EMClient sharedClient].groupManager asyncGetPublicGroupsFromServerWithCursor:self.cursor pageSize:FetchPublicGroupsPageSize success:^(EMCursorResult *aCursor) {
+        [weakSelf hideHud];
+        [weakSelf.dataSource removeAllObjects];
+        [weakSelf.dataSource addObjectsFromArray:aCursor.list];
+        [weakSelf.tableView reloadData];
+        weakSelf.cursor = aCursor.cursor;
+        if ([aCursor.cursor length])
         {
-            PublicGroupListViewController *strongSelf = weakSelf;
-            [strongSelf hideHud];
-            if (!error)
-            {
-                NSMutableArray *oldGroups = [self.dataSource mutableCopy];
-                [self.dataSource removeAllObjects];
-                dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), ^{
-                    [oldGroups removeAllObjects];
-                });
-                [strongSelf.dataSource addObjectsFromArray:result.list];
-                [strongSelf.tableView reloadData];
-                strongSelf.cursor = result.cursor;
-                if ([result.cursor length])
-                {
-                    self.footerView.state = eGettingMoreFooterViewStateIdle;
-                }
-                else
-                {
-                    self.footerView.state = eGettingMoreFooterViewStateComplete;
-                }
-            }
-            else
-            {
-                self.footerView.state = eGettingMoreFooterViewStateFailed;
-            }
+            weakSelf.footerView.state = eGettingMoreFooterViewStateIdle;
         }
+        else
+        {
+            weakSelf.footerView.state = eGettingMoreFooterViewStateComplete;
+        }
+    } failure:^(EMError *aError) {
+        [weakSelf hideHud];
+        weakSelf.footerView.state = eGettingMoreFooterViewStateFailed;
     }];
 }
 

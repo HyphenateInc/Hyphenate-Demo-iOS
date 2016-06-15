@@ -1,18 +1,17 @@
 /************************************************************
- *  * EaseMob CONFIDENTIAL
+ *  * Hyphenate  
  * __________________
- * Copyright (C) 2013-2014 EaseMob Technologies. All rights reserved.
+ * Copyright (C) 2016 Hyphenate Inc. All rights reserved.
  *
  * NOTICE: All information contained herein is, and remains
- * the property of EaseMob Technologies.
+ * the property of Hyphenate Inc.
  * Dissemination of this information or reproduction of this material
  * is strictly forbidden unless prior written permission is obtained
- * from EaseMob Technologies.
+ * from Hyphenate Inc.
  */
 
 #import "UserProfileEditViewController.h"
 #import <MobileCoreServices/MobileCoreServices.h>
-
 #import "UserProfileManager.h"
 #import "EditNicknameViewController.h"
 #import "UIImageView+HeadImage.h"
@@ -36,13 +35,30 @@
     return self;
 }
 
-- (void)viewDidLoad {
+- (void)viewDidLoad
+{
     [super viewDidLoad];
-    self.title = NSLocalizedString(@"setting.personalInfo", @"Personal Information");
-    self.view.backgroundColor = [UIColor colorWithRed:0.88 green:0.88 blue:0.88 alpha:1.0];
+    
+    self.title = NSLocalizedString(@"setting.personalInfo", @"Profile");
+    
+    self.view.backgroundColor = [UIColor HIPrimaryColor];
+    
+    UIBarButtonItem *backBarButtonItem = [[UIBarButtonItem alloc] initWithImage:[UIImage imageNamed:@"back"]
+                                                                          style:UIBarButtonItemStylePlain
+                                                                         target:self.navigationController
+                                                                         action:@selector(popViewControllerAnimated:)];
+    self.navigationItem.leftBarButtonItem = backBarButtonItem;
     
     self.tableView.backgroundColor = [UIColor whiteColor];
     self.tableView.tableFooterView = [[UIView alloc] init];
+}
+
+- (void)viewWillAppear:(BOOL)animated
+{
+    [super viewWillAppear:animated];
+    
+    [[GAI sharedInstance].defaultTracker set:kGAIScreenName value:NSStringFromClass(self.class)];
+    [[GAI sharedInstance].defaultTracker send:[[GAIDictionaryBuilder createScreenView] build]];
 }
 
 - (UIImageView*)headImageView
@@ -92,7 +108,7 @@
 
 - (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section
 {
-    return 2;
+    return 3;
 }
 
 - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath
@@ -103,16 +119,18 @@
         cell = [[UITableViewCell alloc] initWithStyle:UITableViewCellStyleValue1 reuseIdentifier:cellIdentifier];
     }
     if (indexPath.row == 0) {
-        //cell.textLabel.text = NSLocalizedString(@"setting.personalInfoUpload", @"Upload HeadImage");
+        cell.detailTextLabel.text = NSLocalizedString(@"setting.personalInfoUpload", @"Upload HeadImage");
         [cell.contentView addSubview:self.headImageView];
-        [cell.contentView addSubview:self.usernameLabel];
     } else if (indexPath.row == 1) {
+        cell.textLabel.text = NSLocalizedString(@"username", @"username");
+        cell.detailTextLabel.text = self.usernameLabel.text;
+    } else if (indexPath.row == 2) {
         cell.textLabel.text = NSLocalizedString(@"setting.profileNickname", @"Nickname");
         UserProfileEntity *entity = [[UserProfileManager sharedInstance] getCurUserProfile];
         if (entity && entity.nickname.length>0) {
             cell.detailTextLabel.text = entity.nickname;
         } else {
-            cell.detailTextLabel.text = [[[EaseMob sharedInstance].chatManager loginInfo] objectForKey:kSDKUsername];
+            cell.detailTextLabel.text = [[EMClient sharedClient] currentUsername];
         }
         cell.accessoryType = UITableViewCellAccessoryDisclosureIndicator;
     }
@@ -136,6 +154,8 @@
         UIActionSheet *actionSheet = [[UIActionSheet alloc] initWithTitle:nil delegate:self cancelButtonTitle:NSLocalizedString(@"cancel", @"Cancel") destructiveButtonTitle:nil otherButtonTitles:NSLocalizedString(@"setting.cameraUpload", @"Take photo"),NSLocalizedString(@"setting.localUpload", @"Photos"), nil];
         [actionSheet showInView:[[UIApplication sharedApplication] keyWindow]];
     } else if (indexPath.row == 1) {
+        [tableView deselectRowAtIndexPath:indexPath animated:YES];
+    } else if (indexPath.row == 2) {
         UIAlertView *alert = [[UIAlertView alloc] initWithTitle:nil message:NSLocalizedString(@"setting.editName", @"Edit NickName") delegate:self cancelButtonTitle:NSLocalizedString(@"cancel", @"Cancel") otherButtonTitles:NSLocalizedString(@"ok", @"OK"), nil];
         [alert setAlertViewStyle:UIAlertViewStylePlainTextInput];
         [alert show];
@@ -144,21 +164,24 @@
 
 - (void)alertView:(UIAlertView *)alertView clickedButtonAtIndex:(NSInteger)buttonIndex{
     if ([alertView cancelButtonIndex] != buttonIndex) {
-        //获取文本输入框
+        
         UITextField *nameTextField = [alertView textFieldAtIndex:0];
         if(nameTextField.text.length > 0)
         {
-            //设置推送设置
             [self showHint:NSLocalizedString(@"setting.saving", "saving...")];
             __weak typeof(self) weakSelf = self;
-            [[EaseMob sharedInstance].chatManager setApnsNickname:nameTextField.text];
-            [[UserProfileManager sharedInstance] updateUserProfileInBackground:@{kPARSE_HXUSER_NICKNAME:nameTextField.text} completion:^(BOOL success, NSError *error) {
-                [self hideHud];
-                if (success) {
-                    [weakSelf.tableView reloadData];
-                } else {
-                    [self showHint:NSLocalizedString(@"setting.saveFailed", "save failed") yOffset:0];
-                }
+            [[EMClient sharedClient] asyncSetApnsNickname:nameTextField.text success:^{
+                [[UserProfileManager sharedInstance] updateUserProfileInBackground:@{kPARSE_HXUSER_NICKNAME:nameTextField.text} completion:^(BOOL success, NSError *error) {
+                    [weakSelf hideHud];
+                    if (success) {
+                        [weakSelf.tableView reloadData];
+                    } else {
+                        [weakSelf showHint:NSLocalizedString(@"setting.saveFailed", "save failed") yOffset:0];
+                    }
+                }];
+            } failure:^(EMError *aError) {
+                [weakSelf hideHud];
+                [weakSelf showHint:NSLocalizedString(@"setting.saveFailed", "save failed") yOffset:0];
             }];
         }
     }
@@ -222,7 +245,5 @@
 
     }
 }
-
-
 
 @end

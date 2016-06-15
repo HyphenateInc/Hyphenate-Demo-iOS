@@ -1,18 +1,18 @@
 /************************************************************
- *  * EaseMob CONFIDENTIAL
+ *  * Hyphenate  
  * __________________
- * Copyright (C) 2013-2014 EaseMob Technologies. All rights reserved.
+ * Copyright (C) 2016 Hyphenate Inc. All rights reserved.
  *
  * NOTICE: All information contained herein is, and remains
- * the property of EaseMob Technologies.
+ * the property of Hyphenate Inc.
  * Dissemination of this information or reproduction of this material
  * is strictly forbidden unless prior written permission is obtained
- * from EaseMob Technologies.
+ * from Hyphenate Inc.
  */
 
 #import "AddFriendViewController.h"
 
-#import "ApplyViewController.h"
+#import "FriendRequestViewController.h"
 #import "AddFriendCell.h"
 #import "InvitationManager.h"
 
@@ -21,7 +21,7 @@
 @property (strong, nonatomic) NSMutableArray *dataSource;
 
 @property (strong, nonatomic) UIView *headerView;
-@property (strong, nonatomic) UITextField *textField;
+@property (strong, nonatomic) UITextField *addFriendTextField;
 @property (strong, nonatomic) NSIndexPath *selectedIndexPath;
 
 @end
@@ -32,8 +32,7 @@
 {
     self = [super initWithStyle:style];
     if (self) {
-        // Custom initialization
-        _dataSource = [NSMutableArray array];
+        self.dataSource = [NSMutableArray array];
     }
     return self;
 }
@@ -41,34 +40,38 @@
 - (void)viewDidLoad
 {
     [super viewDidLoad];
-    // Do any additional setup after loading the view.
-    if ([self respondsToSelector:@selector(setEdgesForExtendedLayout:)])
-    {
-        [self setEdgesForExtendedLayout:UIRectEdgeNone];
-    }
+    
+    [self setEdgesForExtendedLayout:UIRectEdgeNone];
     self.title = NSLocalizedString(@"friend.add", @"Add friend");
     self.view.backgroundColor = [UIColor whiteColor];
     self.tableView.separatorStyle = UITableViewCellSeparatorStyleNone;
     self.tableView.tableHeaderView = self.headerView;
     
     UIView *footerView = [[UIView alloc] init];
-    footerView.backgroundColor = [UIColor colorWithRed:0.88 green:0.88 blue:0.88 alpha:1.0];
+    footerView.backgroundColor = [UIColor whiteColor];
     self.tableView.tableFooterView = footerView;
     
-    UIButton *searchButton = [[UIButton alloc] initWithFrame:CGRectMake(0, 0, 60, 44)];
-    [searchButton setTitle:NSLocalizedString(@"search", @"Search") forState:UIControlStateNormal];
-    [searchButton setTitleColor:[UIColor colorWithRed:32 / 255.0 green:134 / 255.0 blue:158 / 255.0 alpha:1.0] forState:UIControlStateNormal];
-    [searchButton setTitleColor:[UIColor whiteColor] forState:UIControlStateHighlighted];
-    [searchButton addTarget:self action:@selector(searchAction) forControlEvents:UIControlEventTouchUpInside];
-    [self.navigationItem setRightBarButtonItem:[[UIBarButtonItem alloc] initWithCustomView:searchButton]];
+    UIBarButtonItem *addBarButtonItem = [[UIBarButtonItem alloc] initWithTitle:@"Add"
+                                                                         style:UIBarButtonItemStylePlain
+                                                                        target:self
+                                                                        action:@selector(addUserAction)];
+    self.navigationItem.rightBarButtonItem = addBarButtonItem;
     
-    UIButton *backButton = [[UIButton alloc] initWithFrame:CGRectMake(0, 0, 44, 44)];
-    [backButton setImage:[UIImage imageNamed:@"back.png"] forState:UIControlStateNormal];
-    [backButton addTarget:self.navigationController action:@selector(popViewControllerAnimated:) forControlEvents:UIControlEventTouchUpInside];
-    UIBarButtonItem *backItem = [[UIBarButtonItem alloc] initWithCustomView:backButton];
-    [self.navigationItem setLeftBarButtonItem:backItem];
+    UIBarButtonItem *backBarButtonItem = [[UIBarButtonItem alloc] initWithImage:[UIImage imageNamed:@"back"]
+                                                                          style:UIBarButtonItemStylePlain
+                                                                         target:self.navigationController
+                                                                         action:@selector(popViewControllerAnimated:)];
+    self.navigationItem.leftBarButtonItem = backBarButtonItem;
     
-    [self.view addSubview:self.textField];
+    [self.view addSubview:self.addFriendTextField];
+}
+
+- (void)viewWillAppear:(BOOL)animated
+{
+    [super viewWillAppear:animated];
+    
+    [[GAI sharedInstance].defaultTracker set:kGAIScreenName value:NSStringFromClass(self.class)];
+    [[GAI sharedInstance].defaultTracker send:[[GAIDictionaryBuilder createScreenView] build]];
 }
 
 - (void)didReceiveMemoryWarning
@@ -79,34 +82,35 @@
 
 #pragma mark - getter
 
-- (UITextField *)textField
+- (UITextField *)addFriendTextField
 {
-    if (_textField == nil) {
-        _textField = [[UITextField alloc] initWithFrame:CGRectMake(10, 10, self.view.frame.size.width - 20, 40)];
-        _textField.layer.borderColor = [[UIColor lightGrayColor] CGColor];
-        _textField.layer.borderWidth = 0.5;
-        _textField.layer.cornerRadius = 3;
-        _textField.leftView = [[UIView alloc] initWithFrame:CGRectMake(0, 0, 5, 30)];
-        _textField.contentVerticalAlignment = UIControlContentVerticalAlignmentCenter;
-        _textField.leftViewMode = UITextFieldViewModeAlways;
-        _textField.clearButtonMode = UITextFieldViewModeWhileEditing;
-        _textField.font = [UIFont systemFontOfSize:15.0];
-        _textField.backgroundColor = [UIColor whiteColor];
-        _textField.placeholder = NSLocalizedString(@"friend.inputNameToSearch", @"input to find friends");
-        _textField.returnKeyType = UIReturnKeyDone;
-        _textField.delegate = self;
+    if (_addFriendTextField == nil) {
+        
+        _addFriendTextField = [[UITextField alloc] initWithFrame:CGRectMake(12, 10, self.view.frame.size.width - 20, 40)];
+        _addFriendTextField.layer.borderColor = [[UIColor lightGrayColor] CGColor];
+        _addFriendTextField.layer.borderWidth = 0.5;
+        _addFriendTextField.layer.cornerRadius = 6;
+        _addFriendTextField.leftView = [[UIView alloc] initWithFrame:CGRectMake(0, 0, 5, 30)];
+        _addFriendTextField.leftViewMode = UITextFieldViewModeAlways;
+        _addFriendTextField.clearButtonMode = UITextFieldViewModeWhileEditing;
+        _addFriendTextField.font = [UIFont systemFontOfSize:15.0];
+        _addFriendTextField.backgroundColor = [UIColor whiteColor];
+        _addFriendTextField.placeholder = NSLocalizedString(@"friend.inputNameToSearch", @"Enter friend's username");
+        _addFriendTextField.returnKeyType = UIReturnKeyDone;
+        _addFriendTextField.delegate = self;
     }
     
-    return _textField;
+    return _addFriendTextField;
 }
 
 - (UIView *)headerView
 {
     if (_headerView == nil) {
-        _headerView = [[UIView alloc] initWithFrame:CGRectMake(0, 0, self.tableView.frame.size.width, 60)];
-        _headerView.backgroundColor = [UIColor colorWithRed:0.88 green:0.88 blue:0.88 alpha:1.0];
         
-        [_headerView addSubview:_textField];
+        _headerView = [[UIView alloc] initWithFrame:CGRectMake(0, 0, self.tableView.frame.size.width, 60)];
+        _headerView.backgroundColor = [UIColor whiteColor];
+        
+        [_headerView addSubview:self.addFriendTextField];
     }
     
     return _headerView;
@@ -116,22 +120,21 @@
 
 - (NSInteger)numberOfSectionsInTableView:(UITableView *)tableView
 {
-    // Return the number of sections.
     return 1;
 }
 
 - (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section
 {
-    // Return the number of rows in the section.
-    return [self.dataSource count];
+    return 0;
+//    return [self.dataSource count];
 }
 
 - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath
 {
     static NSString *CellIdentifier = @"AddFriendCell";
+    
     AddFriendCell *cell = (AddFriendCell *)[tableView dequeueReusableCellWithIdentifier:CellIdentifier];
     
-    // Configure the cell...
     if (cell == nil) {
         cell = [[AddFriendCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:CellIdentifier];
     }
@@ -152,10 +155,18 @@
 - (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath
 {
     [tableView deselectRowAtIndexPath:indexPath animated:YES];
+    
     self.selectedIndexPath = indexPath;
-    NSString *buddyName = [self.dataSource objectAtIndex:indexPath.row];
-    if ([self didBuddyExist:buddyName]) {
-        NSString *message = [NSString stringWithFormat:NSLocalizedString(@"friend.repeat", @"'%@'has been your friend!"), buddyName];
+    
+    NSString *friendName = [self.dataSource objectAtIndex:indexPath.row];
+    [self sendUserFriendRequest:friendName];
+}
+
+- (void)sendUserFriendRequest:(NSString *)friendName
+{
+    if ([self didBuddyExist:friendName]) {
+        
+        NSString *message = [NSString stringWithFormat:NSLocalizedString(@"friend.repeat", @"'%@' is already your friend"), friendName];
         
         [EMAlertView showAlertWithTitle:message
                                 message:nil
@@ -164,17 +175,40 @@
                       otherButtonTitles:nil];
         
     }
-    else if([self hasSendBuddyRequest:buddyName])
+    else if ([self hasSendBuddyRequest:friendName])
     {
-        NSString *message = [NSString stringWithFormat:NSLocalizedString(@"friend.repeatApply", @"you have send fridend request to '%@'!"), buddyName];
+        NSString *message = [NSString stringWithFormat:NSLocalizedString(@"friend.repeatApply", @"Send the friend request to '%@' again"), friendName];
         [EMAlertView showAlertWithTitle:message
                                 message:nil
                         completionBlock:nil
                       cancelButtonTitle:NSLocalizedString(@"ok", @"OK")
                       otherButtonTitles:nil];
         
-    }else{
-        [self showMessageAlertView];
+    }
+    else {
+        
+        NSString *message = [NSString stringWithFormat:NSLocalizedString(@"friend.somebodyInvite", @"%@ sent you a friend request"), [[EMClient sharedClient] currentUsername]];
+        
+        if (friendName && friendName.length > 0) {
+            
+            [self showHudInView:self.view hint:NSLocalizedString(@"friend.sendFriendRequest", @"sending friend request...")];
+            
+            // Currently the method doesn't provide feedback if user exist or not on the server
+            [[EMClient sharedClient].contactManager asyncAddContact:friendName message:message success:^{
+                
+                [self hideHud];
+
+                [self showHint:NSLocalizedString(@"friend.sendFriendRequestSuccess", @"Friend request sent")];
+                
+                [self.navigationController popViewControllerAnimated:YES];
+                
+            } failure:^(EMError *aError) {
+                
+                [self hideHud];
+
+                [self showHint:NSLocalizedString(@"friend.sendFriendRequestFail", @"send friend request fails, please try again")];
+            }];
+        }
     }
 }
 
@@ -188,31 +222,42 @@
 
 #pragma mark - action
 
-- (void)searchAction
+- (void)addUserAction
 {
-    [_textField resignFirstResponder];
-    if(_textField.text.length > 0)
+    [self.addFriendTextField resignFirstResponder];
+    
+    NSString *friendName = [self.addFriendTextField.text lowercaseString];
+    
+    if (friendName.length > 0)
     {
-#warning 由用户体系的用户，需要添加方法在已有的用户体系中查询符合填写内容的用户
-#warning 以下代码为测试代码，默认用户体系中有一个符合要求的同名用户
-        NSDictionary *loginInfo = [[[EaseMob sharedInstance] chatManager] loginInfo];
-        NSString *loginUsername = [loginInfo objectForKey:kSDKUsername];
-        if ([_textField.text isEqualToString:loginUsername]) {
+        NSString *loginUsername = [[[EMClient sharedClient] currentUsername] lowercaseString];
+        
+        if ([[self.addFriendTextField.text lowercaseString] isEqualToString:loginUsername]) {
+            
             UIAlertView *alertView = [[UIAlertView alloc] initWithTitle:NSLocalizedString(@"prompt", @"Prompt") message:NSLocalizedString(@"friend.notAddSelf", @"can't add yourself as a friend") delegate:nil cancelButtonTitle:NSLocalizedString(@"ok", @"OK") otherButtonTitles:nil, nil];
+            
             [alertView show];
             
             return;
         }
         
-        //判断是否已发来申请
-        NSArray *applyArray = [[ApplyViewController shareController] dataSource];
+        // Check friend request list
+        NSArray *applyArray = [[FriendRequestViewController shareController] dataSource];
+        
         if (applyArray && [applyArray count] > 0) {
+            
             for (ApplyEntity *entity in applyArray) {
+                
                 ApplyStyle style = [entity.style intValue];
+                
                 BOOL isGroup = style == ApplyStyleFriend ? NO : YES;
-                if (!isGroup && [entity.applicantUsername isEqualToString:_textField.text]) {
-                    NSString *str = [NSString stringWithFormat:NSLocalizedString(@"friend.repeatInvite", @"%@ have sent the application to you"), _textField.text];
-                    UIAlertView *alertView = [[UIAlertView alloc] initWithTitle:NSLocalizedString(@"prompt", @"Prompt") message:str delegate:nil cancelButtonTitle:NSLocalizedString(@"ok", @"OK") otherButtonTitles:nil, nil];
+                
+                if (!isGroup && [entity.applicantUsername isEqualToString:friendName]) {
+                    
+                    NSString *message = [NSString stringWithFormat:NSLocalizedString(@"friend.repeatInvite", @"%@ sent an invitation to you"), friendName];
+                    
+                    UIAlertView *alertView = [[UIAlertView alloc] initWithTitle:NSLocalizedString(@"prompt", @"Prompt") message:message delegate:nil cancelButtonTitle:NSLocalizedString(@"ok", @"OK") otherButtonTitles:nil, nil];
+                    
                     [alertView show];
                     
                     return;
@@ -220,19 +265,21 @@
             }
         }
         
-        [self.dataSource removeAllObjects];
-        [self.dataSource addObject:_textField.text];
-        [self.tableView reloadData];
+        [self sendUserFriendRequest:friendName];
+        
+//        [self.dataSource removeAllObjects];
+//        
+//        [self.dataSource addObject:self.addFriendTextField.text];
+//        
+//        [self.tableView reloadData];
     }
 }
 
 - (BOOL)hasSendBuddyRequest:(NSString *)buddyName
 {
-    NSArray *buddyList = [[[EaseMob sharedInstance] chatManager] buddyList];
-    for (EMBuddy *buddy in buddyList) {
-        if ([buddy.username isEqualToString:buddyName] &&
-            buddy.followState == eEMBuddyFollowState_NotFollowed &&
-            buddy.isPendingApproval) {
+    NSArray *userlist = [[EMClient sharedClient].contactManager getContactsFromDB];
+    for (NSString *username in userlist) {
+        if ([username isEqualToString:buddyName]) {
             return YES;
         }
     }
@@ -241,62 +288,38 @@
 
 - (BOOL)didBuddyExist:(NSString *)buddyName
 {
-    NSArray *buddyList = [[[EaseMob sharedInstance] chatManager] buddyList];
-    for (EMBuddy *buddy in buddyList) {
-        if ([buddy.username isEqualToString:buddyName] &&
-            buddy.followState != eEMBuddyFollowState_NotFollowed) {
+    NSArray *userlist = [[EMClient sharedClient].contactManager getContactsFromDB];
+    for (NSString *username in userlist) {
+        if ([username isEqualToString:buddyName]){
             return YES;
         }
     }
     return NO;
 }
 
-- (void)showMessageAlertView
+- (void)sendFriendRequestToUsername:(NSString *)username message:(NSString *)message
 {
-    UIAlertView *alert = [[UIAlertView alloc] initWithTitle:nil
-                                                    message:NSLocalizedString(@"saySomething", @"say somthing")
-                                                   delegate:self
-                                          cancelButtonTitle:NSLocalizedString(@"cancel", @"Cancel")
-                                          otherButtonTitles:NSLocalizedString(@"ok", @"OK"), nil];
-    [alert setAlertViewStyle:UIAlertViewStylePlainTextInput];
-    [alert show];
-}
-
-- (void)alertView:(UIAlertView *)alertView clickedButtonAtIndex:(NSInteger)buttonIndex{
-    if ([alertView cancelButtonIndex] != buttonIndex) {
-        UITextField *messageTextField = [alertView textFieldAtIndex:0];
+    if (username && username.length > 0) {
         
-        NSString *messageStr = @"";
-        NSDictionary *loginInfo = [[[EaseMob sharedInstance] chatManager] loginInfo];
-        NSString *username = [loginInfo objectForKey:kSDKUsername];
-        if (messageTextField.text.length > 0) {
-            messageStr = [NSString stringWithFormat:@"%@：%@", username, messageTextField.text];
-        }
-        else{
-            messageStr = [NSString stringWithFormat:NSLocalizedString(@"friend.somebodyInvite", @"%@ invite you as a friend"), username];
-        }
-        [self sendFriendApplyAtIndexPath:self.selectedIndexPath
-                                 message:messageStr];
+        [self showHudInView:self.view hint:NSLocalizedString(@"friend.sendFriendRequest", @"sending friend request...")];
+      
+        // Currently the method doesn't provide feedback if user exist or not on the server
+        [[EMClient sharedClient].contactManager asyncAddContact:username message:message success:^{
+            
+            [self hideHud];
+            
+            [self showHint:NSLocalizedString(@"friend.sendFriendRequestSuccess", @"Friend request sent")];
+            
+            [self.navigationController popViewControllerAnimated:YES];
+            
+        } failure:^(EMError *aError) {
+            
+            [self hideHud];
+            
+            [self showHint:NSLocalizedString(@"friend.sendFriendRequestFail", @"send friend request fails, please try again")];
+        }];
     }
 }
 
-- (void)sendFriendApplyAtIndexPath:(NSIndexPath *)indexPath
-                           message:(NSString *)message
-{
-    NSString *buddyName = [self.dataSource objectAtIndex:indexPath.row];
-    if (buddyName && buddyName.length > 0) {
-        [self showHudInView:self.view hint:NSLocalizedString(@"friend.sendApply", @"sending application...")];
-        EMError *error;
-        [[EaseMob sharedInstance].chatManager addBuddy:buddyName message:message error:&error];
-        [self hideHud];
-        if (error) {
-            [self showHint:NSLocalizedString(@"friend.sendApplyFail", @"send application fails, please operate again")];
-        }
-        else{
-            [self showHint:NSLocalizedString(@"friend.sendApplySuccess", @"send successfully")];
-            [self.navigationController popViewControllerAnimated:YES];
-        }
-    }
-}
 
 @end

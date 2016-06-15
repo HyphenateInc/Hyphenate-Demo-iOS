@@ -1,67 +1,64 @@
 /************************************************************
- *  * EaseMob CONFIDENTIAL
+ *  * Hyphenate  
  * __________________
- * Copyright (C) 2013-2014 EaseMob Technologies. All rights reserved.
+ * Copyright (C) 2016 Hyphenate Inc. All rights reserved.
  *
  * NOTICE: All information contained herein is, and remains
- * the property of EaseMob Technologies.
+ * the property of Hyphenate Inc.
  * Dissemination of this information or reproduction of this material
  * is strictly forbidden unless prior written permission is obtained
- * from EaseMob Technologies.
+ * from Hyphenate Inc.
  */
 
 #import <AVFoundation/AVFoundation.h>
-#import <CoreTelephony/CTCallCenter.h>
 #import <UIKit/UIKit.h>
 
-static CTCallCenter *g_callCenter;
+#define kLocalCallBitrate @"HyphenateLocalCallBitrate"
 
-@interface CallViewController : UIViewController<UIAlertViewDelegate, EMCallManagerDelegate, AVCaptureVideoDataOutputSampleBufferDelegate>
-{
-    NSTimer *_timeTimer;
-    AVAudioPlayer *_ringPlayer;
-    
-    UIView *_topView;
-    UILabel *_statusLabel;
-    UILabel *_timeLabel;
-    UILabel *_nameLabel;
-    UIImageView *_headerImageView;
-    
-    UIView *_smallView;
-    OpenGLView20 *_openGLView;
-    AVCaptureVideoPreviewLayer *_smallCaptureLayer;
-    AVCaptureSession *_session;
-    AVCaptureVideoDataOutput *_captureOutput;
-    AVCaptureDeviceInput *_captureInput;
-    
-    UIView *_actionView;
-    UIButton *_silenceButton;
-    UILabel *_silenceLabel;
-    UIButton *_speakerOutButton;
-    UILabel *_speakerOutLabel;
-    
-    UIButton *_rejectButton;
-    UIButton *_answerButton;
-    
-    UIButton *_hangupButton;
-    
-    BOOL _isIncoming;
-    int _timeLength;
-    EMCallSession *_callSession;
-    UITapGestureRecognizer *_tapRecognizer;
-    
-    UInt8 *_imageDataBuffer;
-}
+@class EMCallSession;
 
-@property (strong, nonatomic) NSString *chatter;
+@interface CallViewController : UIViewController
+
+@property (strong, nonatomic) NSTimer *timeTimer;
+@property (strong, nonatomic) AVAudioPlayer *ringPlayer;
+
 @property (strong, nonatomic) UILabel *statusLabel;
-@property (strong, nonatomic) UITapGestureRecognizer *tapRecognizer;
+@property (strong, nonatomic) UILabel *timeLabel;
+
+@property (strong, nonatomic) UIView *topView;
+@property (strong, nonatomic) UILabel *nameLabel;
+@property (strong, nonatomic) UIImageView *headerImageView;
+
+@property (strong, nonatomic) UIButton *rejectButton;
+@property (strong, nonatomic) UIButton *answerButton;
+@property (strong, nonatomic) UIButton *cancelButton;
+
+@property (strong, nonatomic) UIButton *recordButton;
+@property (strong, nonatomic) UIButton *videoButton;
+@property (strong, nonatomic) UIButton *voiceButton;
+
+@property (strong, nonatomic) UIView *actionView;
+@property (strong, nonatomic) UIButton *silenceButton;
+@property (strong, nonatomic) UILabel *silenceLabel;
+@property (strong, nonatomic) UIButton *speakerOutButton;
+@property (strong, nonatomic) UILabel *speakerOutLabel;
+
 
 - (instancetype)initWithSession:(EMCallSession *)session
-                     isIncoming:(BOOL)isIncoming;
+                       isCaller:(BOOL)isCaller
+                         status:(NSString *)statusString;
 
 + (BOOL)canVideo;
 
 + (void)saveBitrate:(NSString*)value;
+
+- (void)startTimer;
+
+- (void)showCallInfo;
+
+- (void)close;
+
+- (void)setNetwork:(EMCallNetworkStatus)status;
+
 
 @end

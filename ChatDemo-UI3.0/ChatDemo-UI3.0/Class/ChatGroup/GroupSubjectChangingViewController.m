@@ -1,23 +1,23 @@
 /************************************************************
- *  * EaseMob CONFIDENTIAL
+ *  * Hyphenate  
  * __________________
- * Copyright (C) 2013-2014 EaseMob Technologies. All rights reserved.
+ * Copyright (C) 2016 Hyphenate Inc. All rights reserved.
  *
  * NOTICE: All information contained herein is, and remains
- * the property of EaseMob Technologies.
+ * the property of Hyphenate Inc.
  * Dissemination of this information or reproduction of this material
  * is strictly forbidden unless prior written permission is obtained
- * from EaseMob Technologies.
+ * from Hyphenate Inc.
  */
 
 #import "GroupSubjectChangingViewController.h"
 
 @interface GroupSubjectChangingViewController () <UITextFieldDelegate>
-{
-    EMGroup         *_group;
-    BOOL            _isOwner;
-    UITextField     *_subjectField;
-}
+
+@property (nonatomic, strong) IBOutlet UITextField *subjectField;
+
+@property (nonatomic, strong) EMGroup *group;
+@property (nonatomic, assign) BOOL isOwner;
 
 @end
 
@@ -26,12 +26,13 @@
 - (instancetype)initWithGroup:(EMGroup *)group
 {
     self = [self init];
+    
     if (self) {
-        _group = group;
-        NSDictionary *loginInfo = [[[EaseMob sharedInstance] chatManager] loginInfo];
-        NSString *loginUsername = [loginInfo objectForKey:kSDKUsername];
-        _isOwner = [_group.owner isEqualToString:loginUsername];
-        self.view.backgroundColor = [UIColor whiteColor];
+        
+        self.group = group;
+        
+        NSString *loginUsername = [[EMClient sharedClient] currentUsername];
+        self.isOwner = [self.group.owner isEqualToString:loginUsername];
     }
 
     return self;
@@ -40,57 +41,63 @@
 - (void)viewDidLoad
 {
     [super viewDidLoad];
+    
+    self.view.backgroundColor = [UIColor whiteColor];
+    
+    self.title = NSLocalizedString(@"title.groupSubjectChanging", @"Change Group Name");
 
-    self.title = NSLocalizedString(@"title.groupSubjectChanging", @"Change group name");
+    UIBarButtonItem *backBarButtonItem = [[UIBarButtonItem alloc] initWithImage:[UIImage imageNamed:@"back"]
+                                                                          style:UIBarButtonItemStylePlain
+                                                                         target:self.navigationController
+                                                                         action:@selector(popViewControllerAnimated:)];
+    self.navigationItem.leftBarButtonItem = backBarButtonItem;
 
-    UIButton *backButton = [[UIButton alloc] initWithFrame:CGRectMake(0, 0, 44, 44)];
-    [backButton setImage:[UIImage imageNamed:@"back.png"] forState:UIControlStateNormal];
-    [backButton addTarget:self action:@selector(back) forControlEvents:UIControlEventTouchUpInside];
-    UIBarButtonItem *backItem = [[UIBarButtonItem alloc] initWithCustomView:backButton];
-    [self.navigationItem setLeftBarButtonItem:backItem];
-
-    if (_isOwner)
+    if (self.isOwner)
     {
-        UIBarButtonItem *saveItem = [[UIBarButtonItem alloc] initWithTitle:NSLocalizedString(@"save", @"Save") style:UIBarButtonItemStylePlain target:self action:@selector(save:)];
-        saveItem.tintColor = [UIColor colorWithRed:32 / 255.0 green:134 / 255.0 blue:158 / 255.0 alpha:1.0];
+        UIBarButtonItem *saveItem = [[UIBarButtonItem alloc] initWithTitle:NSLocalizedString(@"save", @"Save")
+                                                                     style:UIBarButtonItemStylePlain
+                                                                    target:self
+                                                                    action:@selector(save:)];
+        saveItem.tintColor = [UIColor HIPrimaryColor];
+        
         [self.navigationItem setRightBarButtonItem:saveItem];
     }
 
     CGRect frame = CGRectMake(20, 80, self.view.frame.size.width - 40, 40);
-    _subjectField = [[UITextField alloc] initWithFrame:frame];
-    _subjectField.layer.cornerRadius = 5.0;
-    _subjectField.layer.borderWidth = 1.0;
-    _subjectField.placeholder = NSLocalizedString(@"group.setting.subject", @"Please input group name");
-    _subjectField.text = _group.groupSubject;
-    if (!_isOwner)
-    {
-        _subjectField.enabled = NO;
+    self.subjectField = [[UITextField alloc] initWithFrame:frame];
+    self.subjectField.layer.cornerRadius = 5.0;
+    self.subjectField.layer.borderWidth = 1.0;
+    self.subjectField.placeholder = NSLocalizedString(@"group.setting.subject", @"Please enter a group name");
+    self.subjectField.text = self.group.subject;
+  
+    if (!self.isOwner) {
+        self.subjectField.enabled = NO;
     }
+    
     frame.origin = CGPointMake(frame.size.width - 5.0, 0.0);
     frame.size = CGSizeMake(5.0, 40.0);
     UIView *holder = [[UIView alloc] initWithFrame:frame];
-    _subjectField.rightView = holder;
-    _subjectField.rightViewMode = UITextFieldViewModeAlways;
+    self.subjectField.rightView = holder;
+    self.subjectField.rightViewMode = UITextFieldViewModeAlways;
     frame.origin = CGPointMake(0.0, 0.0);
     holder = [[UIView alloc] initWithFrame:frame];
-    _subjectField.leftView = holder;
-    _subjectField.leftViewMode = UITextFieldViewModeAlways;
-    _subjectField.delegate = self;
-    [self.view addSubview:_subjectField];
+    self.subjectField.leftView = holder;
+    self.subjectField.leftViewMode = UITextFieldViewModeAlways;
+    self.subjectField.delegate = self;
+    [self.view addSubview:self.subjectField];
 }
 
-- (void)didReceiveMemoryWarning
+- (void)viewWillAppear:(BOOL)animated
 {
-    [super didReceiveMemoryWarning];
-    // Dispose of any resources that can be recreated.
+    [super viewWillAppear:animated];
+    
+    [[GAI sharedInstance].defaultTracker set:kGAIScreenName value:NSStringFromClass(self.class)];
+    [[GAI sharedInstance].defaultTracker send:[[GAIDictionaryBuilder createScreenView] build]];
 }
 
-- (void)viewWillDisappear:(BOOL)animated
-{
-    [super viewWillDisappear:animated];
-}
 
 #pragma mark - UITextFieldDelegate
+
 - (BOOL)textFieldShouldReturn:(UITextField *)textField
 {
     [textField resignFirstResponder];
@@ -98,34 +105,30 @@
 }
 
 #pragma mark - action
-- (void)back
-{
-    if ([_subjectField isFirstResponder])
-    {
-        [_subjectField resignFirstResponder];
-    }
-    [self.navigationController popViewControllerAnimated:YES];
-}
 
 - (void)save:(id)sender
 {
-    [self saveSubject];
-}
-
-- (void)saveSubject
-{
-    EMConversation *conversation = [[EaseMob sharedInstance].chatManager conversationForChatter:_group.groupId conversationType:eConversationTypeGroupChat];
-    [[EaseMob sharedInstance].chatManager asyncChangeGroupSubject:_subjectField.text forGroup:_group.groupId completion:^(EMGroup *group, EMError *error) {
-        if (!error) {
-            if ([_group.groupId isEqualToString:conversation.chatter]) {
-                NSMutableDictionary *ext = [NSMutableDictionary dictionaryWithDictionary:conversation.ext];
-                [ext setObject:_group.groupSubject forKey:@"groupSubject"];
-                [ext setObject:[NSNumber numberWithBool:_group.isPublic] forKey:@"isPublic"];
-                conversation.ext = ext;
-            }
+    EMConversation *conversation = [[EMClient sharedClient].chatManager getConversation:_group.groupId type:EMConversationTypeGroupChat createIfNotExist:NO];
+    
+    __weak typeof(self) weakSelf = self;
+    
+    [[EMClient sharedClient].groupManager asyncChangeGroupSubject:_subjectField.text forGroup:_group.groupId success:^(EMGroup *aGroup) {
+        
+        GroupSubjectChangingViewController *strongSelf = weakSelf;
+        
+        if ([strongSelf->_group.groupId isEqualToString:conversation.conversationId]) {
+            NSMutableDictionary *ext = [NSMutableDictionary dictionaryWithDictionary:conversation.ext];
+            [ext setObject:strongSelf->_group.subject forKey:@"subject"];
+            [ext setObject:[NSNumber numberWithBool:strongSelf->_group.isPublic] forKey:@"isPublic"];
+            conversation.ext = ext;
         }
-        [self back];
-    } onQueue:NULL];
+        [self.navigationController popViewControllerAnimated:YES];
+        
+    } failure:^(EMError *aError) {
+        [self.navigationController popViewControllerAnimated:YES];
+    }];
+    
+    [self.navigationController popViewControllerAnimated:YES];
 }
 
 @end

@@ -1,29 +1,26 @@
 /************************************************************
- *  * EaseMob CONFIDENTIAL
+ *  * Hyphenate
  * __________________
- * Copyright (C) 2013-2014 EaseMob Technologies. All rights reserved.
+ * Copyright (C) 2016 Hyphenate Inc. All rights reserved.
  *
  * NOTICE: All information contained herein is, and remains
- * the property of EaseMob Technologies.
+ * the property of Hyphenate Inc.
  * Dissemination of this information or reproduction of this material
  * is strictly forbidden unless prior written permission is obtained
- * from EaseMob Technologies.
+ * from Hyphenate Inc.
  */
 
 #import "BlackListViewController.h"
 
 #import "BaseTableViewCell.h"
 #import "SRRefreshView.h"
-//#import "EaseChineseToPinyin.h"
 
-@interface BlackListViewController ()<IChatManagerDelegate, UITableViewDataSource, UITableViewDelegate, SRRefreshDelegate>
-{
-    NSMutableArray *_dataSource;
-}
+#import "ChatDemoHelper.h"
+
+@interface BlackListViewController ()<UITableViewDataSource, UITableViewDelegate, SRRefreshDelegate>
 
 @property (strong, nonatomic) NSMutableArray *dataSource;
 @property (strong, nonatomic) NSMutableArray *sectionTitles;
-
 @property (strong, nonatomic) UITableView *tableView;
 @property (strong, nonatomic) SRRefreshView *slimeView;
 
@@ -35,8 +32,7 @@
 {
     self = [super initWithNibName:nibNameOrNil bundle:nibBundleOrNil];
     if (self) {
-        // Custom initialization
-        _dataSource = [NSMutableArray array];
+        self.dataSource = [NSMutableArray array];
         _sectionTitles = [NSMutableArray array];
     }
     return self;
@@ -46,31 +42,48 @@
 {
     [super viewDidLoad];
     
-    // Uncomment the following line to preserve selection between presentations.
+    self.navigationController.navigationBar.tintColor = [UIColor whiteColor];
+    
     self.title = NSLocalizedString(@"friend.black", @"Black List");
     
-    _tableView = [[UITableView alloc] initWithFrame:CGRectZero style:UITableViewStylePlain];
-    _tableView.frame = CGRectMake(0, 0, self.view.frame.size.width, self.view.frame.size.height);
-    _tableView.separatorStyle = UITableViewCellSeparatorStyleNone;
-    _tableView.backgroundColor = [UIColor whiteColor];
-    _tableView.autoresizingMask = UIViewAutoresizingFlexibleHeight;
-    _tableView.delegate = self;
-    _tableView.dataSource = self;
-    _tableView.tableFooterView = [[UIView alloc] init];
-    [self.view addSubview:_tableView];
+    UIBarButtonItem *backBarButtonItem = [[UIBarButtonItem alloc] initWithImage:[UIImage imageNamed:@"back"]
+                                                                          style:UIBarButtonItemStylePlain
+                                                                         target:self.navigationController
+                                                                         action:@selector(popViewControllerAnimated:)];
+    self.navigationItem.leftBarButtonItem = backBarButtonItem;
     
-    _slimeView = [[SRRefreshView alloc] init];
-    _slimeView.delegate = self;
-    _slimeView.upInset = 0;
-    _slimeView.slimeMissWhenGoingBack = YES;
-    _slimeView.slime.bodyColor = [UIColor grayColor];
-    _slimeView.slime.skinColor = [UIColor grayColor];
-    _slimeView.slime.lineWith = 1;
-    _slimeView.slime.shadowBlur = 4;
-    _slimeView.slime.shadowColor = [UIColor grayColor];
-    [self.tableView addSubview:_slimeView];
+    self.tableView = [[UITableView alloc] initWithFrame:CGRectZero style:UITableViewStylePlain];
+    self.tableView.frame = CGRectMake(0, 0, self.view.frame.size.width, self.view.frame.size.height);
+    self.tableView.separatorStyle = UITableViewCellSeparatorStyleNone;
+    self.tableView.backgroundColor = [UIColor whiteColor];
+    self.tableView.autoresizingMask = UIViewAutoresizingFlexibleHeight;
+    self.tableView.delegate = self;
+    self.tableView.dataSource = self;
+    self.tableView.tableFooterView = [[UIView alloc] init];
+    [self.view addSubview:self.tableView];
     
-    [self.slimeView setLoadingWithExpansion];
+    self.slimeView = [[SRRefreshView alloc] init];
+    self.slimeView.delegate = self;
+    self.slimeView.upInset = 0;
+    self.slimeView.slimeMissWhenGoingBack = YES;
+    self.slimeView.slime.bodyColor = [UIColor grayColor];
+    self.slimeView.slime.skinColor = [UIColor grayColor];
+    self.slimeView.slime.lineWith = 1;
+    self.slimeView.slime.shadowBlur = 4;
+    self.slimeView.slime.shadowColor = [UIColor grayColor];
+    [self.tableView addSubview:self.slimeView];
+    
+    [self.slimeView setLoadingWithexpansion];
+    
+    [self loadBlacklistData];
+}
+
+- (void)viewWillAppear:(BOOL)animated
+{
+    [super viewWillAppear:animated];
+    
+    [[GAI sharedInstance].defaultTracker set:kGAIScreenName value:NSStringFromClass(self.class)];
+    [[GAI sharedInstance].defaultTracker send:[[GAIDictionaryBuilder createScreenView] build]];
 }
 
 - (void)didReceiveMemoryWarning
@@ -81,30 +94,30 @@
 
 - (void)dealloc
 {
-    _tableView.delegate = nil;
-    _tableView.dataSource = nil;
-    _slimeView.delegate = nil;
+    self.tableView.delegate = nil;
+    self.tableView.dataSource = nil;
+    
+    self.slimeView.delegate = nil;
 }
+
 
 #pragma mark - Table view data source
 
 - (NSInteger)numberOfSectionsInTableView:(UITableView *)tableView
 {
-    // Return the number of sections.
     return [_dataSource count];
 }
 
 - (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section
 {
-    // Return the number of rows in the section.
     return [[_dataSource objectAtIndex:section] count];
 }
 
 - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath
 {
-    static NSString *cellIdentifier = @"Cell";
-    BaseTableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:cellIdentifier];
+    static NSString *cellIdentifier = @"blacklistCell";
     
+    BaseTableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:cellIdentifier];
     if (cell == nil) {
         cell = [[BaseTableViewCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:cellIdentifier];
     }
@@ -113,6 +126,7 @@
     cell.imageView.image = [UIImage imageNamed:@"chatListCellHead.png"];
     cell.textLabel.text = username;
     cell.username = username;
+    
     
     return cell;
 }
@@ -128,16 +142,14 @@
 {
     if (editingStyle == UITableViewCellEditingStyleDelete) {
         NSString *username = [[self.dataSource objectAtIndex:indexPath.section] objectAtIndex:indexPath.row];
-        EMError *error = [[EaseMob sharedInstance].chatManager unblockBuddy:username];
-        if (!error)
-        {
-            [[self.dataSource objectAtIndex:indexPath.section] removeObjectAtIndex:indexPath.row];
+        __weak typeof(self) weakself = self;
+        [[EMClient sharedClient].contactManager asyncRemoveUserFromBlackList:username success:^{
+            [[ChatDemoHelper shareHelper].contactViewVC reloadDataSource];
+            [[weakself.dataSource objectAtIndex:indexPath.section] removeObjectAtIndex:indexPath.row];
             [tableView reloadData];
-        }
-        else
-        {
-            [self showHint:error.description];
-        }
+        } failure:^(EMError *aError) {
+            [weakself showHint:aError.errorDescription];
+        }];
     }
 }
 
@@ -150,35 +162,26 @@
 
 - (CGFloat)tableView:(UITableView *)tableView heightForHeaderInSection:(NSInteger)section
 {
-    if ([[self.dataSource objectAtIndex:section] count] == 0)
-    {
-        return 0;
-    }
-    else{
-        return 22;
-    }
+    return 22;
 }
 
 - (UIView *)tableView:(UITableView *)tableView viewForHeaderInSection:(NSInteger)section
 {
-    if ([[self.dataSource objectAtIndex:section] count] == 0)
-    {
-        return nil;
-    }
-    
     UIView *contentView = [[UIView alloc] init];
-    [contentView setBackgroundColor:[UIColor colorWithRed:0.88 green:0.88 blue:0.88 alpha:1.0]];
+    [contentView setBackgroundColor:[UIColor HIGreenDarkColor]];
+    
     UILabel *label = [[UILabel alloc] initWithFrame:CGRectMake(10, 0, 100, 22)];
-    label.backgroundColor = [UIColor clearColor];
-    [label setText:[self.sectionTitles objectAtIndex:section]];
+    label.backgroundColor = [UIColor whiteColor];
+    label.text = [self.sectionTitles objectAtIndex:section];
+    
     [contentView addSubview:label];
+    
     return contentView;
 }
 
 - (NSArray *)sectionIndexTitlesForTableView:(UITableView *)tableView
 {
     NSMutableArray * existTitles = [NSMutableArray array];
-    //section数组为空的title过滤掉，不显示
     for (int i = 0; i < [self.sectionTitles count]; i++) {
         if ([[self.dataSource objectAtIndex:i] count] > 0) {
             [existTitles addObject:[self.sectionTitles objectAtIndex:i]];
@@ -192,80 +195,61 @@
     return UITableViewCellEditingStyleDelete;
 }
 
+
 #pragma mark - scrollView delegate
 
 - (void)scrollViewDidScroll:(UIScrollView *)scrollView
 {
-    [_slimeView scrollViewDidScroll];
+    [self.slimeView scrollViewDidScroll];
 }
 
 - (void)scrollViewDidEndDragging:(UIScrollView *)scrollView willDecelerate:(BOOL)decelerate
 {
-    [_slimeView scrollViewDidEndDraging];
+    [self.slimeView scrollViewDidEndDraging];
 }
 
+
 #pragma mark - slimeRefresh delegate
-//刷新列表
+
 - (void)slimeRefreshStartRefresh:(SRRefreshView *)refreshView
 {
-    [self reloadDataSource];
-    [_slimeView endRefresh];
+    [self loadBlacklistData];
 }
+
 
 #pragma mark - data
 
-- (NSMutableArray *)sortDataArray:(NSArray *)dataArray
+- (void)loadBlacklistData
 {
-    //建立索引的核心
-    UILocalizedIndexedCollation *indexCollation = [UILocalizedIndexedCollation currentCollation];
+    __weak typeof(self) weakself = self;
     
-    [self.sectionTitles removeAllObjects];
-    [self.sectionTitles addObjectsFromArray:[indexCollation sectionTitles]];
-    
-    //返回27，是a－z和＃
-    NSInteger highSection = [self.sectionTitles count];
-    //tableView 会被分成27个section
-    NSMutableArray *sortedArray = [NSMutableArray arrayWithCapacity:highSection];
-    for (int i = 0; i <= highSection; i++) {
-        NSMutableArray *sectionArray = [NSMutableArray arrayWithCapacity:1];
-        [sortedArray addObject:sectionArray];
-    }
-    
-    //名字分section
-    for (NSString *username in dataArray) {
-        //getUserName是实现中文拼音检索的核心，见NameIndex类
-        NSString *firstLetter = [EaseChineseToPinyin pinyinFromChineseString:username];
-        NSInteger section = [indexCollation sectionForObject:[firstLetter substringToIndex:1] collationStringSelector:@selector(uppercaseString)];
+    dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), ^{
         
-        NSMutableArray *array = [sortedArray objectAtIndex:section];
-        [array addObject:username];
-    }
-    
-    //每个section内的数组排序
-    for (int i = 0; i < [sortedArray count]; i++) {
-        NSArray *array = [[sortedArray objectAtIndex:i] sortedArrayUsingComparator:^NSComparisonResult(NSString *obj1, NSString *obj2) {
-            NSString *firstLetter1 = [EaseChineseToPinyin pinyinFromChineseString:obj1];
-            firstLetter1 = [[firstLetter1 substringToIndex:1] uppercaseString];
+        [weakself.dataSource removeAllObjects];
+        
+        [[EMClient sharedClient].contactManager asyncGetBlackListFromServer:^(NSArray *aList) {
             
-            NSString *firstLetter2 = [EaseChineseToPinyin pinyinFromChineseString:obj2];
-            firstLetter2 = [[firstLetter2 substringToIndex:1] uppercaseString];
-            
-            return [firstLetter1 caseInsensitiveCompare:firstLetter2];
+            [weakself.dataSource addObjectsFromArray:aList];
+
+            dispatch_async(dispatch_get_main_queue(), ^{
+                
+                [weakself.tableView reloadData];
+                
+                [self.slimeView endRefresh];
+            });
+        } failure:^(EMError *aError) {
+            dispatch_async(dispatch_get_main_queue(), ^{
+                
+                [weakself.tableView reloadData];
+                
+                [self.slimeView endRefresh];
+            });
         }];
         
         
-        [sortedArray replaceObjectAtIndex:i withObject:[NSMutableArray arrayWithArray:array]];
-    }
-    
-    return sortedArray;
+
+    });
 }
 
-- (void)reloadDataSource
-{
-    [_dataSource removeAllObjects];
-    NSArray *blocked = [[EaseMob sharedInstance].chatManager fetchBlockedList:nil];
-    [_dataSource addObjectsFromArray:[self sortDataArray:blocked]];
-    [self.tableView reloadData];
-}
 
 @end

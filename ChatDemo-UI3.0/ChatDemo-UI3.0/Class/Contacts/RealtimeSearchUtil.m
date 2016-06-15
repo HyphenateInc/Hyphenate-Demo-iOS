@@ -1,13 +1,11 @@
 /************************************************************
-  *  * EaseMob CONFIDENTIAL 
+  *  * Hyphenate   
   * __________________ 
-  * Copyright (C) 2013-2014 EaseMob Technologies. All rights reserved. 
+  * Copyright (C) 2016 Hyphenate Inc. All rights reserved. 
   *  
   * NOTICE: All information contained herein is, and remains 
-  * the property of EaseMob Technologies.
-  * Dissemination of this information or reproduction of this material 
-  * is strictly forbidden unless prior written permission is obtained
-  * from EaseMob Technologies.
+  * the property of Hyphenate Inc.
+
   */
 
 #import "RealtimeSearchUtil.h"
@@ -21,14 +19,7 @@ static RealtimeSearchUtil *defaultUtil = nil;
 @property (nonatomic) SEL selector;
 
 @property (copy, nonatomic) RealtimeSearchResultsBlock resultBlock;
-
-/**
- *  当前搜索线程
- */
 @property (strong, nonatomic) NSThread *searchThread;
-/**
- *  搜索线程队列
- */
 @property (strong, nonatomic) dispatch_queue_t searchQueue;
 
 @end
@@ -50,11 +41,6 @@ static RealtimeSearchUtil *defaultUtil = nil;
     return self;
 }
 
-/**
- *  实时搜索单例实例化
- *
- *  @return 实时搜索单例
- */
 + (instancetype)currentUtil
 {
     static dispatch_once_t onceToken;
@@ -71,7 +57,6 @@ static RealtimeSearchUtil *defaultUtil = nil;
 {
     [self.searchThread cancel];
     
-    //开启新线程
     self.searchThread = [[NSThread alloc] initWithTarget:self selector:@selector(searchBegin:) object:string];
     [self.searchThread start];
 }
@@ -119,13 +104,6 @@ static RealtimeSearchUtil *defaultUtil = nil;
 
 #pragma mark - public
 
-/**
- *  开始搜索，只需要调用一次，与[realtimeSearchStop]配套使用
- *
- *  @param source      要搜索的数据源
- *  @param selector    获取元素中要比较的字段的方法
- *  @param resultBlock 回调方法，返回搜索结果
- */
 - (void)realtimeSearchWithSource:(id)source searchText:(NSString *)searchText collationStringSelector:(SEL)selector resultBlock:(RealtimeSearchResultsBlock)resultBlock
 {
     if (!source || !searchText || !resultBlock) {
@@ -141,14 +119,6 @@ static RealtimeSearchUtil *defaultUtil = nil;
     [self realtimeSearch:searchText];
 }
 
-/**
- *  从fromString中搜索是否包含searchString
- *
- *  @param searchString 要搜索的字串
- *  @param fromString   从哪个字符串搜索
- *
- *  @return 是否包含字串
- */
 - (BOOL)realtimeSearchString:(NSString *)searchString fromString:(NSString *)fromString
 {
     if (!searchString || !fromString || (fromString.length == 0 && searchString.length != 0)) {
@@ -162,9 +132,6 @@ static RealtimeSearchUtil *defaultUtil = nil;
     return (location == NSNotFound ? NO : YES);
 }
 
-/**
- * 结束搜索，只需要调用一次，在[realtimeSearchBeginWithSource:]之后使用，主要用于释放资源
- */
 - (void)realtimeSearchStop
 {
     [self.searchThread cancel];
