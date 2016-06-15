@@ -21,7 +21,7 @@
 
 -(void)removeInvitation:(ApplyEntity *)applyEntity loginUser:(NSString *)username;
 
--(NSArray *)applyEmtitiesWithloginUser:(NSString *)username;
+-(NSArray *)getSavedFriendRequests:(NSString *)username;
 
 @end
 

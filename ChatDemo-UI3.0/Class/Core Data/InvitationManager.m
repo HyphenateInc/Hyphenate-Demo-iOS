@@ -12,7 +12,6 @@
 
 #import "InvitationManager.h"
 
-
 @interface InvitationManager (){
     NSUserDefaults *_defaults;
 }
@@ -39,36 +38,58 @@ static InvitationManager *sharedInstance = nil;
     return self;
 }
 
--(void)addInvitation:(ApplyEntity *)applyEntity loginUser:(NSString *)username{
+
+#pragma mark - Data
+
+- (void)addInvitation:(ApplyEntity *)applyEntity loginUser:(NSString *)username
+{
     NSData *defalutData = [_defaults objectForKey:username];
-    NSArray *ary = [NSKeyedUnarchiver unarchiveObjectWithData:defalutData];
-    NSMutableArray *appleys = [[NSMutableArray alloc] initWithArray:ary];
-    [appleys addObject:applyEntity];
-    NSData *data = [NSKeyedArchiver archivedDataWithRootObject:appleys];
+    
+    NSMutableArray *requests = [[NSKeyedUnarchiver unarchiveObjectWithData:defalutData] mutableCopy];
+    
+    [requests addObject:applyEntity];
+    
+    NSData *data = [NSKeyedArchiver archivedDataWithRootObject:requests];
+    
     [_defaults setObject:data forKey:username];
 }
 
--(void)removeInvitation:(ApplyEntity *)applyEntity loginUser:(NSString *)username{
+- (void)removeInvitation:(ApplyEntity *)applyEntity loginUser:(NSString *)username
+{
     NSData *defalutData = [_defaults objectForKey:username];
-    NSArray *ary = [NSKeyedUnarchiver unarchiveObjectWithData:defalutData];
-    NSMutableArray *appleys = [[NSMutableArray alloc] initWithArray:ary];
+    
+    if (!defalutData) {
+        return;
+    }
+    
+    NSMutableArray *requests = [[NSKeyedUnarchiver unarchiveObjectWithData:defalutData] mutableCopy];
+    
     ApplyEntity *needDelete;
-    for (ApplyEntity *entity in appleys) {
-        if ([entity.groupId isEqualToString:applyEntity.groupId] &&
-            [entity.receiverUsername isEqualToString:applyEntity.receiverUsername]) {
-            needDelete = entity;
+    for (ApplyEntity *request in requests) {
+        if ([request.groupId isEqualToString:applyEntity.groupId] &&
+            [request.receiverUsername isEqualToString:applyEntity.receiverUsername]) {
+            needDelete = request;
             break;
         }
     }
-    [appleys removeObject:needDelete];
-    NSData *data = [NSKeyedArchiver archivedDataWithRootObject:appleys];
+    [requests removeObject:needDelete];
+    
+    NSData *data = [NSKeyedArchiver archivedDataWithRootObject:requests];
+    
     [_defaults setObject:data forKey:username];
 }
 
--(NSArray *)applyEmtitiesWithloginUser:(NSString *)username{
+- (NSArray *)getSavedFriendRequests:(NSString *)username
+{
     NSData *defalutData = [_defaults objectForKey:username];
-    NSArray *ary = [NSKeyedUnarchiver unarchiveObjectWithData:defalutData];
-    return ary;
+    
+    NSArray *requestObjects = [[NSArray alloc] init];
+    
+    if (defalutData) {
+        requestObjects = [NSKeyedUnarchiver unarchiveObjectWithData:defalutData];
+    }
+    
+    return requestObjects;
 }
 
 @end

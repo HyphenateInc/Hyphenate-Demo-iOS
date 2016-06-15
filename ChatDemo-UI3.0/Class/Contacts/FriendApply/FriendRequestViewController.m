@@ -318,7 +318,7 @@ static FriendRequestViewController *controller = nil;
     NSString *loginName = [self loginUsername];
     if(loginName && [loginName length] > 0)
     {
-        NSArray * applyArray = [[InvitationManager sharedInstance] applyEmtitiesWithloginUser:loginName];
+        NSArray * applyArray = [[InvitationManager sharedInstance] getSavedFriendRequests:loginName];
         [self.dataSource addObjectsFromArray:applyArray];
         
         [self.tableView reloadData];
