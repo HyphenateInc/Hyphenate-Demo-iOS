@@ -7,7 +7,6 @@ target 'ChatDemo-UI3.0' do
     
     pod 'HyphenateFull-SDK'
     pod 'EaseUI', :git => 'https://github.com/HyphenateInc/easeui_ios'
-#    pod 'EaseUI', :path => '~/easeui_ios'
 
     pod 'GoogleCloudMessaging', '~> 1.2'
     pod 'Google/Analytics'
