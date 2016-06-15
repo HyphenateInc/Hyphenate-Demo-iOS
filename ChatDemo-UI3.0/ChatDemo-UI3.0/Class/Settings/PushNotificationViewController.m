@@ -13,15 +13,13 @@
 #import "PushNotificationViewController.h"
 
 @interface PushNotificationViewController ()
-{
-    EMPushDisplayStyle _pushDisplayStyle;
-    EMPushNoDisturbStatus _noDisturbingStatus;
-    NSInteger _noDisturbingStart;
-    NSInteger _noDisturbingEnd;
-    NSString *_nickName;
-}
 
 @property (strong, nonatomic) UISwitch *pushDisplaySwitch;
+@property (assign, nonatomic) EMPushDisplayStyle pushDisplayStyle;
+@property (assign, nonatomic) EMPushNoDisturbStatus noDisturbingStatus;
+@property (assign, nonatomic) NSInteger noDisturbingStart;
+@property (assign, nonatomic) NSInteger noDisturbingEnd;
+@property (strong, nonatomic) NSString *nickName;
 
 @end
 
@@ -32,9 +30,9 @@
     self = [super initWithStyle:style];
     if (self) {
         // Custom initialization
-        _noDisturbingStart = -1;
-        _noDisturbingEnd = -1;
-        _noDisturbingStatus = -1;
+        self.noDisturbingStart = -1;
+        self.noDisturbingEnd = -1;
+        self.noDisturbingStatus = -1;
     }
     return self;
 }
@@ -50,11 +48,6 @@
                                                                          target:self.navigationController
                                                                          action:@selector(popViewControllerAnimated:)];
     self.navigationItem.leftBarButtonItem = backBarButtonItem;
-    
-    UIButton *saveButton = [[UIButton alloc] initWithFrame:CGRectMake(0, 0, 50, 40)];
-    [saveButton setTitle:NSLocalizedString(@"save", @"Save") forState:UIControlStateNormal];
-    [saveButton addTarget:self action:@selector(savePushOptions) forControlEvents:UIControlEventTouchUpInside];
-    self.navigationItem.rightBarButtonItem = [[UIBarButtonItem alloc] initWithCustomView:saveButton];
     
     self.tableView.tableFooterView = [[UIView alloc] init];
     
@@ -94,13 +87,11 @@
 
 - (NSInteger)numberOfSectionsInTableView:(UITableView *)tableView
 {
-    // Return the number of sections.
     return 2;
 }
 
 - (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section
 {
-    // Return the number of rows in the section.
     if (section == 0) {
         return 1;
     }
@@ -150,17 +141,17 @@
     {
         if (indexPath.row == 0) {
             cell.textLabel.text = NSLocalizedString(@"setting.open", @"On");
-            cell.accessoryType = _noDisturbingStatus == EMPushNoDisturbStatusDay ? UITableViewCellAccessoryCheckmark : UITableViewCellAccessoryNone;
+            cell.accessoryType = self.noDisturbingStatus == EMPushNoDisturbStatusDay ? UITableViewCellAccessoryCheckmark : UITableViewCellAccessoryNone;
         }
         else if (indexPath.row == 1)
         {
             cell.textLabel.text = NSLocalizedString(@"setting.nightOpen", @"On only from 10pm to 7am.");
-            cell.accessoryType = _noDisturbingStatus == EMPushNoDisturbStatusCustom ? UITableViewCellAccessoryCheckmark : UITableViewCellAccessoryNone;
+            cell.accessoryType = self.noDisturbingStatus == EMPushNoDisturbStatusCustom ? UITableViewCellAccessoryCheckmark : UITableViewCellAccessoryNone;
         }
         else if (indexPath.row == 2)
         {
             cell.textLabel.text = NSLocalizedString(@"setting.close", @"Off");
-            cell.accessoryType = _noDisturbingStatus == EMPushNoDisturbStatusClose ? UITableViewCellAccessoryCheckmark : UITableViewCellAccessoryNone;
+            cell.accessoryType = self.noDisturbingStatus == EMPushNoDisturbStatusClose ? UITableViewCellAccessoryCheckmark : UITableViewCellAccessoryNone;
         }
     }
     
@@ -202,9 +193,9 @@
                                         case 0: {
                                         } break;
                                         default: {
-                                            self->_noDisturbingStart = 0;
-                                            self->_noDisturbingEnd = 24;
-                                            self->_noDisturbingStatus = EMPushNoDisturbStatusDay;
+                                            self.noDisturbingStart = 0;
+                                            self.noDisturbingEnd = 24;
+                                            self.noDisturbingStatus = EMPushNoDisturbStatusDay;
                                             [tableView reloadData];
                                         } break;
                                     }
@@ -215,16 +206,16 @@
             } break;
             case 1:
             {
-                _noDisturbingStart = 22;
-                _noDisturbingEnd = 7;
-                _noDisturbingStatus = EMPushNoDisturbStatusCustom;
+                self.noDisturbingStart = 22;
+                self.noDisturbingEnd = 7;
+                self.noDisturbingStatus = EMPushNoDisturbStatusCustom;
             }
                 break;
             case 2:
             {
-                _noDisturbingStart = -1;
-                _noDisturbingEnd = -1;
-                _noDisturbingStatus = EMPushNoDisturbStatusClose;
+                self.noDisturbingStart = -1;
+                self.noDisturbingEnd = -1;
+                self.noDisturbingStatus = EMPushNoDisturbStatusClose;
             }
                 break;
                 
@@ -235,43 +226,53 @@
         if (needReload) {
             [tableView reloadData];
         }
+        
+        [self savePushOptions];
     }
 }
+
 
 #pragma mark - action
 
 - (void)savePushOptions
 {
-    BOOL isUpdate = NO;
+    BOOL isUpdated = NO;
+    
+    // push summery vs detailed
     EMPushOptions *options = [[EMClient sharedClient] pushOptions];
-    if (_pushDisplayStyle != options.displayStyle) {
-        options.displayStyle = _pushDisplayStyle;
-        isUpdate = YES;
+    if (self.pushDisplayStyle != options.displayStyle) {
+        options.displayStyle = self.pushDisplayStyle;
+        isUpdated = YES;
     }
     
-    if (_nickName && _nickName.length > 0 && ![_nickName isEqualToString:options.nickname])
-    {
-        options.nickname = _nickName;
-        isUpdate = YES;
+    // APNs nickname
+    if (self.nickName && self.nickName.length > 0 && ![self.nickName isEqualToString:options.nickname]) {
+        options.nickname = self.nickName;
+        isUpdated = YES;
     }
-    if (options.noDisturbingStartH != _noDisturbingStart || options.noDisturbingEndH != _noDisturbingEnd){
-        isUpdate = YES;
-        options.noDisturbStatus = _noDisturbingStatus;
-        options.noDisturbingStartH = _noDisturbingStart;
-        options.noDisturbingEndH = _noDisturbingEnd;
+    
+    // Do Not Disturb option
+    if (options.noDisturbingStartH != self.noDisturbingStart || options.noDisturbingEndH != self.noDisturbingEnd){
+        options.noDisturbStatus = self.noDisturbingStatus;
+        options.noDisturbingStartH = self.noDisturbingStart;
+        options.noDisturbingEndH = self.noDisturbingEnd;
+        isUpdated = YES;
     }
     
     __weak typeof(self) weakself = self;
     dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), ^{
+        
         EMError *error = nil;
-        if (isUpdate) {
+        if (isUpdated) {
             error = [[EMClient sharedClient] updatePushOptionsToServer];
         }
+        
         dispatch_async(dispatch_get_main_queue(), ^{
+            
             if (!error) {
                 [weakself.navigationController popViewControllerAnimated:YES];
             } else {
-                [weakself showHint:[NSString stringWithFormat:@"%@:%@", NSLocalizedString(@"error.save", @"Fail to save"),error.errorDescription]];
+                [weakself showHint:[NSString stringWithFormat:@"%@:%@", NSLocalizedString(@"error.save", @"Failed to save"), error.errorDescription]];
             }
         });
     });
@@ -280,11 +281,13 @@
 - (void)pushDisplayChanged:(UISwitch *)pushDisplaySwitch
 {
     if (pushDisplaySwitch.isOn) {
-        _pushDisplayStyle = EMPushDisplayStyleMessageSummary;
+        self.pushDisplayStyle = EMPushDisplayStyleMessageSummary;
     }
-    else{
-        _pushDisplayStyle = EMPushDisplayStyleSimpleBanner;
+    else {
+        self.pushDisplayStyle = EMPushDisplayStyleSimpleBanner;
     }
+    
+    [self savePushOptions];
 }
 
 - (void)loadPushOptions
@@ -306,16 +309,18 @@
 - (void)refreshPushOptions
 {
     EMPushOptions *options = [[EMClient sharedClient] pushOptions];
-    _nickName = options.nickname;
-    _pushDisplayStyle = options.displayStyle;
-    _noDisturbingStatus = options.noDisturbStatus;
-    if (_noDisturbingStatus != EMPushNoDisturbStatusClose) {
-        _noDisturbingStart = options.noDisturbingStartH;
-        _noDisturbingEnd = options.noDisturbingEndH;
+    self.nickName = options.nickname;
+    self.pushDisplayStyle = options.displayStyle;
+    self.noDisturbingStatus = options.noDisturbStatus;
+    if (self.noDisturbingStatus != EMPushNoDisturbStatusClose) {
+        self.noDisturbingStart = options.noDisturbingStartH;
+        self.noDisturbingEnd = options.noDisturbingEndH;
     }
     
-    BOOL isDisplayOn = _pushDisplayStyle == EMPushDisplayStyleSimpleBanner ? NO : YES;
+    BOOL isDisplayOn = self.pushDisplayStyle == EMPushDisplayStyleSimpleBanner ? NO : YES;
+    
     [self.pushDisplaySwitch setOn:isDisplayOn animated:YES];
+    
     [self.tableView reloadData];
 }
 

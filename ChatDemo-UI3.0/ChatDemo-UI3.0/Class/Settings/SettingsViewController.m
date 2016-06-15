@@ -13,7 +13,6 @@
 #import "FriendRequestViewController.h"
 #import "PushNotificationViewController.h"
 #import "BlackListViewController.h"
-#import "DebugViewController.h"
 #import "EditNicknameViewController.h"
 #import "UserProfileEditViewController.h"
 #import "CallViewController.h"
@@ -126,8 +125,8 @@
                 cell.accessoryType = UITableViewCellAccessoryDisclosureIndicator;
                 break;
             case 3:
-                cell.textLabel.text = NSLocalizedString(@"title.debug", @"Debug");
-                cell.accessoryType = UITableViewCellAccessoryDisclosureIndicator;
+                cell.accessoryType = UITableViewCellAccessoryNone;
+                cell.textLabel.text = [NSString stringWithFormat:@"SDK Version: %@", [[EMClient sharedClient] version]];
                 break;
             case 4:
                 cell.textLabel.text = NSLocalizedString(@"setting.deleteConWhenLeave", @"Delete conversation when leave a group");
@@ -175,11 +174,6 @@
     {
         BlackListViewController *blackController = [[BlackListViewController alloc] initWithNibName:nil bundle:nil];
         [self.navigationController pushViewController:blackController animated:YES];
-    }
-    else if (indexPath.row == 3)
-    {
-        DebugViewController *debugController = [[DebugViewController alloc] initWithStyle:UITableViewStylePlain];
-        [self.navigationController pushViewController:debugController animated:YES];
     }
     else if (indexPath.row == 5) {
         EditNicknameViewController *editName = [[EditNicknameViewController alloc] initWithNibName:nil bundle:nil];
