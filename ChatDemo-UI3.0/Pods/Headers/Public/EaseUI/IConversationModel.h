@@ -1,1 +1,1 @@
-../../../EaseUI/EaseUI/EMUIKit/Model/IConversationModel.h
+../../../../../../easeui_ios/EaseUI/EMUIKit/Model/IConversationModel.h

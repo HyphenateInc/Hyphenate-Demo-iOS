@@ -1,1 +1,1 @@
-../../../EaseUI/EaseUI/EMUIKit/Util/EaseConvertToCommonEmoticonsHelper.h
+../../../../../../easeui_ios/EaseUI/EMUIKit/Util/EaseConvertToCommonEmoticonsHelper.h

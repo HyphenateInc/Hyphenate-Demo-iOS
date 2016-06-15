@@ -1,1 +1,1 @@
-../../../EaseUI/EaseUI/EMUIKit/Views/conversation/toolbar/MoreView/EaseChatBarMoreView.h
+../../../../../../easeui_ios/EaseUI/EMUIKit/Views/conversation/toolbar/MoreView/EaseChatBarMoreView.h

@@ -1,1 +1,1 @@
-../../../EaseUI/EaseUI/EMUIKit/Views/conversation/MessageCell/EaseMessageTimeCell.h
+../../../../../../easeui_ios/EaseUI/EMUIKit/Views/conversation/MessageCell/EaseMessageTimeCell.h

@@ -1,1 +1,1 @@
-../../../EaseUI/EaseUI/EMUIKit/Model/IModelChatCell.h
+../../../../../../easeui_ios/EaseUI/EMUIKit/Model/IModelChatCell.h
