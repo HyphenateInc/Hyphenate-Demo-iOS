@@ -41,7 +41,7 @@
     
     self.title = NSLocalizedString(@"setting.personalInfo", @"Profile");
     
-    self.view.backgroundColor = [UIColor HIColorGreenDark];
+    self.view.backgroundColor = [UIColor HIPrimaryColor];
     
     UIBarButtonItem *backBarButtonItem = [[UIBarButtonItem alloc] initWithImage:[UIImage imageNamed:@"back"]
                                                                           style:UIBarButtonItemStylePlain

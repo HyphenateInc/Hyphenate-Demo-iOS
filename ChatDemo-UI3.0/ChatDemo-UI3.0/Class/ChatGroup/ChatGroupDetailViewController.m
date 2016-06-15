@@ -173,7 +173,7 @@
         [_clearButton setTitle:NSLocalizedString(@"group.removeAllMessages", @"Clear all messages") forState:UIControlStateNormal];
         [_clearButton setTitleColor:[UIColor whiteColor] forState:UIControlStateNormal];
         [_clearButton addTarget:self action:@selector(clearAction) forControlEvents:UIControlEventTouchUpInside];
-        [_clearButton setBackgroundColor:[UIColor HIColorRed]];
+        [_clearButton setBackgroundColor:[UIColor HIRedColor]];
         _clearButton.layer.cornerRadius = 6.0f;
         _clearButton.layer.masksToBounds = YES;
     }
@@ -188,7 +188,7 @@
         [_dissolveButton setTitle:NSLocalizedString(@"group.destroy", @"Dismiss the group") forState:UIControlStateNormal];
         [_dissolveButton setTitleColor:[UIColor whiteColor] forState:UIControlStateNormal];
         [_dissolveButton addTarget:self action:@selector(dissolveAction) forControlEvents:UIControlEventTouchUpInside];
-        [_dissolveButton setBackgroundColor: [UIColor HIColorRed]];
+        [_dissolveButton setBackgroundColor: [UIColor HIRedColor]];
         _dissolveButton.layer.cornerRadius = 6.0f;
         _dissolveButton.layer.masksToBounds = YES;
     }
@@ -203,7 +203,7 @@
         [_exitButton setTitle:NSLocalizedString(@"group.leave", @"Leave the group") forState:UIControlStateNormal];
         [_exitButton setTitleColor:[UIColor whiteColor] forState:UIControlStateNormal];
         [_exitButton addTarget:self action:@selector(exitAction) forControlEvents:UIControlEventTouchUpInside];
-        [_exitButton setBackgroundColor:[UIColor HIColorRed]];
+        [_exitButton setBackgroundColor:[UIColor HIRedColor]];
         _exitButton.layer.cornerRadius = 6.0f;
         _exitButton.layer.masksToBounds = YES;
     }

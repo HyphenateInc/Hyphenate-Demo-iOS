@@ -10,27 +10,27 @@
 
 @implementation UIColor (Hyphenate)
 
-+ (UIColor *)HIColorGreenMajor
++ (UIColor *)HIPrimaryColor
 {
     return [[self class] colorFromHexString:@"#A0D830"];
 }
 
-+ (UIColor *)HIColorGreenDark
++ (UIColor *)HIGreenDarkColor
 {
     return [[self class] colorFromHexString:@"#7d9b3c"];
 }
 
-+ (UIColor *)HIColorGreenLight
++ (UIColor *)HIGreenLightColor
 {
     return [[self class] colorFromHexString:@"#9cc13b"];
 }
 
-+ (UIColor *)HIColorRed
++ (UIColor *)HIRedColor
 {
     return [[self class] colorFromHexString:@"#cc0000"];
 }
 
-+ (UIColor *)HIColorLightGray
++ (UIColor *)HIGrayLightColor
 {
     return [[self class] colorFromHexString:@"#EFEFEF"];
 }

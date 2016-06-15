@@ -115,7 +115,7 @@
         _searchBar = [[EMSearchBar alloc] initWithFrame: CGRectMake(0, 0, self.view.frame.size.width, 44)];
         _searchBar.delegate = self;
         _searchBar.placeholder = NSLocalizedString(@"search", @"Search");
-        _searchBar.barTintColor = [UIColor HIColorLightGray];
+        _searchBar.barTintColor = [UIColor HIGrayLightColor];
     }
     
     return _searchBar;
@@ -275,7 +275,7 @@
     }
     
     UIView *contentView = [[UIView alloc] init];
-    [contentView setBackgroundColor:[UIColor HIColorLightGray]];
+    [contentView setBackgroundColor:[UIColor HIGrayLightColor]];
     return contentView;
 }
 

@@ -19,7 +19,7 @@
     if (self) {
 
         self.addLabel = [[UILabel alloc] initWithFrame:CGRectMake(self.frame.size.width - 20, 0, 60, 30)];
-        self.addLabel.backgroundColor = [UIColor HIColorGreenMajor];
+        self.addLabel.backgroundColor = [UIColor HIPrimaryColor];
         self.addLabel.textAlignment = NSTextAlignmentCenter;
         self.addLabel.text = NSLocalizedString(@"add", @"Add");
         self.addLabel.textColor = [UIColor whiteColor];

@@ -10,11 +10,11 @@
 
 @interface UIColor (Hyphenate)
 
-+ (UIColor *)HIColorGreenMajor;
-+ (UIColor *)HIColorGreenDark;
-+ (UIColor *)HIColorGreenLight;
-+ (UIColor *)HIColorRed;
-+ (UIColor *)HIColorLightGray;
++ (UIColor *)HIPrimaryColor;
++ (UIColor *)HIGreenDarkColor;
++ (UIColor *)HIGreenLightColor;
++ (UIColor *)HIRedColor;
++ (UIColor *)HIGrayLightColor;
 
 + (UIColor *)colorFromHexString:(NSString *)hexString;
 

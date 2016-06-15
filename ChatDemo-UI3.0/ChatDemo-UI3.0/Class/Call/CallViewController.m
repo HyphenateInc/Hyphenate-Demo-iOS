@@ -215,7 +215,7 @@
     int rejectButtonSize = 60;
     self.rejectButton = [[UIButton alloc] initWithFrame:CGRectMake((tmpWidth - rejectButtonSize) / 2, CGRectGetMaxY(_speakerOutLabel.frame) + 10, rejectButtonSize, rejectButtonSize)];
     [self.rejectButton setImage:[UIImage imageNamed:@"call_end"] forState:UIControlStateNormal];
-    [self.rejectButton setBackgroundColor:[UIColor HIColorRed]];
+    [self.rejectButton setBackgroundColor:[UIColor HIRedColor]];
     [self.rejectButton addTarget:self action:@selector(rejectAction) forControlEvents:UIControlEventTouchUpInside];
     self.rejectButton.layer.cornerRadius = rejectButtonSize/2;
     self.rejectButton.layer.masksToBounds = YES;
@@ -225,7 +225,7 @@
     int answerButtonSize = 80;
     self.answerButton = [[UIButton alloc] initWithFrame:CGRectMake(tmpWidth - answerButtonSize / 2, self.rejectButton.frame.origin.y, answerButtonSize, answerButtonSize)];
     [self.answerButton setImage:[UIImage imageNamed:@"call_pickup"] forState:UIControlStateNormal];
-    [self.answerButton setBackgroundColor:[UIColor HIColorGreenMajor]];
+    [self.answerButton setBackgroundColor:[UIColor HIPrimaryColor]];
     [self.answerButton addTarget:self action:@selector(answerAction) forControlEvents:UIControlEventTouchUpInside];
     self.answerButton.layer.cornerRadius = answerButtonSize/2;
     self.answerButton.layer.masksToBounds = YES;
@@ -235,7 +235,7 @@
     int cancelButtonSize = 80;
     self.cancelButton = [[UIButton alloc] initWithFrame:CGRectMake(tmpWidth - cancelButtonSize / 2, self.rejectButton.frame.origin.y, cancelButtonSize, cancelButtonSize)];
     [self.cancelButton setImage:[UIImage imageNamed:@"call_end"] forState:UIControlStateNormal];
-    [self.cancelButton setBackgroundColor:[UIColor HIColorRed]];
+    [self.cancelButton setBackgroundColor:[UIColor HIRedColor]];
     [self.cancelButton addTarget:self action:@selector(hangupAction) forControlEvents:UIControlEventTouchUpInside];
     self.cancelButton.layer.cornerRadius = cancelButtonSize/2;
     self.cancelButton.layer.masksToBounds = YES;

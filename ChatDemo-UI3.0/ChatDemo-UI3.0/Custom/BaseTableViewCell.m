@@ -20,7 +20,7 @@
     if (self) {
         // Initialization code
         _bottomLineView = [[UIView alloc] init];
-        _bottomLineView.backgroundColor = [UIColor HIColorGreenMajor];
+        _bottomLineView.backgroundColor = [UIColor HIPrimaryColor];
         [self.contentView addSubview:_bottomLineView];
         
         self.textLabel.backgroundColor = [UIColor clearColor];

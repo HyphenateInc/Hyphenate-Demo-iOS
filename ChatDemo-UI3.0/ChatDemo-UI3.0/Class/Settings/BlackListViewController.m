@@ -168,7 +168,7 @@
 - (UIView *)tableView:(UITableView *)tableView viewForHeaderInSection:(NSInteger)section
 {
     UIView *contentView = [[UIView alloc] init];
-    [contentView setBackgroundColor:[UIColor HIColorGreenDark]];
+    [contentView setBackgroundColor:[UIColor HIGreenDarkColor]];
     
     UILabel *label = [[UILabel alloc] initWithFrame:CGRectMake(10, 0, 100, 22)];
     label.backgroundColor = [UIColor whiteColor];

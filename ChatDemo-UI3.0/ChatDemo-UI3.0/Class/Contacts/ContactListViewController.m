@@ -105,7 +105,7 @@
         _searchBar = [[EMSearchBar alloc] init];
         _searchBar.delegate = self;
         _searchBar.placeholder = NSLocalizedString(@"search", @"Search Contacts");
-        _searchBar.barTintColor = [UIColor HIColorLightGray];
+        _searchBar.barTintColor = [UIColor HIGrayLightColor];
     }
     
     return _searchBar;
@@ -260,7 +260,7 @@
     }
     
     UIView *contentView = [[UIView alloc] init];
-    [contentView setBackgroundColor:[UIColor HIColorLightGray]];
+    [contentView setBackgroundColor:[UIColor HIGrayLightColor]];
     
     UILabel *label = [[UILabel alloc] initWithFrame:CGRectMake(10, 0, 100, 22)];
     label.backgroundColor = [UIColor clearColor];

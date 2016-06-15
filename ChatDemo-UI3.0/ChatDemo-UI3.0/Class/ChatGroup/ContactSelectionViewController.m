@@ -129,7 +129,7 @@
         _searchBar.delegate = self;
         _searchBar.placeholder = NSLocalizedString(@"search", @"Search");
         _searchBar.autoresizingMask = UIViewAutoresizingFlexibleBottomMargin | UIViewAutoresizingFlexibleRightMargin;
-        _searchBar.backgroundColor = [UIColor HIColorGreenDark];
+        _searchBar.barTintColor = [UIColor HIGrayLightColor];
     }
     
     return _searchBar;
@@ -216,14 +216,14 @@
     if (_footerView == nil) {
         _footerView = [[UIView alloc] initWithFrame:CGRectMake(0, self.view.frame.size.height - 50, self.view.frame.size.width, 50)];
         _footerView.autoresizingMask = UIViewAutoresizingFlexibleTopMargin | UIViewAutoresizingFlexibleRightMargin;
-        _footerView.backgroundColor = [UIColor HIColorGreenDark];
+        _footerView.backgroundColor = [UIColor HIGreenDarkColor];
         
         _footerScrollView = [[UIScrollView alloc] initWithFrame:CGRectMake(10, 0, _footerView.frame.size.width - 30 - 70, _footerView.frame.size.height - 5)];
         _footerScrollView.backgroundColor = [UIColor clearColor];
         [_footerView addSubview:_footerScrollView];
         
         _doneButton = [[UIButton alloc] initWithFrame:CGRectMake(_footerView.frame.size.width - 80, 8, 70, _footerView.frame.size.height - 16)];
-        [_doneButton setBackgroundColor:[UIColor HIColorGreenDark]];
+        [_doneButton setBackgroundColor:[UIColor HIGreenDarkColor]];
         [_doneButton setTitle:NSLocalizedString(@"accept", @"Accept") forState:UIControlStateNormal];
         [_doneButton setTitleColor:[UIColor whiteColor] forState:UIControlStateNormal];
         _doneButton.titleLabel.font = [UIFont systemFontOfSize:14.0];

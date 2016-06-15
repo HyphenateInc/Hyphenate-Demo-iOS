@@ -91,7 +91,7 @@
 {
     _saveButton = [UIButton buttonWithType:UIButtonTypeCustom];
     _saveButton.frame = CGRectMake((CGRectGetWidth(self.view.bounds)-kTextFieldWidth)/2, CGRectGetMaxY(_nickTextField.frame) + 10.0, kTextFieldWidth, kButtonHeight);
-    [_saveButton setBackgroundColor:[UIColor HIColorGreenMajor]];
+    [_saveButton setBackgroundColor:[UIColor HIPrimaryColor]];
     [_saveButton setTitle:NSLocalizedString(@"setting.saveName", @"Save") forState:UIControlStateNormal];
     [_saveButton addTarget:self action:@selector(doSave:) forControlEvents:UIControlEventTouchUpInside];
     [self.view addSubview:_saveButton];

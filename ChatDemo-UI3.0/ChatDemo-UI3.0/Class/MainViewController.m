@@ -111,7 +111,7 @@ static NSString *kGroupName = @"GroupName";
 
 - (void)setupSubviews
 {
-    [[UITabBar appearance] setSelectedImageTintColor:[UIColor HIColorGreenMajor]];
+    [[UITabBar appearance] setSelectedImageTintColor:[UIColor HIPrimaryColor]];
     [[UITabBar appearance] setBarTintColor:[UIColor whiteColor]];
 
     // Chats screen
@@ -147,7 +147,7 @@ static NSString *kGroupName = @"GroupName";
 
 -(void)selectedTapTabBarItems:(UITabBarItem *)tabBarItem
 {
-    [tabBarItem setTitleTextAttributes:[NSDictionary dictionaryWithObjectsAndKeys:[UIFont systemFontOfSize:14], NSFontAttributeName, [UIColor HIColorGreenMajor], NSForegroundColorAttributeName, nil] forState:UIControlStateSelected];
+    [tabBarItem setTitleTextAttributes:[NSDictionary dictionaryWithObjectsAndKeys:[UIFont systemFontOfSize:14], NSFontAttributeName, [UIColor HIPrimaryColor], NSForegroundColorAttributeName, nil] forState:UIControlStateSelected];
 }
 
 -(void)setupUnreadMessageCount

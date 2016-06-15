@@ -117,7 +117,7 @@
 {
     if (_networkStateView == nil) {
         _networkStateView = [[UIView alloc] initWithFrame:CGRectMake(0, 0, self.tableView.frame.size.width, 44)];
-        _networkStateView.backgroundColor = [UIColor HIColorGreenMajor];
+        _networkStateView.backgroundColor = [UIColor HIPrimaryColor];
         
         UIImageView *imageView = [[UIImageView alloc] initWithFrame:CGRectMake(10, (_networkStateView.frame.size.height - 20) / 2, 20, 20)];
         imageView.image = [UIImage imageNamed:@"messageSendFail"];
@@ -143,7 +143,7 @@
         _searchBar = [[EMSearchBar alloc] initWithFrame: CGRectMake(0, 0, self.view.frame.size.width, 44)];
         _searchBar.delegate = self;
         _searchBar.placeholder = @"Search Contacts";
-        _searchBar.barTintColor = [UIColor HIColorLightGray];
+        _searchBar.barTintColor = [UIColor HIGrayLightColor];
     }
     
     return _searchBar;

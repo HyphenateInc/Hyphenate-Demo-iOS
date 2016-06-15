@@ -44,7 +44,7 @@
     
     self.title = NSLocalizedString(@"title.setting", @"Setting");
     
-    self.view.backgroundColor = [UIColor HIColorLightGray];
+    self.view.backgroundColor = [UIColor HIGrayLightColor];
     
     self.tableView.backgroundColor = [UIColor whiteColor];
     self.tableView.tableFooterView = self.footerView;
@@ -224,13 +224,13 @@
         _footerView.backgroundColor = [UIColor clearColor];
         
         UIView *line = [[UIView alloc] initWithFrame:CGRectMake(0, 0, _footerView.frame.size.width, 1)];
-        line.backgroundColor = [UIColor HIColorLightGray];
+        line.backgroundColor = [UIColor HIGrayLightColor];
         [_footerView addSubview:line];
         
         CGRect buttonFrame = CGRectMake(0, 1, _footerView.frame.size.width, 45);
         
         UIButton *logoutButton = [[UIButton alloc] initWithFrame:buttonFrame];
-        [logoutButton setBackgroundColor:[UIColor HIColorRed]];
+        [logoutButton setBackgroundColor:[UIColor HIRedColor]];
         NSString *username = [[EMClient sharedClient] currentUsername];
         NSString *logoutButtonTitle = [[NSString alloc] initWithFormat:NSLocalizedString(@"setting.loginUser", @"Logout as  (%@)"), username];
         [logoutButton setTitle:logoutButtonTitle forState:UIControlStateNormal];
@@ -239,7 +239,7 @@
         [_footerView addSubview:logoutButton];
 
         UIView *borderBottom = [[UIView alloc] initWithFrame:CGRectMake(0, logoutButton.frame.origin.y + logoutButton.frame.size.height + 2, _footerView.frame.size.width, 1)];
-        borderBottom.backgroundColor = [UIColor HIColorLightGray];
+        borderBottom.backgroundColor = [UIColor HIGrayLightColor];
         [_footerView addSubview:borderBottom];
     }
     

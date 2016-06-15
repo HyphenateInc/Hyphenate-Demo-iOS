@@ -148,7 +148,7 @@
         _searchBar = [[EMSearchBar alloc] init];
         _searchBar.delegate = self;
         _searchBar.placeholder = NSLocalizedString(@"search", @"Search");
-        _searchBar.backgroundColor = [UIColor HIColorGreenDark];
+        _searchBar.barTintColor = [UIColor HIGrayLightColor];
     }
     return _searchBar;
 }

@@ -194,7 +194,7 @@
     }
     
     UIView *contentView = [[UIView alloc] init];
-    [contentView setBackgroundColor:[UIColor HIColorGreenMajor]];
+    [contentView setBackgroundColor:[UIColor HIPrimaryColor]];
     UILabel *label = [[UILabel alloc] initWithFrame:CGRectMake(10, 0, 100, 22)];
     [label setBackgroundColor:[UIColor clearColor]];
     [label setText:[self.sectionTitles objectAtIndex:section]];

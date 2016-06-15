@@ -21,7 +21,7 @@
 #import "AppDelegate+Parse.h"
 
 /** Hyphenate configuration constants **/
-static NSString *const kHyphenateAppKey = @"hyphenate#hyphenatedemo";
+static NSString *const kHyphenateAppKey = @"hyphenatedemo#hyphenatedemo";
 static NSString *const kHyphenatePushServiceDevelopment = @"DevelopmentCertificate";
 static NSString *const kHyphenatePushServiceProduction = @"ProductionCertificate";
 
@@ -49,7 +49,7 @@ static int const kGaDispatchPeriod = 30;
     [self.window makeKeyAndVisible];
 
     [[UINavigationBar appearance] setTintColor:[UIColor whiteColor]];
-    [[UINavigationBar appearance] setBarTintColor:[UIColor HIColorGreenMajor]];
+    [[UINavigationBar appearance] setBarTintColor:[UIColor HIPrimaryColor]];
     [[UINavigationBar appearance] setTitleTextAttributes:
      [NSDictionary dictionaryWithObjectsAndKeys:[UIColor whiteColor], NSForegroundColorAttributeName, [UIFont fontWithName:@"HelveticaNeue" size:21.0], NSFontAttributeName, nil]];
     

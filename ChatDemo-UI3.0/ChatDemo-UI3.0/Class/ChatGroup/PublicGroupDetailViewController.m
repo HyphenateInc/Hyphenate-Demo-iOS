@@ -115,7 +115,7 @@
         [_footerButton setTitle:NSLocalizedString(@"group.join", @"join the group") forState:UIControlStateNormal];
         [_footerButton setTitleColor:[UIColor whiteColor] forState:UIControlStateNormal];
         [_footerButton addTarget:self action:@selector(joinAction) forControlEvents:UIControlEventTouchUpInside];
-        [_footerButton setBackgroundColor:[UIColor HIColorGreenDark]];
+        [_footerButton setBackgroundColor:[UIColor HIGreenDarkColor]];
         [_footerView addSubview:_footerButton];
     }
     
