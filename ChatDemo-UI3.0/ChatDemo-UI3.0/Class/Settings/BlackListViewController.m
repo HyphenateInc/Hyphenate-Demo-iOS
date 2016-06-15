@@ -142,19 +142,14 @@
 {
     if (editingStyle == UITableViewCellEditingStyleDelete) {
         NSString *username = [[self.dataSource objectAtIndex:indexPath.section] objectAtIndex:indexPath.row];
-        EMError *error = [[EMClient sharedClient].contactManager removeUserFromBlackList:username];
-        if (!error)
-        {
+        __weak typeof(self) weakself = self;
+        [[EMClient sharedClient].contactManager asyncRemoveUserFromBlackList:username success:^{
             [[ChatDemoHelper shareHelper].contactViewVC reloadDataSource];
-            
-            [[self.dataSource objectAtIndex:indexPath.section] removeObjectAtIndex:indexPath.row];
-            
+            [[weakself.dataSource objectAtIndex:indexPath.section] removeObjectAtIndex:indexPath.row];
             [tableView reloadData];
-        }
-        else
-        {
-            [self showHint:error.errorDescription];
-        }
+        } failure:^(EMError *aError) {
+            [weakself showHint:aError.errorDescription];
+        }];
     }
 }
 
@@ -232,17 +227,27 @@
         
         [weakself.dataSource removeAllObjects];
         
-        EMError *error = nil;
-        NSArray *blocked = [[EMClient sharedClient].contactManager getBlackListFromServerWithError:&error];
-        
-        [weakself.dataSource addObjectsFromArray:blocked];
-        
-        dispatch_async(dispatch_get_main_queue(), ^{
+        [[EMClient sharedClient].contactManager asyncGetBlackListFromServer:^(NSArray *aList) {
             
-            [weakself.tableView reloadData];
-            
-            [self.slimeView endRefresh];
-        });
+            [weakself.dataSource addObjectsFromArray:aList];
+
+            dispatch_async(dispatch_get_main_queue(), ^{
+                
+                [weakself.tableView reloadData];
+                
+                [self.slimeView endRefresh];
+            });
+        } failure:^(EMError *aError) {
+            dispatch_async(dispatch_get_main_queue(), ^{
+                
+                [weakself.tableView reloadData];
+                
+                [self.slimeView endRefresh];
+            });
+        }];
+        
+        
+
     });
 }
 

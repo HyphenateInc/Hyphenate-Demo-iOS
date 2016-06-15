@@ -54,7 +54,11 @@ didFinishLaunchingWithOptions:(NSDictionary *)launchOptions
 - (void)application:(UIApplication *)application didRegisterForRemoteNotificationsWithDeviceToken:(NSData *)deviceToken
 {
     dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), ^{
-        [[EMClient sharedClient] bindDeviceToken:deviceToken];
+        [[EMClient sharedClient] asyncBindDeviceToken:deviceToken success:^{
+            
+        } failure:^(EMError *aError) {
+            
+        }];
     });
 }
 

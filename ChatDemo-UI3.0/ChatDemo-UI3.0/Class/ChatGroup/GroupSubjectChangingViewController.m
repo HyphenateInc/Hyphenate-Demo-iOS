@@ -108,22 +108,25 @@
 
 - (void)save:(id)sender
 {
-    EMConversation *conversation = [[EMClient sharedClient].chatManager getConversation:self.group.groupId type:EMConversationTypeGroupChat createIfNotExist:NO];
+    EMConversation *conversation = [[EMClient sharedClient].chatManager getConversation:_group.groupId type:EMConversationTypeGroupChat createIfNotExist:NO];
     
-    EMError *error = nil;
+    __weak typeof(self) weakSelf = self;
     
-    [[EMClient sharedClient].groupManager changeGroupSubject:self.subjectField.text forGroup:self.group.groupId error:&error];
-   
-    if (!error) {
+    [[EMClient sharedClient].groupManager asyncChangeGroupSubject:_subjectField.text forGroup:_group.groupId success:^(EMGroup *aGroup) {
         
-        if ([self.group.groupId isEqualToString:conversation.conversationId]) {
-            
+        GroupSubjectChangingViewController *strongSelf = weakSelf;
+        
+        if ([strongSelf->_group.groupId isEqualToString:conversation.conversationId]) {
             NSMutableDictionary *ext = [NSMutableDictionary dictionaryWithDictionary:conversation.ext];
-            [ext setObject:self.group.subject forKey:@"subject"];
-            [ext setObject:[NSNumber numberWithBool:self.group.isPublic] forKey:@"isPublic"];
+            [ext setObject:strongSelf->_group.subject forKey:@"subject"];
+            [ext setObject:[NSNumber numberWithBool:strongSelf->_group.isPublic] forKey:@"isPublic"];
             conversation.ext = ext;
         }
-    }
+        [self.navigationController popViewControllerAnimated:YES];
+        
+    } failure:^(EMError *aError) {
+        [self.navigationController popViewControllerAnimated:YES];
+    }];
     
     [self.navigationController popViewControllerAnimated:YES];
 }

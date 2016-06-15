@@ -85,15 +85,13 @@
         __weak typeof(self) weakself = self;
         dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), ^{
            
-            EMError *error = [[EMClient sharedClient] registerWithUsername:weakself.usernameTextField.text password:weakself.passwordTextField.text];
-            
-            dispatch_async(dispatch_get_main_queue(), ^{
-            
-                [weakself hideHud];
-                
-                if (!error) {
+            [[EMClient sharedClient] asyncRegisterWithUsername:weakself.usernameTextField.text password:weakself.passwordTextField.text success:^{
+                dispatch_async(dispatch_get_main_queue(), ^{
+                    
+                    [weakself hideHud];
+                    
                     [weakself showHudInView:weakself.view hint:NSLocalizedString(@"register.success", @"Is to register...")];
-                   
+                    
                     double delayInSeconds = 2.0;
                     
                     dispatch_time_t popTime = dispatch_time(DISPATCH_TIME_NOW, delayInSeconds * NSEC_PER_SEC);
@@ -102,9 +100,14 @@
                         //code to be executed on the main queue after delay
                         [weakself loginWithUsername:weakself.usernameTextField.text password:weakself.passwordTextField.text];
                     });
-                }
-                else {
-                    switch (error.code) {
+                });
+                
+            } failure:^(EMError *aError) {
+                dispatch_async(dispatch_get_main_queue(), ^{
+                    
+                    [weakself hideHud];
+                    
+                    switch (aError.code) {
                         case EMErrorServerNotReachable:
                             TTAlertNoTitle(NSLocalizedString(@"error.connectServerFail", @"Connect to the server failed!"));
                             break;
@@ -121,8 +124,8 @@
                             TTAlertNoTitle(NSLocalizedString(@"register.fail", @"Registration failed"));
                             break;
                     }
-                }
-            });
+                });
+            }];
         });
     }
 }
@@ -135,17 +138,15 @@
     
     dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), ^{
       
-        EMError *error = [[EMClient sharedClient] loginWithUsername:username password:password];
-        
-        dispatch_async(dispatch_get_main_queue(), ^{
-            
-            [weakself hideHud];
-            
-            if (!error) {
+        [[EMClient sharedClient] asyncLoginWithUsername:username password:password success:^{
+            dispatch_async(dispatch_get_main_queue(), ^{
+                
+                [weakself hideHud];
+                
                 [[EMClient sharedClient].options setIsAutoLogin:YES];
                 
                 [MBProgressHUD showHUDAddedTo:weakself.view animated:YES];
-              
+                
                 dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), ^{
                     [[EMClient sharedClient] dataMigrationTo3];
                     dispatch_async(dispatch_get_main_queue(), ^{
@@ -156,9 +157,15 @@
                         [[NSNotificationCenter defaultCenter] postNotificationName:KNOTIFICATION_LOGINCHANGE object:@([[EMClient sharedClient] isLoggedIn])];
                     });
                 });
-            }
-            else {
-                switch (error.code)
+                
+            });
+
+        } failure:^(EMError *aError) {
+            dispatch_async(dispatch_get_main_queue(), ^{
+                
+                [weakself hideHud];
+                
+                switch (aError.code)
                 {
                     case EMErrorNetworkUnavailable:
                         TTAlertNoTitle(NSLocalizedString(@"error.connectNetworkFail", @"No network connection!"));
@@ -167,7 +174,7 @@
                         TTAlertNoTitle(NSLocalizedString(@"error.connectServerFail", @"Connect to the server failed!"));
                         break;
                     case EMErrorUserAuthenticationFailed:
-                        TTAlertNoTitle(error.errorDescription);
+                        TTAlertNoTitle(aError.errorDescription);
                         break;
                     case EMErrorServerTimeout:
                         TTAlertNoTitle(NSLocalizedString(@"error.connectServerTimeout", @"Connect to the server timed out!"));
@@ -176,8 +183,8 @@
                         TTAlertNoTitle(NSLocalizedString(@"login.fail", @"Login failure"));
                         break;
                 }
-            }
-        });
+            });
+        }];
     });
 }
 
@@ -188,7 +195,11 @@
         UITextField *nameTextField = [alertView textFieldAtIndex:0];
         
         if(nameTextField.text.length > 0) {
-            [[EMClient sharedClient] setApnsNickname:nameTextField.text];
+            [[EMClient sharedClient] asyncSetApnsNickname:nameTextField.text success:^{
+                
+            } failure:^(EMError *aError) {
+                
+            }];
         }
     }
     

@@ -207,19 +207,16 @@
 
 - (void)fetchGroupInfo
 {
-    [self showHudInView:self.view hint:NSLocalizedString(@"loadData", @"Load data...")];
+    [self showHudInView:self.view hint:NSLocalizedString(@"loadData", @"Loading group data...")];
     __weak PublicGroupDetailViewController *weakSelf = self;
-    dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), ^{
-        EMError *error = nil;
-        EMGroup *group = [[EMClient sharedClient].groupManager fetchGroupInfo:weakSelf.groupId includeMembersList:NO error:&error];
-        dispatch_async(dispatch_get_main_queue(), ^{
-            if (!error) {
-                weakSelf.group = group;
-                [weakSelf reloadSubviewsInfo];
-            }
-            [weakSelf hideHud];
-        });
-    });
+    [[EMClient sharedClient].groupManager asyncFetchGroupInfo:self.groupId includeMembersList:NO success:^(EMGroup *aGroup) {
+        [weakSelf hideHud];
+        weakSelf.group = aGroup;
+        [weakSelf reloadSubviewsInfo];
+    } failure:^(EMError *aError) {
+        [weakSelf hideHud];
+        [weakSelf showHint:aError.errorDescription];
+    }];
 }
 
 - (void)reloadSubviewsInfo
@@ -261,36 +258,26 @@
 {
     [self showHudInView:self.view hint:NSLocalizedString(@"group.join.ongoing", @"join the group...")];
     __weak PublicGroupDetailViewController *weakSelf = self;
-    dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), ^{
-        EMError *error = nil;
-        [[EMClient sharedClient].groupManager joinPublicGroup:groupId error:&error];
-        dispatch_async(dispatch_get_main_queue(), ^{
-            if(!error) {
-                [weakSelf hideHud];
-                [weakSelf.navigationController popViewControllerAnimated:YES];
-            } else {
-                [weakSelf showHint:NSLocalizedString(@"group.join.fail", @"again failed to join the group, please")];
-            }
-        });
-    });
+    [[EMClient sharedClient].groupManager asyncJoinPublicGroup:groupId success:^(EMGroup *aGroup) {
+        [weakSelf hideHud];
+        [weakSelf.navigationController popViewControllerAnimated:YES];
+    } failure:^(EMError *aError) {
+        [weakSelf hideHud];
+        [weakSelf showHint:NSLocalizedString(@"group.join.fail", @"join the group failed again")];
+    }];
 }
 
 - (void)applyJoinGroup:(NSString *)groupId withGroupname:(NSString *)groupName message:(NSString *)message
 {
-    [self showHudInView:self.view hint:NSLocalizedString(@"group.sendingRequest", @"send group of application...")];
+    [self showHudInView:self.view hint:NSLocalizedString(@"group.sendingApply", @"send group of application...")];
     __weak typeof(self) weakSelf = self;
-    dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), ^{
-        EMError *error = nil;
-        [[EMClient sharedClient].groupManager applyJoinPublicGroup:groupId message:groupName error:nil];
-        dispatch_async(dispatch_get_main_queue(), ^{
-            [weakSelf hideHud];
-            if (!error) {
-                [weakSelf showHint:NSLocalizedString(@"group.sendRequestRepeat", @"Request to join the group already sent")];
-            }
-            else{
-                [weakSelf showHint:error.errorDescription];
-            }
-        });
-    });}
+    [[EMClient sharedClient].groupManager asyncApplyJoinPublicGroup:groupId message:message success:^(EMGroup *aGroup) {
+        [weakSelf hideHud];
+        [weakSelf showHint:NSLocalizedString(@"group.applyHasBeenSent", @"application has been sent")];
+    } failure:^(EMError *aError) {
+        [weakSelf hideHud];
+        [weakSelf showHint:aError.errorDescription];
+    }];
+}
 
 @end

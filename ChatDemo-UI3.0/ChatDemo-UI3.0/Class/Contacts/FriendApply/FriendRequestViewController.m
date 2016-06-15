@@ -168,73 +168,92 @@ static FriendRequestViewController *controller = nil;
 - (void)applyCellAddFriendAtIndexPath:(NSIndexPath *)indexPath
 {
     if (indexPath.row < [self.dataSource count]) {
-        [self showHudInView:self.view hint:NSLocalizedString(@"sendingRequest", @"sending request...")];
+        [self showHudInView:self.view hint:NSLocalizedString(@"sendingApply", @"sending apply...")];
         
         ApplyEntity *entity = [self.dataSource objectAtIndex:indexPath.row];
         ApplyStyle applyStyle = [entity.style intValue];
-        dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), ^{
-            EMError *error;
-            if (applyStyle == ApplyStyleGroupInvitation) {
-                [[EMClient sharedClient].groupManager acceptInvitationFromGroup:entity.groupId inviter:entity.applicantUsername error:&error];
-            }
-            else if (applyStyle == ApplyStyleJoinGroup)
-            {
-                error = [[EMClient sharedClient].groupManager acceptJoinApplication:entity.groupId applicant:entity.applicantUsername];
-            }
-            else if(applyStyle == ApplyStyleFriend){
-                error = [[EMClient sharedClient].contactManager acceptInvitationForUsername:entity.applicantUsername];
-            }
-            dispatch_async(dispatch_get_main_queue(), ^{
-                [self hideHud];
-                if (!error) {
-                    [self.dataSource removeObject:entity];
-                    NSString *loginUsername = [[EMClient sharedClient] currentUsername];
-                    [[InvitationManager sharedInstance] removeInvitation:entity loginUser:loginUsername];
-                    [self.tableView reloadData];
-                }
-                else{
-                    [self showHint:NSLocalizedString(@"acceptFail", @"accept failure")];
-                }
-            });
-        });
+        __weak typeof(self) weakSelf = self;
+        dispatch_block_t successBlock = ^{
+            [weakSelf hideHud];
+            [weakSelf.dataSource removeObject:entity];
+            NSString *loginUsername = [[EMClient sharedClient] currentUsername];
+            [[InvitationManager sharedInstance] removeInvitation:entity loginUser:loginUsername];
+            [weakSelf.tableView reloadData];
+        };
+        
+        dispatch_block_t errorBlock = ^{
+            [weakSelf hideHud];
+            [weakSelf showHint:NSLocalizedString(@"acceptFail", @"accept failure")];
+        };
+        
+        if (applyStyle == ApplyStyleGroupInvitation) {
+            [[EMClient sharedClient].groupManager asyncAcceptInvitationFromGroup:entity.groupId inviter:entity.applicantUsername success:^(EMGroup *aGroup) {
+                successBlock();
+            } failure:^(EMError *aError) {
+                errorBlock();
+            }];
+        }
+        else if (applyStyle == ApplyStyleJoinGroup)
+        {
+            [[EMClient sharedClient].groupManager asyncAcceptJoinApplication:entity.groupId applicant:entity.applicantUsername success:^{
+                successBlock();
+            } failure:^(EMError *aError) {
+                errorBlock();
+            }];
+        }
+        else if(applyStyle == ApplyStyleFriend){
+            [[EMClient sharedClient].contactManager asyncAcceptInvitationForUsername:entity.applicantUsername success:^{
+                successBlock();
+            } failure:^(EMError *aError) {
+                errorBlock();
+            }];
+        }
     }
 }
 
 - (void)applyCellRefuseFriendAtIndexPath:(NSIndexPath *)indexPath
 {
     if (indexPath.row < [self.dataSource count]) {
-        [self showHudInView:self.view hint:NSLocalizedString(@"sendingRequest", @"sending request...")];
+        [self showHudInView:self.view hint:NSLocalizedString(@"sendingApply", @"sending apply...")];
         ApplyEntity *entity = [self.dataSource objectAtIndex:indexPath.row];
         ApplyStyle applyStyle = [entity.style intValue];
         EMError *error;
         
+        __weak typeof(self) weakSelf = self;
+        dispatch_block_t successBlock = ^{
+            [weakSelf hideHud];
+            [weakSelf.dataSource removeObject:entity];
+            NSString *loginUsername = [[EMClient sharedClient] currentUsername];
+            [[InvitationManager sharedInstance] removeInvitation:entity loginUser:loginUsername];
+            [weakSelf.tableView reloadData];
+        };
+        
+        dispatch_block_t errorBlock = ^{
+            [weakSelf hideHud];
+            [weakSelf showHint:NSLocalizedString(@"rejectFail", @"reject failure")];
+        };
+        
         if (applyStyle == ApplyStyleGroupInvitation) {
-            error = [[EMClient sharedClient].groupManager declineInvitationFromGroup:entity.groupId inviter:entity.applicantUsername reason:nil];
+            [[EMClient sharedClient].groupManager asyncDeclineInvitationFromGroup:entity.groupId inviter:entity.applicantUsername reason:nil success:^{
+                successBlock();
+            } failure:^(EMError *aError) {
+                errorBlock();
+            }];
         }
         else if (applyStyle == ApplyStyleJoinGroup)
         {
-            error = [[EMClient sharedClient].groupManager declineJoinApplication:entity.groupId applicant:entity.applicantUsername reason:nil];
+            [[EMClient sharedClient].groupManager asyncDeclineJoinApplication:entity.groupId applicant:entity.applicantUsername reason:nil success:^{
+                successBlock();
+            } failure:^(EMError *aError) {
+                errorBlock();
+            }];
         }
         else if(applyStyle == ApplyStyleFriend){
-            [[EMClient sharedClient].contactManager declineInvitationForUsername:entity.applicantUsername];
-        }
-        
-        [self hideHud];
-        if (!error) {
-            [self.dataSource removeObject:entity];
-            NSString *loginUsername = [[EMClient sharedClient] currentUsername];
-            [[InvitationManager sharedInstance] removeInvitation:entity loginUser:loginUsername];
-            
-            [self.tableView reloadData];
-        }
-        else{
-            [self showHint:NSLocalizedString(@"requestDeclineFailure", @"")];
-            [self.dataSource removeObject:entity];
-            NSString *loginUsername = [[EMClient sharedClient] currentUsername];
-            [[InvitationManager sharedInstance] removeInvitation:entity loginUser:loginUsername];
-            
-            [self.tableView reloadData];
-
+            [[EMClient sharedClient].contactManager asyncDeclineInvitationForUsername:entity.applicantUsername success:^{
+                successBlock();
+            } failure:^(EMError *aError) {
+                errorBlock();
+            }];
         }
     }
 }

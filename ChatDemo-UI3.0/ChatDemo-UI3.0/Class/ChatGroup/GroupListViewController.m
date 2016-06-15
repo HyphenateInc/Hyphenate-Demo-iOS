@@ -343,18 +343,14 @@
 - (void)slimeRefreshStartRefresh:(SRRefreshView *)refreshView
 {
     __weak typeof(self) weakself = self;
-    dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), ^{
-        EMError *error = nil;
-        NSArray *groups = [[EMClient sharedClient].groupManager getMyGroupsFromServerWithError:&error];
-        dispatch_async(dispatch_get_main_queue(), ^{
-            if (!error) {
-                [weakself.dataSource removeAllObjects];
-                [weakself.dataSource addObjectsFromArray:groups];
-                [weakself.tableView reloadData];
-            }
-            [weakself.slimeView endRefresh];
-        });
-    });
+    [[EMClient sharedClient].groupManager asyncGetMyGroupsFromServer:^(NSArray *aList) {
+        [weakself.dataSource removeAllObjects];
+        [weakself.dataSource addObjectsFromArray:aList];
+        [weakself.tableView reloadData];
+        [weakself.slimeView endRefresh];
+    } failure:^(EMError *aError) {
+        [weakself.slimeView endRefresh];
+    }];
 }
 
 #pragma mark - EMGroupManagerDelegate

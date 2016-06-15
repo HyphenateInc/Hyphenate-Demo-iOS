@@ -83,30 +83,21 @@ static ChatDemoHelper *helper = nil;
 
 - (void)asyncPushOptions
 {
-    dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), ^{
-        EMError *error = nil;
-        [[EMClient sharedClient] getPushOptionsFromServerWithError:&error];
-    });
+    [[EMClient sharedClient] asyncGetPushOptionsFromServer:^(EMPushOptions *aOptions) {
+    } failure:^(EMError *aError) {
+    }];
 }
 
 - (void)asyncGroupFromServer
 {
     __weak typeof(self) weakself = self;
-    
-    dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), ^{
-        
-        [[EMClient sharedClient].groupManager loadAllMyGroupsFromDB];
-        
-        EMError *error = nil;
-        [[EMClient sharedClient].groupManager getMyGroupsFromServerWithError:&error];
-        if (!error) {
-            if (weakself.contactViewVC) {
-                dispatch_async(dispatch_get_main_queue(), ^{
-                    [weakself.contactViewVC reloadGroupView];
-                });
-            }
+    [[EMClient sharedClient].groupManager loadAllMyGroupsFromDB];
+    [[EMClient sharedClient].groupManager asyncGetMyGroupsFromServer:^(NSArray *aList) {
+        if (weakself.contactViewVC) {
+            [weakself.contactViewVC reloadGroupView];
         }
-    });
+    } failure:^(EMError *aError) {
+    }];
 }
 
 - (void)asyncConversationFromDB
@@ -677,18 +668,17 @@ static ChatDemoHelper *helper = nil;
 
 - (void)answerCall
 {
-    __weak typeof(self) weakSelf = self;
-
     if (self.callSession) {
         dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), ^{
-            EMError *error = [[EMClient sharedClient].callManager answerCall:weakSelf.callSession.sessionId];
+            
+            EMError *error = [[EMClient sharedClient].callManager answerIncomingCall:self.callSession.sessionId];
             if (error) {
                 dispatch_async(dispatch_get_main_queue(), ^{
                     if (error.code == EMErrorNetworkUnavailable) {
                         UIAlertView *alertView = [[UIAlertView alloc] initWithTitle:nil message:NSLocalizedString(@"network.disconnection", @"Network disconnection") delegate:nil cancelButtonTitle:NSLocalizedString(@"ok", @"OK") otherButtonTitles:nil, nil];
                         [alertView show];
                     }
-                    else{
+                    else {
                         [self hangupCallWithReason:EMCallEndReasonFailed];
                     }
                 });
@@ -735,10 +725,18 @@ static ChatDemoHelper *helper = nil;
     self.chatVC = nil;
     self.contactViewVC = nil;
     
-    [[EMClient sharedClient] logout:NO];
+    [[EMClient sharedClient] asyncLogout:NO success:^{
+        //退出成功
+        //logout succeed
+    } failure:^(EMError *aError) {
+        //退出失败
+        //logout failed
+    }];
     
 #if DEMO_CALL == 1
     [self hangupCallWithReason:EMCallEndReasonFailed];
 #endif
 }
+
+
 @end

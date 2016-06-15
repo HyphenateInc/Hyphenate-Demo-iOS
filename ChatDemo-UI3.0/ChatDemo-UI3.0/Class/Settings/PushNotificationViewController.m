@@ -264,17 +264,20 @@
         
         EMError *error = nil;
         if (isUpdated) {
-            error = [[EMClient sharedClient] updatePushOptionsToServer];
+            [[EMClient sharedClient] asyncUpdatePushOptionsToServer:^{
+                
+                dispatch_async(dispatch_get_main_queue(), ^{
+                    [weakself.navigationController popViewControllerAnimated:YES];
+                });
+                
+            } failure:^(EMError *aError) {
+                
+                dispatch_async(dispatch_get_main_queue(), ^{
+                    [weakself showHint:[NSString stringWithFormat:@"%@:%@", NSLocalizedString(@"error.save", @"Failed to save"), error.errorDescription]];
+                });
+                
+            }];
         }
-        
-        dispatch_async(dispatch_get_main_queue(), ^{
-            
-            if (!error) {
-                [weakself.navigationController popViewControllerAnimated:YES];
-            } else {
-                [weakself showHint:[NSString stringWithFormat:@"%@:%@", NSLocalizedString(@"error.save", @"Failed to save"), error.errorDescription]];
-            }
-        });
     });
 }
 
@@ -293,17 +296,14 @@
 - (void)loadPushOptions
 {
     __weak typeof(self) weakself = self;
-    dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), ^{
-        EMError *error = nil;
-        [[EMClient sharedClient] getPushOptionsFromServerWithError:&error];
+    
+    [[EMClient sharedClient] asyncGetPushOptionsFromServer:^(EMPushOptions *aOptions) {
         dispatch_async(dispatch_get_main_queue(), ^{
-            if (error == nil) {
-                [weakself refreshPushOptions];
-            } else {
-                
-            }
+            [weakself refreshPushOptions];
         });
-    });
+    } failure:^(EMError *aError) {
+        
+    }];
 }
 
 - (void)refreshPushOptions

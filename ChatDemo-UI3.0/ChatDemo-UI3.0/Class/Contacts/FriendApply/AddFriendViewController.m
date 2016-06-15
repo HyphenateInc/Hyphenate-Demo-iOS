@@ -194,17 +194,20 @@
             [self showHudInView:self.view hint:NSLocalizedString(@"friend.sendFriendRequest", @"sending friend request...")];
             
             // Currently the method doesn't provide feedback if user exist or not on the server
-            EMError *error = [[EMClient sharedClient].contactManager addContact:friendName message:message];
-            
-            [self hideHud];
-            
-            if (error) {
-                [self showHint:NSLocalizedString(@"friend.sendFriendRequestFail", @"send friend request fails, please try again")];
-            }
-            else {
+            [[EMClient sharedClient].contactManager asyncAddContact:friendName message:message success:^{
+                
+                [self hideHud];
+
                 [self showHint:NSLocalizedString(@"friend.sendFriendRequestSuccess", @"Friend request sent")];
+                
                 [self.navigationController popViewControllerAnimated:YES];
-            }
+                
+            } failure:^(EMError *aError) {
+                
+                [self hideHud];
+
+                [self showHint:NSLocalizedString(@"friend.sendFriendRequestFail", @"send friend request fails, please try again")];
+            }];
         }
     }
 }
@@ -301,17 +304,20 @@
         [self showHudInView:self.view hint:NSLocalizedString(@"friend.sendFriendRequest", @"sending friend request...")];
       
         // Currently the method doesn't provide feedback if user exist or not on the server
-        EMError *error = [[EMClient sharedClient].contactManager addContact:username message:message];
-       
-        [self hideHud];
-      
-        if (error) {
-            [self showHint:NSLocalizedString(@"friend.sendFriendRequestFail", @"send friend request fails, please try again")];
-        }
-        else {
+        [[EMClient sharedClient].contactManager asyncAddContact:username message:message success:^{
+            
+            [self hideHud];
+            
             [self showHint:NSLocalizedString(@"friend.sendFriendRequestSuccess", @"Friend request sent")];
+            
             [self.navigationController popViewControllerAnimated:YES];
-        }
+            
+        } failure:^(EMError *aError) {
+            
+            [self hideHud];
+            
+            [self showHint:NSLocalizedString(@"friend.sendFriendRequestFail", @"send friend request fails, please try again")];
+        }];
     }
 }
 

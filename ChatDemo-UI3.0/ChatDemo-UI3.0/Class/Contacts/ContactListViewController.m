@@ -339,20 +339,18 @@
             return;
         }
         
-        EMError *error = [[EMClient sharedClient].contactManager deleteContact:model.buddy];
-        if (!error) {
+        __weak typeof(self) weakself = self;
+        [[EMClient sharedClient].contactManager asyncDeleteContact:model.buddy success:^{
             [[EMClient sharedClient].chatManager deleteConversation:model.buddy deleteMessages:YES];
-            
             [tableView beginUpdates];
-            [[self.dataArray objectAtIndex:(indexPath.section - 1)] removeObjectAtIndex:indexPath.row];
-            [self.contactsSource removeObject:model.buddy];
+            [[weakself.dataArray objectAtIndex:(indexPath.section - 1)] removeObjectAtIndex:indexPath.row];
+            [weakself.contactsSource removeObject:model.buddy];
             [tableView  deleteRowsAtIndexPaths:[NSArray arrayWithObject:indexPath] withRowAnimation:UITableViewRowAnimationFade];
             [tableView endUpdates];
-        }
-        else{
-            [self showHint:[NSString stringWithFormat:NSLocalizedString(@"deleteFailed", @"Delete failed:%@"), error.errorDescription]];
+        } failure:^(EMError *aError) {
+            [weakself showHint:[NSString stringWithFormat:NSLocalizedString(@"deleteFailed", @"Delete failed:%@"), aError.errorDescription]];
             [tableView reloadData];
-        }
+        }];
     }
 }
 
@@ -516,15 +514,14 @@
     if (buttonIndex != actionSheet.cancelButtonIndex && _currentLongPressIndex) {
         EaseUserModel *model = [[self.dataArray objectAtIndex:(_currentLongPressIndex.section - 1)] objectAtIndex:_currentLongPressIndex.row];
         [self showHudInView:self.view hint:NSLocalizedString(@"wait", @"Pleae wait...")];
-        
-        EMError *error = [[EMClient sharedClient].contactManager addUserToBlackList:model.buddy relationshipBoth:YES];
-        if (!error) {
-            [self reloadDataSource];
-        }
-        else {
-            [self showHint:error.errorDescription];
-        }
-        [self hideHud];
+        __weak typeof(self) weakself = self;
+        [[EMClient sharedClient].contactManager asyncAddUserToBlackList:model.buddy relationshipBoth:YES success:^{
+            [weakself reloadDataSource];
+            [weakself hideHud];
+        } failure:^(EMError *aError) {
+            [weakself hideHud];
+            [weakself showHint:aError.errorDescription];
+        }];
     }
     _currentLongPressIndex = nil;
 }
@@ -533,38 +530,30 @@
 
 - (void)tableViewDidTriggerHeaderRefresh
 {
-//    [self showHudInView:self.view hint:NSLocalizedString(@"loadData", @"Load data...")];
+    //    [self showHudInView:self.view hint:NSLocalizedString(@"loadData", @"Load data...")];
     __weak typeof(self) weakself = self;
-    dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), ^{
-        EMError *error = nil;
-        NSArray *buddyList = [[EMClient sharedClient].contactManager getContactsFromServerWithError:&error];
-        if (!error) {
-            [[EMClient sharedClient].contactManager getBlackListFromServerWithError:&error];
-            if (!error) {
-                [weakself.contactsSource removeAllObjects];
-                
-                for (NSInteger i = (buddyList.count - 1); i >= 0; i--) {
-                    NSString *username = [buddyList objectAtIndex:i];
-                    [weakself.contactsSource addObject:username];
-                }
-                
-                NSString *loginUsername = [[EMClient sharedClient] currentUsername];
-                if (loginUsername && loginUsername.length > 0) {
-                    [weakself.contactsSource addObject:loginUsername];
-                }
-                dispatch_async(dispatch_get_main_queue(), ^{
-                    [weakself _sortDataArray:self.contactsSource];
-                });
+    [[EMClient sharedClient].contactManager asyncGetContactsFromServer:^(NSArray *aList) {
+        NSArray *buddyList = aList;
+        [[EMClient sharedClient].contactManager asyncGetBlackListFromServer:^(NSArray *aList) {
+            [weakself.contactsSource removeAllObjects];
+            [weakself.contactsSource addObjectsFromArray:buddyList];
+            
+            NSString *loginUsername = [[EMClient sharedClient] currentUsername];
+            if (loginUsername && loginUsername.length > 0) {
+                [weakself.contactsSource addObject:loginUsername];
             }
-        }
-        if (error) {
-            dispatch_async(dispatch_get_main_queue(), ^{
-                [weakself showHint:NSLocalizedString(@"loadDataFailed", @"")];
-                [weakself reloadDataSource];
-            });
-        }
-        [weakself tableViewDidFinishTriggerHeader:YES reload:YES];
-    });
+            [weakself _sortDataArray:self.contactsSource];
+            [weakself tableViewDidFinishTriggerHeader:YES reload:NO];
+        } failure:^(EMError *aError) {
+            [weakself showHint:NSLocalizedString(@"loadDataFailed", @"Load data failed.")];
+            [weakself reloadDataSource];
+            [weakself tableViewDidFinishTriggerHeader:YES reload:NO];
+        }];
+    } failure:^(EMError *aError) {
+        [weakself showHint:NSLocalizedString(@"loadDataFailed", @"Load data failed.")];
+        [weakself reloadDataSource];
+        [weakself tableViewDidFinishTriggerHeader:YES reload:NO];
+    }];
 }
 
 #pragma mark - public

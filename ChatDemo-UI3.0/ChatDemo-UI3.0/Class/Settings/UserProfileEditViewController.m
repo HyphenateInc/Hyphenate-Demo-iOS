@@ -164,25 +164,24 @@
 
 - (void)alertView:(UIAlertView *)alertView clickedButtonAtIndex:(NSInteger)buttonIndex{
     if ([alertView cancelButtonIndex] != buttonIndex) {
-
+        
         UITextField *nameTextField = [alertView textFieldAtIndex:0];
         if(nameTextField.text.length > 0)
         {
             [self showHint:NSLocalizedString(@"setting.saving", "saving...")];
             __weak typeof(self) weakSelf = self;
-            [[EMClient sharedClient] setApnsNickname:nameTextField.text];
-            [[UserProfileManager sharedInstance] updateUserProfileInBackground:@{kPARSE_HXUSER_NICKNAME:nameTextField.text} completion:^(BOOL success, NSError *error) {
-                dispatch_async(dispatch_get_main_queue(), ^{
-                    if (weakSelf) {
-                        UserProfileEditViewController *strongSelf = weakSelf;
-                        [strongSelf hideHud];
-                        if (success) {
-                            [strongSelf.tableView reloadData];
-                        } else {
-                            [strongSelf showHint:NSLocalizedString(@"setting.saveFailed", "save failed") yOffset:0];
-                        }
+            [[EMClient sharedClient] asyncSetApnsNickname:nameTextField.text success:^{
+                [[UserProfileManager sharedInstance] updateUserProfileInBackground:@{kPARSE_HXUSER_NICKNAME:nameTextField.text} completion:^(BOOL success, NSError *error) {
+                    [weakSelf hideHud];
+                    if (success) {
+                        [weakSelf.tableView reloadData];
+                    } else {
+                        [weakSelf showHint:NSLocalizedString(@"setting.saveFailed", "save failed") yOffset:0];
                     }
-                });
+                }];
+            } failure:^(EMError *aError) {
+                [weakSelf hideHud];
+                [weakSelf showHint:NSLocalizedString(@"setting.saveFailed", "save failed") yOffset:0];
             }];
         }
     }

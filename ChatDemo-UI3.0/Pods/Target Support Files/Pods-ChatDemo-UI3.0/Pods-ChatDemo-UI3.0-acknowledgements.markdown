@@ -101,7 +101,7 @@ Copyright 2015 Google Inc.
 
 Copyright 2015 Google Inc.
 
-## HyphenateFullSDK
+## HyphenateFull-SDK
 
 Copyright (c) 2016 Hyphenate Inc.
 

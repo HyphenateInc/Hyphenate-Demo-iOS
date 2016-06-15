@@ -299,7 +299,7 @@
 //setting
 "setting.autoLogin" = "Automatic Login";
 "setting.loginUser" = "Logout as (%@)";
-"setting.logoutOngoing" = "loging out...";
+"setting.logoutInProgress" = "Logging out...";
 
 "setting.notDisturb" = "Do Not Disturb";
 "setting.showDetail" = "Show Message Details on Lock Screen";

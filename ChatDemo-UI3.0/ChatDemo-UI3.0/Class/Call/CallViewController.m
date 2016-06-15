@@ -293,14 +293,14 @@
 - (void)initializeVideoView
 {
     // Recipient's window
-    _callSession.remoteView = [[EMCallRemoteView alloc] initWithFrame:CGRectMake(0, 0, self.view.frame.size.width, self.view.frame.size.height)];
-    [self.view addSubview:_callSession.remoteView];
+    _callSession.remoteVideoView = [[EMCallRemoteView alloc] initWithFrame:CGRectMake(0, 0, self.view.frame.size.width, self.view.frame.size.height)];
+    [self.view addSubview:_callSession.remoteVideoView];
     
     // my window
     CGFloat width = 80;
     CGFloat height = self.view.frame.size.height / self.view.frame.size.width * width;
-    _callSession.localView = [[EMCallLocalView alloc] initWithFrame:CGRectMake(self.view.frame.size.width - 90, CGRectGetMaxY(self.statusLabel.frame), width, height)];
-    [self.view addSubview:_callSession.localView];
+    _callSession.localVideoView = [[EMCallLocalView alloc] initWithFrame:CGRectMake(self.view.frame.size.width - 90, CGRectGetMaxY(self.statusLabel.frame), width, height)];
+    [self.view addSubview:_callSession.localVideoView];
     
     // call info
     _propertyView = [[UIView alloc] initWithFrame:CGRectMake(10, CGRectGetMinY(self.actionView.frame) - 90, self.view.frame.size.width - 20, 90)];
@@ -597,7 +597,7 @@
 
 - (void)close
 {
-    _callSession.remoteView.hidden = YES;
+    _callSession.remoteVideoView.hidden = YES;
     _callSession = nil;
     _propertyView = nil;
     

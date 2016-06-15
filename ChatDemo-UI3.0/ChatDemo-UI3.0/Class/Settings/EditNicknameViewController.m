@@ -123,7 +123,12 @@
 {
     if(_nickTextField.text.length > 0)
     {
-        [[EMClient sharedClient] setApnsNickname:_nickTextField.text];
+        [[EMClient sharedClient] asyncSetApnsNickname:_nickTextField.text success:^{
+            
+        } failure:^(EMError *aError) {
+            
+        }];
+        
         [[UserProfileManager sharedInstance] updateUserProfileInBackground:@{kPARSE_HXUSER_NICKNAME:_nickTextField.text} completion:^(BOOL success, NSError *error){}];
         [self.navigationController popViewControllerAnimated:YES];
     } else {
