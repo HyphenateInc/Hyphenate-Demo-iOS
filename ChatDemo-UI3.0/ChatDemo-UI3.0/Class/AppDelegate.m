@@ -46,7 +46,9 @@ static int const kGaDispatchPeriod = 30;
     
     self.window = [[UIWindow alloc] initWithFrame:[[UIScreen mainScreen] bounds]];
     self.window.backgroundColor = [UIColor whiteColor];
+    [self.window makeKeyAndVisible];
 
+    [[UINavigationBar appearance] setTintColor:[UIColor whiteColor]];
     [[UINavigationBar appearance] setBarTintColor:[UIColor HIColorGreenMajor]];
     [[UINavigationBar appearance] setTitleTextAttributes:
      [NSDictionary dictionaryWithObjectsAndKeys:[UIColor whiteColor], NSForegroundColorAttributeName, [UIFont fontWithName:@"HelveticaNeue" size:21.0], NSFontAttributeName, nil]];
@@ -73,8 +75,6 @@ static int const kGaDispatchPeriod = 30;
 
     // Crashlytics
     [Fabric with:@[[Crashlytics class]]];
-
-    [self.window makeKeyAndVisible];
     
     return YES;
 }
