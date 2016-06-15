@@ -1,1 +1,1 @@
-../../../../../../easeui_ios/EaseUI/EMUIKit/3rdparty/DeviceHelper/internal/EMCDDeviceManager+Microphone.h
+../../../EaseUI/EaseUI/EMUIKit/3rdparty/DeviceHelper/internal/EMCDDeviceManager+Microphone.h

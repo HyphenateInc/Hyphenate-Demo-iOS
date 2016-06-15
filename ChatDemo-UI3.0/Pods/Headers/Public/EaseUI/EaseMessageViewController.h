@@ -1,1 +1,1 @@
-../../../../../../easeui_ios/EaseUI/EMUIKit/ViewController/EaseMessageViewController.h
+../../../EaseUI/EaseUI/EMUIKit/ViewController/EaseMessageViewController.h

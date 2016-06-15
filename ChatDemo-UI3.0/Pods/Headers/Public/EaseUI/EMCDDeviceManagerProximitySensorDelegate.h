@@ -1,1 +1,1 @@
-../../../../../../easeui_ios/EaseUI/EMUIKit/3rdparty/DeviceHelper/delegates/EMCDDeviceManagerProximitySensorDelegate.h
+../../../EaseUI/EaseUI/EMUIKit/3rdparty/DeviceHelper/delegates/EMCDDeviceManagerProximitySensorDelegate.h

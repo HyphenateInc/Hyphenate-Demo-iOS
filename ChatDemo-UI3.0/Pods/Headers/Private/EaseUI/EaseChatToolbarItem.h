@@ -1,1 +1,1 @@
-../../../../../../easeui_ios/EaseUI/EMUIKit/Views/conversation/toolbar/EaseChatToolbarItem.h
+../../../EaseUI/EaseUI/EMUIKit/Views/conversation/toolbar/EaseChatToolbarItem.h

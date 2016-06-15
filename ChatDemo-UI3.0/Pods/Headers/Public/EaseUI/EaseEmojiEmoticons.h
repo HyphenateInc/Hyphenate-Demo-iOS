@@ -1,1 +1,1 @@
-../../../../../../easeui_ios/EaseUI/EMUIKit/Util/Emoji/EaseEmojiEmoticons.h
+../../../EaseUI/EaseUI/EMUIKit/Util/Emoji/EaseEmojiEmoticons.h

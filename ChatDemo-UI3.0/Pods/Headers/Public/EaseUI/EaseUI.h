@@ -1,1 +1,1 @@
-../../../../../../easeui_ios/EaseUI/EaseUI.h
+../../../EaseUI/EaseUI/EaseUI.h

@@ -1,1 +1,1 @@
-../../../../../../easeui_ios/EaseUI/EMUIKit/3rdparty/MWPhotoBrowser/Classes/MWZoomingScrollView.h
+../../../EaseUI/EaseUI/EMUIKit/3rdparty/MWPhotoBrowser/Classes/MWZoomingScrollView.h

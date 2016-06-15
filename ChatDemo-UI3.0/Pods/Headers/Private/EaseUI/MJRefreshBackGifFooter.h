@@ -1,1 +1,1 @@
-../../../../../../easeui_ios/EaseUI/EMUIKit/3rdparty/MJRefresh/Custom/Footer/Back/MJRefreshBackGifFooter.h
+../../../EaseUI/EaseUI/EMUIKit/3rdparty/MJRefresh/Custom/Footer/Back/MJRefreshBackGifFooter.h

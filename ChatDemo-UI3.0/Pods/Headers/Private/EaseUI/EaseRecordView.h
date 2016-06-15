@@ -1,1 +1,1 @@
-../../../../../../easeui_ios/EaseUI/EMUIKit/Views/conversation/toolbar/RecordView/EaseRecordView.h
+../../../EaseUI/EaseUI/EMUIKit/Views/conversation/toolbar/RecordView/EaseRecordView.h

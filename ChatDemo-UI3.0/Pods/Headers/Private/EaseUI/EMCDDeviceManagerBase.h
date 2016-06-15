@@ -1,1 +1,1 @@
-../../../../../../easeui_ios/EaseUI/EMUIKit/3rdparty/DeviceHelper/internal/EMCDDeviceManagerBase.h
+../../../EaseUI/EaseUI/EMUIKit/3rdparty/DeviceHelper/internal/EMCDDeviceManagerBase.h

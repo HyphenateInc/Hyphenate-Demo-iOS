@@ -1,1 +1,1 @@
-../../../../../../easeui_ios/EaseUI/EMUIKit/Util/EaseMessageReadManager.h
+../../../EaseUI/EaseUI/EMUIKit/Util/EaseMessageReadManager.h

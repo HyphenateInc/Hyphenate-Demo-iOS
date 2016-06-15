@@ -14,7 +14,7 @@
             buildForArchiving = "YES">
             <BuildableReference
                BuildableIdentifier = 'primary'
-               BlueprintIdentifier = 'D2B1E3CC82E7C151249B8CD9C8EF7C0A'
+               BlueprintIdentifier = 'D330A41ADC95765EB4A9F795E33C4273'
                BlueprintName = 'EaseUI'
                ReferencedContainer = 'container:Pods.xcodeproj'
                BuildableName = 'libEaseUI.a'>

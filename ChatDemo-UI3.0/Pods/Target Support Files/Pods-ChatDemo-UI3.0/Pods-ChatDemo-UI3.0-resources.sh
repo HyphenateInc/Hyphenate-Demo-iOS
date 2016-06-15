@@ -80,13 +80,13 @@ EOM
   esac
 }
 if [[ "$CONFIGURATION" == "Debug" ]]; then
-  install_resource "../../../easeui_ios/export/resources/EaseUIResource.bundle"
+  install_resource "EaseUI/export/resources/EaseUIResource.bundle"
   install_resource "Parse/Parse/Resources/en.lproj"
   install_resource "SlimeRefresh/SlimeRefresh/SlimeRefresh/sr_refresh.png"
   install_resource "SlimeRefresh/SlimeRefresh/SlimeRefresh/sr_refresh@2X.png"
 fi
 if [[ "$CONFIGURATION" == "Release" ]]; then
-  install_resource "../../../easeui_ios/export/resources/EaseUIResource.bundle"
+  install_resource "EaseUI/export/resources/EaseUIResource.bundle"
   install_resource "Parse/Parse/Resources/en.lproj"
   install_resource "SlimeRefresh/SlimeRefresh/SlimeRefresh/sr_refresh.png"
   install_resource "SlimeRefresh/SlimeRefresh/SlimeRefresh/sr_refresh@2X.png"

@@ -1,1 +1,1 @@
-../../../../../../easeui_ios/EaseUI/EMUIKit/ViewController/EaseLocationViewController.h
+../../../EaseUI/EaseUI/EMUIKit/ViewController/EaseLocationViewController.h

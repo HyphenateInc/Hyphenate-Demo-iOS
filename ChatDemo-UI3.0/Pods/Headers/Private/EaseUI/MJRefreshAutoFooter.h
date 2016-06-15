@@ -1,1 +1,1 @@
-../../../../../../easeui_ios/EaseUI/EMUIKit/3rdparty/MJRefresh/Base/MJRefreshAutoFooter.h
+../../../EaseUI/EaseUI/EMUIKit/3rdparty/MJRefresh/Base/MJRefreshAutoFooter.h

@@ -1,1 +1,1 @@
-../../../../../../easeui_ios/EaseUI/EMUIKit/Views/conversation/toolbar/EaseTextView.h
+../../../EaseUI/EaseUI/EMUIKit/Views/conversation/toolbar/EaseTextView.h
