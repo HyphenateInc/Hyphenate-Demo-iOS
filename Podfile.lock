@@ -45,12 +45,12 @@ DEPENDENCIES:
 
 EXTERNAL SOURCES:
   EaseUI:
-    :path: "~/easeui_ios"
+    :path: ~/easeui_ios
 
 SPEC CHECKSUMS:
   Bolts: a0058fa3b331c5a1e4402d534f2dae36dbff31e4
   Crashlytics: 3cdd4c9655be68032a0cf0379e0fb5ef6af22cad
-  EaseUI: 7fa81823064995d85dde141a94f0a1c20829320f
+  EaseUI: 8bb1a7b97c2f4e0a0a0167be20ae71a32350fd85
   Fabric: caf7580c725e64db144f610ac65cd60956911dc7
   FirebaseAnalytics: 6f75b04e6bfb8e0b6e9ef298e04c24eea3b13863
   FirebaseInstanceID: d014d574053a2fe84478f12f7bae96979e7051bb
