@@ -239,10 +239,10 @@
         CGFloat tmpWidth = [UIScreen mainScreen].bounds.size.width;
         int buttonWidth = 40;
         int buttonHeight = 40;
-        int topMargin = 20;
+        int topMargin = 80;
         
         // Record Button
-        self.recordButton = [[UIButton alloc] initWithFrame:CGRectMake((tmpWidth- 160)/5, 80, buttonWidth, buttonHeight)];
+        self.recordButton = [[UIButton alloc] initWithFrame:CGRectMake((tmpWidth- 160)/5, topMargin, buttonWidth, buttonHeight)];
         self.recordButton.layer.cornerRadius = 6.0f;
         [self.recordButton setImage:[UIImage imageNamed:@"call_record_start"] forState:UIControlStateNormal];
         [self.recordButton setImage:[UIImage imageNamed:@"call_record_stop"] forState:UIControlStateSelected];
@@ -252,7 +252,7 @@
         [self.actionView addSubview:self.recordButton];
         
         // Video Button
-        self.videoButton = [[UIButton alloc] initWithFrame:CGRectMake((tmpWidth - 160)/5 * 3 +  80, 80, buttonWidth, buttonHeight)];
+        self.videoButton = [[UIButton alloc] initWithFrame:CGRectMake((tmpWidth - 160)/5 * 3 +  80, topMargin, buttonWidth, buttonHeight)];
         self.videoButton.layer.cornerRadius = 6.0f;
         [self.videoButton setImage:[UIImage imageNamed:@"call_video_on"] forState:UIControlStateNormal];
         [self.videoButton setImage:[UIImage imageNamed:@"call_video_off"] forState:UIControlStateSelected];
