@@ -45,7 +45,7 @@ DEPENDENCIES:
 
 EXTERNAL SOURCES:
   EaseUI:
-    :path: ~/easeui_ios
+    :path: "~/easeui_ios"
 
 SPEC CHECKSUMS:
   Bolts: a0058fa3b331c5a1e4402d534f2dae36dbff31e4
