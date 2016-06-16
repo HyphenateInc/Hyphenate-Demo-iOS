@@ -41,12 +41,14 @@ didFinishLaunchingWithOptions:(NSDictionary *)launchOptions
     [self registerRemoteNotification];
     
     BOOL isAutoLogin = [EMClient sharedClient].isAutoLogin;
-    if (isAutoLogin){
-        [[NSNotificationCenter defaultCenter] postNotificationName:KNOTIFICATION_LOGINCHANGE object:@YES];
-    }
-    else {
-        [[NSNotificationCenter defaultCenter] postNotificationName:KNOTIFICATION_LOGINCHANGE object:@NO];
-    }
+    dispatch_async(dispatch_get_main_queue(), ^{
+        if (isAutoLogin){
+            [[NSNotificationCenter defaultCenter] postNotificationName:KNOTIFICATION_LOGINCHANGE object:@YES];
+        }
+        else {
+            [[NSNotificationCenter defaultCenter] postNotificationName:KNOTIFICATION_LOGINCHANGE object:@NO];
+        }
+    });
 }
 
 #pragma mark - App Delegate
