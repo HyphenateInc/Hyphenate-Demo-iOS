@@ -58,7 +58,7 @@
                                                                      style:UIBarButtonItemStylePlain
                                                                     target:self
                                                                     action:@selector(save:)];
-        saveItem.tintColor = [UIColor HIPrimaryColor];
+        saveItem.tintColor = [UIColor whiteColor];
         
         [self.navigationItem setRightBarButtonItem:saveItem];
     }

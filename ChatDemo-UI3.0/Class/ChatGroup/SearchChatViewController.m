@@ -105,7 +105,25 @@
             return;
         }
         
-        NSArray *formattedMessages = moreMessages;
+        NSMutableArray *formattedMessages = [NSMutableArray array];
+        for (EMMessage *message in moreMessages) {
+            CGFloat interval = (self.messageTimeIntervalTag - message.timestamp) / 1000;
+            if (self.messageTimeIntervalTag < 0 || interval > 60 || interval < -60) {
+                NSDate *messageDate = [NSDate dateWithTimeIntervalInMilliSecondSince1970:(NSTimeInterval)message.timestamp];
+                NSString *timeStr = @"";
+                timeStr = [messageDate formattedTime];
+                [formattedMessages addObject:timeStr];
+                self.messageTimeIntervalTag = message.timestamp;
+            }
+            
+            id<IMessageModel> model = nil;
+            model = [[EaseMessageModel alloc] initWithMessage:message];
+            model.avatarImage = [UIImage imageNamed:@"EaseUIResource.bundle/user"];
+            model.failImageName = @"imageDownloadFail";
+            if (model) {
+                [formattedMessages addObject:model];
+            }
+        }
         
         NSInteger scrollToIndex = 0;
         
