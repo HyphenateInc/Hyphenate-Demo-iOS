@@ -34,7 +34,7 @@ didFinishLaunchingWithOptions:(NSDictionary *)launchOptions
     EMOptions *options = [EMOptions optionsWithAppkey:appkey];
     options.apnsCertName = apnsCertName;
     options.isAutoAcceptGroupInvitation = NO;
-    // options.enableConsoleLog = YES;
+    options.enableConsoleLog = YES;
     
     [[EMClient sharedClient] initializeSDKWithOptions:options];
     

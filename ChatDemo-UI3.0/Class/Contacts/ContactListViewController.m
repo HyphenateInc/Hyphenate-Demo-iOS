@@ -342,11 +342,6 @@
         __weak typeof(self) weakself = self;
         [[EMClient sharedClient].contactManager asyncDeleteContact:model.buddy success:^{
             [[EMClient sharedClient].chatManager deleteConversation:model.buddy deleteMessages:YES];
-            [tableView beginUpdates];
-            [[weakself.dataArray objectAtIndex:(indexPath.section - 1)] removeObjectAtIndex:indexPath.row];
-            [weakself.contactsSource removeObject:model.buddy];
-            [tableView  deleteRowsAtIndexPaths:[NSArray arrayWithObject:indexPath] withRowAnimation:UITableViewRowAnimationFade];
-            [tableView endUpdates];
         } failure:^(EMError *aError) {
             [weakself showHint:[NSString stringWithFormat:NSLocalizedString(@"deleteFailed", @"Delete failed:%@"), aError.errorDescription]];
             [tableView reloadData];
