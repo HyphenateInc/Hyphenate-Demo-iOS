@@ -724,10 +724,8 @@ static ChatDemoHelper *helper = nil;
     self.contactViewVC = nil;
     
     [[EMClient sharedClient] asyncLogout:NO success:^{
-        //退出成功
         //logout succeed
     } failure:^(EMError *aError) {
-        //退出失败
         //logout failed
     }];
     
