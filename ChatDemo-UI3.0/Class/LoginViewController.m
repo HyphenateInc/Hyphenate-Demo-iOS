@@ -168,7 +168,7 @@
                         TTAlertNoTitle(NSLocalizedString(@"error.connectServerFail", @"Connect to the server failed!"));
                         break;
                     case EMErrorUserAuthenticationFailed:
-                        TTAlertNoTitle(aError.errorDescription);
+                        TTAlertNoTitle([NSString stringWithFormat:@"Login Failure - User authentication failed, %@", aError.errorDescription]);
                         break;
                     case EMErrorServerTimeout:
                         TTAlertNoTitle(NSLocalizedString(@"error.connectServerTimeout", @"Connect to the server timed out!"));
@@ -177,7 +177,7 @@
                         TTAlertNoTitle(NSLocalizedString(@"error.login.userNotFound", @""));
                         break;
                     default:
-                        TTAlertNoTitle(NSLocalizedString(@"login.fail", @"Login failure"));
+                        TTAlertNoTitle([NSString stringWithFormat:@"Login Failure - %@", aError.errorDescription]);
                         break;
                 }
             });
