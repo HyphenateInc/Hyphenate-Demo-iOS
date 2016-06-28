@@ -36,7 +36,7 @@ didFinishLaunchingWithOptions:(NSDictionary *)launchOptions
     options.apnsCertName = apnsCertName;
     [[EMClient sharedClient] initializeSDKWithOptions:options];
     
-    [self registerNotification];
+    [self registerMessagingNotification];
     
     BOOL isAutoLogin = [EMClient sharedClient].isAutoLogin;
     if (isAutoLogin) {
@@ -44,7 +44,7 @@ didFinishLaunchingWithOptions:(NSDictionary *)launchOptions
     }
     else {
         [self proceedLogout];
-        [[EMClient sharedClient].options setIsAutoLogin:YES];
+//        [[EMClient sharedClient].options setIsAutoLogin:YES];
     }
 }
 
@@ -87,6 +87,7 @@ didFinishLaunchingWithOptions:(NSDictionary *)launchOptions
     }
 }
 
+// go to login view controller. result of logout action
 - (void)proceedLoginViewController
 {
     if (self.mainViewController) {
@@ -145,7 +146,7 @@ didFinishLaunchingWithOptions:(NSDictionary *)launchOptions
     
 }
 
-- (void)registerNotification
+- (void)registerMessagingNotification
 {
     UIApplication *application = [UIApplication sharedApplication];
     application.applicationIconBadgeNumber = 0;
