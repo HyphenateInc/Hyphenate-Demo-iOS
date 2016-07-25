@@ -66,8 +66,6 @@ static int const kGaDispatchPeriod = 30;
     [self parseApplication:application didFinishLaunchingWithOptions:launchOptions];
     
     /** Hyphenate **/
-    self.connectionState = EMConnectionConnected;
-    
     // APNs Push Service
     NSString *apnsCertName = nil;
 #if DEBUG

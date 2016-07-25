@@ -44,7 +44,7 @@ didFinishLaunchingWithOptions:(NSDictionary *)launchOptions
     }
     else {
         [self proceedLogout];
-//        [[EMClient sharedClient].options setIsAutoLogin:YES];
+        [[EMClient sharedClient].options setIsAutoLogin:YES];
     }
 }
 
