@@ -66,8 +66,6 @@ static int const kGaDispatchPeriod = 30;
     [self parseApplication:application didFinishLaunchingWithOptions:launchOptions];
     
     /** Hyphenate **/
-    self.connectionState = EMConnectionConnected;
-    
     // APNs Push Service
     NSString *apnsCertName = nil;
 #if DEBUG
@@ -83,7 +81,7 @@ static int const kGaDispatchPeriod = 30;
                    otherConfig:@{kSDKConfigEnableConsoleLogger:[NSNumber numberWithBool:YES]}];
 
     /** Google Analytics **/
-//    [self initializeGoogleAnalytics];
+    [self initializeGoogleAnalytics];
 
     /** Fabric **/
     [[Fabric sharedSDK] setDebug:YES];

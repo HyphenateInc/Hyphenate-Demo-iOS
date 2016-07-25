@@ -53,7 +53,6 @@
 {
     [super viewDidLoad];
 
-    // Do any additional setup after loading the view.
     self.showRefreshHeader = YES;
     
     _contactsSource = [NSMutableArray array];
