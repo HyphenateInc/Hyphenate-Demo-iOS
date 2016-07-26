@@ -37,11 +37,7 @@ static NSString *const kTrackingPreferenceKey = @"allowTracking";
 static BOOL const kGaDryRun = NO;
 static int const kGaDispatchPeriod = 30;
 
-
 @interface AppDelegate ()
-
-/** Hyphenate **/
-@property (assign, nonatomic) EMConnectionState connectionState;
 
 /** Google Analytics **/
 - (void)initializeGoogleAnalytics;
