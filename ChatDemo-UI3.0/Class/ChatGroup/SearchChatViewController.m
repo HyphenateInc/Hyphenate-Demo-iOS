@@ -60,15 +60,18 @@
 {
     [super viewWillAppear:animated];
     
-    [[GAI sharedInstance].defaultTracker set:kGAIScreenName value:NSStringFromClass(self.class)];
-    [[GAI sharedInstance].defaultTracker send:[[GAIDictionaryBuilder createScreenView] build]];
+//    [[GAI sharedInstance].defaultTracker set:kGAIScreenName value:NSStringFromClass(self.class)];
+//    [[GAI sharedInstance].defaultTracker send:[[GAIDictionaryBuilder createScreenView] build]];
 }
 
 - (void)tableViewDidTriggerHeaderRefresh
 {
     if ([self.messsagesSource count] == 0) {
-        EMMessage *firstMessage = [self.conversation loadMessageWithId:self.upMessageId];
-        [self addMessageToDataSource:firstMessage progress:nil];
+        EMError *error = nil;
+        EMMessage *firstMessage = [self.conversation loadMessageWithId:self.upMessageId error:&error];
+        if (firstMessage) {
+            [self addMessageToDataSource:firstMessage progress:nil];
+        }
     }
     
     [self _loadMessagesDirection:YES];
@@ -83,68 +86,58 @@
 - (void)_loadMessagesDirection:(BOOL)direction
 {
     __weak typeof(self) weakSelf = self;
-    dispatch_async(_searchMessageQueue, ^{
-        NSArray *moreMessages = nil;
-        if (direction) {
-            moreMessages = [self.conversation loadMoreMessagesFromId:self.upMessageId limit:SEARCHCHAT_PAGE_SIZE direction:EMMessageSearchDirectionUp];
-            if ([moreMessages count] > 0) {
-                EMMessage *firstMessage = [moreMessages firstObject];
-                self.upMessageId = firstMessage.messageId;
-            }
-            
-        } else {
-            moreMessages = [self.conversation loadMoreMessagesFromId:self.downMessageId limit:SEARCHCHAT_PAGE_SIZE direction:EMMessageSearchDirectionDownload];
-            if ([moreMessages count] > 0) {
-                EMMessage *lastMessage = [moreMessages lastObject];
-                self.downMessageId = lastMessage.messageId;
-            }
-        }
-        
-        if ([moreMessages count] == 0) {
-            [weakSelf tableViewDidFinishTriggerHeader:direction reload:YES];
-            return;
-        }
-        
-        NSArray *formattedMessages = moreMessages;
-        
-        NSInteger scrollToIndex = 0;
-        
-        if (direction) {
-            [weakSelf.messsagesSource insertObjects:moreMessages atIndexes:[NSIndexSet indexSetWithIndexesInRange:NSMakeRange(0, [moreMessages count])]];
-        } else {
-            [weakSelf.messsagesSource addObjectsFromArray:moreMessages];
-        }
-        
-        id object = [weakSelf.dataArray firstObject];
-        if ([object isKindOfClass:[NSString class]])
-        {
-            NSString *timestamp = object;
-            [formattedMessages enumerateObjectsWithOptions:NSEnumerationReverse usingBlock:^(id model, NSUInteger idx, BOOL *stop) {
-                if ([model isKindOfClass:[NSString class]] && [timestamp isEqualToString:model])
-                {
-                    [weakSelf.dataArray removeObjectAtIndex:0];
-                    *stop = YES;
+    [self.conversation loadMessagesStartFromId:self.upMessageId count:SEARCHCHAT_PAGE_SIZE searchDirection:direction ? EMMessageSearchDirectionUp : EMMessageSearchDirectionDown completion:^(NSArray *aMessages, EMError *aError) {
+        SearchChatViewController *strongSelf = weakSelf;
+        if (strongSelf) {
+            if (aError) {
+                if ([aMessages count] > 0) {
+                    if (direction) {
+                        EMMessage *firstMessage = [aMessages firstObject];
+                        strongSelf.upMessageId = firstMessage.messageId;
+                    }
+                    else {
+                        EMMessage *lastMessage = [aMessages lastObject];
+                        strongSelf.downMessageId = lastMessage.messageId;
+                    }
+                    
+                    NSArray *formattedMessages = aMessages;
+                    NSInteger scrollToIndex = 0;
+                    
+                    if (direction) {
+                        [strongSelf.messsagesSource insertObjects:aMessages atIndexes:[NSIndexSet indexSetWithIndexesInRange:NSMakeRange(0, [aMessages count])]];
+                    } else {
+                        [strongSelf.messsagesSource addObjectsFromArray:aMessages];
+                    }
+                    
+                    id object = [strongSelf.dataArray firstObject];
+                    if ([object isKindOfClass:[NSString class]]) {
+                        NSString *timestamp = object;
+                        [formattedMessages enumerateObjectsWithOptions:NSEnumerationReverse usingBlock:^(id model, NSUInteger idx, BOOL *stop) {
+                            if ([model isKindOfClass:[NSString class]] && [timestamp isEqualToString:model])
+                            {
+                                [strongSelf.dataArray removeObjectAtIndex:0];
+                                *stop = YES;
+                            }
+                        }];
+                    }
+                    scrollToIndex = [strongSelf.dataArray count];
+                    if (direction) {
+                        [strongSelf.dataArray insertObjects:formattedMessages atIndexes:[NSIndexSet indexSetWithIndexesInRange:NSMakeRange(0, [formattedMessages count])]];
+                    } else {
+                        [strongSelf.dataArray addObjectsFromArray:formattedMessages];
+                    }
+                    
+                    [strongSelf.tableView reloadData];
+                    if (direction) {
+                        [strongSelf.tableView scrollToRowAtIndexPath:[NSIndexPath indexPathForRow:[strongSelf.dataArray count] - scrollToIndex - 1 inSection:0] atScrollPosition:UITableViewScrollPositionTop animated:NO];
+                    } else {
+                        [strongSelf.tableView scrollToRowAtIndexPath:[NSIndexPath indexPathForRow:[strongSelf.dataArray count]  - 1 inSection:0] atScrollPosition:UITableViewScrollPositionBottom animated:NO];
+                    }
                 }
-            }];
-        }
-        scrollToIndex = [weakSelf.dataArray count];
-        if (direction) {
-            [weakSelf.dataArray insertObjects:formattedMessages atIndexes:[NSIndexSet indexSetWithIndexesInRange:NSMakeRange(0, [formattedMessages count])]];
-        } else {
-            [weakSelf.dataArray addObjectsFromArray:formattedMessages];
-        }
-        
-        dispatch_async(dispatch_get_main_queue(), ^{
-            [weakSelf.tableView reloadData];
-            if (direction) {
-                [weakSelf.tableView scrollToRowAtIndexPath:[NSIndexPath indexPathForRow:[self.dataArray count] - scrollToIndex - 1 inSection:0] atScrollPosition:UITableViewScrollPositionTop animated:NO];
-            } else {
-                [weakSelf.tableView scrollToRowAtIndexPath:[NSIndexPath indexPathForRow:[self.dataArray count]  - 1 inSection:0] atScrollPosition:UITableViewScrollPositionBottom animated:NO];
+                [strongSelf tableViewDidFinishTriggerHeader:direction reload:YES];
             }
-        });
-        
-        [weakSelf tableViewDidFinishTriggerHeader:direction reload:YES];
-    });
+        }
+    }];
 }
 
 

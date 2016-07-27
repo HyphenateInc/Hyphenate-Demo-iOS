@@ -100,8 +100,8 @@
 {
     [super viewWillAppear:animated];
     
-    [[GAI sharedInstance].defaultTracker set:kGAIScreenName value:NSStringFromClass(self.class)];
-    [[GAI sharedInstance].defaultTracker send:[[GAIDictionaryBuilder createScreenView] build]];
+//    [[GAI sharedInstance].defaultTracker set:kGAIScreenName value:NSStringFromClass(self.class)];
+//    [[GAI sharedInstance].defaultTracker send:[[GAIDictionaryBuilder createScreenView] build]];
 }
 
 - (void)didReceiveMemoryWarning
@@ -324,11 +324,11 @@
         
         _sizeLabel.text = [NSString stringWithFormat:@"%@%i/%i", NSLocalizedString(@"call.videoSize", @"Width/Height: "), [_callSession getVideoWidth], [_callSession getVideoHeight]];
         
-        _timedelayLabel.text = [NSString stringWithFormat:@"%@%i", NSLocalizedString(@"call.videoTimedelay", @"Time delay: "), [_callSession getVideoTimedelay]];
+        _timedelayLabel.text = [NSString stringWithFormat:@"%@%i", NSLocalizedString(@"call.videoTimedelay", @"Time delay: "), [_callSession getVideoLatency]];
         
-        _framerateLabel.text = [NSString stringWithFormat:@"%@%i", NSLocalizedString(@"call.videoFramerate", @"Framerate: "), [_callSession getVideoFramerate]];
+        _framerateLabel.text = [NSString stringWithFormat:@"%@%i", NSLocalizedString(@"call.videoFramerate", @"Framerate: "), [_callSession getVideoFrameRate]];
         
-        _lostcntLabel.text = [NSString stringWithFormat:@"%@%i", NSLocalizedString(@"call.videoLostcnt", @"Lost cnt: "), [_callSession getVideoLostcnt]];
+        _lostcntLabel.text = [NSString stringWithFormat:@"%@%i", NSLocalizedString(@"call.videoLostcnt", @"Lost cnt: "), [_callSession getVideoLostRateInPercent]];
         
         _localBitrateLabel.text = [NSString stringWithFormat:@"%@%i", NSLocalizedString(@"call.videoLocalBitrate", @"Local Bitrate: "), [_callSession getVideoLocalBitrate]];
         
@@ -399,9 +399,9 @@
                            attributes:nil
                                 error:nil];
         }
-        [_callSession startVideoRecord:recordPath];
+        [_callSession startVideoRecordingToFilePath:recordPath error:nil];
     } else {
-        NSString *tempPath = [_callSession stopVideoRecord];
+        NSString *tempPath = [_callSession stopVideoRecording:nil];
         if (tempPath.length > 0) {
             //            NSURL *videoURL = [NSURL fileURLWithPath:tempPath];
             //            MPMoviePlayerViewController *moviePlayerController = [[MPMoviePlayerViewController alloc] initWithContentURL:videoURL];
@@ -415,10 +415,10 @@
 - (void)videoPauseAction
 {
     if (self.videoButton.selected) {
-        [[EMClient sharedClient].callManager pauseVideoTransfer:_callSession.sessionId];
+        [[EMClient sharedClient].callManager pauseVideoWithSession:_callSession.sessionId error:nil];
     }
     else {
-        [[EMClient sharedClient].callManager resumeVideoTransfer:_callSession.sessionId];
+        [[EMClient sharedClient].callManager resumeVideoWithSession:_callSession.sessionId error:nil];
     }
     self.videoButton.selected = !self.videoButton.selected;
 }
@@ -426,10 +426,10 @@
 - (void)voicePauseAction
 {
     if (self.voiceButton.selected) {
-        [[EMClient sharedClient].callManager pauseVoiceAndVideoTransfer:_callSession.sessionId];
+        [[EMClient sharedClient].callManager pauseVoiceWithSession:_callSession.sessionId error:nil];
     }
     else {
-        [[EMClient sharedClient].callManager resumeVoiceAndVideoTransfer:_callSession.sessionId];
+        [[EMClient sharedClient].callManager resumeVoiceWithSession:_callSession.sessionId error:nil];
     }
     self.voiceButton.selected = !self.voiceButton.selected;
 
@@ -438,7 +438,7 @@
 - (void)silenceAction
 {
     self.silenceButton.selected = !self.silenceButton.selected;
-    [[EMClient sharedClient].callManager markCallSession:_callSession.sessionId isSilence:self.silenceButton.selected];
+    [[EMClient sharedClient].callManager pauseVoiceWithSession:_callSession.sessionId error:nil];
 }
 
 - (void)speakerOutAction

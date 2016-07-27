@@ -91,8 +91,8 @@
 {
     [super viewWillAppear:animated];
     
-    [[GAI sharedInstance].defaultTracker set:kGAIScreenName value:NSStringFromClass(self.class)];
-    [[GAI sharedInstance].defaultTracker send:[[GAIDictionaryBuilder createScreenView] build]];
+//    [[GAI sharedInstance].defaultTracker set:kGAIScreenName value:NSStringFromClass(self.class)];
+//    [[GAI sharedInstance].defaultTracker send:[[GAIDictionaryBuilder createScreenView] build]];
 }
 
 
@@ -110,25 +110,27 @@
 {
     EMConversation *conversation = [[EMClient sharedClient].chatManager getConversation:_group.groupId type:EMConversationTypeGroupChat createIfNotExist:NO];
     
+    [self showHudInView:self.view hint:NSLocalizedString(@"setting.saving", "saving...")];
     __weak typeof(self) weakSelf = self;
-    
-    [[EMClient sharedClient].groupManager asyncChangeGroupSubject:_subjectField.text forGroup:_group.groupId success:^(EMGroup *aGroup) {
-        
+    [[EMClient sharedClient].groupManager updateGroupSubject:_subjectField.text forGroup:_group.groupId  completion:^(EMGroup *aGroup, EMError *aError) {
         GroupSubjectChangingViewController *strongSelf = weakSelf;
-        
-        if ([strongSelf->_group.groupId isEqualToString:conversation.conversationId]) {
-            NSMutableDictionary *ext = [NSMutableDictionary dictionaryWithDictionary:conversation.ext];
-            [ext setObject:strongSelf->_group.subject forKey:@"subject"];
-            [ext setObject:[NSNumber numberWithBool:strongSelf->_group.isPublic] forKey:@"isPublic"];
-            conversation.ext = ext;
+        if (strongSelf) {
+            [strongSelf hideHud];
+            if (!aError) {
+                if ([strongSelf.group.groupId isEqualToString:conversation.conversationId]) {
+                    NSMutableDictionary *ext = [NSMutableDictionary dictionaryWithDictionary:conversation.ext];
+                    [ext setObject:strongSelf.group.subject forKey:@"subject"];
+                    [ext setObject:[NSNumber numberWithBool:strongSelf.group.isPublic] forKey:@"isPublic"];
+                    conversation.ext = ext;
+                }
+                [strongSelf.navigationController popViewControllerAnimated:YES];
+            }
+            else {
+                [strongSelf showHint:NSLocalizedString(@"setting.saveFailed", "save failed")];
+                [strongSelf.navigationController popViewControllerAnimated:YES];
+            }
         }
-        [self.navigationController popViewControllerAnimated:YES];
-        
-    } failure:^(EMError *aError) {
-        [self.navigationController popViewControllerAnimated:YES];
     }];
-    
-    [self.navigationController popViewControllerAnimated:YES];
 }
 
 @end

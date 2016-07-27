@@ -54,8 +54,8 @@
 {
     [super viewWillAppear:animated];
     
-    [[GAI sharedInstance].defaultTracker set:kGAIScreenName value:NSStringFromClass(self.class)];
-    [[GAI sharedInstance].defaultTracker send:[[GAIDictionaryBuilder createScreenView] build]];
+//    [[GAI sharedInstance].defaultTracker set:kGAIScreenName value:NSStringFromClass(self.class)];
+//    [[GAI sharedInstance].defaultTracker send:[[GAIDictionaryBuilder createScreenView] build]];
 }
 
 - (void)didReceiveMemoryWarning
@@ -276,17 +276,16 @@
 {
     __weak SettingsViewController *weakSelf = self;
     [self showHudInView:self.view hint:NSLocalizedString(@"setting.logoutInProgress", @"logging out...")];
-    [[EMClient sharedClient] asyncLogout:YES success:^{
-        dispatch_async(dispatch_get_main_queue(), ^{
+    [[EMClient sharedClient] logout:YES completion:^(EMError *aError) {
+        if (!aError) {
             [weakSelf hideHud];
             [[FriendRequestViewController shareController] clear];
             [[NSNotificationCenter defaultCenter] postNotificationName:KNotification_logout object:nil];
-        });
-    } failure:^(EMError *aError) {
-        dispatch_async(dispatch_get_main_queue(), ^{
+        }
+        else {
             [weakSelf hideHud];
             [weakSelf showHint:aError.errorDescription];
-        });
+        }
     }];
 }
  

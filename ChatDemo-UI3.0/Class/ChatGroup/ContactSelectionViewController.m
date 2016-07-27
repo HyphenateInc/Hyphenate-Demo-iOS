@@ -110,8 +110,8 @@
 {
     [super viewWillAppear:animated];
     
-    [[GAI sharedInstance].defaultTracker set:kGAIScreenName value:NSStringFromClass(self.class)];
-    [[GAI sharedInstance].defaultTracker send:[[GAIDictionaryBuilder createScreenView] build]];
+//    [[GAI sharedInstance].defaultTracker set:kGAIScreenName value:NSStringFromClass(self.class)];
+//    [[GAI sharedInstance].defaultTracker send:[[GAIDictionaryBuilder createScreenView] build]];
 }
 
 - (void)didReceiveMemoryWarning
@@ -394,7 +394,7 @@
     [_dataSource removeAllObjects];
     [_contactsSource removeAllObjects];
     
-    NSArray *usernameList = [[EMClient sharedClient].contactManager getContactsFromDB];
+    NSArray *usernameList = [[EMClient sharedClient].contactManager getContacts];
     for (NSString *username in usernameList) {
         [self.contactsSource addObject:username];
     }

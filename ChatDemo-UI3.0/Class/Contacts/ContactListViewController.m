@@ -69,7 +69,7 @@
 
     [[UserProfileManager sharedInstance] loadUserProfileInBackgroundOfUser:self.contactsSource saveToLoacal:YES completion:NULL];
     
-    [[EMClient sharedClient].chatManager addDelegate:self delegateQueue:nil];
+    [[EMClient sharedClient].chatManager addDelegate:self];
 
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(updateUnreadMessageCount:) name:kNotification_unreadMessageCountUpdated object:nil];
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(reloadRequestCount) name:kNotification_didReceiveRequest object:nil];
@@ -81,8 +81,8 @@
     
     [self reloadRequestCount];
     
-    [[GAI sharedInstance].defaultTracker set:kGAIScreenName value:NSStringFromClass(self.class)];
-    [[GAI sharedInstance].defaultTracker send:[[GAIDictionaryBuilder createScreenView] build]];
+//    [[GAI sharedInstance].defaultTracker set:kGAIScreenName value:NSStringFromClass(self.class)];
+//    [[GAI sharedInstance].defaultTracker send:[[GAIDictionaryBuilder createScreenView] build]];
 }
 
 
@@ -384,16 +384,22 @@
         }
         
         __weak typeof(self) weakself = self;
-        [[EMClient sharedClient].contactManager asyncDeleteContact:model.username success:^{
-            [[EMClient sharedClient].chatManager deleteConversation:model.username deleteMessages:YES];
-            [tableView beginUpdates];
-            [[weakself.dataArray objectAtIndex:(indexPath.section - 1)] removeObjectAtIndex:indexPath.row];
-            [weakself.contactsSource removeObject:model.username];
-            [tableView  deleteRowsAtIndexPaths:[NSArray arrayWithObject:indexPath] withRowAnimation:UITableViewRowAnimationFade];
-            [tableView endUpdates];
-        } failure:^(EMError *aError) {
-            [weakself showHint:[NSString stringWithFormat:NSLocalizedString(@"deleteFailed", @"Delete failed:%@"), aError.errorDescription]];
-            [tableView reloadData];
+        [[EMClient sharedClient].contactManager deleteContact:model.username completion:^(NSString *aUsername, EMError *aError) {
+            ContactListViewController *strongSelf = weakself;
+            if (!aError) {
+                [[EMClient sharedClient].chatManager deleteConversation:model.username isDeleteMessages:YES completion:nil];
+                if (strongSelf) {
+                    [strongSelf.tableView beginUpdates];
+                    [[strongSelf.dataArray objectAtIndex:(indexPath.section - 1)] removeObjectAtIndex:indexPath.row];
+                    [strongSelf.contactsSource removeObject:model.username];
+                    [strongSelf.tableView  deleteRowsAtIndexPaths:[NSArray arrayWithObject:indexPath] withRowAnimation:UITableViewRowAnimationFade];
+                    [strongSelf.tableView endUpdates];
+                }
+            }
+            else if (strongSelf) {
+                [strongSelf showHint:[NSString stringWithFormat:NSLocalizedString(@"deleteFailed", @"Delete failed:%@"), aError.errorDescription]];
+                [strongSelf.tableView reloadData];
+            }
         }];
     }
 }
@@ -480,7 +486,7 @@
     [self.sectionTitles removeAllObjects];
     NSMutableArray *contactsSource = [NSMutableArray array];
     
-    NSArray *blockList = [[EMClient sharedClient].contactManager getBlackListFromDB];
+    NSArray *blockList = [[EMClient sharedClient].contactManager getBlackList];
     for (NSString *username in usernameList) {
         if (![blockList containsObject:username]) {
             [contactsSource addObject:username];
@@ -568,16 +574,14 @@
         [self showHudInView:self.view hint:NSLocalizedString(@"wait", @"Pleae wait...")];
         
         __weak typeof(self) weakself = self;
-        
-        [[EMClient sharedClient].contactManager asyncAddUserToBlackList:model.username relationshipBoth:YES success:^{
-            
-            [weakself reloadDataSource];
+        [[EMClient sharedClient].contactManager addUserToBlackList:model.username completion:^(NSString *aUsername, EMError *aError) {
             [weakself hideHud];
-            
-        } failure:^(EMError *aError) {
-            
-            [weakself hideHud];
-            [weakself showHint:aError.errorDescription];
+            if (!aError) {
+                [weakself reloadDataSource];
+            }
+            else {
+                [weakself showHint:aError.errorDescription];
+            }
         }];
     }
     _currentLongPressIndex = nil;
@@ -590,13 +594,13 @@
     
 }
 
-- (void)didReceiveMessages:(NSArray *)aMessages
+- (void)messagesDidReceive:(NSArray *)aMessages
 {
     BOOL isUpdated = NO;
     
     for (EMMessage *message in aMessages) {
         EMConversation *conversation = [[EMClient sharedClient].chatManager getConversation:message.conversationId
-                                                                                       type:message.chatType
+                                                                                       type:(EMConversationType)message.chatType
                                                                            createIfNotExist:NO];
         
         
@@ -629,29 +633,36 @@
 
 - (void)tableViewDidTriggerHeaderRefresh
 {
-    [[EMClient sharedClient].contactManager asyncGetContactsFromServer:^(NSArray *aList) {
-        
-        NSArray *usernameList = aList;
-        [[EMClient sharedClient].contactManager asyncGetBlackListFromServer:^(NSArray *aList) {
-            
-            [self.contactsSource removeAllObjects];
-            [self.contactsSource addObjectsFromArray:usernameList];
-            
-            [self sortDataArray:self.contactsSource];
-            [self tableViewDidFinishTriggerHeader:YES reload:NO];
-            
-        } failure:^(EMError *aError) {
-            
-            [self showHint:[NSString stringWithFormat:@"Failed to get blacklist from server - %@", aError.errorDescription]];
-            [self reloadDataSource];
-            [self tableViewDidFinishTriggerHeader:YES reload:NO];
-        }];
-        
-    } failure:^(EMError *aError) {
-        
-        [self showHint:aError.errorDescription];
-        [self reloadDataSource];
-        [self tableViewDidFinishTriggerHeader:YES reload:NO];
+    __weak typeof(self) weakSelf = self;
+    [[EMClient sharedClient].contactManager getContactsFromServerWithCompletion:^(NSArray *aList, EMError *aError) {
+        if (!aError) {
+            NSArray *usernameList = aList;
+            [[EMClient sharedClient].contactManager getBlackListFromServerWithCompletion:^(NSArray *aList, EMError *aError) {
+                ContactListViewController *strongSelf = weakSelf;
+                if (strongSelf) {
+                    if (!aError) {
+                        [strongSelf.contactsSource removeAllObjects];
+                        [strongSelf.contactsSource addObjectsFromArray:usernameList];
+                        
+                        [strongSelf sortDataArray:self.contactsSource];
+                        [strongSelf tableViewDidFinishTriggerHeader:YES reload:NO];
+                    }
+                    else {
+                        [strongSelf showHint:[NSString stringWithFormat:@"Failed to get blacklist from server - %@", aError.errorDescription]];
+                        [strongSelf reloadDataSource];
+                        [strongSelf tableViewDidFinishTriggerHeader:YES reload:NO];
+                    }
+                }
+            }];
+        }
+        else {
+            ContactListViewController *strongSelf = weakSelf;
+            if (strongSelf) {
+                [strongSelf showHint:aError.errorDescription];
+                [strongSelf reloadDataSource];
+                [strongSelf tableViewDidFinishTriggerHeader:YES reload:NO];
+            }
+        }
     }];
 }
 
@@ -707,7 +718,7 @@
     [self.dataArray removeAllObjects];
     [self.contactsSource removeAllObjects];
     
-    self.contactsSource = [[[EMClient sharedClient].contactManager getContactsFromDB] mutableCopy];
+    self.contactsSource = [[[EMClient sharedClient].contactManager getContacts] mutableCopy];
     
     [self sortDataArray:self.contactsSource];
     

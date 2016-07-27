@@ -41,8 +41,8 @@
 {
     [super viewWillAppear:animated];
     
-    [[GAI sharedInstance].defaultTracker set:kGAIScreenName value:NSStringFromClass(self.class)];
-    [[GAI sharedInstance].defaultTracker send:[[GAIDictionaryBuilder createScreenView] build]];
+//    [[GAI sharedInstance].defaultTracker set:kGAIScreenName value:NSStringFromClass(self.class)];
+//    [[GAI sharedInstance].defaultTracker send:[[GAIDictionaryBuilder createScreenView] build]];
 }
 
 #pragma mark - EMUserListViewControllerDelegate
@@ -55,19 +55,22 @@
         if (self.messageModel.bodyType == EMMessageBodyTypeText) {
             EMMessage *message = [EaseSDKHelper sendTextMessage:self.messageModel.text to:userModel.username messageType:EMChatTypeChat messageExt:self.messageModel.message.ext];
             __weak typeof(self) weakself = self;
-            [[EMClient sharedClient].chatManager asyncSendMessage:message progress:nil completion:^(EMMessage *aMessage, EMError *aError) {
-                if (!aError) {
-                    NSMutableArray *array = [NSMutableArray arrayWithArray:[self.navigationController viewControllers]];
-                    ChatViewController *chatController = [[ChatViewController alloc] initWithConversationID:userModel.username conversationType:EMConversationTypeChat];
-                    chatController.title = userModel.nickname.length != 0 ? [userModel.nickname copy] : [userModel.username copy];
-                    if ([array count] >= 3) {
-                        [array removeLastObject];
-                        [array removeLastObject];
+            [[EMClient sharedClient].chatManager sendMessage:message progress:nil completion:^(EMMessage *message, EMError *aError) {
+                ContactListSelectViewController *strongSelf = weakself;
+                if (strongSelf) {
+                    if (!aError) {
+                        NSMutableArray *array = [NSMutableArray arrayWithArray:[self.navigationController viewControllers]];
+                        ChatViewController *chatController = [[ChatViewController alloc] initWithConversationID:userModel.username conversationType:EMConversationTypeChat];
+                        chatController.title = userModel.nickname.length != 0 ? [userModel.nickname copy] : [userModel.username copy];
+                        if ([array count] >= 3) {
+                            [array removeLastObject];
+                            [array removeLastObject];
+                        }
+                        [array addObject:chatController];
+                        [strongSelf.navigationController setViewControllers:array animated:YES];
+                    } else {
+                        [strongSelf showHudInView:self.view hint:NSLocalizedString(@"forwardFail", @"")];
                     }
-                    [array addObject:chatController];
-                    [weakself.navigationController setViewControllers:array animated:YES];
-                } else {
-                    [self showHudInView:self.view hint:NSLocalizedString(@"forwardFail", @"")];
                 }
             }];
         } else if (self.messageModel.bodyType == EMMessageBodyTypeImage) {
@@ -79,20 +82,24 @@
                 image = [UIImage imageWithContentsOfFile:self.messageModel.fileLocalPath];
             }
             EMMessage *message= [EaseSDKHelper sendImageMessageWithImage:image to:userModel.username messageType:EMChatTypeChat messageExt:self.messageModel.message.ext];
-            
-            [[EMClient sharedClient].chatManager asyncSendMessage:message progress:nil completion:^(EMMessage *message, EMError *error) {
-                if (!error) {
-                    NSMutableArray *array = [NSMutableArray arrayWithArray:[self.navigationController viewControllers]];
-                    ChatViewController *chatController = [[ChatViewController alloc] initWithConversationID:userModel.username conversationType:EMConversationTypeChat];
-                    chatController.title = userModel.nickname.length != 0 ? userModel.nickname : userModel.username;
-                    if ([array count] >= 3) {
-                        [array removeLastObject];
-                        [array removeLastObject];
+            __weak typeof(self) weakself = self;
+            [[EMClient sharedClient].chatManager sendMessage:message progress:nil completion:^(EMMessage *message, EMError *aError) {
+                ContactListSelectViewController *strongSelf = weakself;
+                if (strongSelf) {
+                    [strongSelf hideHud];
+                    if (!aError) {
+                        NSMutableArray *array = [NSMutableArray arrayWithArray:[self.navigationController viewControllers]];
+                        ChatViewController *chatController = [[ChatViewController alloc] initWithConversationID:userModel.username conversationType:EMConversationTypeChat];
+                        chatController.title = userModel.nickname.length != 0 ? [userModel.nickname copy] : [userModel.username copy];
+                        if ([array count] >= 3) {
+                            [array removeLastObject];
+                            [array removeLastObject];
+                        }
+                        [array addObject:chatController];
+                        [strongSelf.navigationController setViewControllers:array animated:YES];
+                    } else {
+                        [strongSelf showHudInView:self.view hint:NSLocalizedString(@"forwardFail", @"")];
                     }
-                    [array addObject:chatController];
-                    [self.navigationController setViewControllers:array animated:YES];
-                } else {
-                    [self showHudInView:self.view hint:NSLocalizedString(@"forwardFail", @"")];
                 }
             }];
         }

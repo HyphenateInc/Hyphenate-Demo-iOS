@@ -60,24 +60,16 @@
     if (self.conversation.type == EMConversationTypeChatRoom)
     {
         NSString *conversationID = self.conversation.conversationId;
-        
-        dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), ^{
-            
-            EMError *error = nil;
-            [[EMClient sharedClient].roomManager asyncLeaveChatroom:conversationID success:^(EMChatroom *aRoom) {
-                
-            } failure:^(EMError *aError) {
-                dispatch_async(dispatch_get_main_queue(), ^{
-                    
-                    UIAlertView *alertView = [[UIAlertView alloc] initWithTitle:@"Error"
-                                                                        message:[NSString stringWithFormat:@"Failed to leave chatroom '%@': [%@]", conversationID, error.errorDescription]
-                                                                       delegate:nil
-                                                              cancelButtonTitle:NSLocalizedString(@"ok", @"ok")
-                                                              otherButtonTitles:nil, nil];
-                    [alertView show];
-                });
-            }];
-        });
+        [[EMClient sharedClient].roomManager leaveChatroom:conversationID completion:^(EMChatroom *aChatroom, EMError *aError) {
+            if (aError) {
+                UIAlertView *alertView = [[UIAlertView alloc] initWithTitle:@"Error"
+                                                                    message:[NSString stringWithFormat:@"Failed to leave chatroom '%@': [%@]", conversationID, aError.errorDescription]
+                                                                   delegate:nil
+                                                          cancelButtonTitle:NSLocalizedString(@"ok", @"ok")
+                                                          otherButtonTitles:nil, nil];
+                [alertView show];
+            }
+        }];
     }
     
     [[EMClient sharedClient] removeDelegate:self];
@@ -87,8 +79,8 @@
 {
     [super viewWillAppear:animated];
     
-    [[GAI sharedInstance].defaultTracker set:kGAIScreenName value:NSStringFromClass(self.class)];
-    [[GAI sharedInstance].defaultTracker send:[[GAIDictionaryBuilder createScreenView] build]];
+//    [[GAI sharedInstance].defaultTracker set:kGAIScreenName value:NSStringFromClass(self.class)];
+//    [[GAI sharedInstance].defaultTracker send:[[GAIDictionaryBuilder createScreenView] build]];
     
     if (self.conversation.type == EMConversationTypeGroupChat) {
         
@@ -104,8 +96,8 @@
 {
     UIBarButtonItem *backBarButtonItem = [[UIBarButtonItem alloc] initWithImage:[UIImage imageNamed:@"back"]
                                                                           style:UIBarButtonItemStylePlain
-                                                                         target:self.navigationController
-                                                                         action:@selector(popViewControllerAnimated:)];
+                                                                         target:self
+                                                                         action:@selector(backAction)];
     self.navigationItem.leftBarButtonItem = backBarButtonItem;
     
     if (self.conversation.type == EMConversationTypeChat) {
@@ -134,7 +126,7 @@
     if (alertView.cancelButtonIndex != buttonIndex) {
         
         self.messageTimeIntervalTag = -1;
-        [self.conversation deleteAllMessages];
+        [self.conversation deleteAllMessages:nil];
         [self.dataArray removeAllObjects];
         [self.messsagesSource removeAllObjects];
         
@@ -256,14 +248,14 @@
 
 #pragma mark - EMClientDelegate
 
-- (void)didLoginFromOtherDevice
+- (void)userAccountDidLoginFromOtherDevice
 {
     if ([self.imagePicker.mediaTypes count] > 0 && [[self.imagePicker.mediaTypes objectAtIndex:0] isEqualToString:(NSString *)kUTTypeMovie]) {
         [self.imagePicker stopVideoCapture];
     }
 }
 
-- (void)didRemovedFromServer
+- (void)userAccountDidRemoveFromServer
 {
     if ([self.imagePicker.mediaTypes count] > 0 && [[self.imagePicker.mediaTypes objectAtIndex:0] isEqualToString:(NSString *)kUTTypeMovie]) {
         [self.imagePicker stopVideoCapture];
@@ -282,7 +274,7 @@
     if (self.deleteConversationIfNull) {
         EMMessage *message = [self.conversation latestMessage];
         if (message == nil) {
-            [[EMClient sharedClient].chatManager deleteConversation:self.conversation.conversationId deleteMessages:NO];
+            [[EMClient sharedClient].chatManager deleteConversation:self.conversation.conversationId isDeleteMessages:NO completion:nil];
         }
     }
     
@@ -310,7 +302,7 @@
         BOOL isDelete = [groupId isEqualToString:self.conversation.conversationId];
         if (self.conversation.type != EMConversationTypeChat && isDelete) {
             self.messageTimeIntervalTag = -1;
-            [self.conversation deleteAllMessages];
+            [self.conversation deleteAllMessages:nil];
             [self.messsagesSource removeAllObjects];
             [self.dataArray removeAllObjects];
             
@@ -357,7 +349,7 @@
         NSMutableIndexSet *indexs = [NSMutableIndexSet indexSetWithIndex:self.menuIndexPath.row];
         NSMutableArray *indexPaths = [NSMutableArray arrayWithObjects:self.menuIndexPath, nil];
         
-        [self.conversation deleteMessageWithId:model.message.messageId];
+        [self.conversation deleteMessageWithId:model.message.messageId error:nil];
         [self.messsagesSource removeObject:model.message];
         
         if (self.menuIndexPath.row - 1 >= 0) {
@@ -402,7 +394,7 @@
     if (object) {
         EMMessage *message = (EMMessage *)object;
         [self addMessageToDataSource:message progress:nil];
-        [[EMClient sharedClient].chatManager importMessages:@[message]];
+        [[EMClient sharedClient].chatManager importMessages:@[message] completion:nil];
     }
 }
 

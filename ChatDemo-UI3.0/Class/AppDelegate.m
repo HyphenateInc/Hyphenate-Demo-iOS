@@ -22,12 +22,12 @@
 #import "AppDelegate+Parse.h"
 
 /** Fabric **/
-#import <Fabric/Fabric.h>
-#import <Crashlytics/Crashlytics.h>
+//#import <Fabric/Fabric.h>
+//#import <Crashlytics/Crashlytics.h>
 
 
 /** Hyphenate configuration constants **/
-static NSString *const kHyphenateAppKey = @"hyphenatedemo#hyphenatedemo";
+static NSString *const kHyphenateAppKey = @"easemob-demo#chatdemoui";
 static NSString *const kHyphenatePushServiceDevelopment = @"DevelopmentCertificate";
 static NSString *const kHyphenatePushServiceProduction = @"ProductionCertificate";
 
@@ -80,8 +80,8 @@ static int const kGaDispatchPeriod = 30;
     [self initializeGoogleAnalytics];
 
     /** Fabric **/
-    [[Fabric sharedSDK] setDebug:YES];
-    [Fabric with:@[[Crashlytics class]]];
+//    [[Fabric sharedSDK] setDebug:YES];
+//    [Fabric with:@[[Crashlytics class]]];
 
     return YES;
 }
@@ -115,7 +115,7 @@ static int const kGaDispatchPeriod = 30;
 - (void)applicationDidBecomeActive:(UIApplication *)application
 {
     /** Google analytics **/
-    [GAI sharedInstance].optOut = ![[NSUserDefaults standardUserDefaults] boolForKey:kTrackingPreferenceKey];
+    //[GAI sharedInstance].optOut = ![[NSUserDefaults standardUserDefaults] boolForKey:kTrackingPreferenceKey];
 }
 
 
@@ -124,13 +124,13 @@ static int const kGaDispatchPeriod = 30;
 - (void)initializeGoogleAnalytics
 {
     // Configure tracker from GoogleService-Info.plist.
-    NSError *configureError;
-    [[GGLContext sharedInstance] configureWithError:&configureError];
-    NSAssert(!configureError, @"Error configuring Google services: %@", configureError);
-    
-    [[GAI sharedInstance] setDispatchInterval:kGaDispatchPeriod];
-    [[GAI sharedInstance] setDryRun:kGaDryRun];
-    self.tracker = [[GAI sharedInstance] trackerWithTrackingId:kGaPropertyId];
+//    NSError *configureError;
+//    [[GGLContext sharedInstance] configureWithError:&configureError];
+//    NSAssert(!configureError, @"Error configuring Google services: %@", configureError);
+//    
+//    [[GAI sharedInstance] setDispatchInterval:kGaDispatchPeriod];
+//    [[GAI sharedInstance] setDryRun:kGaDryRun];
+//    self.tracker = [[GAI sharedInstance] trackerWithTrackingId:kGaPropertyId];
 }
 
 @end

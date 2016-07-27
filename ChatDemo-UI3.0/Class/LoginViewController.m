@@ -47,8 +47,8 @@
 {
     [super viewDidAppear:animated];
     
-    [[GAI sharedInstance].defaultTracker set:kGAIScreenName value:NSStringFromClass(self.class)];
-    [[GAI sharedInstance].defaultTracker send:[[GAIDictionaryBuilder createScreenView] build]];
+//    [[GAI sharedInstance].defaultTracker set:kGAIScreenName value:NSStringFromClass(self.class)];
+//    [[GAI sharedInstance].defaultTracker send:[[GAIDictionaryBuilder createScreenView] build]];
 }
 
 
@@ -63,39 +63,37 @@
         
         [self showHudInView:self.view hint:NSLocalizedString(@"register.ongoing", @"Is to register...")];
         
-        dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), ^{
-            
-            [[EMClient sharedClient] asyncRegisterWithUsername:self.usernameTextField.text password:self.passwordTextField.text success:^{
-                
-                // Update APNs display name
-                [[EMClient sharedClient] asyncSetApnsNickname:self.usernameTextField.text success:^{
-                    
-                } failure:^(EMError *aError) {
-                    TTAlertNoTitle(aError.errorDescription);
+        __weak typeof(self) weakSelf = self;
+        NSString *displayName = self.usernameTextField.text;
+        [[EMClient sharedClient] registerWithUsername:self.usernameTextField.text password:self.passwordTextField.text completion:^(NSString *aUsername, EMError *aError) {
+            if (!aError) {
+                [[EMClient sharedClient] updateAPNsDisplayName:displayName completion:^(NSString *aDisplayName, EMError *aError) {
+                    if (aError) {
+                        TTAlertNoTitle(aError.errorDescription);
+                    }
                 }];
                 
-                dispatch_async(dispatch_get_main_queue(), ^{
-                    
-                    [self hideHud];
-                    
-                    [self showHudInView:self.view hint:NSLocalizedString(@"register.success", @"")];
+                LoginViewController *strongSelf = weakSelf;
+                if (strongSelf) {
+                    [strongSelf hideHud];
+                    [strongSelf showHudInView:self.view hint:NSLocalizedString(@"register.success", @"")];
                     
                     double delayInSeconds = 2.0;
                     
                     dispatch_time_t popTime = dispatch_time(DISPATCH_TIME_NOW, delayInSeconds * NSEC_PER_SEC);
                     dispatch_after(popTime, dispatch_get_main_queue(), ^(void){
                         
-                        [self hideHud];
-
+                        [strongSelf hideHud];
+                        
                         // Log in user
-                        [self loginWithUsername:self.usernameTextField.text password:self.passwordTextField.text];
+                        [strongSelf loginWithUsername:self.usernameTextField.text password:self.passwordTextField.text];
                     });
-                });
-                
-            } failure:^(EMError *aError) {
-                dispatch_async(dispatch_get_main_queue(), ^{
-                    
-                    [self hideHud];
+                }
+            }
+            else {
+                LoginViewController *strongSelf = weakSelf;
+                if (strongSelf) {
+                    [strongSelf hideHud];
                     
                     switch (aError.code) {
                         case EMErrorServerNotReachable:
@@ -114,9 +112,9 @@
                             TTAlertNoTitle(NSLocalizedString(@"register.fail", @"Registration failed"));
                             break;
                     }
-                });
-            }];
-        });
+                }
+            }
+        }];
     }
 }
 
@@ -134,31 +132,20 @@
 {
     [self showHudInView:self.view hint:NSLocalizedString(@"login.inProgress", @"")];
     
-    dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), ^{
-      
-        [[EMClient sharedClient] asyncLoginWithUsername:username password:password success:^{
-            
-            dispatch_async(dispatch_get_main_queue(), ^{
-                
-                [self hideHud];
-                                
-                [MBProgressHUD showHUDAddedTo:self.view animated:YES];
+    [[EMClient sharedClient] loginWithUsername:username password:password completion:^(NSString *aUsername, EMError *aError) {
+        LoginViewController *strongSelf = self;
+        if (strongSelf) {
+            [strongSelf hideHud];
+            if (!aError) {
+                [MBProgressHUD showHUDAddedTo:strongSelf.view animated:YES];
                 
                 [[ChatDemoHelper shareHelper] login];
                 
-                [MBProgressHUD hideAllHUDsForView:self.view animated:YES];
-            });
-
-        } failure:^(EMError *aError) {
-            
-            [[ChatDemoHelper shareHelper] logout];
-            
-            dispatch_async(dispatch_get_main_queue(), ^{
+                [MBProgressHUD hideAllHUDsForView:strongSelf.view animated:YES];
+            }
+            else {
+                [[ChatDemoHelper shareHelper] logout];
                 
-                [self hideHud];
-                
-                TTAlertNoTitle(aError.errorDescription);
-
                 switch (aError.code)
                 {
                     case EMErrorNetworkUnavailable:
@@ -180,9 +167,9 @@
                         TTAlertNoTitle([NSString stringWithFormat:@"Login Failure - %@", aError.errorDescription]);
                         break;
                 }
-            });
-        }];
-    });
+            }
+        }
+    }];
 }
 
 - (BOOL)isInputsEmpty

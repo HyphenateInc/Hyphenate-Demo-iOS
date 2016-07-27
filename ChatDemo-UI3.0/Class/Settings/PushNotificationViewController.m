@@ -60,8 +60,8 @@
 {
     [super viewWillAppear:animated];
     
-    [[GAI sharedInstance].defaultTracker set:kGAIScreenName value:NSStringFromClass(self.class)];
-    [[GAI sharedInstance].defaultTracker send:[[GAIDictionaryBuilder createScreenView] build]];
+//    [[GAI sharedInstance].defaultTracker set:kGAIScreenName value:NSStringFromClass(self.class)];
+//    [[GAI sharedInstance].defaultTracker send:[[GAIDictionaryBuilder createScreenView] build]];
 }
 
 - (void)didReceiveMemoryWarning
@@ -260,25 +260,16 @@
     }
     
     __weak typeof(self) weakself = self;
-    dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), ^{
-        
-        EMError *error = nil;
-        if (isUpdated) {
-            [[EMClient sharedClient] asyncUpdatePushOptionsToServer:^{
-                
-                dispatch_async(dispatch_get_main_queue(), ^{
-                    [weakself.navigationController popViewControllerAnimated:YES];
-                });
-                
-            } failure:^(EMError *aError) {
-                
-                dispatch_async(dispatch_get_main_queue(), ^{
-                    [weakself showHint:[NSString stringWithFormat:@"%@:%@", NSLocalizedString(@"error.save", @"Failed to save"), error.errorDescription]];
-                });
-                
-            }];
-        }
-    });
+    if (isUpdated) {
+        [[EMClient sharedClient] updatePushOptionsToServerWithCompletion:^(EMError *aError) {
+            if (!aError) {
+                [weakself.navigationController popViewControllerAnimated:YES];
+            }
+            else {
+                [weakself showHint:[NSString stringWithFormat:@"%@:%@", NSLocalizedString(@"error.save", @"Failed to save"), aError.errorDescription]];
+            }
+        }];
+    }
 }
 
 - (void)pushDisplayChanged:(UISwitch *)pushDisplaySwitch
@@ -296,13 +287,12 @@
 - (void)loadPushOptions
 {
     __weak typeof(self) weakself = self;
-    
-    [[EMClient sharedClient] asyncGetPushOptionsFromServer:^(EMPushOptions *aOptions) {
-        dispatch_async(dispatch_get_main_queue(), ^{
+    [[EMClient sharedClient] getPushOptionsFromServerWithCompletion:^(EMPushOptions *aOptions, EMError *aError) {
+        if (!aError) {
             [weakself refreshPushOptions];
-        });
-    } failure:^(EMError *aError) {
-        
+        }
+        else {
+        }
     }];
 }
 

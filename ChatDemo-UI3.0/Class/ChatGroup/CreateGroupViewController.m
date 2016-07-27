@@ -78,8 +78,8 @@
 {
     [super viewWillAppear:animated];
     
-    [[GAI sharedInstance].defaultTracker set:kGAIScreenName value:NSStringFromClass(self.class)];
-    [[GAI sharedInstance].defaultTracker send:[[GAIDictionaryBuilder createScreenView] build]];
+//    [[GAI sharedInstance].defaultTracker set:kGAIScreenName value:NSStringFromClass(self.class)];
+//    [[GAI sharedInstance].defaultTracker send:[[GAIDictionaryBuilder createScreenView] build]];
 }
 
 - (void)didReceiveMemoryWarning
@@ -247,13 +247,18 @@
     __weak CreateGroupViewController *weakSelf = self;
     NSString *username = [[EMClient sharedClient] currentUsername];
     NSString *messageStr = [NSString stringWithFormat:NSLocalizedString(@"group.somebodyInvite", @"%@ invite you to join groups \'%@\'"), username, self.groupNameTextField.text];
-    [[EMClient sharedClient].groupManager asyncCreateGroupWithSubject:self.groupNameTextField.text description:self.groupNameTextField.text invitees:source message:messageStr setting:setting success:^(EMGroup *aGroup) {
-        [weakSelf hideHud];
-        [weakSelf showHint:NSLocalizedString(@"group.create.success", @"create group success")];
-        [weakSelf.navigationController popViewControllerAnimated:YES];
-    } failure:^(EMError *aError) {
-        [weakSelf hideHud];
-        [weakSelf showHint:NSLocalizedString(@"group.create.fail", @"Failed to create a group, please operate again")];
+    [[EMClient sharedClient].groupManager createGroupWithSubject:self.groupNameTextField.text description:self.groupNameTextField.text invitees:source message:messageStr setting:setting completion:^(EMGroup *aGroup, EMError *aError) {
+        CreateGroupViewController *strongSelf = weakSelf;
+        if (strongSelf) {
+            [strongSelf hideHud];
+            if (!aError) {
+                [strongSelf showHint:NSLocalizedString(@"group.create.success", @"create group success")];
+                [strongSelf.navigationController popViewControllerAnimated:YES];
+            }
+            else {
+                [strongSelf showHint:NSLocalizedString(@"group.create.fail", @"Failed to create a group, please operate again")];
+            }
+        }
     }];
     return YES;
 }
