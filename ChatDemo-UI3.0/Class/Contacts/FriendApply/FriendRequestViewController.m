@@ -52,8 +52,8 @@ static FriendRequestViewController *controller = nil;
     
     UIBarButtonItem *backBarButtonItem = [[UIBarButtonItem alloc] initWithImage:[UIImage imageNamed:@"back"]
                                                                           style:UIBarButtonItemStylePlain
-                                                                         target:self.navigationController
-                                                                         action:@selector(popViewControllerAnimated:)];
+                                                                         target:self
+                                                                         action:@selector(backAction)];
     self.navigationItem.leftBarButtonItem = backBarButtonItem;
     
     [self loadDataSourceFromLocalDB];

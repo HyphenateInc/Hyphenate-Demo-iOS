@@ -129,12 +129,17 @@
         cell = [[UITableViewCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:cellIdentifier];
     }
     
+    [[cell.contentView subviews] makeObjectsPerformSelector:@selector(removeFromSuperview)];
     if (indexPath.section == 0) {
         if (indexPath.row == 0) {
-            cell.textLabel.text = NSLocalizedString(@"setting.showDetail", @"notify the display messages");
-            
             self.pushDisplaySwitch.frame = CGRectMake(self.tableView.frame.size.width - self.pushDisplaySwitch.frame.size.width - 10, (cell.contentView.frame.size.height - self.pushDisplaySwitch.frame.size.height) / 2, self.pushDisplaySwitch.frame.size.width, self.pushDisplaySwitch.frame.size.height);
             [cell.contentView addSubview:self.pushDisplaySwitch];
+            
+            CGRect frame = cell.textLabel.frame;
+            frame.size.width -= self.pushDisplaySwitch.frame.size.width;
+            UILabel *textLabel = [[UILabel alloc] initWithFrame:frame];
+            textLabel.text = NSLocalizedString(@"setting.showDetail", @"notify the display messages");
+            [cell.contentView addSubview:textLabel];
         }
     }
     else if (indexPath.section == 1)

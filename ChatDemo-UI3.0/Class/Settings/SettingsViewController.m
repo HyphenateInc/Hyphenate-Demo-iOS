@@ -107,6 +107,7 @@
         cell = [[UITableViewCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:cellIdentifier];
     }
     
+    [[cell.contentView subviews] makeObjectsPerformSelector:@selector(removeFromSuperview)];
     if (indexPath.section == 0) {
         
         switch(indexPath.row) {
@@ -135,12 +136,20 @@
                 cell.accessoryType = UITableViewCellAccessoryDisclosureIndicator;
                 break;
             case 5:
-                cell.textLabel.text = NSLocalizedString(@"setting.deleteConWhenLeave", @"Delete conversation when leave a group");
+            {
+                //cell.textLabel.text = NSLocalizedString(@"setting.deleteConWhenLeave", @"Delete conversation when leave a group");
                 cell.accessoryType = UITableViewCellAccessoryNone;
                 self.delConversationSwitch.frame = CGRectMake(self.tableView.frame.size.width - (self.delConversationSwitch.frame.size.width + 10), (cell.contentView.frame.size.height - self.delConversationSwitch.frame.size.height) / 2, self.delConversationSwitch.frame.size.width, self.delConversationSwitch.frame.size.height);
-                [self.delConversationSwitch setOn:NO animated:NO];
                 [cell.contentView addSubview:self.delConversationSwitch];
+                
+                CGRect frame = cell.contentView.frame;
+                frame.origin.x = 16;
+                frame.size.width = self.delConversationSwitch.frame.origin.x - frame.origin.x;
+                UILabel *textLabel = [[UILabel alloc] initWithFrame:frame];
+                textLabel.text = NSLocalizedString(@"setting.deleteConWhenLeave", @"Delete conversation when leave a group");
+                [cell.contentView addSubview:textLabel];
                 break;
+            }
             case 6:
                 cell.textLabel.text = NSLocalizedString(@"setting.autoLogin", @"Automatic Login");
                 cell.accessoryType = UITableViewCellAccessoryNone;
@@ -267,7 +276,7 @@
 
 - (void)refreshConfig
 {
-    [self.autoLoginSwitch setOn:[[EMClient sharedClient].options isAutoLogin] animated:YES];
+    [self.autoLoginSwitch setOn:[[EMClient sharedClient].options isAutoLogin] animated:NO];
     
     [self.tableView reloadData];
 }
