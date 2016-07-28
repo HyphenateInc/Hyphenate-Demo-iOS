@@ -140,7 +140,9 @@
     }
     
     cell.imageView.image = [UIImage imageNamed:@"chatListCellHead.png"];
-    cell.textLabel.text = [self.dataSource objectAtIndex:indexPath.row];
+    if (self.dataSource.count > indexPath.row) {
+        cell.textLabel.text = [self.dataSource objectAtIndex:indexPath.row];
+    }
     
     return cell;
 }
@@ -158,8 +160,10 @@
     
     self.selectedIndexPath = indexPath;
     
-    NSString *friendName = [self.dataSource objectAtIndex:indexPath.row];
-    [self sendUserFriendRequest:friendName];
+    if (self.dataSource.count > indexPath.row) {
+        NSString *friendName = [self.dataSource objectAtIndex:indexPath.row];
+        [self sendUserFriendRequest:friendName];
+    }
 }
 
 - (void)sendUserFriendRequest:(NSString *)friendName

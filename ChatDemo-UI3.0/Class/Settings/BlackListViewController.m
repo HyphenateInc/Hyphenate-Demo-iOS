@@ -127,11 +127,12 @@
         cell = [[BaseTableViewCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:cellIdentifier];
     }
     
-    NSString *username = [self.dataSource objectAtIndex:indexPath.row];
     cell.imageView.image = [UIImage imageNamed:@"chatListCellHead.png"];
-    cell.textLabel.text = username;
-    cell.username = username;
-    
+    if (self.dataSource.count > indexPath.row) {
+        NSString *username = [self.dataSource objectAtIndex:indexPath.row];
+        cell.textLabel.text = username;
+        cell.username = username;
+    }
     
     return cell;
 }
@@ -145,13 +146,13 @@
 // Override to support editing the table view.
 - (void)tableView:(UITableView *)tableView commitEditingStyle:(UITableViewCellEditingStyle)editingStyle forRowAtIndexPath:(NSIndexPath *)indexPath
 {
-    if (editingStyle == UITableViewCellEditingStyleDelete) {
+    if (editingStyle == UITableViewCellEditingStyleDelete && self.dataSource.count > indexPath.row) {
         NSString *username = [self.dataSource objectAtIndex:indexPath.row];
         __weak typeof(self) weakself = self;
         [[EMClient sharedClient].contactManager removeUserFromBlackList:username completion:^(NSString *aUsername, EMError *aError) {
             if (!aError) {
                 [[ChatDemoHelper shareHelper].contactViewVC reloadDataSource];
-                [weakself.dataSource removeObjectAtIndex:indexPath.row];
+                [weakself.dataSource removeObject:username];
                 [weakself.tableView reloadData];
             }
             else {
