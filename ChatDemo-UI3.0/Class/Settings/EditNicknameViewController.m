@@ -123,10 +123,7 @@
 {
     if(_nickTextField.text.length > 0)
     {
-        [[EMClient sharedClient] asyncSetApnsNickname:_nickTextField.text success:^{
-            
-        } failure:^(EMError *aError) {
-            
+        [[EMClient sharedClient] updateAPNsDisplayName:_nickTextField.text completion:^(NSString *aNickname, EMError *aError) {
         }];
         
         [[UserProfileManager sharedInstance] updateUserProfileInBackground:@{kPARSE_HXUSER_NICKNAME:_nickTextField.text} completion:^(BOOL success, NSError *error){}];

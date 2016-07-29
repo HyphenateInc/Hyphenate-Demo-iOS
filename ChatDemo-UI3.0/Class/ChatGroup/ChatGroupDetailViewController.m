@@ -53,7 +53,7 @@
 
 - (void)registerNotifications {
     [self unregisterNotifications];
-    [[EMClient sharedClient].groupManager addDelegate:self delegateQueue:nil];
+    [[EMClient sharedClient].groupManager addDelegate:self];
 }
 
 - (void)unregisterNotifications {
@@ -84,7 +84,7 @@
 - (instancetype)initWithGroupId:(NSString *)chatGroupId
 {
     EMGroup *chatGroup = nil;
-    NSArray *groupArray = [[EMClient sharedClient].groupManager getAllGroups];
+    NSArray *groupArray = [[EMClient sharedClient].groupManager getJoinedGroups];
     for (EMGroup *group in groupArray) {
         if ([group.groupId isEqualToString:chatGroupId]) {
             chatGroup = group;
@@ -363,7 +363,7 @@
 - (BOOL)viewController:(EMChooseViewController *)viewController didFinishSelectedSources:(NSArray *)selectedSources
 {
     NSInteger maxUsersCount = self.chatGroup.setting.maxUsersCount;
-    if (([selectedSources count] + self.chatGroup.occupantsCount) > maxUsersCount) {
+    if (([selectedSources count] + self.chatGroup.membersCount) > maxUsersCount) {
         UIAlertView *alertView = [[UIAlertView alloc] initWithTitle:NSLocalizedString(@"group.maxUserCount", nil) message:nil delegate:nil cancelButtonTitle:NSLocalizedString(@"ok", @"OK") otherButtonTitles:nil, nil];
         [alertView show];
         
@@ -373,22 +373,20 @@
     [self showHudInView:self.view hint:NSLocalizedString(@"group.addingOccupant", @"add a group member...")];
     
     __weak typeof(self) weakSelf = self;
-    dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), ^{
-        NSMutableArray *source = [NSMutableArray array];
-        for (NSString *username in selectedSources) {
-            [source addObject:username];
+    NSString *username = [[EMClient sharedClient] currentUsername];
+    NSString *messageStr = [NSString stringWithFormat:NSLocalizedString(@"group.somebodyInvite", @"%@ invites you to join group \'%@\'"), username, weakSelf.chatGroup.subject];
+    [[EMClient sharedClient].groupManager addMembers:selectedSources toGroup:self.chatGroup.groupId message:messageStr completion:^(EMGroup *aGroup, EMError *aError) {
+        ChatGroupDetailViewController *strongSelf = weakSelf;
+        if (strongSelf) {
+            [strongSelf hideHud];
+            if (!aError) {
+                [strongSelf reloadDataSource];
+            }
+            else {
+                [strongSelf showHint:aError.errorDescription];
+            }
         }
-        
-        NSString *username = [[EMClient sharedClient] currentUsername];
-        NSString *messageStr = [NSString stringWithFormat:NSLocalizedString(@"group.somebodyInvite", @"%@ invites you to join group \'%@\'"), username, weakSelf.chatGroup.subject];
-        [[EMClient sharedClient].groupManager asyncAddOccupants:selectedSources toGroup:self.chatGroup.groupId welcomeMessage:messageStr success:^(EMGroup *aGroup) {
-            [weakSelf hideHud];
-            [weakSelf reloadDataSource];
-        } failure:^(EMError *aError) {
-            [weakSelf hideHud];
-            [weakSelf showHint:aError.errorDescription];
-        }];
-    });
+    }];
     
     return YES;
 }
@@ -402,7 +400,7 @@
 
 #pragma mark - EMGroupManagerDelegate
 
-- (void)didReceiveAcceptedGroupInvitation:(EMGroup *)aGroup
+- (void)groupInvitationDidApprove:(EMGroup *)aGroup
                                   invitee:(NSString *)aInvitee
 {
     if ([aGroup.groupId isEqualToString:self.chatGroup.groupId]) {
@@ -416,20 +414,25 @@
 {
     __weak typeof(self) weakSelf = self;
     [self showHudInView:self.view hint:NSLocalizedString(@"loadData", @"Load data...")];
-    [[EMClient sharedClient].groupManager asyncFetchGroupInfo:weakSelf.chatGroup.groupId includeMembersList:YES success:^(EMGroup *aGroup) {
-        [weakSelf hideHud];
-        weakSelf.chatGroup = aGroup;
-        EMConversation *conversation = [[EMClient sharedClient].chatManager getConversation:aGroup.groupId type:EMConversationTypeGroupChat createIfNotExist:YES];
-        if ([aGroup.groupId isEqualToString:conversation.conversationId]) {
-            NSMutableDictionary *ext = [NSMutableDictionary dictionaryWithDictionary:conversation.ext];
-            [ext setObject:aGroup.subject forKey:@"subject"];
-            [ext setObject:[NSNumber numberWithBool:aGroup.isPublic] forKey:@"isPublic"];
-            conversation.ext = ext;
+    [[EMClient sharedClient].groupManager getGroupSpecificationFromServerByID:self.chatGroup.groupId includeMembersList:YES completion:^(EMGroup *aGroup, EMError *aError) {
+        ChatGroupDetailViewController *strongSelf = weakSelf;
+        if (strongSelf) {
+            [strongSelf hideHud];
+            if (!aError) {
+                strongSelf.chatGroup = aGroup;
+                EMConversation *conversation = [[EMClient sharedClient].chatManager getConversation:aGroup.groupId type:EMConversationTypeGroupChat createIfNotExist:YES];
+                if ([aGroup.groupId isEqualToString:conversation.conversationId]) {
+                    NSMutableDictionary *ext = [NSMutableDictionary dictionaryWithDictionary:conversation.ext];
+                    [ext setObject:aGroup.subject forKey:@"subject"];
+                    [ext setObject:[NSNumber numberWithBool:aGroup.isPublic] forKey:@"isPublic"];
+                    conversation.ext = ext;
+                }
+                [strongSelf reloadDataSource];
+            }
+            else {
+                [strongSelf showHint:NSLocalizedString(@"group.fetchInfoFail", @"failed to get the group details, please try again later")];
+            }
         }
-        [weakSelf reloadDataSource];
-    } failure:^(EMError *aError) {
-        [weakSelf hideHud];
-        [weakSelf showHint:NSLocalizedString(@"group.fetchInfoFail", @"failed to get the group details, please try again later")];
     }];
 }
 
@@ -507,15 +510,20 @@
                 __weak typeof(self) weakSelf = self;
                 [contactView setDeleteContact:^(NSInteger index) {
                     [weakSelf showHudInView:weakSelf.view hint:NSLocalizedString(@"group.removingOccupant", @"deleting member...")];
-                    NSArray *occupants = [NSArray arrayWithObject:[weakSelf.dataSource objectAtIndex:index]];
-                    [[EMClient sharedClient].groupManager asyncRemoveOccupants:occupants fromGroup:weakSelf.chatGroup.groupId success:^(EMGroup *aGroup) {
-                        [weakSelf hideHud];
-                        weakSelf.chatGroup = aGroup;
-                        [weakSelf.dataSource removeObjectAtIndex:index];
-                        [weakSelf refreshScrollView];
-                    } failure:^(EMError *aError) {
-                        [weakSelf hideHud];
-                        [weakSelf showHint:aError.errorDescription];
+                    NSArray *members = [NSArray arrayWithObject:[weakSelf.dataSource objectAtIndex:index]];
+                    [[EMClient sharedClient].groupManager removeMembers:members fromGroup:self.chatGroup.groupId completion:^(EMGroup *aGroup, EMError *aError) {
+                        ChatGroupDetailViewController *strongSelf = weakSelf;
+                        if (strongSelf) {
+                            [strongSelf hideHud];
+                            if (!aError) {
+                                strongSelf.chatGroup = aGroup;
+                                [strongSelf.dataSource removeObjectAtIndex:index];
+                                [strongSelf refreshScrollView];
+                            }
+                            else {
+                                [strongSelf showHint:aError.errorDescription];
+                            }
+                        }
                     }];
                 }];
                 
@@ -633,13 +641,14 @@
     __weak typeof(self) weakSelf = self;
     
     [self showHudInView:self.view hint:NSLocalizedString(@"group.destroy", @"dissolution of the group")];
-  
-    [[EMClient sharedClient].groupManager asyncDestroyGroup:self.chatGroup.groupId success:^(EMGroup *aGroup) {
+    [[EMClient sharedClient].groupManager destroyGroup:self.chatGroup.groupId completion:^(EMGroup *aGroup, EMError *aError) {
         [weakSelf hideHud];
-        [[NSNotificationCenter defaultCenter] postNotificationName:@"ExitGroup" object:nil];
-    } failure:^(EMError *aError) {
-        [weakSelf hideHud];
-        [weakSelf showHint:NSLocalizedString(@"group.destroyFail", @"dissolution of group failure")];
+        if (!aError) {
+            [[NSNotificationCenter defaultCenter] postNotificationName:@"ExitGroup" object:nil];
+        }
+        else {
+            [weakSelf showHint:NSLocalizedString(@"group.destroyFail", @"dissolution of group failure")];
+        }
     }];
 }
 
@@ -649,15 +658,16 @@
     
     [self showHudInView:self.view hint:NSLocalizedString(@"group.leave", @"Leave the group")];
     
-    [[EMClient sharedClient].groupManager asyncLeaveGroup:self.chatGroup.groupId success:^(EMGroup *aGroup) {
+    [[EMClient sharedClient].groupManager leaveGroup:self.chatGroup.groupId completion:^(EMGroup *aGroup, EMError *aError) {
         [weakSelf hideHud];
-        [[NSNotificationCenter defaultCenter] postNotificationName:@"ExitGroup" object:nil];
-    } failure:^(EMError *aError) {
-        [weakSelf hideHud];
-        [weakSelf showHint:NSLocalizedString(@"group.leaveFail", @"exit the group failure")];
+        if (!aError) {
+            [[NSNotificationCenter defaultCenter] postNotificationName:@"ExitGroup" object:nil];
+        }
+        else {
+            [weakSelf showHint:NSLocalizedString(@"group.leaveFail", @"exit the group failure")];
+        }
     }];
 }
-
 
 #pragma mark - UIActionSheetDelegate
 
@@ -674,16 +684,21 @@
     {
         //add to black list
         [self showHudInView:self.view hint:NSLocalizedString(@"group.ban.adding", @"Adding to black list..")];
-        NSArray *occupants = [NSArray arrayWithObject:[self.dataSource objectAtIndex:_selectedContact.index]];
+        NSArray *members = [NSArray arrayWithObject:[self.dataSource objectAtIndex:_selectedContact.index]];
         __weak ChatGroupDetailViewController *weakSelf = self;
-        [[EMClient sharedClient].groupManager asyncBlockOccupants:occupants fromGroup:self.chatGroup.groupId success:^(EMGroup *aGroup) {
-            [weakSelf hideHud];
-            weakSelf.chatGroup = aGroup;
-            [weakSelf.dataSource removeObjectAtIndex:index];
-            [weakSelf refreshScrollView];
-        } failure:^(EMError *aError) {
-            [weakSelf hideHud];
-            [weakSelf showHint:aError.errorDescription];
+        [[EMClient sharedClient].groupManager blockMembers:members fromGroup:self.chatGroup.groupId completion:^(EMGroup *aGroup, EMError *aError) {
+            ChatGroupDetailViewController *strongSelf = weakSelf;
+            if (strongSelf) {
+                [strongSelf hideHud];
+                if (!aError) {
+                    strongSelf.chatGroup = aGroup;
+                    [strongSelf.dataSource removeObjectAtIndex:index];
+                    [strongSelf refreshScrollView];
+                }
+                else {
+                    [strongSelf showHint:aError.errorDescription];
+                }
+            }
         }];
     }
     _selectedContact = nil;
@@ -746,50 +761,26 @@
         [self showHudInView:self.view hint:NSLocalizedString(@"group.setting.save", @"Saving Properties")];
         
         if (self.blockSwitch.isOn) {
-            
-            dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), ^{
-                
-                [[EMClient sharedClient].groupManager asyncBlockGroup:self.chatGroup.groupId success:^(EMGroup *aGroup) {
-                    dispatch_async(dispatch_get_main_queue(), ^{
-                        
-                        [weakSelf hideHud];
-                        
-                        [weakSelf showHint:NSLocalizedString(@"group.setting.success", @"Settings Saved")];
-                    });
-                } failure:^(EMError *aError) {
-                    dispatch_async(dispatch_get_main_queue(), ^{
-                        
-                        [weakSelf hideHud];
-                        
-                        if (aError) {
-                            [weakSelf showHint:NSLocalizedString(@"group.setting.fail", @"Setting Failed")];
-                        }
-                    });
-                }];
-            });
+            [[EMClient sharedClient].groupManager blockGroup:self.chatGroup.groupId completion:^(EMGroup *aGroup, EMError *aError) {
+                [weakSelf hideHud];
+                if (!aError) {
+                    [weakSelf showHint:NSLocalizedString(@"group.setting.success", @"Settings Saved")];
+                }
+                else {
+                    [weakSelf showHint:NSLocalizedString(@"group.setting.fail", @"Setting Failed")];
+                }
+            }];
         }
         else {
-            
-            dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), ^{
-                
-                [[EMClient sharedClient].groupManager asyncUnblockGroup:self.chatGroup.groupId success:^(EMGroup *aGroup) {
-                    dispatch_async(dispatch_get_main_queue(), ^{
-                        
-                        [weakSelf hideHud];
-                        
-                        [weakSelf showHint:NSLocalizedString(@"group.setting.success", @"Settings Saved")];
-                    });
-                } failure:^(EMError *aError) {
-                    dispatch_async(dispatch_get_main_queue(), ^{
-                        
-                        [weakSelf hideHud];
-                        
-                        if (aError) {
-                            [weakSelf showHint:NSLocalizedString(@"group.setting.fail", @"Setting Failed")];
-                        }
-                    });
-                }];
-            });
+            [[EMClient sharedClient].groupManager unblockGroup:self.chatGroup.groupId completion:^(EMGroup *aGroup, EMError *aError) {
+                [weakSelf hideHud];
+                if (!aError) {
+                    [weakSelf showHint:NSLocalizedString(@"group.setting.success", @"Settings Saved")];
+                }
+                else {
+                    [weakSelf showHint:NSLocalizedString(@"group.setting.fail", @"Setting Failed")];
+                }
+            }];
         }
     }
     
@@ -805,27 +796,15 @@
     [self showHudInView:self.view hint:NSLocalizedString(@"group.setting.save", @"set properties")];
     
     __weak ChatGroupDetailViewController *weakSelf = self;
-    
-    dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), ^{
-        
-        [[EMClient sharedClient].groupManager asyncIgnoreGroupPush:weakSelf.chatGroup.groupId ignore:isIgnore success:^{
-            dispatch_async(dispatch_get_main_queue(), ^{
-                
-                [weakSelf hideHud];
-                
-                [weakSelf showHint:NSLocalizedString(@"group.setting.success", @"set success")];
-            });
-        } failure:^(EMError *aError) {
-            dispatch_async(dispatch_get_main_queue(), ^{
-                
-                [weakSelf hideHud];
-                
-                if (aError) {
-                    [weakSelf showHint:NSLocalizedString(@"group.setting.fail", @"set failure")];
-                }
-            });
-        }];
-    });
+    [[EMClient sharedClient].groupManager updatePushServiceForGroup:self.chatGroup.groupId isPushEnabled:!isIgnore completion:^(EMGroup *aGroup, EMError *aError) {
+        [weakSelf hideHud];
+        if (!aError) {
+            [weakSelf showHint:NSLocalizedString(@"group.setting.success", @"set success")];
+        }
+        else {
+            [weakSelf showHint:NSLocalizedString(@"group.setting.fail", @"set failure")];
+        }
+    }];
 }
 
 @end

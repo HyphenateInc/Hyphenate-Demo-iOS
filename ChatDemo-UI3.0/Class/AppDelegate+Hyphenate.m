@@ -34,6 +34,7 @@ didFinishLaunchingWithOptions:(NSDictionary *)launchOptions
     // Init Hyhenate SDK
     EMOptions *options = [EMOptions optionsWithAppkey:appkey];
     options.apnsCertName = apnsCertName;
+    options.enableConsoleLog = YES;
     [[EMClient sharedClient] initializeSDKWithOptions:options];
     
     [self registerMessagingNotification];
@@ -112,13 +113,11 @@ didFinishLaunchingWithOptions:(NSDictionary *)launchOptions
 
 - (void)application:(UIApplication *)application didRegisterForRemoteNotificationsWithDeviceToken:(NSData *)deviceToken
 {
-    dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), ^{
-        [[EMClient sharedClient] asyncBindDeviceToken:deviceToken success:^{
-            NSLog(@"bind device token for remote notification succeeded");
-        } failure:^(EMError *aError) {
+    [[EMClient sharedClient] registerForRemoteNotificationsWithDeviceToken:deviceToken completion:^(EMError *aError) {
+        if (aError) {
             NSLog(@"Error!!! Failed to bindDeviceToken - %@", aError.errorDescription);
-        }];
-    });
+        }
+    }];
 }
 
 - (void)application:(UIApplication *)application didFailToRegisterForRemoteNotificationsWithError:(NSError *)error

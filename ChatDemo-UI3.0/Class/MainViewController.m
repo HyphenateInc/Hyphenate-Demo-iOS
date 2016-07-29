@@ -281,7 +281,7 @@ static NSString *kGroupName = @"GroupName";
         
         if (message.chatType == EMChatTypeGroupChat) {
             
-            NSArray *groupArray = [[EMClient sharedClient].groupManager getAllGroups];
+            NSArray *groupArray = [[EMClient sharedClient].groupManager getJoinedGroups];
             
             for (EMGroup *group in groupArray) {
                 
@@ -439,7 +439,7 @@ static NSString *kGroupName = @"GroupName";
                                 
                             case EMChatTypeChat:
                                 {
-                                    NSArray *groupArray = [[EMClient sharedClient].groupManager getAllGroups];
+                                    NSArray *groupArray = [[EMClient sharedClient].groupManager getJoinedGroups];
                                     for (EMGroup *group in groupArray) {
                                         if ([group.groupId isEqualToString:conversationID]) {
                                             chatViewController.title = group.subject;
@@ -469,7 +469,7 @@ static NSString *kGroupName = @"GroupName";
                 switch (messageType) {
                     case EMChatTypeGroupChat:
                     {
-                        NSArray *groupArray = [[EMClient sharedClient].groupManager getAllGroups];
+                        NSArray *groupArray = [[EMClient sharedClient].groupManager getJoinedGroups];
                         for (EMGroup *group in groupArray) {
                             if ([group.groupId isEqualToString:conversationID]) {
                                 chatViewController.title = group.subject;

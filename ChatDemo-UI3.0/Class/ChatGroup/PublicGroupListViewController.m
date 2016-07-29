@@ -320,22 +320,26 @@ typedef NS_ENUM(NSInteger, GettingMoreFooterViewState){
         __weak typeof(self) weakSelf = self;
         self.footerView.state = eGettingMoreFooterViewStateGetting;
         _isGettingMore = YES;
-        [[EMClient sharedClient].groupManager asyncGetPublicGroupsFromServerWithCursor:self.cursor pageSize:FetchPublicGroupsPageSize success:^(EMCursorResult *aCursor) {
-            weakSelf.isGettingMore = NO;
-            [weakSelf.dataSource addObjectsFromArray:aCursor.list];
-            [weakSelf.tableView reloadData];
-            weakSelf.cursor = aCursor.cursor;
-            if ([aCursor.cursor length])
-            {
-                weakSelf.footerView.state = eGettingMoreFooterViewStateIdle;
+        [[EMClient sharedClient].groupManager getPublicGroupsFromServerWithCursor:self.cursor pageSize:FetchPublicGroupsPageSize completion:^(EMCursorResult *aResult, EMError *aError) {
+            PublicGroupListViewController *strongSelf = weakSelf;
+            if (strongSelf) {
+                if (!aError) {
+                    strongSelf.isGettingMore = NO;
+                    [strongSelf.dataSource addObjectsFromArray:aResult.list];
+                    [strongSelf.tableView reloadData];
+                    strongSelf.cursor = aResult.cursor;
+                    if ([strongSelf.cursor length]) {
+                        strongSelf.footerView.state = eGettingMoreFooterViewStateIdle;
+                    }
+                    else {
+                        strongSelf.footerView.state = eGettingMoreFooterViewStateComplete;
+                    }
+                }
+                else {
+                    strongSelf.isGettingMore = NO;
+                    strongSelf.footerView.state = eGettingMoreFooterViewStateFailed;
+                }
             }
-            else
-            {
-                weakSelf.footerView.state = eGettingMoreFooterViewStateComplete;
-            }
-        } failure:^(EMError *aError) {
-            weakSelf.isGettingMore = NO;
-            weakSelf.footerView.state = eGettingMoreFooterViewStateFailed;
         }];
     }
 }
@@ -396,14 +400,19 @@ typedef NS_ENUM(NSInteger, GettingMoreFooterViewState){
         {
             __weak typeof(self) weakSelf = self;
             [self showHudInView:self.view hint:NSLocalizedString(@"searching", @"Searching")];
-            [[EMClient sharedClient].groupManager asyncSearchPublicGroupWithId:searchBar.text success:^(EMGroup *aGroup) {
-                [weakSelf hideHud];
-                [weakSelf.searchController.resultsSource removeAllObjects];
-                [weakSelf.searchController.resultsSource addObject:aGroup];
-                [weakSelf.searchController.searchResultsTableView reloadData];
-            } failure:^(EMError *aError) {
-                [weakSelf hideHud];
-                [weakSelf showHint:NSLocalizedString(@"notFound", @"Can't found")];
+            [[EMClient sharedClient].groupManager searchPublicGroupWithId:searchBar.text completion:^(EMGroup *aGroup, EMError *aError) {
+                PublicGroupListViewController *strongSelf = weakSelf;
+                if (strongSelf) {
+                    [strongSelf hideHud];
+                    if (!aError) {
+                        [strongSelf.searchController.resultsSource removeAllObjects];
+                        [strongSelf.searchController.resultsSource addObject:aGroup];
+                        [strongSelf.searchController.searchResultsTableView reloadData];
+                    }
+                    else {
+                        [strongSelf showHint:NSLocalizedString(@"notFound", @"Can't found")];
+                    }
+                }
             }];
         }
     }
@@ -452,23 +461,26 @@ typedef NS_ENUM(NSInteger, GettingMoreFooterViewState){
     _cursor = nil;
     
     __weak typeof(self) weakSelf = self;
-    [[EMClient sharedClient].groupManager asyncGetPublicGroupsFromServerWithCursor:self.cursor pageSize:FetchPublicGroupsPageSize success:^(EMCursorResult *aCursor) {
-        [weakSelf hideHud];
-        [weakSelf.dataSource removeAllObjects];
-        [weakSelf.dataSource addObjectsFromArray:aCursor.list];
-        [weakSelf.tableView reloadData];
-        weakSelf.cursor = aCursor.cursor;
-        if ([aCursor.cursor length])
-        {
-            weakSelf.footerView.state = eGettingMoreFooterViewStateIdle;
+    [[EMClient sharedClient].groupManager getPublicGroupsFromServerWithCursor:self.cursor pageSize:FetchPublicGroupsPageSize completion:^(EMCursorResult *aResult, EMError *aError) {
+        PublicGroupListViewController *strongSelf = weakSelf;
+        if (strongSelf) {
+            [strongSelf hideHud];
+            if (!aError) {
+                [strongSelf.dataSource removeAllObjects];
+                [strongSelf.dataSource addObjectsFromArray:aResult.list];
+                [strongSelf.tableView reloadData];
+                strongSelf.cursor = aResult.cursor;
+                if ([aResult.cursor length]) {
+                    strongSelf.footerView.state = eGettingMoreFooterViewStateIdle;
+                }
+                else {
+                    strongSelf.footerView.state = eGettingMoreFooterViewStateComplete;
+                }
+            }
+            else {
+                strongSelf.footerView.state = eGettingMoreFooterViewStateFailed;
+            }
         }
-        else
-        {
-            weakSelf.footerView.state = eGettingMoreFooterViewStateComplete;
-        }
-    } failure:^(EMError *aError) {
-        [weakSelf hideHud];
-        weakSelf.footerView.state = eGettingMoreFooterViewStateFailed;
     }];
 }
 

@@ -194,7 +194,7 @@
 - (BOOL)isJoined:(EMGroup *)group
 {
     if (group) {
-        NSArray *groupList = [[EMClient sharedClient].groupManager getAllGroups];
+        NSArray *groupList = [[EMClient sharedClient].groupManager getJoinedGroups];
         for (EMGroup *tmpGroup in groupList) {
             if (tmpGroup.isPublic == group.isPublic && [group.groupId isEqualToString:tmpGroup.groupId]) {
                 return YES;
@@ -209,13 +209,18 @@
 {
     [self showHudInView:self.view hint:NSLocalizedString(@"loadData", @"Loading group data...")];
     __weak PublicGroupDetailViewController *weakSelf = self;
-    [[EMClient sharedClient].groupManager asyncFetchGroupInfo:self.groupId includeMembersList:NO success:^(EMGroup *aGroup) {
-        [weakSelf hideHud];
-        weakSelf.group = aGroup;
-        [weakSelf reloadSubviewsInfo];
-    } failure:^(EMError *aError) {
-        [weakSelf hideHud];
-        [weakSelf showHint:aError.errorDescription];
+    [[EMClient sharedClient].groupManager getGroupSpecificationFromServerByID:self.groupId includeMembersList:NO completion:^(EMGroup *aGroup, EMError *aError) {
+        PublicGroupDetailViewController *strongSelf = weakSelf;
+        if (strongSelf) {
+            [strongSelf hideHud];
+            if (!aError) {
+                strongSelf.group = aGroup;
+                [strongSelf reloadSubviewsInfo];
+            }
+            else {
+                [strongSelf showHint:aError.errorDescription];
+            }
+        }
     }];
 }
 
@@ -258,12 +263,17 @@
 {
     [self showHudInView:self.view hint:NSLocalizedString(@"group.join.ongoing", @"join the group...")];
     __weak PublicGroupDetailViewController *weakSelf = self;
-    [[EMClient sharedClient].groupManager asyncJoinPublicGroup:groupId success:^(EMGroup *aGroup) {
-        [weakSelf hideHud];
-        [weakSelf.navigationController popViewControllerAnimated:YES];
-    } failure:^(EMError *aError) {
-        [weakSelf hideHud];
-        [weakSelf showHint:NSLocalizedString(@"group.join.fail", @"join the group failed again")];
+    [[EMClient sharedClient].groupManager joinPublicGroup:groupId completion:^(EMGroup *aGroup, EMError *aError) {
+        PublicGroupDetailViewController *strongSelf = weakSelf;
+        if (strongSelf) {
+            [strongSelf hideHud];
+            if (!aError) {
+                [weakSelf.navigationController popViewControllerAnimated:YES];
+            }
+            else {
+                [weakSelf showHint:NSLocalizedString(@"group.join.fail", @"join the group failed again")];
+            }
+        }
     }];
 }
 
@@ -271,12 +281,17 @@
 {
     [self showHudInView:self.view hint:NSLocalizedString(@"group.sendingApply", @"send group of application...")];
     __weak typeof(self) weakSelf = self;
-    [[EMClient sharedClient].groupManager asyncApplyJoinPublicGroup:groupId message:message success:^(EMGroup *aGroup) {
-        [weakSelf hideHud];
-        [weakSelf showHint:NSLocalizedString(@"group.applyHasBeenSent", @"application has been sent")];
-    } failure:^(EMError *aError) {
-        [weakSelf hideHud];
-        [weakSelf showHint:aError.errorDescription];
+    [[EMClient sharedClient].groupManager requestToJoinPublicGroup:groupId message:message completion:^(EMGroup *aGroup, EMError *aError) {
+        PublicGroupDetailViewController *strongSelf = weakSelf;
+        if (strongSelf) {
+            [strongSelf hideHud];
+            if (!aError) {
+                [weakSelf showHint:NSLocalizedString(@"group.applyHasBeenSent", @"application has been sent")];
+            }
+            else {
+                [weakSelf showHint:aError.errorDescription];
+            }
+        }
     }];
 }
 

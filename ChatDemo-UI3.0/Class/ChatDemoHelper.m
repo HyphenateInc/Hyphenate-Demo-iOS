@@ -66,15 +66,15 @@ static ChatDemoHelper *helper = nil;
 
 - (void)initHelper
 {
-    [[EMClient sharedClient] addDelegate:self delegateQueue:nil];
-    [[EMClient sharedClient].groupManager addDelegate:self delegateQueue:nil];
-    [[EMClient sharedClient].contactManager addDelegate:self delegateQueue:nil];
-    [[EMClient sharedClient].roomManager addDelegate:self delegateQueue:nil];
-    [[EMClient sharedClient].chatManager addDelegate:self delegateQueue:nil];
+    [[EMClient sharedClient] addDelegate:self];
+    [[EMClient sharedClient].groupManager addDelegate:self];
+    [[EMClient sharedClient].contactManager addDelegate:self];
+    [[EMClient sharedClient].roomManager addDelegate:self];
+    [[EMClient sharedClient].chatManager addDelegate:self];
     
 #if DEMO_CALL == 1
-    [[EMClient sharedClient].callManager setVideoAdaptive:YES];
-    [[EMClient sharedClient].callManager addDelegate:self delegateQueue:nil];
+    [[EMClient sharedClient].callManager enableAdaptiveBirateStreaming:YES];
+    [[EMClient sharedClient].callManager addDelegate:self];
     
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(makeCall:) name:KNOTIFICATION_CALL object:nil];
 #endif
@@ -85,22 +85,19 @@ static ChatDemoHelper *helper = nil;
 
 - (void)asyncPushOptions
 {
-    [[EMClient sharedClient] asyncGetPushOptionsFromServer:^(EMPushOptions *aOptions) {
-    } failure:^(EMError *aError) {
+    [[EMClient sharedClient] getPushOptionsFromServerWithCompletion:^(EMPushOptions *aOptions, EMError *aError) {
     }];
 }
 
 - (void)asyncGroupFromServer
 {
-    [[EMClient sharedClient].groupManager loadAllMyGroupsFromDB];
-    
-    [[EMClient sharedClient].groupManager asyncGetMyGroupsFromServer:^(NSArray *aList) {
-        
-        if (self.contactViewVC) {
-            [self.contactViewVC reloadGroupView];
+    [[EMClient sharedClient].groupManager getJoinedGroups];
+    [[EMClient sharedClient].groupManager getJoinedGroupsFromServerWithCompletion:^(NSArray *aList, EMError *aError) {
+        if (!aError) {
+            if (self.contactViewVC) {
+                [self.contactViewVC reloadGroupView];
+            }
         }
-        
-    } failure:^(EMError *aError) {
     }];
 }
 
@@ -108,33 +105,31 @@ static ChatDemoHelper *helper = nil;
 {
     dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), ^{
         
-        NSArray *conversationsFromDB = [[EMClient sharedClient].chatManager loadAllConversationsFromDB];
-        
-        [conversationsFromDB enumerateObjectsUsingBlock:^(EMConversation *conversation, NSUInteger idx, BOOL *stop){
+        NSMutableArray *conversations = [NSMutableArray array];
+        [[[EMClient sharedClient].chatManager getAllConversations] enumerateObjectsUsingBlock:^(EMConversation *conversation, NSUInteger idx, BOOL *stop){
             if(!conversation.latestMessage){
-                [[EMClient sharedClient].chatManager deleteConversation:conversation.conversationId deleteMessages:NO];
+                [[EMClient sharedClient].chatManager deleteConversation:conversation.conversationId isDeleteMessages:NO completion:nil];
+            }
+            else {
+                [conversations addObject:conversation];
             }
         }];
         
-        dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), ^{
-            
-            NSArray *conversations = [[EMClient sharedClient].chatManager getAllConversations];
-            
+        dispatch_async(dispatch_get_main_queue(), ^{
             [[NSNotificationCenter defaultCenter] postNotificationName:kNotification_conversationUpdated object:conversations];
             [[NSNotificationCenter defaultCenter] postNotificationName:kNotification_unreadMessageCountUpdated object:conversations];
         });
     });
 }
 
-
 #pragma mark - EMClientDelegate
 
-- (void)didConnectionStateChanged:(EMConnectionState)connectionState
+- (void)connectionStateDidChange:(EMConnectionState)connectionState
 {
     [self.mainVC networkChanged:connectionState];
 }
 
-- (void)didAutoLoginWithError:(EMError *)error
+- (void)autoLoginDidCompleteWithError:(EMError *)error
 {
     if (error) {
         
@@ -151,7 +146,7 @@ static ChatDemoHelper *helper = nil;
         
         dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), ^{
             
-            BOOL flag = [[EMClient sharedClient] dataMigrationTo3];
+            BOOL flag = [[EMClient sharedClient] migrateDatabaseToLatestSDK];
             if (flag) {
                 [self asyncGroupFromServer];
                 [self asyncConversationFromDB];
@@ -164,7 +159,7 @@ static ChatDemoHelper *helper = nil;
     }
 }
 
-- (void)didLoginFromOtherDevice
+- (void)userAccountDidLoginFromOtherDevice
 {
     [self logout];
     
@@ -173,7 +168,7 @@ static ChatDemoHelper *helper = nil;
     [alertView show];
 }
 
-- (void)didRemovedFromServer
+- (void)userAccountDidRemoveFromServer
 {
     [self logout];
     
@@ -185,18 +180,18 @@ static ChatDemoHelper *helper = nil;
 
 #pragma mark - EMChatManagerDelegate
 
-- (void)didUpdateConversationList:(NSArray *)aConversationList
+- (void)conversationListDidUpdate:(NSArray *)aConversationList
 {
     [[NSNotificationCenter defaultCenter] postNotificationName:kNotification_unreadMessageCountUpdated object:aConversationList];
     [[NSNotificationCenter defaultCenter] postNotificationName:kNotification_conversationUpdated object:aConversationList];
 }
 
-- (void)didReceiveCmdMessages:(NSArray *)aCmdMessages
+- (void)cmdMessagesDidReceive:(NSArray *)aCmdMessages
 {
     [[NSNotificationCenter defaultCenter] postNotificationName:kNotification_didReceiveCmdMessages object:aCmdMessages];
 }
 
-- (void)didReceiveMessages:(NSArray *)aMessages
+- (void)messagesDidReceive:(NSArray *)aMessages
 {
     BOOL isRefreshCons = YES;
     
@@ -238,8 +233,7 @@ static ChatDemoHelper *helper = nil;
 
 #pragma mark - EMGroupManagerDelegate
 
-- (void)didReceiveLeavedGroup:(EMGroup *)aGroup
-                       reason:(EMGroupLeaveReason)aReason
+- (void)didLeaveGroup:(EMGroup *)aGroup reason:(EMGroupLeaveReason)aReason
 {
     NSString *str = nil;
     if (aReason == EMGroupLeaveReasonBeRemoved) {
@@ -273,9 +267,7 @@ static ChatDemoHelper *helper = nil;
     }
 }
 
-- (void)didReceiveJoinGroupApplication:(EMGroup *)aGroup
-                             applicant:(NSString *)aApplicant
-                                reason:(NSString *)aReason
+- (void)joinGroupRequestDidReceive:(EMGroup *)aGroup user:(NSString *)aApplicant reason:(NSString *)aReason
 {
     if (!aGroup || !aApplicant) {
         return;
@@ -302,17 +294,14 @@ static ChatDemoHelper *helper = nil;
     [[NSNotificationCenter defaultCenter] postNotificationName:kNotification_didReceiveRequest object:requestDict];
 }
 
-- (void)didJoinedGroup:(EMGroup *)aGroup
-               inviter:(NSString *)aInviter
-               message:(NSString *)aMessage
+- (void)didJoinGroup:(EMGroup *)aGroup inviter:(NSString *)aInviter message:(NSString *)aMessage
 {
     UIAlertView *alertView = [[UIAlertView alloc] initWithTitle:NSLocalizedString(@"prompt", @"Prompt") message:[NSString stringWithFormat:@"%@ invite you to group: %@ [%@]", aInviter, aGroup.subject, aGroup.groupId] delegate:nil cancelButtonTitle:NSLocalizedString(@"ok", @"OK") otherButtonTitles:nil, nil];
     
     [alertView show];
 }
 
-- (void)didReceiveDeclinedJoinGroup:(NSString *)aGroupId
-                             reason:(NSString *)aReason
+- (void)joinGroupRequestDidDecline:(NSString *)aGroupId reason:(NSString *)aReason
 {
     if (!aReason || aReason.length == 0) {
         aReason = [NSString stringWithFormat:NSLocalizedString(@"group.joinRequestDeclined", @"be refused to join the group\'%@\'"), aGroupId];
@@ -323,7 +312,7 @@ static ChatDemoHelper *helper = nil;
     [alertView show];
 }
 
-- (void)didReceiveAcceptedJoinGroup:(EMGroup *)aGroup
+- (void)joinGroupRequestDidApprove:(EMGroup *)aGroup
 {
     NSString *message = [NSString stringWithFormat:NSLocalizedString(@"group.agreedAndJoined", @"agreed to join the group of \'%@\'"), aGroup.subject];
    
@@ -332,9 +321,7 @@ static ChatDemoHelper *helper = nil;
     [alertView show];
 }
 
-- (void)didReceiveGroupInvitation:(NSString *)aGroupId
-                          inviter:(NSString *)aInviter
-                          message:(NSString *)aMessage
+- (void)groupInvitationDidReceive:(NSString *)aGroupId inviter:(NSString *)aInviter message:(NSString *)aMessage
 {
     if (!aGroupId || !aInviter) {
         return;
@@ -356,21 +343,21 @@ static ChatDemoHelper *helper = nil;
 
 #pragma mark - EMContactManagerDelegate
 
-- (void)didReceiveAgreedFromUsername:(NSString *)aUsername
+- (void)friendRequestDidApproveByUser:(NSString *)aUsername
 {
     NSString *msgstr = [NSString stringWithFormat:@"%@ accepted friend request", aUsername];
     UIAlertView *alertView = [[UIAlertView alloc] initWithTitle:nil message:msgstr delegate:nil cancelButtonTitle:NSLocalizedString(@"ok", @"ok") otherButtonTitles:nil, nil];
     [alertView show];
 }
 
-- (void)didReceiveDeclinedFromUsername:(NSString *)aUsername
+- (void)friendRequestDidDeclineByUser:(NSString *)aUsername
 {
     NSString *msgstr = [NSString stringWithFormat:@"%@ declined friend request", aUsername];
     UIAlertView *alertView = [[UIAlertView alloc] initWithTitle:nil message:msgstr delegate:nil cancelButtonTitle:NSLocalizedString(@"ok", @"ok") otherButtonTitles:nil, nil];
     [alertView show];
 }
 
-- (void)didReceiveDeletedFromUsername:(NSString *)aUsername
+- (void)friendshipDidRemoveByUser:(NSString *)aUsername
 {
     NSMutableArray *viewControllers = [NSMutableArray arrayWithArray:self.mainVC.navigationController.viewControllers];
     
@@ -400,13 +387,13 @@ static ChatDemoHelper *helper = nil;
     [_contactViewVC reloadDataSource];
 }
 
-- (void)didReceiveAddedFromUsername:(NSString *)aUsername
+- (void)friendshipDidAddByUser:(NSString *)aUsername
 {
     [_contactViewVC reloadDataSource];
 }
 
-- (void)didReceiveFriendInvitationFromUsername:(NSString *)aUsername
-                                       message:(NSString *)aMessage
+- (void)friendRequestDidReceiveFromUser:(NSString *)aUsername
+                                message:(NSString *)aMessage
 {
     if (!aUsername) {
         return;
@@ -441,14 +428,14 @@ static ChatDemoHelper *helper = nil;
 
 #pragma mark - EMChatroomManagerDelegate
 
-- (void)didReceiveUserJoinedChatroom:(EMChatroom *)aChatroom
-                            username:(NSString *)aUsername
+- (void)userDidJoinChatroom:(EMChatroom *)aChatroom
+                   username:(NSString *)aUsername
 {
     
 }
 
-- (void)didReceiveUserLeavedChatroom:(EMChatroom *)aChatroom
-                            username:(NSString *)aUsername
+- (void)userDidLeaveChatroom:(EMChatroom *)aChatroom
+                    username:(NSString *)aUsername
 {
 
 }
@@ -458,7 +445,7 @@ static ChatDemoHelper *helper = nil;
 
 #if DEMO_CALL == 1
 
-- (void)didReceiveCallIncoming:(EMCallSession *)aSession
+- (void)callDidReceive:(EMCallSession *)aSession
 {
     if(self.callSession && self.callSession.status != EMCallSessionStatusDisconnected){
         [[EMClient sharedClient].callManager endCall:aSession.sessionId reason:EMCallEndReasonBusy];
@@ -480,7 +467,7 @@ static ChatDemoHelper *helper = nil;
     }
 }
 
-- (void)didReceiveCallConnected:(EMCallSession *)aSession
+- (void)callDidConnect:(EMCallSession *)aSession
 {
     if ([aSession.sessionId isEqualToString:self.callSession.sessionId]) {
         self.callController.statusLabel.text = NSLocalizedString(@"call.established", "Establish call");
@@ -491,7 +478,7 @@ static ChatDemoHelper *helper = nil;
     }
 }
 
-- (void)didReceiveCallAccepted:(EMCallSession *)aSession
+- (void)callDidAccept:(EMCallSession *)aSession
 {
     if ([[UIApplication sharedApplication] applicationState] != UIApplicationStateActive) {
         [[EMClient sharedClient].callManager endCall:aSession.sessionId reason:EMCallEndReasonFailed];
@@ -516,9 +503,7 @@ static ChatDemoHelper *helper = nil;
     }
 }
 
-- (void)didReceiveCallTerminated:(EMCallSession *)aSession
-                          reason:(EMCallEndReason)aReason
-                           error:(EMError *)aError
+- (void)callDidEnd:(EMCallSession *)aSession reason:(EMCallEndReason)aReason error:(EMError *)aError
 {
     if ([aSession.sessionId isEqualToString:self.callSession.sessionId]) {
         
@@ -562,7 +547,7 @@ static ChatDemoHelper *helper = nil;
     }
 }
 
-- (void)didReceiveCallNetworkChanged:(EMCallSession *)aSession status:(EMCallNetworkStatus)aStatus
+- (void)callNetworkStatusDidChange:(EMCallSession *)aSession status:(EMCallNetworkStatus)aStatus
 {
     if ([aSession.sessionId isEqualToString:self.callSession.sessionId]) {
         [self.callController setNetwork:aStatus];
@@ -612,26 +597,35 @@ static ChatDemoHelper *helper = nil;
         return;
     }
     
+    __weak typeof(self) weakSelf = self;
+    void (^completionBlock)(EMCallSession *, EMError *) = ^(EMCallSession *aCallSession, EMError *aError){
+        ChatDemoHelper *strongSelf = weakSelf;
+        if (strongSelf) {
+            if (!aError && aCallSession) {
+                strongSelf.callSession = aCallSession;
+                [strongSelf startCallTimer];
+                strongSelf.callController = [[CallViewController alloc] initWithSession:self.callSession isCaller:YES status:NSLocalizedString(@"call.connecting", @"Connecting...")];
+                [strongSelf.mainVC presentViewController:self.callController animated:NO completion:nil];
+            }
+            else {
+                UIAlertView *alertView = [[UIAlertView alloc] initWithTitle:nil message:NSLocalizedString(@"call.initFailed", @"Failed to establish the call") delegate:nil cancelButtonTitle:NSLocalizedString(@"ok", @"OK") otherButtonTitles:nil, nil];
+                [alertView show];
+            }
+        }
+        else {
+            [[EMClient sharedClient].callManager endCall:aCallSession.sessionId reason:EMCallEndReasonNoResponse];
+        }
+    };
     if (aIsVideo) {
-        self.callSession = [[EMClient sharedClient].callManager makeVideoCall:aUsername error:nil];
+        [[EMClient sharedClient].callManager startVideoCall:aUsername completion:^(EMCallSession *aCallSession, EMError *aError) {
+            completionBlock(aCallSession, aError);
+        }];
     }
     else {
-        self.callSession = [[EMClient sharedClient].callManager makeVoiceCall:aUsername error:nil];
+        [[EMClient sharedClient].callManager startVoiceCall:aUsername completion:^(EMCallSession *aCallSession, EMError *aError) {
+            completionBlock(aCallSession, aError);
+        }];
     }
-    
-    if (self.callSession) {
-        
-        [self startCallTimer];
-        
-        self.callController = [[CallViewController alloc] initWithSession:self.callSession isCaller:YES status:NSLocalizedString(@"call.connecting", @"Connecting...")];
-
-        [self.mainVC presentViewController:self.callController animated:NO completion:nil];
-    }
-    else {
-        UIAlertView *alertView = [[UIAlertView alloc] initWithTitle:nil message:NSLocalizedString(@"call.initFailed", @"Failed to establish the call") delegate:nil cancelButtonTitle:NSLocalizedString(@"ok", @"OK") otherButtonTitles:nil, nil];
-        [alertView show];
-    }
-    
 }
 
 - (void)hangupCallWithReason:(EMCallEndReason)aReason
@@ -674,7 +668,7 @@ static ChatDemoHelper *helper = nil;
 - (BOOL)_needShowNotification:(NSString *)fromChatter
 {
     BOOL ret = YES;
-    NSArray *igGroupIds = [[EMClient sharedClient].groupManager getAllIgnoredGroupIds];
+    NSArray *igGroupIds = [[EMClient sharedClient].groupManager getGroupsWithoutPushNotification:nil];
     for (NSString *str in igGroupIds) {
         if ([str isEqualToString:fromChatter]) {
             ret = NO;
@@ -702,7 +696,7 @@ static ChatDemoHelper *helper = nil;
 - (void)login
 {
     // Update to latest Hyphenate SDK
-    [[EMClient sharedClient] dataMigrationTo3];
+    [[EMClient sharedClient] migrateDatabaseToLatestSDK];
     
     [[NSNotificationCenter defaultCenter] postNotificationName:KNotification_login object:nil];
 }
@@ -714,15 +708,14 @@ static ChatDemoHelper *helper = nil;
     self.chatVC = nil;
     self.contactViewVC = nil;
     
-    [[EMClient sharedClient] asyncLogout:NO success:^{
-        dispatch_async(dispatch_get_main_queue(), ^{
+    [[EMClient sharedClient] logout:NO completion:^(EMError *aError) {
+        if (!aError) {
             [[NSNotificationCenter defaultCenter] postNotificationName:KNotification_logout object:nil];
-        });
-    } failure:^(EMError *aError) {
-        NSLog(@"Error!!! Failed to logout properly");
-        dispatch_async(dispatch_get_main_queue(), ^{
+        }
+        else {
+            NSLog(@"Error!!! Failed to logout properly");
             [[NSNotificationCenter defaultCenter] postNotificationName:KNotification_logout object:nil];
-        });
+        }
     }];
     
 #if DEMO_CALL == 1

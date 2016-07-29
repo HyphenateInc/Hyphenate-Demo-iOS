@@ -108,8 +108,8 @@
         }
     }
     
-    if (needRemoveConversations && needRemoveConversations.count > 0) {
-        [[EMClient sharedClient].chatManager deleteConversations:needRemoveConversations deleteMessages:YES];
+    if ([needRemoveConversations count] > 0) {
+        [[EMClient sharedClient].chatManager deleteConversations:needRemoveConversations isDeleteMessages:YES completion:nil];
     }
 }
 
@@ -249,7 +249,7 @@
         NSString *imageName = @"group";
         if (![conversation.ext objectForKey:@"subject"])
         {
-            NSArray *groupArray = [[EMClient sharedClient].groupManager getAllGroups];
+            NSArray *groupArray = [[EMClient sharedClient].groupManager getJoinedGroups];
             for (EMGroup *group in groupArray) {
                 if ([group.groupId isEqualToString:conversation.conversationId]) {
                     NSMutableDictionary *ext = [NSMutableDictionary dictionaryWithDictionary:conversation.ext];
