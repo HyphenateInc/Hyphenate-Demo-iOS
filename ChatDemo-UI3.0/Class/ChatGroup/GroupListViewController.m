@@ -52,7 +52,7 @@
     self.title = NSLocalizedString(@"title.group", @"Group");
     
     [[EMClient sharedClient].groupManager removeDelegate:self];
-    [[EMClient sharedClient].groupManager addDelegate:self delegateQueue:nil];
+    [[EMClient sharedClient].groupManager addDelegate:self];
     
     self.tableView.separatorStyle = UITableViewCellSeparatorStyleNone;
     self.tableView.backgroundColor = [UIColor whiteColor];
@@ -343,22 +343,25 @@
 - (void)slimeRefreshStartRefresh:(SRRefreshView *)refreshView
 {
     __weak typeof(self) weakself = self;
-    [[EMClient sharedClient].groupManager asyncGetMyGroupsFromServer:^(NSArray *aList) {
-        [weakself.dataSource removeAllObjects];
-        [weakself.dataSource addObjectsFromArray:aList];
-        [weakself.tableView reloadData];
-        [weakself.slimeView endRefresh];
-    } failure:^(EMError *aError) {
-        [weakself.slimeView endRefresh];
+    [[EMClient sharedClient].groupManager getJoinedGroupsFromServerWithCompletion:^(NSArray *aList, EMError *aError) {
+        GroupListViewController *strongSelf = weakself;
+        if (strongSelf) {
+            if (!aError) {
+                [strongSelf.dataSource removeAllObjects];
+                [strongSelf.dataSource addObjectsFromArray:aList];
+                [strongSelf.tableView reloadData];
+            }
+            [strongSelf.slimeView endRefresh];
+        }
     }];
 }
 
 #pragma mark - EMGroupManagerDelegate
 
-- (void)didUpdateGroupList:(NSArray *)groupList
+- (void)groupListDidUpdate:(NSArray *)aGroupList
 {
     [self.dataSource removeAllObjects];
-    [self.dataSource addObjectsFromArray:groupList];
+    [self.dataSource addObjectsFromArray:aGroupList];
     [self.tableView reloadData];
 }
 
@@ -368,7 +371,7 @@
 {
     [self.dataSource removeAllObjects];
     
-    NSArray *rooms = [[EMClient sharedClient].groupManager getAllGroups];
+    NSArray *rooms = [[EMClient sharedClient].groupManager getJoinedGroups];
     [self.dataSource addObjectsFromArray:rooms];
     
     [self.tableView reloadData];

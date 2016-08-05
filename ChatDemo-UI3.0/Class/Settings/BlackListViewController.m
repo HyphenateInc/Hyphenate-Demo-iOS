@@ -127,11 +127,12 @@
         cell = [[BaseTableViewCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:cellIdentifier];
     }
     
-    NSString *username = [self.dataSource objectAtIndex:indexPath.row];
     cell.imageView.image = [UIImage imageNamed:@"chatListCellHead.png"];
-    cell.textLabel.text = username;
-    cell.username = username;
-    
+    if (self.dataSource.count > indexPath.row) {
+        NSString *username = [self.dataSource objectAtIndex:indexPath.row];
+        cell.textLabel.text = username;
+        cell.username = username;
+    }
     
     return cell;
 }
@@ -145,15 +146,18 @@
 // Override to support editing the table view.
 - (void)tableView:(UITableView *)tableView commitEditingStyle:(UITableViewCellEditingStyle)editingStyle forRowAtIndexPath:(NSIndexPath *)indexPath
 {
-    if (editingStyle == UITableViewCellEditingStyleDelete) {
+    if (editingStyle == UITableViewCellEditingStyleDelete && self.dataSource.count > indexPath.row) {
         NSString *username = [self.dataSource objectAtIndex:indexPath.row];
         __weak typeof(self) weakself = self;
-        [[EMClient sharedClient].contactManager asyncRemoveUserFromBlackList:username success:^{
-            [[ChatDemoHelper shareHelper].contactViewVC reloadDataSource];
-            [self.dataSource removeObjectAtIndex:indexPath.row];
-            [tableView reloadData];
-        } failure:^(EMError *aError) {
-            [weakself showHint:aError.errorDescription];
+        [[EMClient sharedClient].contactManager removeUserFromBlackList:username completion:^(NSString *aUsername, EMError *aError) {
+            if (!aError) {
+                [[ChatDemoHelper shareHelper].contactViewVC reloadDataSource];
+                [weakself.dataSource removeObject:username];
+                [weakself.tableView reloadData];
+            }
+            else {
+                [weakself showHint:aError.errorDescription];
+            }
         }];
     }
 }
@@ -229,32 +233,22 @@
 
 - (void)loadBlacklistData
 {
-    dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), ^{
-        
-        [self.dataSource removeAllObjects];
-        
-        [[EMClient sharedClient].contactManager asyncGetBlackListFromServer:^(NSArray *aList) {
-            
-            [self.dataSource addObjectsFromArray:aList];
-
-            dispatch_async(dispatch_get_main_queue(), ^{
-                
-                [self.tableView reloadData];
-                
-                [self.slimeView endRefresh];
-            });
-        } failure:^(EMError *aError) {
-            dispatch_async(dispatch_get_main_queue(), ^{
-                
-                [self.tableView reloadData];
-                
-                [self.slimeView endRefresh];
-            });
-        }];
-        
-        
-
-    });
+    __weak typeof(self) weakSelf = self;
+    [[EMClient sharedClient].contactManager getBlackListFromServerWithCompletion:^(NSArray *aList, EMError *aError) {
+        BlackListViewController *strongSelf = weakSelf;
+        if (strongSelf) {
+            if (!aError) {
+                [strongSelf.dataSource removeAllObjects];
+                [strongSelf.dataSource addObjectsFromArray:aList];
+                [strongSelf.tableView reloadData];
+                [strongSelf.slimeView endRefresh];
+            }
+            else {
+                [strongSelf.tableView reloadData];
+                [strongSelf.slimeView endRefresh];
+            }
+        }
+    }];
 }
 
 

@@ -52,8 +52,8 @@ static FriendRequestViewController *controller = nil;
     
     UIBarButtonItem *backBarButtonItem = [[UIBarButtonItem alloc] initWithImage:[UIImage imageNamed:@"back"]
                                                                           style:UIBarButtonItemStylePlain
-                                                                         target:self.navigationController
-                                                                         action:@selector(popViewControllerAnimated:)];
+                                                                         target:self
+                                                                         action:@selector(backAction)];
     self.navigationItem.leftBarButtonItem = backBarButtonItem;
     
     [self loadDataSourceFromLocalDB];
@@ -187,25 +187,33 @@ static FriendRequestViewController *controller = nil;
         };
         
         if (requestType == HIRequestTypeReceivedGroupInvitation) {
-            [[EMClient sharedClient].groupManager asyncAcceptInvitationFromGroup:entity.groupId inviter:entity.applicantUsername success:^(EMGroup *aGroup) {
-                successBlock();
-            } failure:^(EMError *aError) {
-                errorBlock();
+            [[EMClient sharedClient].groupManager approveInvitationFromGroup:entity.groupId inviter:entity.applicantUsername completion:^(EMGroup *aGroup, EMError *aError) {
+                if (!aError) {
+                    successBlock();
+                }
+                else {
+                    errorBlock();
+                }
             }];
         }
-        else if (requestType == HIRequestTypeJoinGroup)
-        {
-            [[EMClient sharedClient].groupManager asyncAcceptJoinApplication:entity.groupId applicant:entity.applicantUsername success:^{
-                successBlock();
-            } failure:^(EMError *aError) {
-                errorBlock();
+        else if (requestType == HIRequestTypeJoinGroup) {
+            [[EMClient sharedClient].groupManager approveJoinGroupRequest:entity.groupId user:entity.applicantUsername completion:^(EMGroup *aGroup, EMError *aError) {
+                if (!aError) {
+                    successBlock();
+                }
+                else {
+                    errorBlock();
+                }
             }];
         }
         else if(requestType == HIRequestTypeFriend){
-            [[EMClient sharedClient].contactManager asyncAcceptInvitationForUsername:entity.applicantUsername success:^{
-                successBlock();
-            } failure:^(EMError *aError) {
-                errorBlock();
+            [[EMClient sharedClient].contactManager approveFriendRequestFromUser:entity.applicantUsername completion:^(NSString *aUsername, EMError *aError) {
+                if (!aError) {
+                    successBlock();
+                }
+                else {
+                    errorBlock();
+                }
             }];
         }
     }
@@ -233,25 +241,34 @@ static FriendRequestViewController *controller = nil;
         };
         
         if (requestType == HIRequestTypeReceivedGroupInvitation) {
-            [[EMClient sharedClient].groupManager asyncDeclineInvitationFromGroup:entity.groupId inviter:entity.applicantUsername reason:nil success:^{
-                successBlock();
-            } failure:^(EMError *aError) {
-                errorBlock();
+            [[EMClient sharedClient].groupManager declineGroupInvitation:entity.groupId inviter:entity.applicantUsername reason:nil completion:^(EMError *aError) {
+                if (!aError) {
+                    successBlock();
+                }
+                else {
+                    errorBlock();
+                }
             }];
         }
         else if (requestType == HIRequestTypeJoinGroup)
         {
-            [[EMClient sharedClient].groupManager asyncDeclineJoinApplication:entity.groupId applicant:entity.applicantUsername reason:nil success:^{
-                successBlock();
-            } failure:^(EMError *aError) {
-                errorBlock();
+            [[EMClient sharedClient].groupManager declineJoinGroupRequest:entity.groupId user:entity.applicantUsername reason:nil completion:^(EMGroup *aGroup, EMError *aError) {
+                if (!aError) {
+                    successBlock();
+                }
+                else {
+                    errorBlock();
+                }
             }];
         }
         else if(requestType == HIRequestTypeFriend){
-            [[EMClient sharedClient].contactManager asyncDeclineInvitationForUsername:entity.applicantUsername success:^{
-                successBlock();
-            } failure:^(EMError *aError) {
-                errorBlock();
+            [[EMClient sharedClient].contactManager declineFriendRequestFromUser:entity.applicantUsername completion:^(NSString *aUsername, EMError *aError) {
+                if (!aError) {
+                    successBlock();
+                }
+                else {
+                    errorBlock();
+                }
             }];
         }
     }

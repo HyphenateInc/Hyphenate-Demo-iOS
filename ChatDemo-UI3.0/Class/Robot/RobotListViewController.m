@@ -46,7 +46,7 @@
     {
         [self setEdgesForExtendedLayout:UIRectEdgeNone];
     }
-    [[EMClient sharedClient].chatManager addDelegate:self delegateQueue:nil];
+    [[EMClient sharedClient].chatManager addDelegate:self];
 
     self.title = NSLocalizedString(@"title.robotlist",@"robot list");
     
