@@ -80,9 +80,10 @@
     [super viewWillAppear:animated];
     
     [self reloadRequestCount];
-    
+#ifdef ENABLE_GOOGLE_ANALYTICS
     [[GAI sharedInstance].defaultTracker set:kGAIScreenName value:NSStringFromClass(self.class)];
     [[GAI sharedInstance].defaultTracker send:[[GAIDictionaryBuilder createScreenView] build]];
+#endif
 }
 
 
@@ -390,7 +391,9 @@
                 [[EMClient sharedClient].chatManager deleteConversation:model.username isDeleteMessages:YES completion:nil];
                 if (strongSelf) {
                     [strongSelf.tableView beginUpdates];
-                    [[strongSelf.dataArray objectAtIndex:(indexPath.section - 1)] removeObjectAtIndex:indexPath.row];
+                    if ([strongSelf.dataArray count] > indexPath.section && [strongSelf.dataArray[indexPath.section - 1] count] > indexPath.row) {
+                        [strongSelf.dataArray[indexPath.section - 1] removeObjectAtIndex:indexPath.row];
+                    }
                     [strongSelf.contactsSource removeObject:model.username];
                     [strongSelf.tableView  deleteRowsAtIndexPaths:[NSArray arrayWithObject:indexPath] withRowAnimation:UITableViewRowAnimationFade];
                     [strongSelf.tableView endUpdates];

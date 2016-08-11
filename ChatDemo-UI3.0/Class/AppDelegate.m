@@ -115,7 +115,9 @@ static int const kGaDispatchPeriod = 30;
 - (void)applicationDidBecomeActive:(UIApplication *)application
 {
     /** Google analytics **/
+#ifdef ENABLE_GOOGLE_ANALYTICS
     [GAI sharedInstance].optOut = ![[NSUserDefaults standardUserDefaults] boolForKey:kTrackingPreferenceKey];
+#endif
 }
 
 
@@ -124,6 +126,7 @@ static int const kGaDispatchPeriod = 30;
 - (void)initializeGoogleAnalytics
 {
     // Configure tracker from GoogleService-Info.plist.
+#ifdef ENABLE_GOOGLE_ANALYTICS
     NSError *configureError;
     [[GGLContext sharedInstance] configureWithError:&configureError];
     NSAssert(!configureError, @"Error configuring Google services: %@", configureError);
@@ -131,6 +134,7 @@ static int const kGaDispatchPeriod = 30;
     [[GAI sharedInstance] setDispatchInterval:kGaDispatchPeriod];
     [[GAI sharedInstance] setDryRun:kGaDryRun];
     self.tracker = [[GAI sharedInstance] trackerWithTrackingId:kGaPropertyId];
+#endif
 }
 
 @end
