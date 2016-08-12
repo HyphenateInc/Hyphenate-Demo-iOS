@@ -390,11 +390,11 @@
             if (!aError) {
                 [[EMClient sharedClient].chatManager deleteConversation:model.username isDeleteMessages:YES completion:nil];
                 if (strongSelf) {
-                    [strongSelf.tableView beginUpdates];
-                    if ([strongSelf.dataArray count] > indexPath.section && [strongSelf.dataArray[indexPath.section - 1] count] > indexPath.row) {
+                    if ([strongSelf.dataArray count] >= indexPath.section && [strongSelf.dataArray[indexPath.section - 1] count] > indexPath.row) {
                         [strongSelf.dataArray[indexPath.section - 1] removeObjectAtIndex:indexPath.row];
                     }
                     [strongSelf.contactsSource removeObject:model.username];
+                    [strongSelf.tableView beginUpdates];
                     [strongSelf.tableView  deleteRowsAtIndexPaths:[NSArray arrayWithObject:indexPath] withRowAnimation:UITableViewRowAnimationFade];
                     [strongSelf.tableView endUpdates];
                 }
