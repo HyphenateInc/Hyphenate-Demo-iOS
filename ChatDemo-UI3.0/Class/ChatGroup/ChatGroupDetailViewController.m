@@ -339,15 +339,20 @@
             [self.navigationController pushViewController:changingController animated:YES];
         }
         else {
-            UIAlertController* alert = [UIAlertController alertControllerWithTitle:@"Change Group Name Setting"
-                                                                           message:@"Only group owner can change group name"
-                                                                    preferredStyle:UIAlertControllerStyleAlert];
-            
-            UIAlertAction* defaultAction = [UIAlertAction actionWithTitle:@"OK" style:UIAlertActionStyleDefault
-                                                                  handler:^(UIAlertAction * action) {}];
-            
-            [alert addAction:defaultAction];
-            [self presentViewController:alert animated:YES completion:nil];
+            if ([UIAlertController class] != nil) {
+                UIAlertController* alert = [UIAlertController alertControllerWithTitle:@"Change Group Name Setting"
+                                                                               message:@"Only group owner can change group name"
+                                                                        preferredStyle:UIAlertControllerStyleAlert];
+                
+                UIAlertAction* defaultAction = [UIAlertAction actionWithTitle:@"OK" style:UIAlertActionStyleDefault
+                                                                      handler:^(UIAlertAction * action) {}];
+                
+                [alert addAction:defaultAction];
+                [self presentViewController:alert animated:YES completion:nil];
+            }
+            else {
+                [self showHint:@"Only group owner can change group name"];
+            }
         }
     }
     else if (indexPath.row == 5) {
@@ -720,16 +725,20 @@
     if (self.isOwner) {
         self.pushSwitch.on = YES;
         
-        UIAlertController* alert = [UIAlertController alertControllerWithTitle:@"Push Service Setting"
-                                                                       message:@"Only none group owner can turn off push notification"
-                                                                preferredStyle:UIAlertControllerStyleAlert];
-        
-        UIAlertAction* defaultAction = [UIAlertAction actionWithTitle:@"OK" style:UIAlertActionStyleDefault
-                                                              handler:^(UIAlertAction * action) {}];
-        
-        [alert addAction:defaultAction];
-        [self presentViewController:alert animated:YES completion:nil];
-        
+        if ([UIAlertController class] != nil) {
+            UIAlertController* alert = [UIAlertController alertControllerWithTitle:@"Push Service Setting"
+                                                                           message:@"Only none group owner can turn off push notification"
+                                                                    preferredStyle:UIAlertControllerStyleAlert];
+            
+            UIAlertAction* defaultAction = [UIAlertAction actionWithTitle:@"OK" style:UIAlertActionStyleDefault
+                                                                  handler:^(UIAlertAction * action) {}];
+            
+            [alert addAction:defaultAction];
+            [self presentViewController:alert animated:YES completion:nil];
+        }
+        else {
+            [self showHint:@"Only none group owner can turn off push notification"];
+        }
         return;
     }
     
@@ -743,15 +752,20 @@
     if (self.isOwner) {
         self.blockSwitch.on = NO;
         
-        UIAlertController* alert = [UIAlertController alertControllerWithTitle:@"Block Messages Setting"
-                                                                       message:@"Only none group owner can block messages"
-                                                                preferredStyle:UIAlertControllerStyleAlert];
-        
-        UIAlertAction* defaultAction = [UIAlertAction actionWithTitle:@"OK" style:UIAlertActionStyleDefault
-                                                              handler:^(UIAlertAction * action) {}];
-        
-        [alert addAction:defaultAction];
-        [self presentViewController:alert animated:YES completion:nil];
+        if ([UIAlertController class] != nil) {
+            UIAlertController* alert = [UIAlertController alertControllerWithTitle:@"Block Messages Setting"
+                                                                           message:@"Only none group owner can block messages"
+                                                                    preferredStyle:UIAlertControllerStyleAlert];
+            
+            UIAlertAction* defaultAction = [UIAlertAction actionWithTitle:@"OK" style:UIAlertActionStyleDefault
+                                                                  handler:^(UIAlertAction * action) {}];
+            
+            [alert addAction:defaultAction];
+            [self presentViewController:alert animated:YES completion:nil];
+        }
+        else {
+            [self showHint:@"Only none group owner can block messages"];
+        }
         
         return;
     }
