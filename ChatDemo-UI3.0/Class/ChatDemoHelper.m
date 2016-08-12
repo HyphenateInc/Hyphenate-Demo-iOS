@@ -85,7 +85,7 @@ static ChatDemoHelper *helper = nil;
 
 - (void)asyncPushOptions
 {
-    [[EMClient sharedClient] getPushOptionsFromServerWithCompletion:^(EMPushOptions *aOptions, EMError *aError) {
+    [[EMClient sharedClient] getPushNotificationOptionsFromServerWithCompletion:^(EMPushOptions *aOptions, EMError *aError) {
     }];
 }
 

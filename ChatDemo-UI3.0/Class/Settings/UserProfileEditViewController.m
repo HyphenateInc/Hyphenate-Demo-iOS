@@ -171,7 +171,7 @@
         {
             [self showHint:NSLocalizedString(@"setting.saving", "saving...")];
             __weak typeof(self) weakSelf = self;
-            [[EMClient sharedClient] updateAPNsDisplayName:nameTextField.text completion:^(NSString *aNickname, EMError *aError) {
+            [[EMClient sharedClient] updatePushNotifiationDisplayName:nameTextField.text completion:^(NSString *aNickname, EMError *aError) {
                 if (!aError) {
                     [[UserProfileManager sharedInstance] updateUserProfileInBackground:@{kPARSE_HXUSER_NICKNAME:nameTextField.text} completion:^(BOOL success, NSError *error) {
                         [weakSelf hideHud];

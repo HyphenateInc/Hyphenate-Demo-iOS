@@ -267,7 +267,7 @@
     
     __weak typeof(self) weakself = self;
     if (isUpdated) {
-        [[EMClient sharedClient] updatePushOptionsToServerWithCompletion:^(EMError *aError) {
+        [[EMClient sharedClient] updatePushNotificationOptionsToServerWithCompletion:^(EMError *aError) {
             if (!aError) {
                 [weakself.navigationController popViewControllerAnimated:YES];
             }
@@ -293,7 +293,7 @@
 - (void)loadPushOptions
 {
     __weak typeof(self) weakself = self;
-    [[EMClient sharedClient] getPushOptionsFromServerWithCompletion:^(EMPushOptions *aOptions, EMError *aError) {
+    [[EMClient sharedClient] getPushNotificationOptionsFromServerWithCompletion:^(EMPushOptions *aOptions, EMError *aError) {
         if (!aError) {
             [weakself refreshPushOptions];
         }
