@@ -392,11 +392,21 @@
                 if (strongSelf) {
                     if ([strongSelf.dataArray count] >= indexPath.section && [strongSelf.dataArray[indexPath.section - 1] count] > indexPath.row) {
                         [strongSelf.dataArray[indexPath.section - 1] removeObjectAtIndex:indexPath.row];
+                        bool deleteSection = NO;
+                        if ([strongSelf.dataArray[indexPath.section - 1] count] == 0) {
+                            [strongSelf.dataArray removeObjectAtIndex:indexPath.section - 1];
+                            deleteSection = YES;
+                        }
+                        [strongSelf.contactsSource removeObject:model.username];
+                        [strongSelf.tableView beginUpdates];
+                        if (deleteSection) {
+                            [strongSelf.tableView deleteSections:[NSIndexSet indexSetWithIndex:indexPath.section] withRowAnimation:UITableViewRowAnimationFade];
+                        }
+                        else {
+                            [strongSelf.tableView  deleteRowsAtIndexPaths:[NSArray arrayWithObject:indexPath] withRowAnimation:UITableViewRowAnimationFade];
+                        }
+                        [strongSelf.tableView endUpdates];
                     }
-                    [strongSelf.contactsSource removeObject:model.username];
-                    [strongSelf.tableView beginUpdates];
-                    [strongSelf.tableView  deleteRowsAtIndexPaths:[NSArray arrayWithObject:indexPath] withRowAnimation:UITableViewRowAnimationFade];
-                    [strongSelf.tableView endUpdates];
                 }
             }
             else if (strongSelf) {
