@@ -187,7 +187,7 @@ static FriendRequestViewController *controller = nil;
         };
         
         if (requestType == HIRequestTypeReceivedGroupInvitation) {
-            [[EMClient sharedClient].groupManager approveInvitationFromGroup:entity.groupId inviter:entity.applicantUsername completion:^(EMGroup *aGroup, EMError *aError) {
+            [[EMClient sharedClient].groupManager acceptInvitationFromGroup:entity.groupId inviter:entity.applicantUsername completion:^(EMGroup *aGroup, EMError *aError) {
                 if (!aError) {
                     successBlock();
                 }
@@ -197,7 +197,7 @@ static FriendRequestViewController *controller = nil;
             }];
         }
         else if (requestType == HIRequestTypeJoinGroup) {
-            [[EMClient sharedClient].groupManager approveJoinGroupRequest:entity.groupId user:entity.applicantUsername completion:^(EMGroup *aGroup, EMError *aError) {
+            [[EMClient sharedClient].groupManager approveJoinGroupRequest:entity.groupId sender:entity.applicantUsername completion:^(EMGroup *aGroup, EMError *aError) {
                 if (!aError) {
                     successBlock();
                 }
@@ -252,7 +252,7 @@ static FriendRequestViewController *controller = nil;
         }
         else if (requestType == HIRequestTypeJoinGroup)
         {
-            [[EMClient sharedClient].groupManager declineJoinGroupRequest:entity.groupId user:entity.applicantUsername reason:nil completion:^(EMGroup *aGroup, EMError *aError) {
+            [[EMClient sharedClient].groupManager declineJoinGroupRequest:entity.groupId sender:entity.applicantUsername reason:nil completion:^(EMGroup *aGroup, EMError *aError) {
                 if (!aError) {
                     successBlock();
                 }

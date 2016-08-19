@@ -252,8 +252,8 @@
     }
     
     // APNs nickname
-    if (self.nickName && self.nickName.length > 0 && ![self.nickName isEqualToString:options.nickname]) {
-        options.nickname = self.nickName;
+    if (self.nickName && self.nickName.length > 0 && ![self.nickName isEqualToString:options.displayName]) {
+        options.displayName = self.nickName;
         isUpdated = YES;
     }
     
@@ -267,7 +267,7 @@
     
     __weak typeof(self) weakself = self;
     if (isUpdated) {
-        [[EMClient sharedClient] updatePushOptionsToServerWithCompletion:^(EMError *aError) {
+        [[EMClient sharedClient] updatePushNotificationOptionsToServerWithCompletion:^(EMError *aError) {
             if (!aError) {
                 [weakself.navigationController popViewControllerAnimated:YES];
             }
@@ -293,7 +293,7 @@
 - (void)loadPushOptions
 {
     __weak typeof(self) weakself = self;
-    [[EMClient sharedClient] getPushOptionsFromServerWithCompletion:^(EMPushOptions *aOptions, EMError *aError) {
+    [[EMClient sharedClient] getPushNotificationOptionsFromServerWithCompletion:^(EMPushOptions *aOptions, EMError *aError) {
         if (!aError) {
             [weakself refreshPushOptions];
         }
@@ -305,7 +305,7 @@
 - (void)refreshPushOptions
 {
     EMPushOptions *options = [[EMClient sharedClient] pushOptions];
-    self.nickName = options.nickname;
+    self.nickName = options.displayName;
     self.pushDisplayStyle = options.displayStyle;
     self.noDisturbingStatus = options.noDisturbStatus;
     if (self.noDisturbingStatus != EMPushNoDisturbStatusClose) {
