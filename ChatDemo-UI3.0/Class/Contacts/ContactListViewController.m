@@ -385,11 +385,13 @@
         }
         
         __weak typeof(self) weakself = self;
+        [self showHudInView:self.view hint:NSLocalizedString(@"wait", @"Pleae wait...")];
         [[EMClient sharedClient].contactManager deleteContact:model.username completion:^(NSString *aUsername, EMError *aError) {
             ContactListViewController *strongSelf = weakself;
             if (!aError) {
                 [[EMClient sharedClient].chatManager deleteConversation:model.username isDeleteMessages:YES completion:nil];
                 if (strongSelf) {
+                    [strongSelf hideHud];
                     if ([strongSelf.dataArray count] >= indexPath.section && [strongSelf.dataArray[indexPath.section - 1] count] > indexPath.row) {
                         [strongSelf.dataArray[indexPath.section - 1] removeObjectAtIndex:indexPath.row];
                         bool deleteSection = NO;
@@ -410,6 +412,7 @@
                 }
             }
             else if (strongSelf) {
+                [strongSelf hideHud];
                 [strongSelf showHint:[NSString stringWithFormat:NSLocalizedString(@"deleteFailed", @"Delete failed:%@"), aError.errorDescription]];
                 [strongSelf.tableView reloadData];
             }
@@ -728,6 +731,10 @@
 
 - (void)reloadDataSource
 {
+    if (self.sectionTitles == nil || self.contactsSource == nil) {
+        return;
+    }
+    
     [self.dataArray removeAllObjects];
     [self.contactsSource removeAllObjects];
     

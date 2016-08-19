@@ -252,8 +252,8 @@
     }
     
     // APNs nickname
-    if (self.nickName && self.nickName.length > 0 && ![self.nickName isEqualToString:options.nickname]) {
-        options.nickname = self.nickName;
+    if (self.nickName && self.nickName.length > 0 && ![self.nickName isEqualToString:options.displayName]) {
+        options.displayName = self.nickName;
         isUpdated = YES;
     }
     
@@ -305,7 +305,7 @@
 - (void)refreshPushOptions
 {
     EMPushOptions *options = [[EMClient sharedClient] pushOptions];
-    self.nickName = options.nickname;
+    self.nickName = options.displayName;
     self.pushDisplayStyle = options.displayStyle;
     self.noDisturbingStatus = options.noDisturbStatus;
     if (self.noDisturbingStatus != EMPushNoDisturbStatusClose) {
