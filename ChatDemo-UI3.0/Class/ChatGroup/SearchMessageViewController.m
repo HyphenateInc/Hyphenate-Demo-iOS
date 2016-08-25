@@ -81,9 +81,10 @@
 - (void)viewWillAppear:(BOOL)animated
 {
     [super viewWillAppear:animated];
-    
+#ifdef ENABLE_GOOGLE_ANALYTICS
     [[GAI sharedInstance].defaultTracker set:kGAIScreenName value:NSStringFromClass(self.class)];
     [[GAI sharedInstance].defaultTracker send:[[GAIDictionaryBuilder createScreenView] build]];
+#endif
 }
 
 - (UILabel*)fromLabel
@@ -204,7 +205,7 @@
             }
             else {
                 EMMessage *message = [weakSelf.searchController.resultsSource objectAtIndex:[weakSelf.searchController.resultsSource count] - 1];
-                [weakSelf.conversation loadMessagesContainKeywords:weakSelf.searchBar.text timestamp:message.timestamp count:SEARCHMESSAGE_PAGE_SIZE fromUser:weakSelf.textField.text searchDirection:EMMessageSearchDirectionUp completion:^(NSArray *aMessages, EMError *aError) {
+                [weakSelf.conversation loadMessagesWithKeyword:weakSelf.searchBar.text timestamp:message.timestamp count:SEARCHMESSAGE_PAGE_SIZE fromUser:weakSelf.textField.text searchDirection:EMMessageSearchDirectionUp completion:^(NSArray *aMessages, EMError *aError) {
                     if (!aError) {
                         if ([aMessages count] < SEARCHMESSAGE_PAGE_SIZE) {
                             weakSelf.hasMore = NO;
@@ -251,7 +252,7 @@
 - (void)searchBar:(UISearchBar *)searchBar textDidChange:(NSString *)searchText
 {
     __weak typeof(self) weakSelf = self;
-    [self.conversation loadMessagesContainKeywords:searchBar.text timestamp:[self.datePicker.date timeIntervalSince1970]*1000 count:SEARCHMESSAGE_PAGE_SIZE fromUser:self.textField.text searchDirection:EMMessageSearchDirectionUp completion:^(NSArray *aMessages, EMError *aError) {
+    [self.conversation loadMessagesWithKeyword:searchBar.text timestamp:[self.datePicker.date timeIntervalSince1970]*1000 count:SEARCHMESSAGE_PAGE_SIZE fromUser:self.textField.text searchDirection:EMMessageSearchDirectionUp completion:^(NSArray *aMessages, EMError *aError) {
         SearchMessageViewController *strongSelf = weakSelf;
         if (strongSelf) {
             if([aMessages count]<SEARCHMESSAGE_PAGE_SIZE) {

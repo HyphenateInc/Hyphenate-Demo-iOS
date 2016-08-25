@@ -19,6 +19,7 @@
 @property (strong, nonatomic) MainViewController *mainViewController;
 
 /** Google Analytics **/
+#ifdef ENABLE_GOOGLE_ANALYTICS
 @property (strong, nonatomic) id<GAITracker> tracker;
-
+#endif
 @end

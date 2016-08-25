@@ -52,9 +52,10 @@
 - (void)viewWillAppear:(BOOL)animated
 {
     [super viewWillAppear:animated];
-    
+#ifdef ENABLE_GOOGLE_ANALYTICS
     [[GAI sharedInstance].defaultTracker set:kGAIScreenName value:NSStringFromClass(self.class)];
     [[GAI sharedInstance].defaultTracker send:[[GAIDictionaryBuilder createScreenView] build]];
+#endif
 }
 
 - (void)didReceiveMemoryWarning {
@@ -123,7 +124,7 @@
 {
     if(_nickTextField.text.length > 0)
     {
-        [[EMClient sharedClient] updateAPNsDisplayName:_nickTextField.text completion:^(NSString *aNickname, EMError *aError) {
+        [[EMClient sharedClient] updatePushNotifiationDisplayName:_nickTextField.text completion:^(NSString *aNickname, EMError *aError) {
         }];
         
         [[UserProfileManager sharedInstance] updateUserProfileInBackground:@{kPARSE_HXUSER_NICKNAME:_nickTextField.text} completion:^(BOOL success, NSError *error){}];

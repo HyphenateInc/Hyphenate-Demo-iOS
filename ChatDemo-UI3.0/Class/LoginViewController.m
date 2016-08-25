@@ -46,9 +46,10 @@
 - (void)viewDidAppear:(BOOL)animated
 {
     [super viewDidAppear:animated];
-    
+#ifdef ENABLE_GOOGLE_ANALYTICS
     [[GAI sharedInstance].defaultTracker set:kGAIScreenName value:NSStringFromClass(self.class)];
     [[GAI sharedInstance].defaultTracker send:[[GAIDictionaryBuilder createScreenView] build]];
+#endif
 }
 
 
@@ -67,7 +68,7 @@
         NSString *displayName = self.usernameTextField.text;
         [[EMClient sharedClient] registerWithUsername:self.usernameTextField.text password:self.passwordTextField.text completion:^(NSString *aUsername, EMError *aError) {
             if (!aError) {
-                [[EMClient sharedClient] updateAPNsDisplayName:displayName completion:^(NSString *aDisplayName, EMError *aError) {
+                [[EMClient sharedClient] updatePushNotifiationDisplayName:displayName completion:^(NSString *aDisplayName, EMError *aError) {
                     if (aError) {
                         TTAlertNoTitle(aError.errorDescription);
                     }

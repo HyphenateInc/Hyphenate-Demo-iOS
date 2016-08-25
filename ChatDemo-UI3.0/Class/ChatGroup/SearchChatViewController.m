@@ -59,9 +59,10 @@
 - (void)viewWillAppear:(BOOL)animated
 {
     [super viewWillAppear:animated];
-    
+#ifdef ENABLE_GOOGLE_ANALYTICS
     [[GAI sharedInstance].defaultTracker set:kGAIScreenName value:NSStringFromClass(self.class)];
     [[GAI sharedInstance].defaultTracker send:[[GAIDictionaryBuilder createScreenView] build]];
+#endif
 }
 
 - (void)tableViewDidTriggerHeaderRefresh
@@ -89,7 +90,7 @@
     [self.conversation loadMessagesStartFromId:self.upMessageId count:SEARCHCHAT_PAGE_SIZE searchDirection:direction ? EMMessageSearchDirectionUp : EMMessageSearchDirectionDown completion:^(NSArray *aMessages, EMError *aError) {
         SearchChatViewController *strongSelf = weakSelf;
         if (strongSelf) {
-            if (aError) {
+            if (!aError) {
                 if ([aMessages count] > 0) {
                     if (direction) {
                         EMMessage *firstMessage = [aMessages firstObject];

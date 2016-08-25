@@ -56,9 +56,10 @@
 - (void)viewWillAppear:(BOOL)animated
 {
     [super viewWillAppear:animated];
-    
+#ifdef ENABLE_GOOGLE_ANALYTICS
     [[GAI sharedInstance].defaultTracker set:kGAIScreenName value:NSStringFromClass(self.class)];
     [[GAI sharedInstance].defaultTracker send:[[GAIDictionaryBuilder createScreenView] build]];
+#endif
 }
 
 - (UIImageView*)headImageView
@@ -170,7 +171,7 @@
         {
             [self showHint:NSLocalizedString(@"setting.saving", "saving...")];
             __weak typeof(self) weakSelf = self;
-            [[EMClient sharedClient] updateAPNsDisplayName:nameTextField.text completion:^(NSString *aNickname, EMError *aError) {
+            [[EMClient sharedClient] updatePushNotifiationDisplayName:nameTextField.text completion:^(NSString *aNickname, EMError *aError) {
                 if (!aError) {
                     [[UserProfileManager sharedInstance] updateUserProfileInBackground:@{kPARSE_HXUSER_NICKNAME:nameTextField.text} completion:^(BOOL success, NSError *error) {
                         [weakSelf hideHud];

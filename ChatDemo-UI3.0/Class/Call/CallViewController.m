@@ -99,9 +99,10 @@
 - (void)viewWillAppear:(BOOL)animated
 {
     [super viewWillAppear:animated];
-    
+#ifdef ENABLE_GOOGLE_ANALYTICS
     [[GAI sharedInstance].defaultTracker set:kGAIScreenName value:NSStringFromClass(self.class)];
     [[GAI sharedInstance].defaultTracker send:[[GAIDictionaryBuilder createScreenView] build]];
+#endif
 }
 
 - (void)didReceiveMemoryWarning
@@ -438,7 +439,11 @@
 - (void)silenceAction
 {
     self.silenceButton.selected = !self.silenceButton.selected;
-    [[EMClient sharedClient].callManager pauseVoiceWithSession:_callSession.sessionId error:nil];
+    if (_silenceButton.selected) {
+        [[EMClient sharedClient].callManager pauseVoiceWithSession:_callSession.sessionId error:nil];
+    } else {
+        [[EMClient sharedClient].callManager resumeVoiceWithSession:_callSession.sessionId error:nil];
+    }
 }
 
 - (void)speakerOutAction
