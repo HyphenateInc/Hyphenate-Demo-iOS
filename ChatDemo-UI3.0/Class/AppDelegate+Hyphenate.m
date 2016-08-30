@@ -34,7 +34,6 @@ didFinishLaunchingWithOptions:(NSDictionary *)launchOptions
     // Init Hyhenate SDK
     EMOptions *options = [EMOptions optionsWithAppkey:appkey];
     options.apnsCertName = apnsCertName;
-    options.enableConsoleLog = YES;
     [[EMClient sharedClient] initializeSDKWithOptions:options];
     
     [self registerMessagingNotification];
