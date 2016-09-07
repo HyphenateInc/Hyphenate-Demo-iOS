@@ -1,6 +1,6 @@
 PODS:
   - Bolts/Tasks (1.8.4)
-  - Crashlytics (3.7.3):
+  - Crashlytics (3.8.0):
     - Fabric (~> 1.6.3)
   - EaseUI (3.1.2)
   - Fabric (1.6.8)
@@ -54,7 +54,7 @@ CHECKOUT OPTIONS:
 
 SPEC CHECKSUMS:
   Bolts: 8a7995239dbe724f9cba2248b766d48b7ebdd322
-  Crashlytics: 76f6beaff70acf226139582c09c78461597c2b98
+  Crashlytics: 8601d9c74a4c4d28f3e7f408bf4c0e490c70e8b4
   EaseUI: 330b7ccf569d77724ec6439fd505a8717944f04c
   Fabric: 5755268d0171435ab167e3d0878a28a777deaf10
   FirebaseAnalytics: d968d4d5f6aeb795cd64144337bcd233e530efc6
