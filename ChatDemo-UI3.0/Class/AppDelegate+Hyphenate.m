@@ -31,10 +31,9 @@ didFinishLaunchingWithOptions:(NSDictionary *)launchOptions
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(proceedLogin) name:KNotification_login object:nil];
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(proceedLogout) name:KNotification_logout object:nil];
 
-    // Init Hyhenate SDK
+    // Init Hyphenate SDK
     EMOptions *options = [EMOptions optionsWithAppkey:appkey];
     options.apnsCertName = apnsCertName;
-    options.enableConsoleLog = YES;
     [[EMClient sharedClient] initializeSDKWithOptions:options];
     
     [self registerMessagingNotification];
