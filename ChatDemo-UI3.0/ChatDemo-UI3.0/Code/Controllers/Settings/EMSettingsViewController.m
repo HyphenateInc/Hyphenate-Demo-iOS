@@ -154,20 +154,10 @@
 
 - (BOOL)isAllowedNotification {
     
-    if ([[UIDevice currentDevice].systemVersion floatValue] > 7.0) {
+    UIUserNotificationSettings *setting = [[UIApplication sharedApplication] currentUserNotificationSettings];
+    if (setting.types != UIUserNotificationTypeNone) {
         
-        UIUserNotificationSettings *setting = [[UIApplication sharedApplication] currentUserNotificationSettings];
-        if (setting.types != UIUserNotificationTypeNone) {
-            
-            return YES;
-        }
-    } else {
-        
-        UIRemoteNotificationType type = [[UIApplication sharedApplication] enabledRemoteNotificationTypes];
-        if (type != UIRemoteNotificationTypeNone) {
-            
-            return YES;
-        }
+        return YES;
     }
     
     return NO;
