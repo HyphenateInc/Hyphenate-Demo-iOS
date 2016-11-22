@@ -124,6 +124,7 @@
 		D24510B41D965FC3006DB36F /* EMChatEmotionView.xib in Resources */ = {isa = PBXBuildFile; fileRef = D24510B31D965FC3006DB36F /* EMChatEmotionView.xib */; };
 		D246721B1D9CC36E003FF9E9 /* (null) in Resources */ = {isa = PBXBuildFile; };
 		D25C716F1DBDC50200AB1C98 /* EMContactInfoViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = D25C716E1DBDC50200AB1C98 /* EMContactInfoViewController.xib */; };
+		D27AC3441DE32667002C6020 /* UserNotifications.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = D27AC3431DE32667002C6020 /* UserNotifications.framework */; };
 		D28345041D8FD1D400FD48A9 /* main.m in Sources */ = {isa = PBXBuildFile; fileRef = D28345031D8FD1D400FD48A9 /* main.m */; };
 		D28345071D8FD1D400FD48A9 /* AppDelegate.m in Sources */ = {isa = PBXBuildFile; fileRef = D28345061D8FD1D400FD48A9 /* AppDelegate.m */; };
 		D283450F1D8FD1D400FD48A9 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = D283450E1D8FD1D400FD48A9 /* Assets.xcassets */; };
@@ -637,6 +638,7 @@
 		D24510B11D965F9F006DB36F /* EMChatEmotionView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = EMChatEmotionView.m; sourceTree = "<group>"; };
 		D24510B31D965FC3006DB36F /* EMChatEmotionView.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = EMChatEmotionView.xib; sourceTree = "<group>"; };
 		D25C716E1DBDC50200AB1C98 /* EMContactInfoViewController.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = EMContactInfoViewController.xib; sourceTree = "<group>"; };
+		D27AC3431DE32667002C6020 /* UserNotifications.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = UserNotifications.framework; path = System/Library/Frameworks/UserNotifications.framework; sourceTree = SDKROOT; };
 		D28344FF1D8FD1D400FD48A9 /* ChatDemo-UI3.0.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = "ChatDemo-UI3.0.app"; sourceTree = BUILT_PRODUCTS_DIR; };
 		D28345031D8FD1D400FD48A9 /* main.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = main.m; sourceTree = "<group>"; };
 		D28345051D8FD1D400FD48A9 /* AppDelegate.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = AppDelegate.h; sourceTree = "<group>"; };
@@ -1000,6 +1002,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				D27AC3441DE32667002C6020 /* UserNotifications.framework in Frameworks */,
 				D24510A81D961F8B006DB36F /* CoreLocation.framework in Frameworks */,
 				D20E26DD1DCA092700B3FAC6 /* Foundation.framework in Frameworks */,
 				D20E26DB1DCA084B00B3FAC6 /* UIKit.framework in Frameworks */,
@@ -1016,6 +1019,7 @@
 		2632E9220D0DB58F65DD15A8 /* Frameworks */ = {
 			isa = PBXGroup;
 			children = (
+				D27AC3431DE32667002C6020 /* UserNotifications.framework */,
 				D20E26DE1DCA13A500B3FAC6 /* CoreGraphics.framework */,
 				D20E26DC1DCA092700B3FAC6 /* Foundation.framework */,
 				D20E26DA1DCA084B00B3FAC6 /* UIKit.framework */,
