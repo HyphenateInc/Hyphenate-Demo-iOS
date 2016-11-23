@@ -41,7 +41,7 @@
     if (indexPath.row == 0) {
         
         cell.textLabel.text = NSLocalizedString(@"setting.about.appversion", @"App Version");
-        cell.detailTextLabel.text = [[[NSBundle mainBundle] infoDictionary] objectForKey:(NSString *)kCFBundleVersionKey];
+        cell.detailTextLabel.text = [[[NSBundle mainBundle] infoDictionary] objectForKey:@"CFBundleShortVersionString"];
     } else if (indexPath.row == 1) {
         
         cell.textLabel.text = NSLocalizedString(@"setting.about.sdkversion", @"SDK Version");
