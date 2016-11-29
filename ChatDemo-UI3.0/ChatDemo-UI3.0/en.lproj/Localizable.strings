@@ -185,6 +185,7 @@
 "group.inviteToJoin" = "%@ invite you to join the group [%@]";
 "group.notifications" = "Group Notifications";
 "group.id" = "Group ID";
+"group.joinPublicGroupMessage" = "Requesting message";
 
 //common
 "common.delete" = "Delete";

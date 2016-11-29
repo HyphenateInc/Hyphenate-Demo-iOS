@@ -43,6 +43,7 @@
 {
     self = [super initWithCoder:aDecoder];
     if (self) {
+        self.width = KScreenWidth;
     }
     return self;
 }
@@ -50,7 +51,6 @@
 - (void)layoutSubviews
 {
     [super layoutSubviews];
-    
     _recordButton.left = (KScreenWidth - _recordButton.width)/2;
     _timeLabel.width = KScreenWidth;
     _recordLabel.width = KScreenWidth;

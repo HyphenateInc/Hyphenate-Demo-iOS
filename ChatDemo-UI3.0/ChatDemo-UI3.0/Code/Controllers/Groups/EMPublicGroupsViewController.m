@@ -91,7 +91,9 @@ typedef NS_ENUM(NSUInteger, EMFetchPublicGroupState) {
                   withRowAnimation:UITableViewRowAnimationNone];
     
     __weak typeof(self) weakSelf = self;
+    [MBProgressHUD showHUDAddedTo:[UIApplication sharedApplication].keyWindow animated:YES];
     [[EMClient sharedClient].groupManager getPublicGroupsFromServerWithCursor:_cursor pageSize:KPUBLICGROUP_PAGE_COUNT completion:^(EMCursorResult *aResult, EMError *aError) {
+        [MBProgressHUD hideHUDForView:[UIApplication sharedApplication].keyWindow animated:YES];
         if (!aError) {
             weakSelf.cursor = aResult.cursor;
             for (EMGroup *group in aResult.list) {
@@ -112,13 +114,15 @@ typedef NS_ENUM(NSUInteger, EMFetchPublicGroupState) {
 - (void)reloadRequestedApplyDataSource {
     __weak typeof(self) weakSelf = self;
     dispatch_async(dispatch_get_main_queue(), ^{
-        [weakSelf.applyedDataSource addObject:_requestGroupModel.group.groupId];
-        NSUInteger index = [weakSelf.publicGroups indexOfObject:_requestGroupModel];
-        NSIndexPath *indexPath = [NSIndexPath indexPathForRow:index inSection:0];
-        [weakSelf.tableView beginUpdates];
-        [weakSelf.tableView reloadRowsAtIndexPaths:@[indexPath] withRowAnimation:UITableViewRowAnimationNone];
-        [weakSelf.tableView endUpdates];
-        _requestGroupModel = nil;
+        if(_requestGroupModel) {
+            [weakSelf.applyedDataSource addObject:_requestGroupModel.group.groupId];
+            NSUInteger index = [weakSelf.publicGroups indexOfObject:_requestGroupModel];
+            NSIndexPath *indexPath = [NSIndexPath indexPathForRow:index inSection:0];
+            [weakSelf.tableView beginUpdates];
+            [weakSelf.tableView reloadRowsAtIndexPaths:@[indexPath] withRowAnimation:UITableViewRowAnimationNone];
+            [weakSelf.tableView endUpdates];
+            _requestGroupModel = nil;
+        }
     });
 }
 
@@ -160,7 +164,7 @@ typedef NS_ENUM(NSUInteger, EMFetchPublicGroupState) {
 }
 
 - (void)popAlertView {
-    UIAlertView *alertView = [[UIAlertView alloc] initWithTitle:@""
+    UIAlertView *alertView = [[UIAlertView alloc] initWithTitle:NSLocalizedString(@"group.joinPublicGroupMessage", "Requesting message")
                                                         message:@""
                                                        delegate:self
                                               cancelButtonTitle:NSLocalizedString(@"common.cancel", @"Cancel")
