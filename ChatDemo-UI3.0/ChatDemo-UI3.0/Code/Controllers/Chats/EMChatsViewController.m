@@ -34,8 +34,6 @@
     
     self.tableView.tableFooterView = [[UIView alloc] init];
     
-    [self setupForDismissKeyboard];
-    
     if ([UIDevice currentDevice].systemVersion.floatValue >= 7) {
         self.edgesForExtendedLayout = UIRectEdgeNone;
     }
@@ -221,6 +219,7 @@
 
 - (void)searchBar:(UISearchBar *)searchBar textDidChange:(NSString *)searchText
 {
+    self.tableView.userInteractionEnabled = YES;
     if (searchBar.text.length == 0) {
         [self.resultsSource removeAllObjects];
         [self.tableView reloadData];

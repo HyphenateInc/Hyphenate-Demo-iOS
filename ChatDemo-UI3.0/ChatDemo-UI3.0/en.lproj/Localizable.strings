@@ -81,7 +81,7 @@
 "setting.push" = "Push Notifications";
 "setting.account" = "Account";
 "setting.chats" = "Chats";
-"setting.callPush" = "If the offline send call push";
+"setting.callPush" = "Offline Call Notification";
 
 //setting.about
 "setting.about.appversion" = "App Version";
@@ -185,6 +185,7 @@
 "group.inviteToJoin" = "%@ invite you to join the group [%@]";
 "group.notifications" = "Group Notifications";
 "group.id" = "Group ID";
+"group.joinPublicGroupMessage" = "Requesting message";
 
 //common
 "common.delete" = "Delete";

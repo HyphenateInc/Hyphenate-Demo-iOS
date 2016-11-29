@@ -412,6 +412,7 @@
 }
 
 - (void)searchBar:(UISearchBar *)searchBar textDidChange:(NSString *)searchText {
+    self.tableView.userInteractionEnabled = YES;
     if (searchBar.text.length == 0) {
         [_searchResults removeAllObjects];
         [self.tableView reloadData];

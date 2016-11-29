@@ -79,9 +79,9 @@
 
 + (instancetype)initWithPFObject:(PFObject*)object;
 
-@property (nonatomic,strong) NSString *objectId;
-@property (nonatomic,strong) NSString *username;
-@property (nonatomic,strong) NSString *nickname;
-@property (nonatomic,strong) NSString *imageUrl;
+@property (nonatomic, copy) NSString *objectId;
+@property (nonatomic, copy) NSString *username;
+@property (nonatomic, copy) NSString *nickname;
+@property (nonatomic, copy) NSString *imageUrl;
 
 @end
