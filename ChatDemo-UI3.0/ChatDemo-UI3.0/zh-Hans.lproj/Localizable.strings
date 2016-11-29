@@ -190,6 +190,7 @@
 "group.inviteToJoin" = "%@邀请您加入群组[%@]";
 "group.notifications" = "群组通知";
 "group.id" = "群ID";
+"group.joinPublicGroupMessage" = "请求信息";
 
 //common
 "common.delete" = "删除";

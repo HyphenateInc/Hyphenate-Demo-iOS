@@ -17,10 +17,13 @@
 #import "EMChatLocationBubbleView.h"
 #import "EMMessageModel.h"
 #import "UIImageView+HeadImage.h"
+#import "EMUserProfileManager.h"
 
 #define HEAD_PADDING 15.f
 #define TIME_PADDING 45.f
 #define BOTTOM_PADDING 16.f
+#define NICK_PADDING 20.f
+#define NICK_LEFT_PADDING 57.f
 
 #define kColorOrangeRed RGBACOLOR(255, 59, 58, 1)
 #define kColorKermitGreenTwo RGBACOLOR(72, 184, 0, 1)
@@ -30,6 +33,7 @@
 @property (weak, nonatomic) IBOutlet UIImageView *headImageView;
 @property (weak, nonatomic) IBOutlet UILabel *timeLabel;
 @property (weak, nonatomic) IBOutlet UILabel *readLabel;
+@property (weak, nonatomic) IBOutlet UILabel *nickLable;
 @property (weak, nonatomic) IBOutlet UILabel *notDeliveredLabel;
 @property (weak, nonatomic) IBOutlet UIImageView *checkView;
 @property (weak, nonatomic) IBOutlet UIButton *resendButton;
@@ -87,8 +91,10 @@
     _timeLabel.top = self.height - BOTTOM_PADDING;
     _timeLabel.textAlignment = _model.message.direction == EMMessageDirectionSend ? NSTextAlignmentRight : NSTextAlignmentLeft;
     
+    _nickLable.left = _model.message.direction == EMMessageDirectionSend ? (self.width - _nickLable.width - NICK_LEFT_PADDING) : NICK_LEFT_PADDING;
+    
     _bubbleView.left = _model.message.direction == EMMessageDirectionSend ? (self.width - _bubbleView.width - TIME_PADDING) : TIME_PADDING;
-    _bubbleView.top = 5;
+    _bubbleView.top = _model.message.direction == EMMessageDirectionSend ? 5.f : NICK_PADDING + 5;
     
     _readLabel.left = KScreenWidth - 135;
     _readLabel.top = self.height - BOTTOM_PADDING;
@@ -242,12 +248,19 @@
             _activityView.hidden = NO;
             [_activityView startAnimating];
         }
+        _nickLable.hidden = YES;
     } else {
         _activityView.hidden = YES;
         _readLabel.hidden = YES;
         _checkView.hidden = YES;
         _resendButton.hidden = YES;
         _notDeliveredLabel.hidden = YES;
+        _nickLable.hidden = NO;
+    }
+    
+    if (_model.message.chatType != EMChatTypeChat) {
+        _checkView.hidden = YES;
+        _readLabel.hidden = YES;
     }
 }
 
@@ -262,6 +275,7 @@
     
     [_headImageView imageWithUsername:model.message.from placeholderImage:[UIImage imageNamed:@"default_avatar"]];
     _timeLabel.text = [self _getMessageTime:model.message];
+    _nickLable.text = [[EMUserProfileManager sharedInstance] getNickNameWithUsername:model.message.from];
 }
 
 + (CGFloat)heightForMessageModel:(EMMessageModel *)model
@@ -285,6 +299,9 @@
             break;
         default:
             break;
+    }
+    if (model.message.direction == EMMessageDirectionReceive) {
+        return height + NICK_PADDING;
     }
     return height;
 }

@@ -60,7 +60,9 @@
 
 - (void)loadGroupsFromServer {
     __weak typeof(self) weakSelf = self;
+    [MBProgressHUD showHUDAddedTo:[UIApplication sharedApplication].keyWindow animated:YES];
     [[EMClient sharedClient].groupManager getJoinedGroupsFromServerWithCompletion:^(NSArray *aList, EMError *aError) {
+        [MBProgressHUD hideHUDForView:[UIApplication sharedApplication].keyWindow animated:YES];
         if (!aError && aList.count > 0) {
             
             [weakSelf.groups removeAllObjects];

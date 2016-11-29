@@ -117,6 +117,9 @@
 
 - (void)dealloc
 {
+    if (_conversation.latestMessage == nil) {
+        [[EMClient sharedClient].chatManager deleteConversation:_conversation.conversationId isDeleteMessages:YES completion:nil];
+    }
     [[EMClient sharedClient].chatManager removeDelegate:self];
     [[NSNotificationCenter defaultCenter] removeObserver:self
                                                     name:KEM_REMOVEGROUP_NOTIFICATION
@@ -553,7 +556,7 @@
                 _longPressIndexPath = nil;
             }
         } else if (buttonIndex == 1){
-            if (_longPressIndexPath && _longPressIndexPath.row > 0) {
+            if (_longPressIndexPath && _longPressIndexPath.row >= 0) {
                 EMMessageModel *model = [self.dataSource objectAtIndex:_longPressIndexPath.row];
                 NSMutableIndexSet *indexs = [NSMutableIndexSet indexSetWithIndex:_longPressIndexPath.row];
                 [self.conversation deleteMessageWithId:model.message.messageId error:nil];
@@ -652,9 +655,6 @@
 
 - (void)backAction
 {
-    if (_conversation.latestMessage == nil) {
-        [[EMClient sharedClient].chatManager deleteConversation:_conversation.conversationId isDeleteMessages:YES completion:nil];
-    }
     [self.navigationController popViewControllerAnimated:YES];
 }
 
@@ -698,13 +698,20 @@
 {
     WEAK_SELF
     dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), ^{
-        EMMessageModel *model = [weakSelf.dataSource objectAtIndex:0];
-        [_conversation loadMessagesStartFromId:model.message.messageId
+        NSString *messageId = nil;
+        if ([weakSelf.dataSource count] > 0) {
+            EMMessageModel *model = [weakSelf.dataSource objectAtIndex:0];
+            messageId = model.message.messageId;
+        }
+        [_conversation loadMessagesStartFromId:messageId
                                          count:20
                                searchDirection:EMMessageSearchDirectionUp
                                     completion:^(NSArray *aMessages, EMError *aError) {
                                         if (!aError) {
-                                            [weakSelf.dataSource insertObjects:aMessages atIndexes:[NSIndexSet indexSetWithIndexesInRange:NSMakeRange(0, [aMessages count])]];
+                                            [aMessages enumerateObjectsWithOptions:NSEnumerationReverse usingBlock:^(id  _Nonnull obj, NSUInteger idx, BOOL * _Nonnull stop) {
+                                                EMMessageModel *model = [[EMMessageModel alloc] initWithMessage:(EMMessage*)obj];
+                                                [weakSelf.dataSource insertObject:model atIndex:0];
+                                            }];
                                             [weakSelf.refresh endRefreshing];
                                             [weakSelf.tableView reloadData];
                                         }
