@@ -200,7 +200,7 @@
 - (void)autoLoginDidCompleteWithError:(EMError *)aError
 {
 #if DEBUG
-    NSString *alertMsg = aError == nil ? NSLocalizedString(@"login.endAutoLogin.succeed", @"Automatic logon succeed") : NSLocalizedString(@"login.endAutoLogin.failure", @"Automatic logon failure");
+    NSString *alertMsg = aError == nil ? NSLocalizedString(@"login.endAutoLogin.succeed", @"Automatic login succeed") : NSLocalizedString(@"login.endAutoLogin.failure", @"Automatic login failed");
     UIAlertView *alert = [[UIAlertView alloc] initWithTitle:nil message:alertMsg delegate:nil cancelButtonTitle:NSLocalizedString(@"login.ok", @"Ok") otherButtonTitles:nil, nil];
     [alert show];
 #endif
