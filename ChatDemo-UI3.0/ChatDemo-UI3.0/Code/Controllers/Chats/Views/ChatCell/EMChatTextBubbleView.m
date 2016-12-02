@@ -58,7 +58,7 @@
     CGSize retSize;
     NSString *text = [EMConvertToCommonEmoticonsHelper convertToSystemEmoticons:((EMTextMessageBody *)self.model.message.body).text];
     NSMutableParagraphStyle *paragraphStyle = [[NSMutableParagraphStyle alloc] init];
-    [paragraphStyle setLineSpacing:[[self class] lineSpacing]];//调整行间距
+    [paragraphStyle setLineSpacing:[[self class] lineSpacing]];
     retSize = [text boundingRectWithSize:textBlockMinSize options:NSStringDrawingUsesLineFragmentOrigin
                               attributes:@{
                                            NSFontAttributeName:[[self class] textLabelFont],
@@ -102,7 +102,7 @@
     });
     NSString *text = [EMConvertToCommonEmoticonsHelper convertToSystemEmoticons:((EMTextMessageBody *)model.message.body).text];
     NSMutableParagraphStyle *paragraphStyle = [[NSMutableParagraphStyle alloc] init];
-    [paragraphStyle setLineSpacing:[[self class] lineSpacing]];//调整行间距
+    [paragraphStyle setLineSpacing:[[self class] lineSpacing]];
     size = [text boundingRectWithSize:textBlockMinSize options:NSStringDrawingUsesLineFragmentOrigin
                            attributes:@{
                                         NSFontAttributeName:[[self class] textLabelFont],

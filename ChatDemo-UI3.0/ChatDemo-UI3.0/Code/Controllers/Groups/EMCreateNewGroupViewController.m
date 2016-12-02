@@ -19,7 +19,7 @@
 #define KEM_GROUP_MEMBERSCOUNT         2000
 
 @interface EMCreateNewGroupViewController ()<UICollectionViewDelegate, UICollectionViewDataSource, UICollectionViewDelegateFlowLayout, UIActionSheetDelegate, UIImagePickerControllerDelegate, UINavigationControllerDelegate, EMGroupUIProtocol>
-//UI控件
+
 @property (strong, nonatomic) IBOutlet UIView *headerView;
 @property (strong, nonatomic) IBOutlet UIButton *groupAvatarSelectButton;
 @property (strong, nonatomic) IBOutlet UITextField *groupSubjectTextField;
@@ -310,7 +310,6 @@
 
 #pragma mark - UICollectionViewDelegateFlowLayout
 
-//布局确定每个Item 的大小
 - (CGSize)collectionView:(UICollectionView *)collectionView layout:(UICollectionViewLayout*)collectionViewLayout sizeForItemAtIndexPath:(NSIndexPath *)indexPath
 {
     return CGSizeMake(collectionView.frame.size.width / 5, collectionView.frame.size.height);

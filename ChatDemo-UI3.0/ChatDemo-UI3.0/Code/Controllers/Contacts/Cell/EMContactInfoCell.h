@@ -15,7 +15,6 @@
 
 @property (nonatomic, strong) NSDictionary *infoDic;
 
-//为了执行加黑名单用
 @property (nonatomic, strong) NSString *hyphenateId;
 
 @property (nonatomic, assign) id<EMContactsUIProtocol> delegate;
