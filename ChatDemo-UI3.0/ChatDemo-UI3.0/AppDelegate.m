@@ -26,7 +26,8 @@
 @implementation AppDelegate
 
 
-- (BOOL)application:(UIApplication *)application didFinishLaunchingWithOptions:(NSDictionary *)launchOptions {
+- (BOOL)application:(UIApplication *)application didFinishLaunchingWithOptions:(NSDictionary *)launchOptions
+{
     // Override point for customization after application launch.
     
     if ([UIDevice currentDevice].systemVersion.floatValue >= 7.0) {
@@ -41,9 +42,9 @@
     
     // init HyphenateSDK
     EMOptions *options = [EMOptions optionsWithAppkey:@"hyphenatedemo#hyphenatedemo"];
-    NSString *apnsCertName = nil;
 
     // Hyphenate cert keys
+    NSString *apnsCertName = nil;
     #if DEBUG
         apnsCertName = @"DevelopmentCertificate";
     #else
@@ -60,6 +61,7 @@
                                                object:nil];
     
     [EaseCallManager sharedManager];
+    
     self.window = [[UIWindow alloc] initWithFrame:[UIScreen mainScreen].bounds];
     self.window.backgroundColor = [UIColor whiteColor];
     EMLaunchViewController *launch = [[EMLaunchViewController alloc] init];
@@ -93,41 +95,28 @@
     }
 }
 
-- (void)applicationWillResignActive:(UIApplication *)application {
-    
-}
 
-
-- (void)applicationDidEnterBackground:(UIApplication *)application {
+- (void)applicationDidEnterBackground:(UIApplication *)application
+{
     [[EMClient sharedClient] applicationDidEnterBackground:application];
 }
 
 
-- (void)applicationWillEnterForeground:(UIApplication *)application {
+- (void)applicationWillEnterForeground:(UIApplication *)application
+{
     [[EMClient sharedClient] applicationWillEnterForeground:application];
+    
     if ([EMChatDemoHelper shareHelper].pushVC) {
         [[EMChatDemoHelper shareHelper].pushVC reloadNotificationStatus];
     }
+    
     if ([EMChatDemoHelper shareHelper].settingsVC) {
         [[EMChatDemoHelper shareHelper].settingsVC reloadNotificationStatus];
     }
 }
 
-
-- (void)applicationDidBecomeActive:(UIApplication *)application {
-
-}
-
-
-- (void)applicationWillTerminate:(UIApplication *)application {
-    
-}
-
-- (void)application:(UIApplication *)application didReceiveRemoteNotification:(NSDictionary *)userInfo {
-    
-}
-
-- (void)application:(UIApplication *)application didReceiveLocalNotification:(UILocalNotification *)notification {
+- (void)application:(UIApplication *)application didReceiveLocalNotification:(UILocalNotification *)notification
+{
     if ([EMChatDemoHelper shareHelper].mainVC) {
         [[EMChatDemoHelper shareHelper].mainVC didReceiveLocalNotification:notification];
     }
@@ -137,9 +126,6 @@
 
 - (void)application:(UIApplication *)application didRegisterForRemoteNotificationsWithDeviceToken:(NSData *)deviceToken
 {
-//    dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), ^{
-//        [[EMClient sharedClient] bindDeviceToken:deviceToken];
-//    });
     [[EMClient sharedClient] registerForRemoteNotificationsWithDeviceToken:deviceToken completion:^(EMError *aError) {
         
     }];
@@ -185,22 +171,23 @@
 #endif
 }
 
--(void)registerNotifications{
+- (void)registerNotifications
+{
     [self unregisterNotifications];
     [[EMClient sharedClient] addDelegate:self delegateQueue:nil];
 }
 
--(void)unregisterNotifications{
+- (void)unregisterNotifications
+{
     [[EMClient sharedClient] removeDelegate:self];
 }
-
 
 #pragma mark - EMClientDelegate
 
 - (void)autoLoginDidCompleteWithError:(EMError *)aError
 {
 #if DEBUG
-    NSString *alertMsg = aError == nil ? NSLocalizedString(@"login.endAutoLogin.succeed", @"Automatic logon succeed") : NSLocalizedString(@"login.endAutoLogin.failure", @"Automatic logon failure");
+    NSString *alertMsg = aError == nil ? NSLocalizedString(@"login.endAutoLogin.succeed", @"Automatic login succeed") : NSLocalizedString(@"login.endAutoLogin.failure", @"Automatic login failed");
     UIAlertView *alert = [[UIAlertView alloc] initWithTitle:nil message:alertMsg delegate:nil cancelButtonTitle:NSLocalizedString(@"login.ok", @"Ok") otherButtonTitles:nil, nil];
     [alert show];
 #endif
