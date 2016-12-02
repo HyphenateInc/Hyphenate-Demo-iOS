@@ -11,15 +11,16 @@
 
 @interface EMLaunchViewController () <EMClientDelegate>
 
-@property (weak ,nonatomic) IBOutlet UIImageView *launchImageView;
+@property (weak, nonatomic) IBOutlet UIImageView *launchImageView;
 
 @end
 
 @implementation EMLaunchViewController
 
-- (void)viewDidLoad {
+- (void)viewDidLoad
+{
     [super viewDidLoad];
-    // Do any additional setup after loading the view from its nib.
+    
     [self setBackgroundColor];
     [self setLauchAnimation];
     
@@ -38,12 +39,8 @@
 - (void)viewWillAppear:(BOOL)animated
 {
     [super viewWillAppear:animated];
+    
     [UIApplication sharedApplication].statusBarStyle = UIStatusBarStyleLightContent;
-}
-
-- (void)dealloc
-{
-
 }
 
 - (void)setBackgroundColor
@@ -77,10 +74,5 @@
     _launchImageView.left = (KScreenWidth - _launchImageView.width)/2;
 }
 
-- (void)didReceiveMemoryWarning
-{
-    [super didReceiveMemoryWarning];
-
-}
 
 @end
