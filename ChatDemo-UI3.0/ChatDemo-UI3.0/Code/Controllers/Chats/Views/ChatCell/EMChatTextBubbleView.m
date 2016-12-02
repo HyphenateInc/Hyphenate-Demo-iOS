@@ -32,7 +32,7 @@
         _textLabel.numberOfLines = 0;
         _textLabel.lineBreakMode = NSLineBreakByCharWrapping;
         _textLabel.font = [UIFont systemFontOfSize:LABEL_FONT_SIZE];
-        _textLabel.textColor = RGBACOLOR(12, 18, 24, 1);
+        _textLabel.textColor = AlmostBlackColor;
         _textLabel.backgroundColor = [UIColor clearColor];
         _textLabel.userInteractionEnabled = NO;
         _textLabel.multipleTouchEnabled = NO;
@@ -87,7 +87,7 @@
     [attributedString addAttribute:NSParagraphStyleAttributeName
                              value:paragraphStyle
                              range:NSMakeRange(0, [text length])];
-    _textLabel.textColor = self.model.message.direction == EMMessageDirectionSend ? RGBACOLOR(255, 255, 255, 1) : RGBACOLOR(12, 18, 24, 1);
+    _textLabel.textColor = self.model.message.direction == EMMessageDirectionSend ? WhiteColor : AlmostBlackColor;
     [_textLabel setAttributedText:attributedString];
 }
 

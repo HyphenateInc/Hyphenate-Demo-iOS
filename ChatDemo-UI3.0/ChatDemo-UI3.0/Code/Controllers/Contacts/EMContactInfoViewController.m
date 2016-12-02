@@ -67,7 +67,7 @@
 }
 - (void)viewWillDisappear:(BOOL)animated {
     [super viewWillDisappear:animated];
-    self.navigationController.navigationBarHidden = NO;
+    [self.navigationController setNavigationBarHidden:NO animated:YES];
 }
 
 - (void)loadContactInfo {
@@ -80,7 +80,7 @@
         }
     }
     _contactInfo = [NSArray arrayWithArray:info];
-    _contactFunc = @[@{DELETE_CONTACT:RGBACOLOR(255.0, 59.0, 48.0, 1.0)}];
+    _contactFunc = @[@{DELETE_CONTACT:OrangeRedColor}];
 }
 
 - (void)makeCallWithContact:(NSString *)contact callTyfpe:(EMCallType)callType {

@@ -62,7 +62,7 @@
         _displayNameTip.textAlignment = NSTextAlignmentLeft;
         _displayNameTip.lineBreakMode = NSLineBreakByWordWrapping;
         _displayNameTip.numberOfLines = 0;
-        _displayNameTip.textColor = RGBACOLOR(112, 126, 137, 1.0);
+        _displayNameTip.textColor = SteelGreyColor;
         _displayNameTip.font = [UIFont systemFontOfSize:11];
         _displayNameTip.text = NSLocalizedString(@"setting.push.tip", @"The display name will appear in notification center.");
      }
@@ -78,7 +78,7 @@
         _systemNotificationTip.textAlignment = NSTextAlignmentLeft;
         _systemNotificationTip.lineBreakMode = NSLineBreakByWordWrapping;
         _systemNotificationTip.numberOfLines = 0;
-        _systemNotificationTip.textColor = RGBACOLOR(112, 126, 137, 1.0);
+        _systemNotificationTip.textColor = SteelGreyColor;
         _systemNotificationTip.font = [UIFont systemFontOfSize:11];
         _systemNotificationTip.text = NSLocalizedString(@"setting.push.anotherTip", @"Enable/Disable Notifications via “Settings”->”Notifications” on the device.");
     }

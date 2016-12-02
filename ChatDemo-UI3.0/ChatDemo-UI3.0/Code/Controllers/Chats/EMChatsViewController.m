@@ -84,7 +84,7 @@
     if (_networkStateView == nil) {
         _networkStateView = [[UIView alloc] initWithFrame:CGRectMake(0, 0, self.tableView.frame.size.width, 44)];
 
-        _networkStateView.backgroundColor = RGBACOLOR(0, 186, 110, 1);
+        _networkStateView.backgroundColor = KermitGreenTwoColor;
         
         UIImageView *imageView = [[UIImageView alloc] initWithFrame:CGRectMake(10, (_networkStateView.frame.size.height - 20) / 2, 20, 20)];
         imageView.image = [UIImage imageNamed:@"Icon_error_white"];
@@ -109,8 +109,8 @@
         _searchBar.showsCancelButton = NO;
         _searchBar.backgroundImage = [UIImage imageWithColor:[UIColor whiteColor] size:_searchBar.bounds.size];
         [_searchBar setSearchFieldBackgroundPositionAdjustment:UIOffsetMake(0, 0)];
-        [_searchBar setSearchFieldBackgroundImage:[UIImage imageWithColor:RGBACOLOR(228, 233, 236, 1) size:_searchBar.bounds.size] forState:UIControlStateNormal];
-        _searchBar.tintColor = RGBACOLOR(12, 18, 24, 1);
+        [_searchBar setSearchFieldBackgroundImage:[UIImage imageWithColor:PaleGrayColor size:_searchBar.bounds.size] forState:UIControlStateNormal];
+        _searchBar.tintColor = AlmostBlackColor;
     }
     return _searchBar;
 }

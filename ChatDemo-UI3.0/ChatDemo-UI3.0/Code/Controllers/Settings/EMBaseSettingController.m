@@ -18,19 +18,19 @@
 - (void)viewDidLoad
 {
     [super viewDidLoad];
-    self.tableView.backgroundColor = RGBACOLOR(228, 233, 236, 1.0);
+    self.tableView.backgroundColor = PaleGrayColor;
     self.tableView.tableFooterView = [[UIView alloc] init];
     self.tableView.separatorStyle = UITableViewCellSeparatorStyleSingleLine;
-    self.tableView.separatorColor = RGBACOLOR(173, 185, 193, 0.5);
+    self.tableView.separatorColor = CoolGrayColor50;
     self.tableView.scrollEnabled = NO;
 }
 
 
 - (void)tableView:(UITableView *)tableView willDisplayCell:(UITableViewCell *)cell forRowAtIndexPath:(NSIndexPath *)indexPath
 {
-    cell.textLabel.textColor = RGBACOLOR(12, 18, 24, 1.0);
+    cell.textLabel.textColor = AlmostBlackColor;
     cell.textLabel.font = [UIFont systemFontOfSize:13];
-    cell.detailTextLabel.textColor = RGBACOLOR(112, 126, 137, 1.0);
+    cell.detailTextLabel.textColor = SteelGreyColor;
     cell.detailTextLabel.font = [UIFont systemFontOfSize:13];
 }
 

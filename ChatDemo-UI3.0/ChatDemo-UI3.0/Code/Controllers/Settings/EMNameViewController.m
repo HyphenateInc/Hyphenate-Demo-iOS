@@ -21,7 +21,7 @@
 {
     if (!_nameTextField) {
         _nameTextField = [[UITextField alloc] init];
-        _nameTextField.textColor = RGBACOLOR(12, 18, 24, 1.0);
+        _nameTextField.textColor = AlmostBlackColor;
         _nameTextField.textAlignment = NSTextAlignmentLeft;
         _nameTextField.font = [UIFont systemFontOfSize:13];
         _nameTextField.borderStyle = UITextBorderStyleNone;

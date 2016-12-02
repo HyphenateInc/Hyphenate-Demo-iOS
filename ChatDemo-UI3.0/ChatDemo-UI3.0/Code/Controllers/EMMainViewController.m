@@ -127,7 +127,7 @@ static NSString *kGroupName = @"GroupName";
 -(void)unSelectedTapTabBarItems:(UITabBarItem *)tabBarItem
 {
     [tabBarItem setTitleTextAttributes:[NSDictionary dictionaryWithObjectsAndKeys:
-                                        [UIFont systemFontOfSize:11.f], NSFontAttributeName,RGBACOLOR(135, 152, 164, 1),NSForegroundColorAttributeName,
+                                        [UIFont systemFontOfSize:11.f], NSFontAttributeName,BlueyGreyColor,NSForegroundColorAttributeName,
                                         nil] forState:UIControlStateNormal];
 }
 
@@ -135,7 +135,7 @@ static NSString *kGroupName = @"GroupName";
 {
     [tabBarItem setTitleTextAttributes:[NSDictionary dictionaryWithObjectsAndKeys:
                                         [UIFont systemFontOfSize:11.f],
-                                        NSFontAttributeName,RGBACOLOR(0, 186, 110, 1),NSForegroundColorAttributeName,
+                                        NSFontAttributeName,KermitGreenTwoColor,NSForegroundColorAttributeName,
                                         nil] forState:UIControlStateSelected];
 }
 

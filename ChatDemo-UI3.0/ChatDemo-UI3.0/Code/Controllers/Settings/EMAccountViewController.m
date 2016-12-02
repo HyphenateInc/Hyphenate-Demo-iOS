@@ -53,7 +53,7 @@
         
         _editButton = [UIButton buttonWithType:UIButtonTypeCustom];
         [_editButton setTitle:NSLocalizedString(@"setting.account.edit", @"Edit")   forState:UIControlStateNormal];
-        [_editButton setTitleColor:RGBACOLOR(72, 184, 0, 1.0) forState:UIControlStateNormal];
+        [_editButton setTitleColor:KermitGreenTwoColor forState:UIControlStateNormal];
         _editButton.frame = CGRectMake(75, 29, 30, 13);
         _editButton.titleLabel.font = [UIFont systemFontOfSize:13];
         _editButton.enabled = NO;
@@ -69,7 +69,7 @@
         
         _signOutButton = [UIButton buttonWithType:UIButtonTypeCustom];
         [_signOutButton setFrame:CGRectMake(0, self.view.frame.size.height - 44 - 45, KScreenWidth, 45)];
-        [_signOutButton setBackgroundColor:RGBACOLOR(255, 59, 48, 1.0)];
+        [_signOutButton setBackgroundColor:OrangeRedColor];
         [_signOutButton setTitle:NSLocalizedString(@"setting.account.signout", @"Sign out") forState:UIControlStateNormal];
         [_signOutButton setTitleColor:[UIColor whiteColor] forState:UIControlStateNormal];
         _signOutButton.titleLabel.textAlignment = NSTextAlignmentCenter;
