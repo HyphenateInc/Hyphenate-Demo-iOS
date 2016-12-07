@@ -11,15 +11,16 @@
 
 @interface EMLaunchViewController () <EMClientDelegate>
 
-@property (weak ,nonatomic) IBOutlet UIImageView *launchImageView;
+@property (weak, nonatomic) IBOutlet UIImageView *launchImageView;
 
 @end
 
 @implementation EMLaunchViewController
 
-- (void)viewDidLoad {
+- (void)viewDidLoad
+{
     [super viewDidLoad];
-    // Do any additional setup after loading the view from its nib.
+    
     [self setBackgroundColor];
     [self setLauchAnimation];
     
@@ -38,19 +39,15 @@
 - (void)viewWillAppear:(BOOL)animated
 {
     [super viewWillAppear:animated];
+    
     [UIApplication sharedApplication].statusBarStyle = UIStatusBarStyleLightContent;
-}
-
-- (void)dealloc
-{
-
 }
 
 - (void)setBackgroundColor
 {
     CAGradientLayer *gradient = [CAGradientLayer layer];
     gradient.frame = [UIScreen mainScreen].bounds;
-    gradient.colors = [NSArray arrayWithObjects:(id)RGBACOLOR(62, 92, 120, 1).CGColor,(id)RGBACOLOR(36, 62, 85, 1).CGColor,nil];
+    gradient.colors = [NSArray arrayWithObjects:(id)RGBACOLOR(62, 92, 120, 1).CGColor, (id)RGBACOLOR(36, 62, 85, 1).CGColor, nil];
     [gradient setStartPoint:CGPointMake(0.0, 0.0)];
     [gradient setEndPoint:CGPointMake(0.0, 1.0)];
     [self.view.layer insertSublayer:gradient atIndex:0];
@@ -74,10 +71,5 @@
     [_launchImageView startAnimating];
 }
 
-- (void)didReceiveMemoryWarning
-{
-    [super didReceiveMemoryWarning];
-
-}
 
 @end

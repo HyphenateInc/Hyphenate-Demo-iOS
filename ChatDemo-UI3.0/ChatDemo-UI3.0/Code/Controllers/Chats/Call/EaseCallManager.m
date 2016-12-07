@@ -42,8 +42,6 @@ static EaseCallManager *callManager = nil;
     return self;
 }
 
-
-
 - (void)makeCall:(NSNotification *)notify
 {
     if (notify.object) {

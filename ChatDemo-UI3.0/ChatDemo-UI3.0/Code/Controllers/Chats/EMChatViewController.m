@@ -94,6 +94,8 @@
 
 - (void)viewDidAppear:(BOOL)animated
 {
+    [super viewDidAppear:animated];
+    
     NSMutableArray *unreadMessages = [NSMutableArray array];
     for (EMMessageModel *model in self.dataSource) {
         if ([self _shouldSendHasReadAckForMessage:model.message read:NO]) {
