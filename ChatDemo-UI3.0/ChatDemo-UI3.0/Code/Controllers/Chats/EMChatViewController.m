@@ -281,6 +281,7 @@
 - (void)didSendAudio:(NSString *)recordPath duration:(NSInteger)duration
 {
     EMMessage *message = [EMSDKHelper sendVoiceMessageWithLocalPath:recordPath
+                                                        displayName:@"audio"
                                                            duration:duration
                                                                  to:_conversation.conversationId
                                                         messageType:[self _messageType]
@@ -332,7 +333,12 @@
                 NSLog(@"failed to remove file, error:%@.", error);
             }
         }
-        EMMessage *message = [EMSDKHelper sendVideoMessageWithURL:mp4 to:_conversation.conversationId messageType:[self _messageType] messageExt:nil];
+        EMMessage *message = [EMSDKHelper sendVideoMessageWithLocalURL:mp4
+                                                           displayName:@"video.mp4"
+                                                              duration:0
+                                                                    to:_conversation.conversationId
+                                                           messageType:[self _messageType]
+                                                            messageExt:nil];
         [self _sendMessage:message];
         
     }else{
@@ -340,10 +346,11 @@
         if (url == nil) {
             UIImage *orgImage = info[UIImagePickerControllerOriginalImage];
             NSData *data = UIImageJPEGRepresentation(orgImage, 1);
-            EMMessage *message = [EMSDKHelper sendImageMessageWithImageData:data
-                                                                         to:_conversation.conversationId
-                                                                messageType:[self _messageType]
-                                                                 messageExt:nil];
+            EMMessage *message = [EMSDKHelper sendImageData:data
+                                                displayName:@"image.png"
+                                                         to:_conversation.conversationId
+                                                messageType:[self _messageType]
+                                                 messageExt:nil];
             [self _sendMessage:message];
         } else {
             if ([[UIDevice currentDevice].systemVersion doubleValue] >= 9.0f) {
@@ -356,10 +363,11 @@
 //                                return;
                             }
                             if (data != nil) {
-                                EMMessage *message = [EMSDKHelper sendImageMessageWithImageData:data
-                                                                                             to:_conversation.conversationId
-                                                                                    messageType:[self _messageType]
-                                                                                     messageExt:nil];
+                                EMMessage *message = [EMSDKHelper sendImageData:data
+                                                                    displayName:@"image.png"
+                                                                             to:_conversation.conversationId
+                                                                    messageType:[self _messageType]
+                                                                     messageExt:nil];
                                 [self _sendMessage:message];
                             } else {
 //                                [self showHint:NSEaseLocalizedString(@"message.smallerImage", @"The image size is too large, please choose another one")];
@@ -379,10 +387,11 @@
 //                            [self showHint:NSEaseLocalizedString(@"message.smallerImage", @"The image size is too large, please choose another one")];
                             return;
                         }
-                        EMMessage *message = [EMSDKHelper sendImageMessageWithImageData:fileData
-                                                                                     to:_conversation.conversationId
-                                                                            messageType:[self _messageType]
-                                                                             messageExt:nil];
+                        EMMessage *message = [EMSDKHelper sendImageData:fileData
+                                                            displayName:@"image.png"
+                                                                     to:_conversation.conversationId
+                                                            messageType:[self _messageType]
+                                                             messageExt:nil];
                         [self _sendMessage:message];
                     }
                 } failureBlock:NULL];

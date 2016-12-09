@@ -14,21 +14,26 @@
 @implementation EMSDKHelper
 
 + (EMMessage *)sendTextMessage:(NSString *)text
-                            to:(NSString *)toUser
+                            to:(NSString *)receiver
                    messageType:(EMChatType)messageType
                     messageExt:(NSDictionary *)messageExt
 
 {
     EMTextMessageBody *body = [[EMTextMessageBody alloc] initWithText:text];
-    NSString *from = [[EMClient sharedClient] currentUsername];
-    EMMessage *message = [[EMMessage alloc] initWithConversationID:toUser from:from to:toUser body:body ext:messageExt];
+
+    NSString *sender = [[EMClient sharedClient] currentUsername];
+    EMMessage *message = [[EMMessage alloc] initWithConversationID:receiver
+                                                              from:sender
+                                                                to:receiver
+                                                              body:body
+                                                               ext:messageExt];
     message.chatType = messageType;
     
     return message;
 }
 
 + (EMMessage *)sendCmdMessage:(NSString *)action
-                           to:(NSString *)to
+                           to:(NSString *)receiver
                   messageType:(EMChatType)messageType
                    messageExt:(NSDictionary *)messageExt
                     cmdParams:(NSArray *)params
@@ -37,8 +42,13 @@
     if (params) {
         body.params = params;
     }
-    NSString *from = [[EMClient sharedClient] currentUsername];
-    EMMessage *message = [[EMMessage alloc] initWithConversationID:to from:from to:to body:body ext:messageExt];
+
+    NSString *sender = [[EMClient sharedClient] currentUsername];
+    EMMessage *message = [[EMMessage alloc] initWithConversationID:receiver
+                                                              from:sender
+                                                                to:receiver
+                                                              body:body
+                                                               ext:messageExt];
     message.chatType = messageType;
     
     return message;
@@ -47,59 +57,93 @@
 + (EMMessage *)sendLocationMessageWithLatitude:(double)latitude
                                      longitude:(double)longitude
                                        address:(NSString *)address
-                                            to:(NSString *)to
+                                            to:(NSString *)receiver
                                    messageType:(EMChatType)messageType
                                     messageExt:(NSDictionary *)messageExt
 {
     EMLocationMessageBody *body = [[EMLocationMessageBody alloc] initWithLatitude:latitude longitude:longitude address:address];
-    NSString *from = [[EMClient sharedClient] currentUsername];
-    EMMessage *message = [[EMMessage alloc] initWithConversationID:to from:from to:to body:body ext:messageExt];
+
+    NSString *sender = [[EMClient sharedClient] currentUsername];
+    EMMessage *message = [[EMMessage alloc] initWithConversationID:receiver
+                                                              from:sender
+                                                                to:receiver
+                                                              body:body
+                                                               ext:messageExt];
     message.chatType = messageType;
     
     return message;
 }
 
-+ (EMMessage *)sendImageMessageWithImageData:(NSData *)imageData
-                                          to:(NSString *)to
-                                 messageType:(EMChatType)messageType
-                                  messageExt:(NSDictionary *)messageExt
++ (EMMessage *)sendImageData:(NSData *)imageData
+                 displayName:(NSString *)displayName
+                          to:(NSString *)receiver
+                 messageType:(EMChatType)messageType
+                  messageExt:(NSDictionary *)messageExt
 {
-    EMImageMessageBody *body = [[EMImageMessageBody alloc] initWithData:imageData displayName:@"image.png"];
-    NSString *from = [[EMClient sharedClient] currentUsername];
-    EMMessage *message = [[EMMessage alloc] initWithConversationID:to from:from to:to body:body ext:messageExt];
-    message.chatType = messageType;
+    EMImageMessageBody *body = [[EMImageMessageBody alloc] initWithData:imageData displayName:displayName];
+    
     if (CGSizeEqualToSize(body.size, CGSizeZero)) {
         if (imageData.length) {
             UIImage *image = [UIImage imageWithData:imageData];
             body.size = image.size;
         }
     }
-    return message;
-}
-
-+ (EMMessage *)sendVoiceMessageWithLocalPath:(NSString *)localPath
-                                    duration:(NSInteger)duration
-                                          to:(NSString *)to
-                                 messageType:(EMChatType)messageType
-                                  messageExt:(NSDictionary *)messageExt
-{
-    EMVoiceMessageBody *body = [[EMVoiceMessageBody alloc] initWithLocalPath:localPath displayName:@"audio"];
-    body.duration = (int)duration;
-    NSString *from = [[EMClient sharedClient] currentUsername];
-    EMMessage *message = [[EMMessage alloc] initWithConversationID:to from:from to:to body:body ext:messageExt];
+    
+    NSString *sender = [[EMClient sharedClient] currentUsername];
+    EMMessage *message = [[EMMessage alloc] initWithConversationID:receiver
+                                                              from:sender
+                                                                to:receiver
+                                                              body:body
+                                                               ext:messageExt];
+    
     message.chatType = messageType;
     
     return message;
 }
 
-+ (EMMessage *)sendVideoMessageWithURL:(NSURL *)url
-                                    to:(NSString *)to
++ (EMMessage *)sendVoiceMessageWithLocalPath:(NSString *)localPath
+                                 displayName:(NSString *)displayName
+                                    duration:(NSInteger)duration
+                                          to:(NSString *)receiver
+                                 messageType:(EMChatType)messageType
+                                  messageExt:(NSDictionary *)messageExt
+{
+    EMVoiceMessageBody *body = [[EMVoiceMessageBody alloc] initWithLocalPath:localPath displayName:displayName];
+    
+    if (duration > 0) {
+        body.duration = (int)duration;
+    }
+    
+    NSString *sender = [[EMClient sharedClient] currentUsername];
+    EMMessage *message = [[EMMessage alloc] initWithConversationID:receiver
+                                                              from:sender
+                                                                to:receiver
+                                                              body:body
+                                                               ext:messageExt];
+    message.chatType = messageType;
+    
+    return message;
+}
+
++ (EMMessage *)sendVideoMessageWithLocalURL:(NSURL *)url
+                           displayName:(NSString *)displayName
+                              duration:(NSInteger)duration
+                                    to:(NSString *)receiver
                            messageType:(EMChatType)messageType
                             messageExt:(NSDictionary *)messageExt
 {
-    EMVideoMessageBody *body = [[EMVideoMessageBody alloc] initWithLocalPath:[url path] displayName:@"video.mp4"];
-    NSString *from = [[EMClient sharedClient] currentUsername];
-    EMMessage *message = [[EMMessage alloc] initWithConversationID:to from:from to:to body:body ext:messageExt];
+    EMVideoMessageBody *body = [[EMVideoMessageBody alloc] initWithLocalPath:[url path] displayName:displayName];
+    
+    if (duration > 0) {
+        body.duration = (int)duration;
+    }
+    
+    NSString *sender = [[EMClient sharedClient] currentUsername];
+    EMMessage *message = [[EMMessage alloc] initWithConversationID:receiver
+                                                              from:sender
+                                                                to:receiver
+                                                              body:body
+                                                               ext:messageExt];
     message.chatType = messageType;
     
     return message;
