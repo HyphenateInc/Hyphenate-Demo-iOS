@@ -273,7 +273,7 @@
 {
     EMMessage *message = [EMSDKHelper sendTextMessage:text
                                                    to:_conversation.conversationId
-                                          messageType:[self _messageType]
+                                             chatType:[self _messageType]
                                            messageExt:nil];
     [self _sendMessage:message];
 }
@@ -284,7 +284,7 @@
                                                         displayName:@"audio"
                                                            duration:duration
                                                                  to:_conversation.conversationId
-                                                        messageType:[self _messageType]
+                                                        chatType:[self _messageType]
                                                          messageExt:nil];
     [self _sendMessage:message];
 }
@@ -337,7 +337,7 @@
                                                            displayName:@"video.mp4"
                                                               duration:0
                                                                     to:_conversation.conversationId
-                                                           messageType:[self _messageType]
+                                                              chatType:[self _messageType]
                                                             messageExt:nil];
         [self _sendMessage:message];
         
@@ -349,7 +349,7 @@
             EMMessage *message = [EMSDKHelper sendImageData:data
                                                 displayName:@"image.png"
                                                          to:_conversation.conversationId
-                                                messageType:[self _messageType]
+                                                   chatType:[self _messageType]
                                                  messageExt:nil];
             [self _sendMessage:message];
         } else {
@@ -359,18 +359,17 @@
                     if (asset) {
                         [[PHImageManager defaultManager] requestImageDataForAsset:asset options:nil resultHandler:^(NSData *data, NSString *uti, UIImageOrientation orientation, NSDictionary *dic){
                             if (data.length > 10 * 1000 * 1000) {
-//                                [self showHint:NSEaseLocalizedString(@"message.smallerImage", @"The image size is too large, please choose another one")];
-//                                return;
+                                // Warning - large image size
                             }
                             if (data != nil) {
                                 EMMessage *message = [EMSDKHelper sendImageData:data
                                                                     displayName:@"image.png"
                                                                              to:_conversation.conversationId
-                                                                    messageType:[self _messageType]
+                                                                    chatType:[self _messageType]
                                                                      messageExt:nil];
                                 [self _sendMessage:message];
                             } else {
-//                                [self showHint:NSEaseLocalizedString(@"message.smallerImage", @"The image size is too large, please choose another one")];
+                                // Warning - large image size
                             }
                         }];
                     }
@@ -384,13 +383,12 @@
                         NSUInteger bufferSize = [assetRepresentation getBytes:buffer fromOffset:0.0 length:(NSUInteger)[assetRepresentation size] error:nil];
                         NSData* fileData = [NSData dataWithBytesNoCopy:buffer length:bufferSize freeWhenDone:YES];
                         if (fileData.length > 10 * 1000 * 1000) {
-//                            [self showHint:NSEaseLocalizedString(@"message.smallerImage", @"The image size is too large, please choose another one")];
-                            return;
+                            // Warning - large image size
                         }
                         EMMessage *message = [EMSDKHelper sendImageData:fileData
                                                             displayName:@"image.png"
                                                                      to:_conversation.conversationId
-                                                            messageType:[self _messageType]
+                                                               chatType:[self _messageType]
                                                              messageExt:nil];
                         [self _sendMessage:message];
                     }
@@ -416,7 +414,7 @@
                                                             longitude:longitude
                                                               address:address
                                                                    to:_conversation.conversationId
-                                                          messageType:[self _messageType]
+                                                          chatType:[self _messageType]
                                                            messageExt:nil];
     [self _sendMessage:message];
 }

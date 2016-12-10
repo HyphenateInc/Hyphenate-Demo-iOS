@@ -15,7 +15,7 @@
 
 + (EMMessage *)sendTextMessage:(NSString *)text
                             to:(NSString *)receiver
-                   messageType:(EMChatType)messageType
+                      chatType:(EMChatType)chatType
                     messageExt:(NSDictionary *)messageExt
 
 {
@@ -27,18 +27,19 @@
                                                                 to:receiver
                                                               body:body
                                                                ext:messageExt];
-    message.chatType = messageType;
+    message.chatType = chatType;
     
     return message;
 }
 
 + (EMMessage *)sendCmdMessage:(NSString *)action
                            to:(NSString *)receiver
-                  messageType:(EMChatType)messageType
+                     chatType:(EMChatType)chatType
                    messageExt:(NSDictionary *)messageExt
                     cmdParams:(NSArray *)params
 {
     EMCmdMessageBody *body = [[EMCmdMessageBody alloc] initWithAction:action];
+    
     if (params) {
         body.params = params;
     }
@@ -49,7 +50,7 @@
                                                                 to:receiver
                                                               body:body
                                                                ext:messageExt];
-    message.chatType = messageType;
+    message.chatType = chatType;
     
     return message;
 }
@@ -58,10 +59,12 @@
                                      longitude:(double)longitude
                                        address:(NSString *)address
                                             to:(NSString *)receiver
-                                   messageType:(EMChatType)messageType
+                                      chatType:(EMChatType)chatType
                                     messageExt:(NSDictionary *)messageExt
 {
-    EMLocationMessageBody *body = [[EMLocationMessageBody alloc] initWithLatitude:latitude longitude:longitude address:address];
+    EMLocationMessageBody *body = [[EMLocationMessageBody alloc] initWithLatitude:latitude
+                                                                        longitude:longitude
+                                                                          address:address];
 
     NSString *sender = [[EMClient sharedClient] currentUsername];
     EMMessage *message = [[EMMessage alloc] initWithConversationID:receiver
@@ -69,7 +72,7 @@
                                                                 to:receiver
                                                               body:body
                                                                ext:messageExt];
-    message.chatType = messageType;
+    message.chatType = chatType;
     
     return message;
 }
@@ -77,7 +80,7 @@
 + (EMMessage *)sendImageData:(NSData *)imageData
                  displayName:(NSString *)displayName
                           to:(NSString *)receiver
-                 messageType:(EMChatType)messageType
+                    chatType:(EMChatType)chatType
                   messageExt:(NSDictionary *)messageExt
 {
     EMImageMessageBody *body = [[EMImageMessageBody alloc] initWithData:imageData displayName:displayName];
@@ -96,7 +99,7 @@
                                                               body:body
                                                                ext:messageExt];
     
-    message.chatType = messageType;
+    message.chatType = chatType;
     
     return message;
 }
@@ -105,7 +108,7 @@
                                  displayName:(NSString *)displayName
                                     duration:(NSInteger)duration
                                           to:(NSString *)receiver
-                                 messageType:(EMChatType)messageType
+                                    chatType:(EMChatType)chatType
                                   messageExt:(NSDictionary *)messageExt
 {
     EMVoiceMessageBody *body = [[EMVoiceMessageBody alloc] initWithLocalPath:localPath displayName:displayName];
@@ -120,17 +123,17 @@
                                                                 to:receiver
                                                               body:body
                                                                ext:messageExt];
-    message.chatType = messageType;
+    message.chatType = chatType;
     
     return message;
 }
 
 + (EMMessage *)sendVideoMessageWithLocalURL:(NSURL *)url
-                           displayName:(NSString *)displayName
-                              duration:(NSInteger)duration
-                                    to:(NSString *)receiver
-                           messageType:(EMChatType)messageType
-                            messageExt:(NSDictionary *)messageExt
+                                displayName:(NSString *)displayName
+                                   duration:(NSInteger)duration
+                                         to:(NSString *)receiver
+                                   chatType:(EMChatType)chatType
+                                 messageExt:(NSDictionary *)messageExt
 {
     EMVideoMessageBody *body = [[EMVideoMessageBody alloc] initWithLocalPath:[url path] displayName:displayName];
     
@@ -144,7 +147,7 @@
                                                                 to:receiver
                                                               body:body
                                                                ext:messageExt];
-    message.chatType = messageType;
+    message.chatType = chatType;
     
     return message;
 }
