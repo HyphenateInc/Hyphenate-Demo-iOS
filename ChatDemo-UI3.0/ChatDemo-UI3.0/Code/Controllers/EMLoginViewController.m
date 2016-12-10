@@ -17,7 +17,6 @@
 @property (weak, nonatomic) IBOutlet UITextField *passwordTextField;
 @property (weak, nonatomic) IBOutlet UIButton *loginButton;
 @property (weak, nonatomic) IBOutlet UIButton *signupButton;
-//@property (weak, nonatomic) IBOutlet UILabel *errorLabel;
 @property (weak, nonatomic) IBOutlet UILabel *tipLabel;
 @property (weak, nonatomic) IBOutlet UIButton *changeButton;
 
@@ -32,10 +31,10 @@
 
 @implementation EMLoginViewController
 
-- (void)viewDidLoad {
+- (void)viewDidLoad
+{
     [super viewDidLoad];
-    // Do any additional setup after loading the view from its nib.
-    
+
     [self setBackgroundColor];
     [self setupForDismissKeyboard];
     
@@ -58,6 +57,7 @@
 - (void)viewWillAppear:(BOOL)animated
 {
     [super viewWillAppear:animated];
+    
     [UIApplication sharedApplication].statusBarStyle = UIStatusBarStyleLightContent;
 }
 
@@ -71,10 +71,6 @@
     [self.view.layer insertSublayer:gradient atIndex:0];
 }
 
-- (void)didReceiveMemoryWarning {
-    [super didReceiveMemoryWarning];
-    // Dispose of any resources that can be recreated.
-}
 
 #pragma mark - action
 

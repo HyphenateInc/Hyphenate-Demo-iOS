@@ -78,6 +78,7 @@ static EMChatDemoHelper *helper = nil;
 }
 
 #pragma mark - EMChatManagerDelegate
+
 - (void)conversationListDidUpdate:(NSArray *)aConversationList {
     if (_mainVC) {
         [_mainVC setupUnreadMessageCount];
