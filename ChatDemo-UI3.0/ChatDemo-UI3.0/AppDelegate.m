@@ -174,7 +174,7 @@
 - (void)registerNotifications
 {
     [self unregisterNotifications];
-    [[EMClient sharedClient] addDelegate:self delegateQueue:nil];
+    [[EMClient sharedClient] addDelegate:self];
 }
 
 - (void)unregisterNotifications

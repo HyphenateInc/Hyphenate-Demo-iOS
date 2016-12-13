@@ -45,7 +45,7 @@
     if (self) {
         // Custom initialization
         _currentGroup = group;
-        [[EMClient sharedClient].groupManager addDelegate:self delegateQueue:nil];
+        [[EMClient sharedClient].groupManager addDelegate:self];
     }
     return self;
 }

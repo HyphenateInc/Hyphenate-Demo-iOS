@@ -310,7 +310,7 @@
 
 #pragma mark - UICollectionViewDelegateFlowLayout
 
-//布局确定每个Item 的大小
+// Adjust item size
 - (CGSize)collectionView:(UICollectionView *)collectionView layout:(UICollectionViewLayout*)collectionViewLayout sizeForItemAtIndexPath:(NSIndexPath *)indexPath
 {
     return CGSizeMake(collectionView.frame.size.width / 5, collectionView.frame.size.height);

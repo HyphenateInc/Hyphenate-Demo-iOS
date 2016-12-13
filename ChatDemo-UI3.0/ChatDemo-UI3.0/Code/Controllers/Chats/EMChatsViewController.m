@@ -15,7 +15,7 @@
 #import "EMChatViewController.h"
 #import "EMConversationModel.h"
 
-@interface EMChatsViewController () <EMChatManagerDelegate,EMGroupManagerDelegate,UISearchBarDelegate,UITableViewDelegate,UITableViewDataSource,UISearchDisplayDelegate>
+@interface EMChatsViewController () <EMChatManagerDelegate, EMGroupManagerDelegate, UISearchBarDelegate, UITableViewDelegate, UITableViewDataSource, UISearchDisplayDelegate>
 {
     BOOL _isSearchState;
 }
@@ -46,7 +46,7 @@
     };
 }
 
--(void)viewWillAppear:(BOOL)animated
+- (void)viewWillAppear:(BOOL)animated
 {
     [super viewWillAppear:animated];
     [self registerNotifications];
@@ -55,7 +55,7 @@
     [[NSNotificationCenter defaultCenter] postNotificationName:KNOTIFICATION_UPDATEUNREADCOUNT object:nil];
 }
 
--(void)viewWillDisappear:(BOOL)animated
+- (void)viewWillDisappear:(BOOL)animated
 {
     [super viewWillDisappear:animated];
     [self unregisterNotifications];
@@ -66,13 +66,13 @@
     // Dispose of any resources that can be recreated.
 }
 
--(void)registerNotifications{
+- (void)registerNotifications{
     [self unregisterNotifications];
-    [[EMClient sharedClient].chatManager addDelegate:self delegateQueue:nil];
-    [[EMClient sharedClient].groupManager addDelegate:self delegateQueue:nil];
+    [[EMClient sharedClient].chatManager addDelegate:self];
+    [[EMClient sharedClient].groupManager addDelegate:self];
 }
 
--(void)unregisterNotifications{
+- (void)unregisterNotifications{
     [[EMClient sharedClient].chatManager removeDelegate:self];
     [[EMClient sharedClient].groupManager removeDelegate:self];
 }
