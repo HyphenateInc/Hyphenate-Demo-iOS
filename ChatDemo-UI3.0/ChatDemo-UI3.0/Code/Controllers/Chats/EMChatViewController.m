@@ -669,7 +669,7 @@
 
 #pragma mark - GestureRecognizer
 
--(void)keyBoardHidden:(UITapGestureRecognizer *)tapRecognizer
+- (void)keyBoardHidden:(UITapGestureRecognizer *)tapRecognizer
 {
     if (tapRecognizer.state == UIGestureRecognizerStateEnded) {
         [self.chatToolBar endEditing:YES];

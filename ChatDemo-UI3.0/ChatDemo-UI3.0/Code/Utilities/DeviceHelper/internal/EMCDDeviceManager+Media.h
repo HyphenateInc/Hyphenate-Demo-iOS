@@ -23,18 +23,18 @@
 
 - (void)stopPlayingWithChangeCategory:(BOOL)isChange;
 
--(BOOL)isPlaying;
+- (BOOL)isPlaying;
 
 #pragma mark - AudioRecorder
 - (void)asyncStartRecordingWithFileName:(NSString *)fileName
                                 completion:(void(^)(NSError *error))completion;
 
--(void)asyncStopRecordingWithCompletion:(void(^)(NSString *recordPath,
+- (void)asyncStopRecordingWithCompletion:(void(^)(NSString *recordPath,
                                                  NSInteger aDuration,
                                                  NSError *error))completion;
--(void)cancelCurrentRecording;
+- (void)cancelCurrentRecording;
 
 
--(BOOL)isRecording;
+- (BOOL)isRecording;
 
 @end

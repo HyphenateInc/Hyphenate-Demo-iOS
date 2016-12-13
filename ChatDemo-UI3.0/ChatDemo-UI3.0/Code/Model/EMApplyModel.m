@@ -11,7 +11,7 @@
 
 @implementation EMApplyModel
 
--(void)encodeWithCoder:(NSCoder *)aCoder{
+- (void)encodeWithCoder:(NSCoder *)aCoder{
     [aCoder encodeObject:_recordId forKey:@"recordId"];
     [aCoder encodeObject:_applyHyphenateId forKey:@"applyHyphenateId"];
     [aCoder encodeObject:_applyNickName forKey:@"applyNickName"];
@@ -24,7 +24,7 @@
     [aCoder encodeInteger:_groupMemberCount forKey:@"groupMemberCount"];
 }
 
--(id)initWithCoder:(NSCoder *)aDecoder{
+- (id)initWithCoder:(NSCoder *)aDecoder{
     if(self = [super init]){
         _recordId = [aDecoder decodeObjectForKey:@"recordId"];
         _applyHyphenateId = [aDecoder decodeObjectForKey:@"applyHyphenateId"];

@@ -129,7 +129,7 @@ typedef NS_ENUM(NSInteger, EMAudioSession){
                                                  completion:completion];
 }
 
--(void)asyncStopRecordingWithCompletion:(void(^)(NSString *recordPath,
+- (void)asyncStopRecordingWithCompletion:(void(^)(NSString *recordPath,
                                                  NSInteger aDuration,
                                                  NSError *error))completion{
     NSError *error = nil;
@@ -179,16 +179,17 @@ typedef NS_ENUM(NSInteger, EMAudioSession){
     }];
 }
 
--(void)cancelCurrentRecording{
+- (void)cancelCurrentRecording{
     [EMAudioRecorderUtil cancelCurrentRecording];
 }
 
--(BOOL)isRecording{
+- (BOOL)isRecording{
     return [EMAudioRecorderUtil isRecording];
 }
 
 #pragma mark - Private
--(NSError *)setupAudioSessionCategory:(EMAudioSession)session
+
+- (NSError *)setupAudioSessionCategory:(EMAudioSession)session
                              isActive:(BOOL)isActive{
     BOOL isNeedActive = NO;
     if (isActive != _currActive) {

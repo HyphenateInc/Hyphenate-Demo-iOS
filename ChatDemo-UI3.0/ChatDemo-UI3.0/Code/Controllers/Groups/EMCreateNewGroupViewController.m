@@ -18,8 +18,8 @@
 
 #define KEM_GROUP_MEMBERSCOUNT         2000
 
-@interface EMCreateNewGroupViewController ()<UICollectionViewDelegate, UICollectionViewDataSource, UICollectionViewDelegateFlowLayout, UIActionSheetDelegate, UIImagePickerControllerDelegate, UINavigationControllerDelegate, EMGroupUIProtocol>
-//UI控件
+@interface EMCreateNewGroupViewController () <UICollectionViewDelegate, UICollectionViewDataSource, UICollectionViewDelegateFlowLayout, UIActionSheetDelegate, UIImagePickerControllerDelegate, UINavigationControllerDelegate, EMGroupUIProtocol>
+
 @property (strong, nonatomic) IBOutlet UIView *headerView;
 @property (strong, nonatomic) IBOutlet UIButton *groupAvatarSelectButton;
 @property (strong, nonatomic) IBOutlet UITextField *groupSubjectTextField;

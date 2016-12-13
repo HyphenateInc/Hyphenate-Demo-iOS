@@ -116,13 +116,13 @@
 
 #pragma mark - FacialViewDelegate
 
--(void)selectedFacialView:(NSString*)str{
+- (void)selectedFacialView:(NSString*)str{
     if (_delegate) {
         [_delegate selectedFacialView:str isDelete:NO];
     }
 }
 
--(void)deleteSelected:(NSString *)str{
+- (void)deleteSelected:(NSString *)str{
     if (_delegate) {
         [_delegate selectedFacialView:str isDelete:YES];
     }

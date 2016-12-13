@@ -22,7 +22,8 @@ static EMCDDeviceManager *emCDDeviceManager;
 @end
 
 @implementation EMCDDeviceManager
-+(EMCDDeviceManager *)sharedInstance{
+
++ (EMCDDeviceManager *)sharedInstance{
     static dispatch_once_t onceToken;
     dispatch_once(&onceToken, ^{
         emCDDeviceManager = [[EMCDDeviceManager alloc] init];
@@ -31,7 +32,7 @@ static EMCDDeviceManager *emCDDeviceManager;
     return emCDDeviceManager;
 }
 
--(instancetype)init{
+- (instancetype)init{
     if (self = [super init]) {
         [self _setupProximitySensor];
         [self registerNotifications];

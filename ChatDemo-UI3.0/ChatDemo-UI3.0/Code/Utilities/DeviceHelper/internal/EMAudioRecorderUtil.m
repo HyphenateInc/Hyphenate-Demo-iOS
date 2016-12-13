@@ -70,7 +70,7 @@ static EMAudioRecorderUtil *audioRecorderUtil = nil;
 }
 
 #pragma mark - Private
-+(EMAudioRecorderUtil *)sharedInstance{
++ (EMAudioRecorderUtil *)sharedInstance{
     static dispatch_once_t onceToken;
     dispatch_once(&onceToken, ^{
         audioRecorderUtil = [[self alloc] init];
@@ -79,7 +79,7 @@ static EMAudioRecorderUtil *audioRecorderUtil = nil;
     return audioRecorderUtil;
 }
 
--(instancetype)init{
+- (instancetype)init{
     if (self = [super init]) {
         
     }
@@ -87,7 +87,7 @@ static EMAudioRecorderUtil *audioRecorderUtil = nil;
     return self;
 }
 
--(void)dealloc{
+- (void)dealloc{
     if (_recorder) {
         _recorder.delegate = nil;
         [_recorder stop];
@@ -97,7 +97,7 @@ static EMAudioRecorderUtil *audioRecorderUtil = nil;
     recordFinish = nil;
 }
 
--(BOOL)isRecording{
+- (BOOL)isRecording{
     return !!_recorder;
 }
 
@@ -132,7 +132,7 @@ static EMAudioRecorderUtil *audioRecorderUtil = nil;
     }
 }
 
--(void)asyncStopRecordingWithCompletion:(void(^)(NSString *recordPath))completion{
+- (void)asyncStopRecordingWithCompletion:(void(^)(NSString *recordPath))completion{
     recordFinish = completion;
     dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), ^{
         [self->_recorder stop];

@@ -70,7 +70,7 @@ static NSString *kGroupName = @"GroupName";
 
 #pragma mark - Notification Registration
 
--(void)registerNotifications
+- (void)registerNotifications
 {
     [self unregisterNotifications];
     [[EMClient sharedClient] addDelegate:self];
@@ -78,7 +78,7 @@ static NSString *kGroupName = @"GroupName";
     [[EMClient sharedClient].groupManager addDelegate:self];
 }
 
--(void)unregisterNotifications
+- (void)unregisterNotifications
 {
     [[EMClient sharedClient] removeDelegate:self];
     [[EMClient sharedClient].chatManager removeDelegate:self];

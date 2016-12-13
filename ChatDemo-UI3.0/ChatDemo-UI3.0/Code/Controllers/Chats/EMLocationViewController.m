@@ -134,7 +134,7 @@
 
 #pragma mark - private
 
--(void)createAnnotationWithCoords:(CLLocationCoordinate2D)coords
+- (void)createAnnotationWithCoords:(CLLocationCoordinate2D)coords
 {
     if (_annotation == nil) {
         _annotation = [[MKPointAnnotation alloc] init];

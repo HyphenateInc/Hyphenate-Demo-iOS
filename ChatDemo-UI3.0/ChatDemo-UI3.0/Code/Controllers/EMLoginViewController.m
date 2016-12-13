@@ -176,7 +176,7 @@
 
 #pragma mark - UITextFieldDelegate
 
--(BOOL)textFieldShouldBeginEditing:(UITextField *)textField{
+- (BOOL)textFieldShouldBeginEditing:(UITextField *)textField{
     if (textField == _usernameTextField) {
         _passwordTextField.text = @"";
     }
@@ -198,7 +198,8 @@
     return YES;
 }
 
-#pragma private
+#pragma mark - private
+
 - (BOOL)_isEmpty
 {
     BOOL ret = NO;
