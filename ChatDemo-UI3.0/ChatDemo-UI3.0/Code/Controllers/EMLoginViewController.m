@@ -65,7 +65,7 @@
 {
     CAGradientLayer *gradient = [CAGradientLayer layer];
     gradient.frame = [UIScreen mainScreen].bounds;
-    gradient.colors = [NSArray arrayWithObjects:(id)RGBACOLOR(62, 92, 120, 1).CGColor,(id)RGBACOLOR(36, 62, 85, 1).CGColor,nil];
+    gradient.colors = [NSArray arrayWithObjects:(id)LaunchTopColor.CGColor,(id)LaunchBottomColor.CGColor,nil];
     [gradient setStartPoint:CGPointMake(0.0, 0.0)];
     [gradient setEndPoint:CGPointMake(0.0, 1.0)];
     [self.view.layer insertSublayer:gradient atIndex:0];

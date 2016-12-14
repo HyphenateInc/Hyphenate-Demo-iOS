@@ -137,7 +137,7 @@
     if (section == 1) {
         
         UIView *header = [[UIView alloc] init];
-        header.backgroundColor = RGBACOLOR(228, 233, 236, 1.0);
+        header.backgroundColor = PaleGrayColor;
         return header;
     }
     return nil;

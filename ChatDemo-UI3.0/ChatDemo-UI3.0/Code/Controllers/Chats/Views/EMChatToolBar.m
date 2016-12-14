@@ -67,7 +67,7 @@
 {
     [super layoutSubviews];
     
-    _inputTextView.layer.borderColor = RGBACOLOR(189, 189, 189, 1).CGColor;
+    _inputTextView.layer.borderColor = TextViewBorderColor.CGColor;
     _inputTextView.layer.borderWidth = 0.5;
     
     _cameraButton.left = (KScreenWidth/5 - _cameraButton.width)/2;
@@ -77,7 +77,7 @@
     _locationButton.left = (KScreenWidth/5 - _locationButton.width)/2 + KScreenWidth/5 * 4;
     
     _inputTextView.placeHolder = NSLocalizedString(@"chat.placeHolder", @"Send Message");
-    _inputTextView.placeHolderTextColor = RGBACOLOR(173, 185, 193, 1);
+    _inputTextView.placeHolderTextColor = CoolGrayColor;
     _line.width = KScreenWidth;
     
     _sendButton.left = KScreenWidth - _sendButton.width - 15.f;

@@ -89,7 +89,7 @@
     
     EMVoiceMessageBody *body = (EMVoiceMessageBody*)model.message.body;
     _durationLabel.text = [self formatDuration:body.duration];
-    _durationLabel.textColor = model.message.direction == EMMessageDirectionSend ? RGBACOLOR(255, 255, 255, 1) : RGBACOLOR(12, 18, 24, 1);
+    _durationLabel.textColor = model.message.direction == EMMessageDirectionSend ? WhiteColor : AlmostBlackColor;
     
     if (model.isPlaying) {
         [self startPlayAudio];

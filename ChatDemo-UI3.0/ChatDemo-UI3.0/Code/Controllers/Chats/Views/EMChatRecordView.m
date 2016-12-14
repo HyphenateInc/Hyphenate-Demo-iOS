@@ -12,13 +12,6 @@
 #import <AVFoundation/AVFoundation.h>
 #import "EMCDDeviceManager.h"
 
-#define kTextNormalColor RGBACOLOR(112, 126, 137, 1)
-#define kTextSendColor RGBACOLOR(255, 59, 48, 1)
-#define kTextCancelColor RGBACOLOR(255, 255, 255, 1)
-
-#define kViewSendBackGroundColor RGBACOLOR(228, 233, 236, 1)
-#define kViewCancelBackGroundColor RGBACOLOR(135, 152, 164, 1)
-
 @interface EMChatRecordView ()
 {
     NSTimer *_recordTimer;
@@ -73,9 +66,9 @@
 - (void)resetView
 {
     _recordLabel.text = NSLocalizedString(@"chat.hold.record", "Hold to record");
-    _recordLabel.textColor = kTextNormalColor;
+    _recordLabel.textColor = SteelGreyColor;
     [_recordButton setImage:[UIImage imageNamed:@"Button_Record"] forState:UIControlStateNormal];
-    self.backgroundColor = kViewSendBackGroundColor;
+    self.backgroundColor = PaleGrayColor;
     [self endTimer];
 }
 
@@ -84,7 +77,7 @@
 - (IBAction)recordButtonTouchDown:(id)sender
 {
     _recordLabel.text = NSLocalizedString(@"chat.release.send", @"Release to send");
-    _recordLabel.textColor = kTextSendColor;
+    _recordLabel.textColor = OrangeRedColor;
     [_recordButton setImage:[UIImage imageNamed:@"Button_Record active"] forState:UIControlStateNormal];
     [self startTimer];
     
@@ -121,17 +114,17 @@
 - (IBAction)recordDragOutside:(id)sender
 {
     _recordLabel.text = NSLocalizedString(@"chat.release.cancel", @"Release to cancel");
-    _recordLabel.textColor = kTextCancelColor;
+    _recordLabel.textColor = WhiteColor;
     [_recordButton setImage:[UIImage imageNamed:@"Button_Record cancel"] forState:UIControlStateNormal];
-    self.backgroundColor = kViewCancelBackGroundColor;
+    self.backgroundColor = BlueyGreyColor;
 }
 
 - (IBAction)recordDragInside:(id)sender
 {
     _recordLabel.text = NSLocalizedString(@"chat.release.send", @"Release to send");
-    _recordLabel.textColor = kTextSendColor;
+    _recordLabel.textColor = OrangeRedColor;
     [_recordButton setImage:[UIImage imageNamed:@"Button_Record active"] forState:UIControlStateNormal];
-    self.backgroundColor = kViewSendBackGroundColor;
+    self.backgroundColor = PaleGrayColor;
 }
 
 - (void)recordTimerAction

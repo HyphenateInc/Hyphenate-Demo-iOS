@@ -30,7 +30,7 @@
         self.backImageView.image = [UIImage imageNamed:@"Location"];
         _addressLabel = [[UILabel alloc] init];
         _addressLabel.font = [UIFont systemFontOfSize:LABEL_FONT_SIZE];
-        _addressLabel.textColor = RGBACOLOR(12, 18, 24, 1);
+        _addressLabel.textColor = AlmostBlackColor;
         _addressLabel.numberOfLines = 0;
         _addressLabel.backgroundColor = [UIColor clearColor];
         [self.backImageView addSubview:_addressLabel];
