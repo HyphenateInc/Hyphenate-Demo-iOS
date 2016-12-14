@@ -67,7 +67,7 @@
 }
 - (void)viewWillDisappear:(BOOL)animated {
     [super viewWillDisappear:animated];
-    [self.navigationController setNavigationBarHidden:YES animated:YES];
+    self.navigationController.navigationBarHidden = NO;
 }
 
 - (void)loadContactInfo {
@@ -80,7 +80,7 @@
         }
     }
     _contactInfo = [NSArray arrayWithArray:info];
-    _contactFunc = @[@{DELETE_CONTACT:OrangeRedColor}];
+    _contactFunc = @[@{DELETE_CONTACT:RGBACOLOR(255.0, 59.0, 48.0, 1.0)}];
 }
 
 - (void)makeCallWithContact:(NSString *)contact callTyfpe:(EMCallType)callType {
@@ -201,16 +201,17 @@
 - (void)actionSheet:(UIActionSheet *)actionSheet clickedButtonAtIndex:(NSInteger)buttonIndex
 {
     if (buttonIndex != actionSheet.cancelButtonIndex) {
+        
         WEAK_SELF
         [MBProgressHUD showHUDAddedTo:self.view animated:YES];
-        [[EMClient sharedClient].contactManager deleteContact:_model.hyphenateId isDeleteConversation:NO completion:^(NSString *aUsername, EMError *aError) {
-            [MBProgressHUD hideAllHUDsForView:weakSelf.view animated:YES];
+        
+        [[EMClient sharedClient].contactManager deleteContact:_model.hyphenateId isDeleteConversation:YES completion:^(NSString *aUsername, EMError *aError) {
+            
             if (!aError) {
                 [[EMChatDemoHelper shareHelper].contactsVC reloadContacts];
-                [[EMClient sharedClient].chatManager deleteConversation:_model.hyphenateId isDeleteMessages:YES completion:nil];
                 [weakSelf.navigationController popViewControllerAnimated:YES];
             }
-            else{
+            else {
                 [weakSelf showAlertWithMessage:NSLocalizedString(@"contact.deleteFailure", @"Delete contacts failed")];
             }
         }];
