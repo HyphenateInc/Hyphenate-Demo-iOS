@@ -12,8 +12,8 @@ target 'ChatDemo-UI3.0' do
 
     pod 'MWPhotoBrowser', '~> 2.1.2'
 
-#pod 'GoogleCloudMessaging', '~> 1.2'
-#pod 'Google/Analytics'
+#    pod 'GoogleCloudMessaging', '~> 1.2'
+    pod 'Google/Analytics'
 
     pod 'Fabric'
     pod 'Crashlytics'
