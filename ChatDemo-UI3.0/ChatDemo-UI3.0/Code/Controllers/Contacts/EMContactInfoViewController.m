@@ -207,6 +207,8 @@
         
         [[EMClient sharedClient].contactManager deleteContact:_model.hyphenateId isDeleteConversation:YES completion:^(NSString *aUsername, EMError *aError) {
             
+            [MBProgressHUD hideAllHUDsForView:weakSelf.view animated:YES];
+            
             if (!aError) {
                 [[EMChatDemoHelper shareHelper].contactsVC reloadContacts];
                 [weakSelf.navigationController popViewControllerAnimated:YES];
