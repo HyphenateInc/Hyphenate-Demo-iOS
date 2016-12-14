@@ -12,7 +12,7 @@
 
 @protocol EMLocationViewDelegate <NSObject>
 
--(void)sendLocationLatitude:(double)latitude
+- (void)sendLocationLatitude:(double)latitude
                   longitude:(double)longitude
                  andAddress:(NSString *)address;
 @end

@@ -203,7 +203,7 @@
     if (buttonIndex != actionSheet.cancelButtonIndex) {
         WEAK_SELF
         [MBProgressHUD showHUDAddedTo:self.view animated:YES];
-        [[EMClient sharedClient].contactManager deleteContact:_model.hyphenateId completion:^(NSString *aUsername, EMError *aError) {
+        [[EMClient sharedClient].contactManager deleteContact:_model.hyphenateId isDeleteConversation:NO completion:^(NSString *aUsername, EMError *aError) {
             [MBProgressHUD hideAllHUDsForView:weakSelf.view animated:YES];
             if (!aError) {
                 [[EMChatDemoHelper shareHelper].contactsVC reloadContacts];

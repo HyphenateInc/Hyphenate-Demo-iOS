@@ -28,7 +28,7 @@ static NSString *kMessageType = @"MessageType";
 static NSString *kConversationChatter = @"ConversationChatter";
 static NSString *kGroupName = @"GroupName";
 
-@interface EMMainViewController () <EMChatManagerDelegate,EMGroupManagerDelegate,EMClientDelegate>
+@interface EMMainViewController () <EMChatManagerDelegate, EMGroupManagerDelegate, EMClientDelegate>
 {
     EMContactsViewController *_contactsVC;
     EMChatsViewController *_chatsVC;
@@ -41,13 +41,14 @@ static NSString *kGroupName = @"GroupName";
 
 @implementation EMMainViewController
 
-- (void)viewDidLoad {
+- (void)viewDidLoad
+{
     [super viewDidLoad];
-    // Do any additional setup after loading the view from its nib.
     
     [self loadViewControllers];
     
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(setupUnreadMessageCount) name:KNOTIFICATION_UPDATEUNREADCOUNT object:nil];
+    
     [self setupUnreadMessageCount];
     
     [self registerNotifications];
@@ -58,6 +59,7 @@ static NSString *kGroupName = @"GroupName";
 - (void)viewWillAppear:(BOOL)animated
 {
     [super viewWillAppear:animated];
+    
     [UIApplication sharedApplication].statusBarStyle = UIStatusBarStyleDefault;
 }
 
@@ -66,24 +68,24 @@ static NSString *kGroupName = @"GroupName";
     [self unregisterNotifications];
 }
 
-- (void)didReceiveMemoryWarning {
-    [super didReceiveMemoryWarning];
-    // Dispose of any resources that can be recreated.
-}
+#pragma mark - Notification Registration
 
--(void)registerNotifications{
+- (void)registerNotifications
+{
     [self unregisterNotifications];
-    [[EMClient sharedClient] addDelegate:self delegateQueue:nil];
-    [[EMClient sharedClient].chatManager addDelegate:self delegateQueue:nil];
-    [[EMClient sharedClient].groupManager addDelegate:self delegateQueue:nil];
+    [[EMClient sharedClient] addDelegate:self];
+    [[EMClient sharedClient].chatManager addDelegate:self];
+    [[EMClient sharedClient].groupManager addDelegate:self];
 }
 
--(void)unregisterNotifications{
+- (void)unregisterNotifications
+{
     [[EMClient sharedClient] removeDelegate:self];
     [[EMClient sharedClient].chatManager removeDelegate:self];
     [[EMClient sharedClient].groupManager removeDelegate:self];
 }
 
+#pragma mark - viewController
 
 - (void)loadViewControllers
 {
@@ -124,14 +126,14 @@ static NSString *kGroupName = @"GroupName";
 
 }
 
--(void)unSelectedTapTabBarItems:(UITabBarItem *)tabBarItem
+- (void)unSelectedTapTabBarItems:(UITabBarItem *)tabBarItem
 {
     [tabBarItem setTitleTextAttributes:[NSDictionary dictionaryWithObjectsAndKeys:
                                         [UIFont systemFontOfSize:11.f], NSFontAttributeName,BlueyGreyColor,NSForegroundColorAttributeName,
                                         nil] forState:UIControlStateNormal];
 }
 
--(void)selectedTapTabBarItems:(UITabBarItem *)tabBarItem
+- (void)selectedTapTabBarItems:(UITabBarItem *)tabBarItem
 {
     [tabBarItem setTitleTextAttributes:[NSDictionary dictionaryWithObjectsAndKeys:
                                         [UIFont systemFontOfSize:11.f],
@@ -139,7 +141,7 @@ static NSString *kGroupName = @"GroupName";
                                         nil] forState:UIControlStateSelected];
 }
 
--(void)setupUnreadMessageCount
+- (void)setupUnreadMessageCount
 {
     NSArray *conversations = [[EMClient sharedClient].chatManager getAllConversations];
     NSInteger unreadCount = 0;
@@ -148,7 +150,7 @@ static NSString *kGroupName = @"GroupName";
     }
     if (_chatsVC) {
         if (unreadCount > 0) {
-            _chatsVC.tabBarItem.badgeValue = [NSString stringWithFormat:@"%i",(int)unreadCount];
+            _chatsVC.tabBarItem.badgeValue = [NSString stringWithFormat:@"%i", (int)unreadCount];
         }else{
             _chatsVC.tabBarItem.badgeValue = nil;
         }
@@ -188,7 +190,8 @@ static NSString *kGroupName = @"GroupName";
                 [self.navigationController pushViewController:chatViewController animated:NO];
             }
         }];
-    } else if (_chatsVC) {
+    }
+    else if (_chatsVC) {
         [self.navigationController popToViewController:self animated:NO];
         [self setSelectedViewController:_chatsVC];
     }
@@ -201,23 +204,27 @@ static NSString *kGroupName = @"GroupName";
     if (item.tag == 0) {
         self.title = NSLocalizedString(@"title.contacts", @"Contacts");
         [_contactsVC setupNavigationItem:self.navigationItem];
-    }else if (item.tag == 1){
+    }
+    else if (item.tag == 1){
         self.title = NSLocalizedString(@"title.chats", @"Chats");
         self.navigationItem.rightBarButtonItem = nil;
         [_chatsVC setupNavigationItem:self.navigationItem];
-    }else if (item.tag == 2){
+    }
+    else if (item.tag == 2){
         self.title = NSLocalizedString(@"title.settings", @"Settings");
         [self clearNavigationItem];
     }
 }
 
-#pragma mark - EMChatManagerDelegate
+#pragma mark - EMC hatManagerDelegate
 
 - (void)messagesDidReceive:(NSArray *)aMessages
 {
     [self setupUnreadMessageCount];
+    
 #if !TARGET_IPHONE_SIMULATOR
     for (EMMessage *message in aMessages) {
+        
         UIApplicationState state = [[UIApplication sharedApplication] applicationState];
         switch (state) {
             case UIApplicationStateActive:
@@ -258,7 +265,8 @@ static NSString *kGroupName = @"GroupName";
     [[NSNotificationCenter defaultCenter] postNotificationName:KNOTIFICATION_LOGINCHANGE object:@NO];
 }
 
-- (void)clearNavigationItem {
+- (void)clearNavigationItem
+{
     self.navigationItem.titleView = nil;
     self.navigationItem.leftBarButtonItem = nil;
     self.navigationItem.rightBarButtonItem = nil;
@@ -285,7 +293,8 @@ static NSString *kGroupName = @"GroupName";
     return conversatinType;
 }
 
-- (void)playSoundAndVibration{
+- (void)playSoundAndVibration
+{
     NSTimeInterval timeInterval = [[NSDate date]
                                    timeIntervalSinceDate:self.lastPlaySoundDate];
     if (timeInterval < kDefaultPlaySoundInterval) {
@@ -369,8 +378,7 @@ static NSString *kGroupName = @"GroupName";
                 NSString *key = [NSString stringWithFormat:@"OnceJoinedChatrooms_%@", [[EMClient sharedClient] currentUsername]];
                 NSMutableDictionary *chatrooms = [NSMutableDictionary dictionaryWithDictionary:[ud objectForKey:key]];
                 NSString *chatroomName = [chatrooms objectForKey:message.conversationId];
-                if (chatroomName)
-                {
+                if (chatroomName) {
                     title = [NSString stringWithFormat:@"%@(%@)", message.from, chatroomName];
                 }
             }
@@ -378,7 +386,7 @@ static NSString *kGroupName = @"GroupName";
             alertBody = [NSString stringWithFormat:@"%@:%@", title, messageStr];
         } while (0);
     }
-    else{
+    else {
         alertBody = NSLocalizedString(@"message.receiveMessage", @"you have a new message");
     }
     
@@ -405,6 +413,7 @@ static NSString *kGroupName = @"GroupName";
         [[UNUserNotificationCenter currentNotificationCenter] addNotificationRequest:request withCompletionHandler:nil];
     }
     else {
+        
         UILocalNotification *notification = [[UILocalNotification alloc] init];
         notification.fireDate = [NSDate date];
         notification.alertBody = alertBody;
@@ -417,15 +426,5 @@ static NSString *kGroupName = @"GroupName";
         [[UIApplication sharedApplication] scheduleLocalNotification:notification];
     }
 }
-
-/*
- #pragma mark - Navigation
- 
- // In a storyboard-based application, you will often want to do a little preparation before navigation
- - (void)prepareForSegue:(UIStoryboardSegue *)segue sender:(id)sender {
- // Get the new view controller using [segue destinationViewController].
- // Pass the selected object to the new view controller.
- }
- */
 
 @end

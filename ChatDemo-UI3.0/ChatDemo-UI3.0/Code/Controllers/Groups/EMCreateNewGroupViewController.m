@@ -18,7 +18,7 @@
 
 #define KEM_GROUP_MEMBERSCOUNT         2000
 
-@interface EMCreateNewGroupViewController ()<UICollectionViewDelegate, UICollectionViewDataSource, UICollectionViewDelegateFlowLayout, UIActionSheetDelegate, UIImagePickerControllerDelegate, UINavigationControllerDelegate, EMGroupUIProtocol>
+@interface EMCreateNewGroupViewController () <UICollectionViewDelegate, UICollectionViewDataSource, UICollectionViewDelegateFlowLayout, UIActionSheetDelegate, UIImagePickerControllerDelegate, UINavigationControllerDelegate, EMGroupUIProtocol>
 
 @property (strong, nonatomic) IBOutlet UIView *headerView;
 @property (strong, nonatomic) IBOutlet UIButton *groupAvatarSelectButton;
@@ -310,6 +310,7 @@
 
 #pragma mark - UICollectionViewDelegateFlowLayout
 
+// Adjust item size
 - (CGSize)collectionView:(UICollectionView *)collectionView layout:(UICollectionViewLayout*)collectionViewLayout sizeForItemAtIndexPath:(NSIndexPath *)indexPath
 {
     return CGSizeMake(collectionView.frame.size.width / 5, collectionView.frame.size.height);

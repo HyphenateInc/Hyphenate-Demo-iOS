@@ -49,7 +49,7 @@
 
 @implementation EMChatToolBar
 
--(id)initWithCoder:(NSCoder *)aDecoder
+- (id)initWithCoder:(NSCoder *)aDecoder
 {
     self = [super initWithCoder:aDecoder];
     if (self) {
@@ -190,7 +190,7 @@
     [self textViewDidChange:self.inputTextView];
 }
 
--(NSMutableAttributedString*)backspaceText:(NSMutableAttributedString*) attr length:(NSInteger)length
+- (NSMutableAttributedString*)backspaceText:(NSMutableAttributedString*) attr length:(NSInteger)length
 {
     NSRange range = [self.inputTextView selectedRange];
     if (range.location == 0) {

@@ -38,7 +38,7 @@
     return self;
 }
 
--(CGSize)sizeThatFits:(CGSize)size
+- (CGSize)sizeThatFits:(CGSize)size
 {
     CGSize textBlockMinSize = {95, 25};
     EMLocationMessageBody *body = (EMLocationMessageBody*)self.model.message.body;
@@ -50,7 +50,7 @@
     return CGSizeMake(width, LOCATION_IMAGEVIEW_SIZE);
 }
 
--(void)layoutSubviews
+- (void)layoutSubviews
 {
     [super layoutSubviews];
     _addressLabel.frame = CGRectMake(5, self.backImageView.height - 30, self.backImageView.width - 10, 25);

@@ -12,14 +12,16 @@
 @protocol EMFacialViewDelegate
 
 @optional
--(void)selectedFacialView:(NSString*)str;
--(void)deleteSelected:(NSString *)str;
--(void)sendFace;
--(void)sendFace:(NSString *)str;
+
+- (void)selectedFacialView:(NSString*)str;
+- (void)deleteSelected:(NSString *)str;
+- (void)sendFace;
+- (void)sendFace:(NSString *)str;
 
 @end
 
 @class EaseEmotionManager;
+
 @interface EMFacialView : UIView
 {
 	NSMutableArray *_faces;
@@ -29,6 +31,6 @@
 
 @property(strong, nonatomic, readonly) NSArray *faces;
 
--(void)loadFacialView;
+- (void)loadFacialView;
 
 @end

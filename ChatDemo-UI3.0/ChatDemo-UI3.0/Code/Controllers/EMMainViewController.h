@@ -11,7 +11,7 @@
 
 @interface EMMainViewController : UITabBarController
 
--(void)setupUnreadMessageCount;
+- (void)setupUnreadMessageCount;
 
 - (void)didReceiveLocalNotification:(UILocalNotification *)notification;
 
