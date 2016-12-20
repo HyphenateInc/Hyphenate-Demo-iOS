@@ -15,9 +15,11 @@
 
 + (NSString *)convertToCommonEmoticons:(NSString *)text
 {
-    int allEmoticsCount = (int)[EMEmoji allEmoji].count;
+    int allEmojiCount = (int)[EMEmoji allEmoji].count;
+    
     NSMutableString *retText = [[NSMutableString alloc] initWithString:text];
-    for(int i=0; i<allEmoticsCount; ++i) {
+    
+    for (int i = 0; i < allEmojiCount; ++i) {
         NSRange range;
         range.location = 0;
         range.length = retText.length;
@@ -280,9 +282,12 @@
     if ([text length] == 0) {
         return @"";
     }
-    int allEmoticsCount = (int)[[EMEmoji allEmoji] count];
+    
+    int allEmojiCount = (int)[[EMEmoji allEmoji] count];
+    
     NSMutableString *retText = [[NSMutableString alloc] initWithString:text];
-    for(int i=0; i<allEmoticsCount; ++i) {
+    
+    for(int i = 0; i < allEmojiCount; ++i) {
         NSRange range;
         range.location = 0;
         range.length = retText.length;
