@@ -11,38 +11,38 @@
 
 @interface EMSDKHelper : NSObject
 
-+ (EMMessage *)sendTextMessage:(NSString *)text
++ (EMMessage *)initTextMessage:(NSString *)text
                             to:(NSString *)to
                       chatType:(EMChatType)chatType
                     messageExt:(NSDictionary *)messageExt;
 
-+ (EMMessage *)sendCmdMessage:(NSString *)action
++ (EMMessage *)initCmdMessage:(NSString *)action
                            to:(NSString *)to
                      chatType:(EMChatType)chatType
                    messageExt:(NSDictionary *)messageExt
                     cmdParams:(NSArray *)params;
 
-+ (EMMessage *)sendLocationMessageWithLatitude:(double)latitude
++ (EMMessage *)initLocationMessageWithLatitude:(double)latitude
                                      longitude:(double)longitude
                                        address:(NSString *)address
                                             to:(NSString *)to
                                       chatType:(EMChatType)chatType
                                     messageExt:(NSDictionary *)messageExt;
 
-+ (EMMessage *)sendImageData:(NSData *)imageData
++ (EMMessage *)initImageData:(NSData *)imageData
                  displayName:(NSString *)displayName
                           to:(NSString *)receiver
                     chatType:(EMChatType)chatType
                   messageExt:(NSDictionary *)messageExt;
 
-+ (EMMessage *)sendVoiceMessageWithLocalPath:(NSString *)localPath
++ (EMMessage *)initVoiceMessageWithLocalPath:(NSString *)localPath
                                  displayName:(NSString *)displayName
                                     duration:(NSInteger)duration
                                           to:(NSString *)receiver
                                     chatType:(EMChatType)chatType
                                   messageExt:(NSDictionary *)messageExt;
 
-+ (EMMessage *)sendVideoMessageWithLocalURL:(NSURL *)url
++ (EMMessage *)initVideoMessageWithLocalURL:(NSURL *)url
                                 displayName:(NSString *)displayName
                                    duration:(NSInteger)duration
                                          to:(NSString *)receiver

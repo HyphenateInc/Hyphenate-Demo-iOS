@@ -13,7 +13,7 @@
 
 @implementation EMSDKHelper
 
-+ (EMMessage *)sendTextMessage:(NSString *)text
++ (EMMessage *)initTextMessage:(NSString *)text
                             to:(NSString *)receiver
                       chatType:(EMChatType)chatType
                     messageExt:(NSDictionary *)messageExt
@@ -32,7 +32,7 @@
     return message;
 }
 
-+ (EMMessage *)sendCmdMessage:(NSString *)action
++ (EMMessage *)initCmdMessage:(NSString *)action
                            to:(NSString *)receiver
                      chatType:(EMChatType)chatType
                    messageExt:(NSDictionary *)messageExt
@@ -55,7 +55,7 @@
     return message;
 }
 
-+ (EMMessage *)sendLocationMessageWithLatitude:(double)latitude
++ (EMMessage *)initLocationMessageWithLatitude:(double)latitude
                                      longitude:(double)longitude
                                        address:(NSString *)address
                                             to:(NSString *)receiver
@@ -77,7 +77,7 @@
     return message;
 }
 
-+ (EMMessage *)sendImageData:(NSData *)imageData
++ (EMMessage *)initImageData:(NSData *)imageData
                  displayName:(NSString *)displayName
                           to:(NSString *)receiver
                     chatType:(EMChatType)chatType
@@ -104,7 +104,7 @@
     return message;
 }
 
-+ (EMMessage *)sendVoiceMessageWithLocalPath:(NSString *)localPath
++ (EMMessage *)initVoiceMessageWithLocalPath:(NSString *)localPath
                                  displayName:(NSString *)displayName
                                     duration:(NSInteger)duration
                                           to:(NSString *)receiver
@@ -128,7 +128,7 @@
     return message;
 }
 
-+ (EMMessage *)sendVideoMessageWithLocalURL:(NSURL *)url
++ (EMMessage *)initVideoMessageWithLocalURL:(NSURL *)url
                                 displayName:(NSString *)displayName
                                    duration:(NSInteger)duration
                                          to:(NSString *)receiver
