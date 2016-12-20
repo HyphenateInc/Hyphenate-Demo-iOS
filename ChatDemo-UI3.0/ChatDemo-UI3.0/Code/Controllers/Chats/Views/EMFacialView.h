@@ -20,7 +20,7 @@
 
 @end
 
-@class EaseEmotionManager;
+@class EaseEmojiManager;
 
 @interface EMFacialView : UIView
 {

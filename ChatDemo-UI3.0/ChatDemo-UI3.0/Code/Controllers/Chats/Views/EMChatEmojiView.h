@@ -9,6 +9,6 @@
 
 #import <UIKit/UIKit.h>
 
-@interface EMChatEmotionView : UIView
+@interface EMChatEmojiView : UIView
 
 @end

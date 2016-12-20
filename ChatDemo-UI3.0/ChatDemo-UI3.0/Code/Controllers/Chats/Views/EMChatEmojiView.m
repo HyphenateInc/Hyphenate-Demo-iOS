@@ -7,9 +7,9 @@
  * the property of Hyphenate Inc.
  */
 
-#import "EMChatEmotionView.h"
+#import "EMChatEmojiView.h"
 
-@implementation EMChatEmotionView
+@implementation EMChatEmojiView
 
 /*
 // Only override drawRect: if you perform custom drawing.

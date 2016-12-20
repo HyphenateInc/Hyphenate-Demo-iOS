@@ -16,7 +16,7 @@
     EMFacialView *_facialView;
     UIScrollView *_bottomScrollView;
     NSInteger _currentSelectIndex;
-    NSArray *_emotionManagers;
+    NSArray *_emojiManagers;
 
 }
 
@@ -40,7 +40,7 @@
 - (void)willMoveToSuperview:(UIView *)newSuperview
 {
     if (newSuperview) {
-        [self reloadEmotionData];
+        [self reloadEmojiData];
     }
 }
 
@@ -68,7 +68,7 @@
 
 - (void)_setupButtonScrollView
 {
-    NSInteger number = [_emotionManagers count];
+    NSInteger number = [_emojiManagers count];
     if (number <= 1) {
         return;
     }
@@ -98,15 +98,15 @@
 {
     UIButton *btn = (UIButton*)sender;
     NSInteger index = btn.tag - 1000;
-    if (index < [_emotionManagers count]) {
+    if (index < [_emojiManagers count]) {
         [_facialView loadFacialView];
     }
 }
 
-- (void)reloadEmotionData
+- (void)reloadEmojiData
 {
     NSInteger index = _currentSelectIndex - 1000;
-    if (index < [_emotionManagers count]) {
+    if (index < [_emojiManagers count]) {
         [_facialView loadFacialView];
     }
 }
@@ -135,7 +135,7 @@
 - (void)sendFace:(NSString *)str
 {
     if (_delegate) {
-        [_delegate sendFaceWithEmotion:str];
+        [_delegate sendFaceWithEmoji:str];
     }
 }
 
@@ -150,9 +150,9 @@
     return NO;
 }
 
-- (void)setEmotionManagers:(NSArray *)emotionManagers
+- (void)setEmojiManagers:(NSArray *)emojiManagers
 {
-    _emotionManagers = emotionManagers;
+    _emojiManagers = emojiManagers;
     [self _setupButtonScrollView];
 }
 

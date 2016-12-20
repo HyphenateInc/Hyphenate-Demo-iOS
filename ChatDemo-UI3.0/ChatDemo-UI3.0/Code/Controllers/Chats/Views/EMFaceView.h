@@ -16,7 +16,7 @@
 @optional
 - (void)selectedFacialView:(NSString *)str isDelete:(BOOL)isDelete;
 - (void)sendFace;
-- (void)sendFaceWithEmotion:(NSString *)emotion;
+- (void)sendFaceWithEmoji:(NSString *)emoji;
 
 @end
 
@@ -26,6 +26,6 @@
 
 - (BOOL)stringIsFace:(NSString *)string;
 
-- (void)setEmotionManagers:(NSArray*)emotionManagers;
+- (void)setEmojiManagers:(NSArray*)emojiManagers;
 
 @end
