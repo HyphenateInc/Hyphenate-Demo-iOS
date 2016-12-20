@@ -31,10 +31,10 @@
     // Override point for customization after application launch.
     
     if ([UIDevice currentDevice].systemVersion.floatValue >= 7.0) {
-        [[UITabBar appearance] setBarTintColor:RGBACOLOR(250, 251, 252, 1.0)];
-        [[UITabBar appearance] setTintColor:RGBACOLOR(0, 186, 110, 1)];
-        [[UINavigationBar appearance] setBarTintColor:RGBACOLOR(255, 255, 255, 1)];
-        [[UINavigationBar appearance] setTintColor:RGBACOLOR(12, 18, 24, 1)];
+        [[UITabBar appearance] setBarTintColor:DefaultBarColor];
+        [[UITabBar appearance] setTintColor:KermitGreenTwoColor];
+        [[UINavigationBar appearance] setBarTintColor:DefaultBarColor];
+        [[UINavigationBar appearance] setTintColor:AlmostBlackColor];
         [[UINavigationBar appearance] setTranslucent:NO];
     }
     
@@ -68,7 +68,7 @@
     self.window.rootViewController = launch;
     [self.window makeKeyAndVisible];
     
-    [self _registerRemoteNotification];
+    [self _registerAPNS];
     [self registerNotifications];
     
     // Fabric
@@ -141,7 +141,7 @@
     [alert show];
 }
 
-- (void)_registerRemoteNotification
+- (void)_registerAPNS
 {
     UIApplication *application = [UIApplication sharedApplication];
     application.applicationIconBadgeNumber = 0;
@@ -174,7 +174,7 @@
 - (void)registerNotifications
 {
     [self unregisterNotifications];
-    [[EMClient sharedClient] addDelegate:self delegateQueue:nil];
+    [[EMClient sharedClient] addDelegate:self];
 }
 
 - (void)unregisterNotifications

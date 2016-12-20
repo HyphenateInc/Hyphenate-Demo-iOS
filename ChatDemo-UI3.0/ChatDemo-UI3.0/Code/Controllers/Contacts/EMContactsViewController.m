@@ -48,7 +48,7 @@
     if ([self respondsToSelector:@selector(edgesForExtendedLayout)]) {
         self.edgesForExtendedLayout = UIRectEdgeNone;
     }
-    self.tableView.sectionIndexColor = BrightBlue;
+    self.tableView.sectionIndexColor = BrightBlueColor;
     self.tableView.sectionIndexBackgroundColor = [UIColor clearColor];
     [self setupNavigationItem:self.navigationItem];
     [self reloadGroupNotifications];
@@ -194,8 +194,8 @@
         _searchBar.showsCancelButton = NO;
         _searchBar.backgroundImage = [UIImage imageWithColor:[UIColor whiteColor] size:_searchBar.bounds.size];
         [_searchBar setSearchFieldBackgroundPositionAdjustment:UIOffsetMake(0, 0)];
-        [_searchBar setSearchFieldBackgroundImage:[UIImage imageWithColor:RGBACOLOR(228, 233, 236, 1) size:_searchBar.bounds.size] forState:UIControlStateNormal];
-        _searchBar.tintColor = RGBACOLOR(12, 18, 24, 1);
+        [_searchBar setSearchFieldBackgroundImage:[UIImage imageWithColor:PaleGrayColor size:_searchBar.bounds.size] forState:UIControlStateNormal];
+        _searchBar.tintColor = AlmostBlackColor;
     }
     return _searchBar;
 }

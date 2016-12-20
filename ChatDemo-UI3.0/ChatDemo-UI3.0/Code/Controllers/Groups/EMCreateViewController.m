@@ -62,8 +62,8 @@
     _searchBar.showsCancelButton = NO;
     _searchBar.backgroundImage = [UIImage imageWithColor:[UIColor whiteColor] size:_searchBar.bounds.size];
     [_searchBar setSearchFieldBackgroundPositionAdjustment:UIOffsetMake(0, 0)];
-    [_searchBar setSearchFieldBackgroundImage:[UIImage imageWithColor:RGBACOLOR(228, 233, 236, 1) size:_searchBar.bounds.size] forState:UIControlStateNormal];
-    _searchBar.tintColor = RGBACOLOR(12, 18, 24, 1);
+    [_searchBar setSearchFieldBackgroundImage:[UIImage imageWithColor:PaleGrayColor size:_searchBar.bounds.size] forState:UIControlStateNormal];
+    _searchBar.tintColor = AlmostBlackColor;
 }
     
 - (void)setupNavBar {

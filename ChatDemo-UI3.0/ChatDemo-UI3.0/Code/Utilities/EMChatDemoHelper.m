@@ -46,10 +46,10 @@ static EMChatDemoHelper *helper = nil;
 
 - (void)initHelper
 {
-    [[EMClient sharedClient] addDelegate:self delegateQueue:nil];
-    [[EMClient sharedClient].chatManager addDelegate:self delegateQueue:nil];
-    [[EMClient sharedClient].groupManager addDelegate:self delegateQueue:nil];
-    [[EMClient sharedClient].contactManager addDelegate:self delegateQueue:nil];
+    [[EMClient sharedClient] addDelegate:self];
+    [[EMClient sharedClient].chatManager addDelegate:self];
+    [[EMClient sharedClient].groupManager addDelegate:self];
+    [[EMClient sharedClient].contactManager addDelegate:self];
 }
 
 

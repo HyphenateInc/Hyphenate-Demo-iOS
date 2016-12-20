@@ -1,13 +1,10 @@
 /************************************************************
- *  * Hyphenate  
+ *  * Hyphenate
  * __________________
- * Copyright (C) 2013-2014 Hyphenate Technologies. All rights reserved.
+ * Copyright (C) 2016 Hyphenate Inc. All rights reserved.
  *
  * NOTICE: All information contained herein is, and remains
- * the property of Hyphenate Technologies.
- * Dissemination of this information or reproduction of this material
- * is strictly forbidden unless prior written permission is obtained
- * from Hyphenate Technologies.
+ * the property of Hyphenate Inc.
  */
 
 #import "EMAudioRecorderUtil.h"
@@ -28,24 +25,21 @@ static EMAudioRecorderUtil *audioRecorderUtil = nil;
 @implementation EMAudioRecorderUtil
 
 #pragma mark - Public
-// 当前是否正在录音
+
 +(BOOL)isRecording{
     return [[EMAudioRecorderUtil sharedInstance] isRecording];
 }
 
-// 开始录音
 + (void)asyncStartRecordingWithPreparePath:(NSString *)aFilePath
                                 completion:(void(^)(NSError *error))completion{
     [[EMAudioRecorderUtil sharedInstance] asyncStartRecordingWithPreparePath:aFilePath
                                                                   completion:completion];
 }
 
-// 停止录音
 +(void)asyncStopRecordingWithCompletion:(void(^)(NSString *recordPath))completion{
     [[EMAudioRecorderUtil sharedInstance] asyncStopRecordingWithCompletion:completion];
 }
 
-// 取消录音
 +(void)cancelCurrentRecording{
     [[EMAudioRecorderUtil sharedInstance] cancelCurrentRecording];
 }
@@ -70,7 +64,7 @@ static EMAudioRecorderUtil *audioRecorderUtil = nil;
 }
 
 #pragma mark - Private
-+(EMAudioRecorderUtil *)sharedInstance{
++ (EMAudioRecorderUtil *)sharedInstance{
     static dispatch_once_t onceToken;
     dispatch_once(&onceToken, ^{
         audioRecorderUtil = [[self alloc] init];
@@ -79,7 +73,7 @@ static EMAudioRecorderUtil *audioRecorderUtil = nil;
     return audioRecorderUtil;
 }
 
--(instancetype)init{
+- (instancetype)init{
     if (self = [super init]) {
         
     }
@@ -87,7 +81,7 @@ static EMAudioRecorderUtil *audioRecorderUtil = nil;
     return self;
 }
 
--(void)dealloc{
+- (void)dealloc{
     if (_recorder) {
         _recorder.delegate = nil;
         [_recorder stop];
@@ -97,7 +91,7 @@ static EMAudioRecorderUtil *audioRecorderUtil = nil;
     recordFinish = nil;
 }
 
--(BOOL)isRecording{
+- (BOOL)isRecording{
     return !!_recorder;
 }
 
@@ -132,7 +126,7 @@ static EMAudioRecorderUtil *audioRecorderUtil = nil;
     }
 }
 
--(void)asyncStopRecordingWithCompletion:(void(^)(NSString *recordPath))completion{
+- (void)asyncStopRecordingWithCompletion:(void(^)(NSString *recordPath))completion{
     recordFinish = completion;
     dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), ^{
         [self->_recorder stop];

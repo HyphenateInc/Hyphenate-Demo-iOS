@@ -45,7 +45,7 @@
     if (self) {
         // Custom initialization
         _currentGroup = group;
-        [[EMClient sharedClient].groupManager addDelegate:self delegateQueue:nil];
+        [[EMClient sharedClient].groupManager addDelegate:self];
     }
     return self;
 }
@@ -67,7 +67,6 @@
 #pragma mark - View Update Method
 
 - (void)setupNavigationItem {
-    //设置leftBarItems
     UIButton *leftBtn = [UIButton buttonWithType:UIButtonTypeCustom];
     leftBtn.frame = CGRectMake(0, 0, 20, 20);
     [leftBtn setImage:[UIImage imageNamed:@"Icon_Back"] forState:UIControlStateNormal];

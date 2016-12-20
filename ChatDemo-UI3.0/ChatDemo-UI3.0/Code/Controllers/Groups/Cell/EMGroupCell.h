@@ -15,7 +15,7 @@
 
 @property (nonatomic, strong) EMGroupModel *model;
 
-@property (nonatomic, assign) BOOL isRequestedToJoinPublicGroup;//是否申请加入公有群
+@property (nonatomic, assign) BOOL isRequestedToJoinPublicGroup;
 
 @property (nonatomic, assign) id<EMGroupUIProtocol> delegate;
 

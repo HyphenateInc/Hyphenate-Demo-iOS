@@ -271,7 +271,7 @@
 
 - (void)didSendText:(NSString *)text
 {
-    EMMessage *message = [EMSDKHelper sendTextMessage:text
+    EMMessage *message = [EMSDKHelper initTextMessage:text
                                                    to:_conversation.conversationId
                                              chatType:[self _messageType]
                                            messageExt:nil];
@@ -280,7 +280,7 @@
 
 - (void)didSendAudio:(NSString *)recordPath duration:(NSInteger)duration
 {
-    EMMessage *message = [EMSDKHelper sendVoiceMessageWithLocalPath:recordPath
+    EMMessage *message = [EMSDKHelper initVoiceMessageWithLocalPath:recordPath
                                                         displayName:@"audio"
                                                            duration:duration
                                                                  to:_conversation.conversationId
@@ -333,7 +333,7 @@
                 NSLog(@"failed to remove file, error:%@.", error);
             }
         }
-        EMMessage *message = [EMSDKHelper sendVideoMessageWithLocalURL:mp4
+        EMMessage *message = [EMSDKHelper initVideoMessageWithLocalURL:mp4
                                                            displayName:@"video.mp4"
                                                               duration:0
                                                                     to:_conversation.conversationId
@@ -346,7 +346,7 @@
         if (url == nil) {
             UIImage *orgImage = info[UIImagePickerControllerOriginalImage];
             NSData *data = UIImageJPEGRepresentation(orgImage, 1);
-            EMMessage *message = [EMSDKHelper sendImageData:data
+            EMMessage *message = [EMSDKHelper initImageData:data
                                                 displayName:@"image.png"
                                                          to:_conversation.conversationId
                                                    chatType:[self _messageType]
@@ -362,7 +362,7 @@
                                 // Warning - large image size
                             }
                             if (data != nil) {
-                                EMMessage *message = [EMSDKHelper sendImageData:data
+                                EMMessage *message = [EMSDKHelper initImageData:data
                                                                     displayName:@"image.png"
                                                                              to:_conversation.conversationId
                                                                     chatType:[self _messageType]
@@ -385,7 +385,7 @@
                         if (fileData.length > 10 * 1000 * 1000) {
                             // Warning - large image size
                         }
-                        EMMessage *message = [EMSDKHelper sendImageData:fileData
+                        EMMessage *message = [EMSDKHelper initImageData:fileData
                                                             displayName:@"image.png"
                                                                      to:_conversation.conversationId
                                                                chatType:[self _messageType]
@@ -410,7 +410,7 @@
                    longitude:(double)longitude
                   andAddress:(NSString *)address
 {
-    EMMessage *message = [EMSDKHelper sendLocationMessageWithLatitude:latitude
+    EMMessage *message = [EMSDKHelper initLocationMessageWithLatitude:latitude
                                                             longitude:longitude
                                                               address:address
                                                                    to:_conversation.conversationId
@@ -669,7 +669,7 @@
 
 #pragma mark - GestureRecognizer
 
--(void)keyBoardHidden:(UITapGestureRecognizer *)tapRecognizer
+- (void)keyBoardHidden:(UITapGestureRecognizer *)tapRecognizer
 {
     if (tapRecognizer.state == UIGestureRecognizerStateEnded) {
         [self.chatToolBar endEditing:YES];

@@ -1,10 +1,11 @@
-/* 
-  Localizable.strings
-  ChatDemo-UI3.0
-
-  Created by Hyphenate on 16/9/19.
-  Copyright © 2016 Hyphenate. All rights reserved.
-*/
+/************************************************************
+ *  * Hyphenate
+ * __________________
+ * Copyright (C) 2016 Hyphenate Inc. All rights reserved.
+ *
+ * NOTICE: All information contained herein is, and remains
+ * the property of Hyphenate Inc.
+ */
 
 //title
 "title.contacts" = "Contacts";

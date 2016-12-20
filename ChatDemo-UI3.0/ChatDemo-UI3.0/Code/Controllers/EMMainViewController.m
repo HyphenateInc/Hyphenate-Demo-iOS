@@ -70,15 +70,15 @@ static NSString *kGroupName = @"GroupName";
 
 #pragma mark - Notification Registration
 
--(void)registerNotifications
+- (void)registerNotifications
 {
     [self unregisterNotifications];
-    [[EMClient sharedClient] addDelegate:self delegateQueue:nil];
-    [[EMClient sharedClient].chatManager addDelegate:self delegateQueue:nil];
-    [[EMClient sharedClient].groupManager addDelegate:self delegateQueue:nil];
+    [[EMClient sharedClient] addDelegate:self];
+    [[EMClient sharedClient].chatManager addDelegate:self];
+    [[EMClient sharedClient].groupManager addDelegate:self];
 }
 
--(void)unregisterNotifications
+- (void)unregisterNotifications
 {
     [[EMClient sharedClient] removeDelegate:self];
     [[EMClient sharedClient].chatManager removeDelegate:self];
@@ -129,7 +129,7 @@ static NSString *kGroupName = @"GroupName";
 - (void)unSelectedTapTabBarItems:(UITabBarItem *)tabBarItem
 {
     [tabBarItem setTitleTextAttributes:[NSDictionary dictionaryWithObjectsAndKeys:
-                                        [UIFont systemFontOfSize:11.f], NSFontAttributeName, RGBACOLOR(135, 152, 164, 1),NSForegroundColorAttributeName,
+                                        [UIFont systemFontOfSize:11.f], NSFontAttributeName,BlueyGreyColor,NSForegroundColorAttributeName,
                                         nil] forState:UIControlStateNormal];
 }
 
@@ -137,7 +137,7 @@ static NSString *kGroupName = @"GroupName";
 {
     [tabBarItem setTitleTextAttributes:[NSDictionary dictionaryWithObjectsAndKeys:
                                         [UIFont systemFontOfSize:11.f],
-                                        NSFontAttributeName, RGBACOLOR(0, 186, 110, 1),NSForegroundColorAttributeName,
+                                        NSFontAttributeName,KermitGreenTwoColor,NSForegroundColorAttributeName,
                                         nil] forState:UIControlStateSelected];
 }
 

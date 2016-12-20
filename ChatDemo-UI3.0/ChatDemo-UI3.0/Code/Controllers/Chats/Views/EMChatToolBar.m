@@ -26,7 +26,7 @@
 
 @property (weak, nonatomic) IBOutlet UIButton *cameraButton;
 @property (weak, nonatomic) IBOutlet UIButton *photoButton;
-@property (weak, nonatomic) IBOutlet UIButton *emotionButton;
+@property (weak, nonatomic) IBOutlet UIButton *emojiButton;
 @property (weak, nonatomic) IBOutlet UIButton *recordButton;
 @property (weak, nonatomic) IBOutlet UIButton *locationButton;
 @property (weak, nonatomic) IBOutlet UIButton *fileButton;
@@ -42,14 +42,14 @@
 - (IBAction)photoAction:(id)sender;
 - (IBAction)locationAction:(id)sender;
 - (IBAction)recordAction:(id)sender;
-- (IBAction)emotionAction:(id)sender;
+- (IBAction)emojiAction:(id)sender;
 - (IBAction)sendAction:(id)sender;
 
 @end
 
 @implementation EMChatToolBar
 
--(id)initWithCoder:(NSCoder *)aDecoder
+- (id)initWithCoder:(NSCoder *)aDecoder
 {
     self = [super initWithCoder:aDecoder];
     if (self) {
@@ -67,17 +67,17 @@
 {
     [super layoutSubviews];
     
-    _inputTextView.layer.borderColor = RGBACOLOR(189, 189, 189, 1).CGColor;
+    _inputTextView.layer.borderColor = TextViewBorderColor.CGColor;
     _inputTextView.layer.borderWidth = 0.5;
     
     _cameraButton.left = (KScreenWidth/5 - _cameraButton.width)/2;
     _photoButton.left = (KScreenWidth/5 - _photoButton.width)/2 + KScreenWidth/5 * 1;
-    _emotionButton.left = (KScreenWidth/5 - _emotionButton.width)/2 + KScreenWidth/5 * 2;
+    _emojiButton.left = (KScreenWidth/5 - _emojiButton.width)/2 + KScreenWidth/5 * 2;
     _recordButton.left = (KScreenWidth/5 - _recordButton.width)/2 + KScreenWidth/5 * 3;
     _locationButton.left = (KScreenWidth/5 - _locationButton.width)/2 + KScreenWidth/5 * 4;
     
     _inputTextView.placeHolder = NSLocalizedString(@"chat.placeHolder", @"Send Message");
-    _inputTextView.placeHolderTextColor = RGBACOLOR(173, 185, 193, 1);
+    _inputTextView.placeHolderTextColor = CoolGrayColor;
     _line.width = KScreenWidth;
     
     _sendButton.left = KScreenWidth - _sendButton.width - 15.f;
@@ -122,7 +122,7 @@
 - (NSMutableArray*)moreItems
 {
     if (_moreItems == nil) {
-        _moreItems = [NSMutableArray arrayWithArray:@[self.cameraButton,self.photoButton,self.emotionButton,self.recordButton,self.locationButton,self.fileButton]];
+        _moreItems = [NSMutableArray arrayWithArray:@[self.cameraButton,self.photoButton,self.emojiButton,self.recordButton,self.locationButton,self.fileButton]];
     }
     return _moreItems;
 }
@@ -190,7 +190,7 @@
     [self textViewDidChange:self.inputTextView];
 }
 
--(NSMutableAttributedString*)backspaceText:(NSMutableAttributedString*) attr length:(NSInteger)length
+- (NSMutableAttributedString*)backspaceText:(NSMutableAttributedString*) attr length:(NSInteger)length
 {
     NSRange range = [self.inputTextView selectedRange];
     if (range.location == 0) {
@@ -256,7 +256,7 @@
     }
 }
 
-- (IBAction)emotionAction:(id)sender
+- (IBAction)emojiAction:(id)sender
 {
     UIButton *button = (UIButton*)sender;
     button.selected = !button.selected;

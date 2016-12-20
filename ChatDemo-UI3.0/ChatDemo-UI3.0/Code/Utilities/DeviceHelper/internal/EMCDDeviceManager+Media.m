@@ -1,13 +1,10 @@
 /************************************************************
- *  * Hyphenate  
+ *  * Hyphenate
  * __________________
- * Copyright (C) 2013-2014 Hyphenate Technologies. All rights reserved.
+ * Copyright (C) 2016 Hyphenate Inc. All rights reserved.
  *
  * NOTICE: All information contained herein is, and remains
- * the property of Hyphenate Technologies.
- * Dissemination of this information or reproduction of this material
- * is strictly forbidden unless prior written permission is obtained
- * from Hyphenate Technologies.
+ * the property of Hyphenate Inc.
  */
 
 #import "EMCDDeviceManager+Media.h"
@@ -129,7 +126,7 @@ typedef NS_ENUM(NSInteger, EMAudioSession){
                                                  completion:completion];
 }
 
--(void)asyncStopRecordingWithCompletion:(void(^)(NSString *recordPath,
+- (void)asyncStopRecordingWithCompletion:(void(^)(NSString *recordPath,
                                                  NSInteger aDuration,
                                                  NSError *error))completion{
     NSError *error = nil;
@@ -179,16 +176,17 @@ typedef NS_ENUM(NSInteger, EMAudioSession){
     }];
 }
 
--(void)cancelCurrentRecording{
+- (void)cancelCurrentRecording{
     [EMAudioRecorderUtil cancelCurrentRecording];
 }
 
--(BOOL)isRecording{
+- (BOOL)isRecording{
     return [EMAudioRecorderUtil isRecording];
 }
 
 #pragma mark - Private
--(NSError *)setupAudioSessionCategory:(EMAudioSession)session
+
+- (NSError *)setupAudioSessionCategory:(EMAudioSession)session
                              isActive:(BOOL)isActive{
     BOOL isNeedActive = NO;
     if (isActive != _currActive) {

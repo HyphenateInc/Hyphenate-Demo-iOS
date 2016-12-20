@@ -30,7 +30,7 @@
         self.backImageView.image = [UIImage imageNamed:@"Location"];
         _addressLabel = [[UILabel alloc] init];
         _addressLabel.font = [UIFont systemFontOfSize:LABEL_FONT_SIZE];
-        _addressLabel.textColor = RGBACOLOR(12, 18, 24, 1);
+        _addressLabel.textColor = AlmostBlackColor;
         _addressLabel.numberOfLines = 0;
         _addressLabel.backgroundColor = [UIColor clearColor];
         [self.backImageView addSubview:_addressLabel];
@@ -38,7 +38,7 @@
     return self;
 }
 
--(CGSize)sizeThatFits:(CGSize)size
+- (CGSize)sizeThatFits:(CGSize)size
 {
     CGSize textBlockMinSize = {95, 25};
     EMLocationMessageBody *body = (EMLocationMessageBody*)self.model.message.body;
@@ -50,7 +50,7 @@
     return CGSizeMake(width, LOCATION_IMAGEVIEW_SIZE);
 }
 
--(void)layoutSubviews
+- (void)layoutSubviews
 {
     [super layoutSubviews];
     _addressLabel.frame = CGRectMake(5, self.backImageView.height - 30, self.backImageView.width - 10, 25);

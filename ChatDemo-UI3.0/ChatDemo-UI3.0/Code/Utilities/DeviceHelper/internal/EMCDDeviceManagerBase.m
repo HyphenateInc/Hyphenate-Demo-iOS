@@ -1,13 +1,10 @@
 /************************************************************
- *  * Hyphenate  
+ *  * Hyphenate
  * __________________
- * Copyright (C) 2013-2014 Hyphenate Technologies. All rights reserved.
+ * Copyright (C) 2016 Hyphenate Inc. All rights reserved.
  *
  * NOTICE: All information contained herein is, and remains
- * the property of Hyphenate Technologies.
- * Dissemination of this information or reproduction of this material
- * is strictly forbidden unless prior written permission is obtained
- * from Hyphenate Technologies.
+ * the property of Hyphenate Inc.
  */
 
 #import <UIKit/UIKit.h>
@@ -22,7 +19,8 @@ static EMCDDeviceManager *emCDDeviceManager;
 @end
 
 @implementation EMCDDeviceManager
-+(EMCDDeviceManager *)sharedInstance{
+
++ (EMCDDeviceManager *)sharedInstance{
     static dispatch_once_t onceToken;
     dispatch_once(&onceToken, ^{
         emCDDeviceManager = [[EMCDDeviceManager alloc] init];
@@ -31,7 +29,7 @@ static EMCDDeviceManager *emCDDeviceManager;
     return emCDDeviceManager;
 }
 
--(instancetype)init{
+- (instancetype)init{
     if (self = [super init]) {
         [self _setupProximitySensor];
         [self registerNotifications];

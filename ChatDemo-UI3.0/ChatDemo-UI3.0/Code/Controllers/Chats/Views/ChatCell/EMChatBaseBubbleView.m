@@ -26,7 +26,7 @@
         _backImageView.multipleTouchEnabled = YES;
         _backImageView.autoresizingMask = UIViewAutoresizingFlexibleHeight | UIViewAutoresizingFlexibleWidth;
         [self addSubview:_backImageView];
-        _backImageView.backgroundColor = RGBACOLOR(236, 239, 241, 1);
+        _backImageView.backgroundColor = PaleGreyTwoColor;
         _backImageView.layer.cornerRadius = 10.f;
         self.backgroundColor = [UIColor clearColor];
         
@@ -51,7 +51,7 @@
 - (void)setModel:(EMMessageModel *)model
 {
     _model = model;
-    _backImageView.backgroundColor = model.message.direction == EMMessageDirectionSend ? RGBACOLOR(0, 186, 110, 1) : RGBACOLOR(236, 239, 241, 1);
+    _backImageView.backgroundColor = model.message.direction == EMMessageDirectionSend ? KermitGreenTwoColor : PaleGreyTwoColor;
 }
 
 + (CGFloat)heightForBubbleWithMessageModel:(EMMessageModel *)model

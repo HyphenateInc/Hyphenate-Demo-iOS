@@ -3,13 +3,16 @@
 # Uncomment this line if you're using Swift
 # use_frameworks!
 
+# Import CocoaPods sources
+source 'https://github.com/CocoaPods/Specs.git'
+
 target 'ChatDemo-UI3.0' do
     
     pod 'Hyphenate'
 
     pod 'MWPhotoBrowser', '~> 2.1.2'
 
-    pod 'GoogleCloudMessaging', '~> 1.2'
+#    pod 'GoogleCloudMessaging', '~> 1.2'
     pod 'Google/Analytics'
 
     pod 'Fabric'

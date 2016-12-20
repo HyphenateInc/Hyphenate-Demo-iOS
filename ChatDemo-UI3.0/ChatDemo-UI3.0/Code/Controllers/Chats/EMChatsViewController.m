@@ -15,7 +15,7 @@
 #import "EMChatViewController.h"
 #import "EMConversationModel.h"
 
-@interface EMChatsViewController () <EMChatManagerDelegate,EMGroupManagerDelegate,UISearchBarDelegate,UITableViewDelegate,UITableViewDataSource,UISearchDisplayDelegate>
+@interface EMChatsViewController () <EMChatManagerDelegate, EMGroupManagerDelegate, UISearchBarDelegate, UITableViewDelegate, UITableViewDataSource, UISearchDisplayDelegate>
 {
     BOOL _isSearchState;
 }
@@ -46,7 +46,7 @@
     };
 }
 
--(void)viewWillAppear:(BOOL)animated
+- (void)viewWillAppear:(BOOL)animated
 {
     [super viewWillAppear:animated];
     [self registerNotifications];
@@ -55,7 +55,7 @@
     [[NSNotificationCenter defaultCenter] postNotificationName:KNOTIFICATION_UPDATEUNREADCOUNT object:nil];
 }
 
--(void)viewWillDisappear:(BOOL)animated
+- (void)viewWillDisappear:(BOOL)animated
 {
     [super viewWillDisappear:animated];
     [self unregisterNotifications];
@@ -66,13 +66,13 @@
     // Dispose of any resources that can be recreated.
 }
 
--(void)registerNotifications{
+- (void)registerNotifications{
     [self unregisterNotifications];
-    [[EMClient sharedClient].chatManager addDelegate:self delegateQueue:nil];
-    [[EMClient sharedClient].groupManager addDelegate:self delegateQueue:nil];
+    [[EMClient sharedClient].chatManager addDelegate:self];
+    [[EMClient sharedClient].groupManager addDelegate:self];
 }
 
--(void)unregisterNotifications{
+- (void)unregisterNotifications{
     [[EMClient sharedClient].chatManager removeDelegate:self];
     [[EMClient sharedClient].groupManager removeDelegate:self];
 }
@@ -84,7 +84,7 @@
     if (_networkStateView == nil) {
         _networkStateView = [[UIView alloc] initWithFrame:CGRectMake(0, 0, self.tableView.frame.size.width, 44)];
 
-        _networkStateView.backgroundColor = RGBACOLOR(0, 186, 110, 1);
+        _networkStateView.backgroundColor = KermitGreenTwoColor;
         
         UIImageView *imageView = [[UIImageView alloc] initWithFrame:CGRectMake(10, (_networkStateView.frame.size.height - 20) / 2, 20, 20)];
         imageView.image = [UIImage imageNamed:@"Icon_error_white"];
@@ -109,8 +109,8 @@
         _searchBar.showsCancelButton = NO;
         _searchBar.backgroundImage = [UIImage imageWithColor:[UIColor whiteColor] size:_searchBar.bounds.size];
         [_searchBar setSearchFieldBackgroundPositionAdjustment:UIOffsetMake(0, 0)];
-        [_searchBar setSearchFieldBackgroundImage:[UIImage imageWithColor:RGBACOLOR(228, 233, 236, 1) size:_searchBar.bounds.size] forState:UIControlStateNormal];
-        _searchBar.tintColor = RGBACOLOR(12, 18, 24, 1);
+        [_searchBar setSearchFieldBackgroundImage:[UIImage imageWithColor:PaleGrayColor size:_searchBar.bounds.size] forState:UIControlStateNormal];
+        _searchBar.tintColor = AlmostBlackColor;
     }
     return _searchBar;
 }

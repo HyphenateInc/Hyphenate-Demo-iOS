@@ -1,8 +1,11 @@
-<?xml version="1.0" encoding="UTF-8" standalone="no"?>
-<document type="com.apple.InterfaceBuilder3.CocoaTouch.XIB" version="3.0" toolsVersion="11201" systemVersion="15F34" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" colorMatched="YES">
+<?xml version="1.0" encoding="UTF-8"?>
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.XIB" version="3.0" toolsVersion="11542" systemVersion="16D12b" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" colorMatched="YES">
+    <device id="retina4_7" orientation="portrait">
+        <adaptation id="fullscreen"/>
+    </device>
     <dependencies>
         <deployment identifier="iOS"/>
-        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="11161"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="11524"/>
         <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
     </dependencies>
     <objects>
@@ -19,16 +22,16 @@
             <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
             <subviews>
                 <view contentMode="scaleToFill" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="Lh5-oT-mc5" customClass="EMChatToolBar">
-                    <frame key="frameInset" minY="584" width="375" height="83"/>
+                    <rect key="frame" x="0.0" y="584" width="375" height="83"/>
                     <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                     <subviews>
                         <view contentMode="scaleToFill" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="JLV-Ip-5Ce" userLabel="Line">
-                            <frame key="frameInset" width="375" height="0.5"/>
+                            <rect key="frame" x="0.0" y="0.0" width="375" height="0.5"/>
                             <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                             <color key="backgroundColor" red="0.74117647058823533" green="0.74117647058823533" blue="0.74117647058823533" alpha="1" colorSpace="calibratedRGB"/>
                         </view>
                         <textView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="34G-oT-3NH" customClass="EMMessageTextView">
-                            <frame key="frameInset" minX="15" minY="10" width="345" height="34"/>
+                            <rect key="frame" x="15" y="10" width="345" height="34"/>
                             <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                             <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                             <color key="textColor" red="0.047058823529411764" green="0.070588235294117646" blue="0.094117647058823528" alpha="1" colorSpace="calibratedRGB"/>
@@ -45,7 +48,7 @@
                             </connections>
                         </textView>
                         <button hidden="YES" opaque="NO" contentMode="scaleToFill" fixedFrame="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="7Eu-Lo-0J5">
-                            <frame key="frameInset" minX="328" minY="10" width="32" height="34"/>
+                            <rect key="frame" x="328" y="10" width="32" height="34"/>
                             <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                             <fontDescription key="fontDescription" type="system" pointSize="13"/>
                             <state key="normal" title="Send">
@@ -56,13 +59,13 @@
                             </connections>
                         </button>
                         <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="kbQ-UG-S2E">
-                            <frame key="frameInset" minX="342" minY="54" width="13" height="22"/>
+                            <rect key="frame" x="342" y="54" width="13" height="22"/>
                             <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                             <state key="normal" image="Icon_File_disable.png"/>
                             <state key="selected" image="Icon_File.png"/>
                         </button>
                         <button opaque="NO" contentMode="scaleToFill" fixedFrame="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="S1W-J3-Mbn">
-                            <frame key="frameInset" minX="20" minY="54" width="22" height="22"/>
+                            <rect key="frame" x="20" y="54" width="22" height="22"/>
                             <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                             <state key="normal" image="Icon_Camera.png"/>
                             <state key="selected" image="Icon_Camera active.png"/>
@@ -71,7 +74,7 @@
                             </connections>
                         </button>
                         <button opaque="NO" contentMode="scaleToFill" fixedFrame="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="HaN-qg-NOO">
-                            <frame key="frameInset" minX="91" minY="54" width="18" height="22"/>
+                            <rect key="frame" x="91" y="54" width="18" height="22"/>
                             <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                             <state key="normal" image="Icon_Image.png"/>
                             <state key="selected" image="Icon_Image active.png"/>
@@ -80,16 +83,16 @@
                             </connections>
                         </button>
                         <button opaque="NO" contentMode="scaleToFill" fixedFrame="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="OSC-wW-s56">
-                            <frame key="frameInset" minX="157" minY="54" width="17" height="22"/>
+                            <rect key="frame" x="157" y="54" width="17" height="22"/>
                             <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                             <state key="normal" image="icon_emoji_disable.png"/>
                             <state key="selected" image="Icon_Emoji.png"/>
                             <connections>
-                                <action selector="emotionAction:" destination="Lh5-oT-mc5" eventType="touchUpInside" id="VOz-0d-GjZ"/>
+                                <action selector="emojiAction:" destination="Lh5-oT-mc5" eventType="touchUpInside" id="oBg-RR-MBO"/>
                             </connections>
                         </button>
                         <button opaque="NO" contentMode="scaleToFill" fixedFrame="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="5LK-Pc-Gvd">
-                            <frame key="frameInset" minX="223" minY="54" width="9" height="22"/>
+                            <rect key="frame" x="223" y="54" width="9" height="22"/>
                             <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                             <state key="normal" image="Icon_Audio_disable.png"/>
                             <state key="selected" image="Icon_Audio.png"/>
@@ -98,7 +101,7 @@
                             </connections>
                         </button>
                         <button opaque="NO" contentMode="scaleToFill" fixedFrame="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="6a8-X0-Lxe">
-                            <frame key="frameInset" minX="280" minY="53" width="13" height="22"/>
+                            <rect key="frame" x="280" y="53" width="13" height="22"/>
                             <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                             <state key="normal" image="Icon_Location_disable.png"/>
                             <state key="selected" image="Icon_Location.png"/>
@@ -115,7 +118,7 @@
                     </variation>
                     <connections>
                         <outlet property="cameraButton" destination="S1W-J3-Mbn" id="vDO-r4-tHx"/>
-                        <outlet property="emotionButton" destination="OSC-wW-s56" id="lfb-ag-IKg"/>
+                        <outlet property="emojiButton" destination="OSC-wW-s56" id="3c6-if-uu5"/>
                         <outlet property="fileButton" destination="kbQ-UG-S2E" id="eKK-xA-4E4"/>
                         <outlet property="inputTextView" destination="34G-oT-3NH" id="qyU-Gm-enW"/>
                         <outlet property="line" destination="JLV-Ip-5Ce" id="UzM-T6-f2l"/>
@@ -126,7 +129,7 @@
                     </connections>
                 </view>
                 <tableView clipsSubviews="YES" contentMode="scaleToFill" fixedFrame="YES" alwaysBounceVertical="YES" showsHorizontalScrollIndicator="NO" showsVerticalScrollIndicator="NO" style="plain" separatorStyle="none" rowHeight="44" sectionHeaderHeight="28" sectionFooterHeight="28" translatesAutoresizingMaskIntoConstraints="NO" id="pr1-TU-Mm9">
-                    <frame key="frameInset" width="375" height="576"/>
+                    <rect key="frame" x="0.0" y="0.0" width="375" height="576"/>
                     <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                     <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                     <connections>

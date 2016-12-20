@@ -201,16 +201,19 @@
 - (void)actionSheet:(UIActionSheet *)actionSheet clickedButtonAtIndex:(NSInteger)buttonIndex
 {
     if (buttonIndex != actionSheet.cancelButtonIndex) {
+        
         WEAK_SELF
         [MBProgressHUD showHUDAddedTo:self.view animated:YES];
-        [[EMClient sharedClient].contactManager deleteContact:_model.hyphenateId completion:^(NSString *aUsername, EMError *aError) {
+        
+        [[EMClient sharedClient].contactManager deleteContact:_model.hyphenateId isDeleteConversation:YES completion:^(NSString *aUsername, EMError *aError) {
+            
             [MBProgressHUD hideAllHUDsForView:weakSelf.view animated:YES];
+            
             if (!aError) {
                 [[EMChatDemoHelper shareHelper].contactsVC reloadContacts];
-                [[EMClient sharedClient].chatManager deleteConversation:_model.hyphenateId isDeleteMessages:YES completion:nil];
                 [weakSelf.navigationController popViewControllerAnimated:YES];
             }
-            else{
+            else {
                 [weakSelf showAlertWithMessage:NSLocalizedString(@"contact.deleteFailure", @"Delete contacts failed")];
             }
         }];

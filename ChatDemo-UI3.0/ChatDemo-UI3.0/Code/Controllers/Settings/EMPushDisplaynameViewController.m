@@ -22,7 +22,7 @@
 {
     if (!_displayTextField) {
         _displayTextField = [[UITextField alloc] init];
-        _displayTextField.textColor = RGBACOLOR(12, 18, 24, 1.0);
+        _displayTextField.textColor = AlmostBlackColor;
         _displayTextField.textAlignment = NSTextAlignmentLeft;
         _displayTextField.font = [UIFont systemFontOfSize:13];
         _displayTextField.borderStyle = UITextBorderStyleNone;

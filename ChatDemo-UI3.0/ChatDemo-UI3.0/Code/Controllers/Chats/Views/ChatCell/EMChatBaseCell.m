@@ -25,9 +25,6 @@
 #define NICK_PADDING 20.f
 #define NICK_LEFT_PADDING 57.f
 
-#define kColorOrangeRed RGBACOLOR(255, 59, 58, 1)
-#define kColorKermitGreenTwo RGBACOLOR(72, 184, 0, 1)
-
 @interface EMChatBaseCell () <EMChatBaseBubbleViewDelegate>
 
 @property (weak, nonatomic) IBOutlet UIImageView *headImageView;
@@ -81,7 +78,7 @@
     // Configure the view for the selected state
 }
 
--(void)layoutSubviews
+- (void)layoutSubviews
 {
     [super layoutSubviews];
     

@@ -32,7 +32,7 @@
         _textLabel.numberOfLines = 0;
         _textLabel.lineBreakMode = NSLineBreakByCharWrapping;
         _textLabel.font = [UIFont systemFontOfSize:LABEL_FONT_SIZE];
-        _textLabel.textColor = RGBACOLOR(12, 18, 24, 1);
+        _textLabel.textColor = AlmostBlackColor;
         _textLabel.backgroundColor = [UIColor clearColor];
         _textLabel.userInteractionEnabled = NO;
         _textLabel.multipleTouchEnabled = NO;
@@ -41,7 +41,7 @@
     return self;
 }
 
--(void)layoutSubviews
+- (void)layoutSubviews
 {
     [super layoutSubviews];
     
@@ -58,7 +58,7 @@
     CGSize retSize;
     NSString *text = [EMConvertToCommonEmoticonsHelper convertToSystemEmoticons:((EMTextMessageBody *)self.model.message.body).text];
     NSMutableParagraphStyle *paragraphStyle = [[NSMutableParagraphStyle alloc] init];
-    [paragraphStyle setLineSpacing:[[self class] lineSpacing]];//调整行间距
+    [paragraphStyle setLineSpacing:[[self class] lineSpacing]];
     retSize = [text boundingRectWithSize:textBlockMinSize options:NSStringDrawingUsesLineFragmentOrigin
                               attributes:@{
                                            NSFontAttributeName:[[self class] textLabelFont],
@@ -87,7 +87,7 @@
     [attributedString addAttribute:NSParagraphStyleAttributeName
                              value:paragraphStyle
                              range:NSMakeRange(0, [text length])];
-    _textLabel.textColor = self.model.message.direction == EMMessageDirectionSend ? RGBACOLOR(255, 255, 255, 1) : RGBACOLOR(12, 18, 24, 1);
+    _textLabel.textColor = self.model.message.direction == EMMessageDirectionSend ? WhiteColor : AlmostBlackColor;
     [_textLabel setAttributedText:attributedString];
 }
 
@@ -102,7 +102,7 @@
     });
     NSString *text = [EMConvertToCommonEmoticonsHelper convertToSystemEmoticons:((EMTextMessageBody *)model.message.body).text];
     NSMutableParagraphStyle *paragraphStyle = [[NSMutableParagraphStyle alloc] init];
-    [paragraphStyle setLineSpacing:[[self class] lineSpacing]];//调整行间距
+    [paragraphStyle setLineSpacing:[[self class] lineSpacing]];
     size = [text boundingRectWithSize:textBlockMinSize options:NSStringDrawingUsesLineFragmentOrigin
                            attributes:@{
                                         NSFontAttributeName:[[self class] textLabelFont],
