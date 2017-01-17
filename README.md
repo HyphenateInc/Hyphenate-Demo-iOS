@@ -7,6 +7,5 @@ For more information, please visit Hyphenate docs at [docs.hyphenate.io](https:/
 - Video/Voice calls
 - Background notifications - so you know there's a message waiting for you
 
-
-## Dependencies
-EaseUI is a UI library based on hyphenate SDK, encapsulates the IM function of commonly used components, fragments, and so on. [UI library for iOS](https://github.com/HyphenateInc/Hyphenate-EaseUI-ios)
+## Download from iTunes store
+iOS on iTunes store https://itunes.apple.com/us/app/hyphenate-mobile-instant-messaging/id1112896608?mt=8
