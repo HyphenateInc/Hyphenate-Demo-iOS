@@ -89,7 +89,7 @@
 }
 
 - (void)updateMemberCountDescription {
-    _memberCountLabel.text = [NSString stringWithFormat:@"%@: %ld/%d",NSLocalizedString(@"group.participants", @"Participants"),(unsigned long)_occupants.count,2000];
+    _memberCountLabel.text = [NSString stringWithFormat:@"%@: %ld/%d",NSLocalizedString(@"group.participants", @"Participants"),(unsigned long)_occupants.count,_currentGroup.setting.maxUsersCount];
 }
 
 #pragma mark - Data Update Method
