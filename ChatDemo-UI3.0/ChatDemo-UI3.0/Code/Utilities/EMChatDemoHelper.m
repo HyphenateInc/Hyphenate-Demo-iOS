@@ -46,10 +46,10 @@ static EMChatDemoHelper *helper = nil;
 
 - (void)initHelper
 {
-    [[EMClient sharedClient] addDelegate:self];
-    [[EMClient sharedClient].chatManager addDelegate:self];
-    [[EMClient sharedClient].groupManager addDelegate:self];
-    [[EMClient sharedClient].contactManager addDelegate:self];
+    [[EMClient sharedClient] addDelegate:self delegateQueue:nil];
+    [[EMClient sharedClient].chatManager addDelegate:self delegateQueue:nil];
+    [[EMClient sharedClient].groupManager addDelegate:self delegateQueue:nil];
+    [[EMClient sharedClient].contactManager addDelegate:self delegateQueue:nil];
 }
 
 
@@ -219,7 +219,7 @@ static EMChatDemoHelper *helper = nil;
         model.applyNickName = aUsername;
         model.groupId = aGroup.groupId;
         model.groupSubject = aGroup.subject;
-        model.groupMemberCount = aGroup.membersCount;
+        model.groupMemberCount = aGroup.occupantsCount;
         model.reason = aReason;
         model.style = EMApplyStyle_joinGroup;
         [[EMApplyManager defaultManager] addApplyRequest:model];
@@ -277,7 +277,7 @@ static EMChatDemoHelper *helper = nil;
         return;
     }
 
-    [[EMClient sharedClient].groupManager getGroupSpecificationFromServerByID:aGroupId includeMembersList:NO completion:^(EMGroup *aGroup, EMError *aError) {
+    [[EMClient sharedClient].groupManager getGroupSpecificationFromServerWithId:aGroupId completion:^(EMGroup *aGroup, EMError *aError) {
         if (![[EMApplyManager defaultManager] isExistingRequest:aInviter
                                                         groupId:aGroupId
                                                      applyStyle:EMApplyStyle_groupInvitation])
