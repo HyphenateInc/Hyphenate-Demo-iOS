@@ -45,7 +45,7 @@
     if (self) {
         // Custom initialization
         _currentGroup = group;
-        [[EMClient sharedClient].groupManager addDelegate:self];
+        [[EMClient sharedClient].groupManager addDelegate:self delegateQueue:nil];
     }
     return self;
 }
@@ -89,7 +89,7 @@
 }
 
 - (void)updateMemberCountDescription {
-    _memberCountLabel.text = [NSString stringWithFormat:@"%@: %ld/%d",NSLocalizedString(@"group.participants", @"Participants"),(unsigned long)_occupants.count,_currentGroup.setting.maxUsersCount];
+    _memberCountLabel.text = [NSString stringWithFormat:@"%@: %ld/%ld",NSLocalizedString(@"group.participants", @"Participants"), (unsigned long)_occupants.count, (long)_currentGroup.setting.maxUsersCount];
 }
 
 #pragma mark - Data Update Method
@@ -147,27 +147,27 @@
     model.title = NSLocalizedString(@"group.id",@"Group ID");
     model.isEdit = NO;
     model.permissionDescription = self.currentGroup.groupId;
-    model.type = EMGroupPermissionType_groupId;
+    model.type = EMGroupInfoType_groupId;
     [sectionData1 addObject:model];
     
     model = [[EMGroupPermissionModel alloc] init];
     model.title = isOwner ? NSLocalizedString(@"group.isPublic", @"Appear in group search") : NSLocalizedString(@"group.groupType", @"Group Type");
     model.isEdit = NO;
     model.permissionDescription = isPublic ? NSLocalizedString(@"group.public", @"Public") : NSLocalizedString(@"group.private", @"Private");
-    model.type = EMGroupPermissionType_groupType;
+    model.type = EMGroupInfoType_groupType;
     [sectionData1 addObject:model];
     
     model = [[EMGroupPermissionModel alloc] init];
     if (isOwner) {
         model.title = isPublic ? NSLocalizedString(@"group.openJoin", @"Join the group freely") : NSLocalizedString(@"group.allowedOccupantInvite", @"Allow members to invite");
         model.isEdit = NO;
-        model.type = isPublic ? EMGroupPermissionType_openJoin : EMGroupPermissionType_canAllInvite;
+        model.type = isPublic ? EMGroupInfoType_openJoin : EMGroupInfoType_canAllInvite;
         model.permissionDescription = _currentGroup.setting.style == EMGroupStylePrivateMemberCanInvite ? NSLocalizedString(@"group.enabled", @"Enabled") : NSLocalizedString(@"group.disabled", @"Disabled");
     }
     else {
         model.title = NSLocalizedString(@"group.block", @"Block");
         model.isEdit = YES;
-        model.type = EMGroupPermissionType_mute;
+        model.type = EMGroupInfoType_mute;
         model.switchState = _currentGroup.isBlocked;
     }
     [sectionData1 addObject:model];
@@ -176,7 +176,7 @@
         model = [[EMGroupPermissionModel alloc] init];
         model.title = NSLocalizedString(@"group.pushNotification", @"Push Notification");
         model.isEdit = YES;
-        model.type = EMGroupPermissionType_pushSetting;
+        model.type = EMGroupInfoType_pushSetting;
         model.switchState = _currentGroup.isPushNotificationEnabled;
         [sectionData1 addObject:model];
     }
@@ -187,7 +187,7 @@
         model = [[EMGroupPermissionModel alloc] init];
         model.title = NSLocalizedString(@"group.pushNotification", @"Push Notification");
         model.isEdit = YES;
-        model.type = EMGroupPermissionType_pushSetting;
+        model.type = EMGroupInfoType_pushSetting;
         model.switchState = _currentGroup.isPushNotificationEnabled;
         [sectionData2 addObject:model];
         [_groupPermissions addObject:sectionData2];
@@ -214,7 +214,7 @@
     WEAK_SELF
     [MBProgressHUD showHUDAddedTo:self.view animated:YES];
     if ([self isGroupOwner]) {
-        [[EMClient sharedClient].groupManager destroyGroup:self.currentGroup.groupId completion:^(EMGroup *aGroup, EMError *aError) {
+        [[EMClient sharedClient].groupManager destroyGroup:self.currentGroup.groupId finishCompletion:^(EMError *aError) {
             [MBProgressHUD hideAllHUDsForView:weakSelf.view animated:YES];
             if (aError) {
                 [weakSelf showAlertWithMessage:NSLocalizedString(@"group.destroyFailure", @"Destroy group failure")];
@@ -226,7 +226,7 @@
         }];
     }
     else {
-        [[EMClient sharedClient].groupManager leaveGroup:self.currentGroup.groupId completion:^(EMGroup *aGroup, EMError *aError) {
+        [[EMClient sharedClient].groupManager leaveGroup:self.currentGroup.groupId completion:^(EMError *aError) {
             [MBProgressHUD hideAllHUDsForView:weakSelf.view animated:YES];
             if (aError) {
                 [weakSelf showAlertWithMessage:NSLocalizedString(@"group.leaveFailure", @"Leave group failure")];
@@ -247,7 +247,7 @@
 }
 
 - (void)permissionSelectAction:(UISwitch *)permissionSwitch {
-    if (permissionSwitch.tag == EMGroupPermissionType_mute) {
+    if (permissionSwitch.tag == EMGroupInfoType_mute) {
         if (permissionSwitch.isOn != _currentGroup.isBlocked) {
             if (permissionSwitch.isOn) {
                 [self blockGroupMessages];
@@ -257,7 +257,7 @@
             }
         }
     }
-    else if (permissionSwitch.tag == EMGroupPermissionType_pushSetting) {
+    else if (permissionSwitch.tag == EMGroupInfoType_pushSetting) {
         if (permissionSwitch.isOn != _currentGroup.isPushNotificationEnabled) {
             [self isPushEnabled:permissionSwitch.isOn];
         }

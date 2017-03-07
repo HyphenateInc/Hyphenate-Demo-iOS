@@ -73,9 +73,9 @@ static NSString *kGroupName = @"GroupName";
 - (void)registerNotifications
 {
     [self unregisterNotifications];
-    [[EMClient sharedClient] addDelegate:self];
-    [[EMClient sharedClient].chatManager addDelegate:self];
-    [[EMClient sharedClient].groupManager addDelegate:self];
+    [[EMClient sharedClient] addDelegate:self delegateQueue:nil];
+    [[EMClient sharedClient].chatManager addDelegate:self delegateQueue:nil];
+    [[EMClient sharedClient].groupManager addDelegate:self delegateQueue:nil];
 }
 
 - (void)unregisterNotifications
