@@ -356,9 +356,9 @@
     
     self.ringPlayer = [[AVAudioPlayer alloc] initWithContentsOfURL:url error:nil];
     [self.ringPlayer setVolume:1];
-    self.ringPlayer.numberOfLoops = -1; //设置音乐播放次数  -1为一直循环
+    self.ringPlayer.numberOfLoops = -1;
     if([self.ringPlayer prepareToPlay]) {
-        [self.ringPlayer play]; //播放
+        [self.ringPlayer play];
     }
 }
 
