@@ -210,6 +210,7 @@
 
 - (void)reloadCallDisconnectedUI
 {
+    [self _stopRing];
     self.statusLabel.hidden = NO;
     self.speakerOutButton.enabled = NO;
     self.silenceButton.enabled = NO;
@@ -367,7 +368,6 @@
     [self.ringPlayer stop];
     self.ringPlayer = nil;
 }
-
 
 #pragma mark - Timer reload time
 - (void)startTimer
