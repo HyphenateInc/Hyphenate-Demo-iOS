@@ -11,6 +11,7 @@ target 'ChatDemo-UI3.0' do
     pod 'Hyphenate'
 
     pod 'MWPhotoBrowser', '~> 2.1.2'
+    pod 'MJRefresh'
 
 #    pod 'GoogleCloudMessaging', '~> 1.2'
     pod 'Google/Analytics'

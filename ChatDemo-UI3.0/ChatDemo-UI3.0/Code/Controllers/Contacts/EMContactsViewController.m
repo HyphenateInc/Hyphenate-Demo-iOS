@@ -53,12 +53,8 @@
     [self setupNavigationItem:self.navigationItem];
     [self reloadGroupNotifications];
     [self reloadContactRequests];
-    [self loadContactsFromServer];
     
-    WEAK_SELF
-    self.headerRefresh = ^(BOOL isRefreshing){
-        [weakSelf loadContactsFromServer];
-    };
+    [self tableViewDidTriggerHeaderRefresh];
 }
 
 - (void)setupNavigationItem:(UINavigationItem *)navigationItem {
@@ -74,28 +70,33 @@
     navigationItem.titleView = self.searchBar;
 }
 
-- (void)loadContactsFromServer {
+- (void)tableViewDidTriggerHeaderRefresh {
     if (_isSearchState) {
-        [self endHeaderRefresh];
+        [self tableViewDidFinishTriggerHeader:YES];
         return;
     }
+    
     WEAK_SELF
     [[EMClient sharedClient].contactManager getContactsFromServerWithCompletion:^(NSArray *aList, EMError *aError) {
         if (!aError) {
             dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), ^(){
                 [weakSelf updateContacts:aList];
+                
+                [weakSelf tableViewDidFinishTriggerHeader:YES];
                 dispatch_async(dispatch_get_main_queue(), ^(){
                     [weakSelf.tableView reloadData];
-                    [weakSelf endHeaderRefresh];
                 });
             });
         }
         else {
-            dispatch_async(dispatch_get_main_queue(), ^(){
-                [weakSelf endHeaderRefresh];
-            });
+            [weakSelf tableViewDidFinishTriggerHeader:YES];
         }
     }];
+}
+
+- (void)loadContactsFromServer
+{
+    [self tableViewDidTriggerHeaderRefresh];
 }
 
 - (void)reloadContacts {

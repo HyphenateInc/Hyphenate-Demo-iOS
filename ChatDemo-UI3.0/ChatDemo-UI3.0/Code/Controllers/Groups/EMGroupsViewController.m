@@ -25,13 +25,12 @@
 
 - (void)viewDidLoad {
     [super viewDidLoad];
+    
     [self setupNavBar];
-    [self loadGroupsFromServer];
     [self addNotifications];
-    WEAK_SELF
-    self.headerRefresh = ^(BOOL isRefreshing){
-        [weakSelf loadGroupsFromServer];
-    };
+    
+    self.tableView.tableFooterView = [[UIView alloc] init];
+    [self tableViewDidTriggerHeaderRefresh];
 }
 
 - (void)dealloc {
@@ -58,11 +57,13 @@
     [self.navigationItem setLeftBarButtonItem:leftBar];
 }
 
-- (void)loadGroupsFromServer {
+- (void)tableViewDidTriggerHeaderRefresh
+{
     __weak typeof(self) weakSelf = self;
     [MBProgressHUD showHUDAddedTo:[UIApplication sharedApplication].keyWindow animated:YES];
     [[EMClient sharedClient].groupManager getJoinedGroupsFromServerWithCompletion:^(NSArray *aList, EMError *aError) {
         [MBProgressHUD hideHUDForView:[UIApplication sharedApplication].keyWindow animated:YES];
+        [weakSelf tableViewDidFinishTriggerHeader:YES];
         if (!aError && aList.count > 0) {
             
             [weakSelf.groups removeAllObjects];
@@ -73,16 +74,14 @@
                 }
             }
             dispatch_async(dispatch_get_main_queue(), ^(){
-                [weakSelf endHeaderRefresh];
                 [weakSelf.tableView reloadData];
             });
         }
-        else {
-            dispatch_async(dispatch_get_main_queue(), ^(){
-                [weakSelf endHeaderRefresh];
-            });
-        }
     }];
+}
+
+- (void)loadGroupsFromServer {
+    [self tableViewDidTriggerHeaderRefresh];
 }
 
 - (void)loadGroupsFromCache {
@@ -94,7 +93,7 @@
             [self.groups addObject:model];
         }
     }
-    [self endHeaderRefresh];
+    [self tableViewDidFinishTriggerHeader:YES];
     [self.tableView reloadData];
 }
 
@@ -143,8 +142,6 @@
 }
 
 
-
-
 - (void)didReceiveMemoryWarning {
     [super didReceiveMemoryWarning];
     // Dispose of any resources that can be recreated.
@@ -179,7 +176,6 @@
     [tableView deselectRowAtIndexPath:indexPath animated:YES];
     EMGroupModel *model = _groups[indexPath.row];
     EMChatViewController *chatViewController = [[EMChatViewController alloc] initWithConversationId:model.hyphenateId conversationType:EMConversationTypeGroupChat];
-//    EMGroupInfoViewController *groupInfoVc = [[EMGroupInfoViewController alloc] initWithGroup:model.group];
     [self.navigationController pushViewController:chatViewController animated:YES];
 }
 
