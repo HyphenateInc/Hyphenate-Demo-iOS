@@ -12,6 +12,7 @@
 "button.remove" = "Remove";
 "button.black" = "ToBlack";
 "button.mute" = "Mute";
+"button.demote" = "Demote";
 "button.more" = "Load More";
 "button.prompt" = "Prompt";
 "button.ok" = "OK";
@@ -35,6 +36,7 @@
 "title.create" = "Create";
 "title.transferOwner" = "Transfer Owner";
 "title.updateGroupName" = "Update Group Name";
+"title.occupantList" = "Occupant List";
 "title.adminList" = "Admin List";
 "title.blacklist" = "Blacklist";
 "title.muteList" = "Mute List";

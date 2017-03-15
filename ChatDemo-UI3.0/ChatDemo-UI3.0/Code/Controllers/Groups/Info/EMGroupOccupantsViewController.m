@@ -1,24 +1,26 @@
 //
-//  EMGroupMembersViewController.m
+//  EMGroupOccupantsViewController.m
 //  ChatDemo-UI3.0
 //
 //  Created by XieYajie on 06/01/2017.
 //  Copyright © 2017 XieYajie. All rights reserved.
 //
 
-#import "EMGroupMembersViewController.h"
+#import "EMGroupOccupantsViewController.h"
 
 #import "EMMemberCell.h"
 #import "UIViewController+HUD.h"
 
-@interface EMGroupMembersViewController ()
+@interface EMGroupOccupantsViewController ()
 
 @property (nonatomic, strong) EMGroup *group;
 @property (nonatomic, strong) NSString *cursor;
 
+@property (nonatomic, strong) NSMutableArray *ownerAndAdmins;
+
 @end
 
-@implementation EMGroupMembersViewController
+@implementation EMGroupOccupantsViewController
 
 - (instancetype)initWithGroup:(EMGroup *)aGroup
 {
@@ -33,7 +35,11 @@
 - (void)viewDidLoad {
     [super viewDidLoad];
     
-    self.title = NSLocalizedString(@"title.memberList", @"Member List");
+    self.title = NSLocalizedString(@"title.occupantList", @"Occupant List");
+    
+    _ownerAndAdmins = [[NSMutableArray alloc] init];
+    [_ownerAndAdmins addObjectsFromArray:@[@"001", @"002"]];
+    [self.dataArray addObjectsFromArray:@[@"003", @"004"]];
     
     UIButton *backButton = [[UIButton alloc] initWithFrame:CGRectMake(0, 0, 44, 44)];
     backButton.accessibilityIdentifier = @"back";
@@ -54,10 +60,15 @@
 #pragma mark - Table view data source
 
 - (NSInteger)numberOfSectionsInTableView:(UITableView *)tableView {
-    return 1;
+    return 2;
 }
 
 - (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section {
+    if (section == 0) {
+//        return [self.ownerAndAdmins count];
+        return 2;
+    }
+    
     return [self.dataArray count];
 }
 
@@ -65,22 +76,43 @@
     EMMemberCell *cell = (EMMemberCell *)[tableView dequeueReusableCellWithIdentifier:@"EMMemberCell"];
     if (cell == nil) {
         cell = [[[NSBundle mainBundle] loadNibNamed:@"EMMemberCell" owner:self options:nil] lastObject];
-        cell.showAccessoryViewInDelete = YES;
+        cell.selectionStyle = UITableViewCellSelectionStyleNone;
     }
     
     cell.imgView.image = [UIImage imageNamed:@"default_avatar"];
-    cell.leftLabel.text = [self.dataArray objectAtIndex:indexPath.row];
+    
+    NSInteger section = indexPath.section;
+    NSInteger row = indexPath.row;
+    cell.rightLabel.text = nil;
+    if (section == 0) {
+        cell.leftLabel.text = [self.ownerAndAdmins objectAtIndex:row];
+        if (row == 0) {
+            cell.showAccessoryViewInDelete = NO;
+            cell.rightLabel.text = @"owner";
+        } else {
+            cell.rightLabel.text = @"admin";
+        }
+    } else {
+        cell.showAccessoryViewInDelete = YES;
+        cell.leftLabel.text = [self.dataArray objectAtIndex:row];
+    }
     
     return cell;
 }
 
 - (BOOL)tableView:(UITableView *)tableView canEditRowAtIndexPath:(NSIndexPath *)indexPath
 {
+    NSInteger section = indexPath.section;
+    NSInteger row = indexPath.row;
+    if (section == 0 && row == 0) {
+        return NO;
+    }
+    
 //    if (self.group.permissionType == EMGroupPermissionTypeOwner || self.group.permissionType == EMGroupPermissionTypeAdmin) {
 //        return YES;
 //    }
     
-    return NO;
+    return YES;
 }
 
 - (nullable NSArray<UITableViewRowAction *> *)tableView:(UITableView *)tableView editActionsForRowAtIndexPath:(NSIndexPath *)indexPath
@@ -147,12 +179,47 @@
 - (void)tableViewDidTriggerHeaderRefresh
 {
     self.cursor = @"";
-    [self fetchMembersWithPage:self.page isHeader:YES];
+    [self fetchGroupInfo];
+//    [self fetchMembersWithPage:self.page isHeader:YES];
+    [self tableViewDidFinishTriggerHeader:YES];
 }
 
 - (void)tableViewDidTriggerFooterRefresh
 {
     [self fetchMembersWithPage:self.page isHeader:NO];
+}
+
+- (void)fetchGroupInfo
+{
+    //    __weak typeof(self) weakSelf = self;
+    //    [self showHudInView:self.view hint:NSLocalizedString(@"hud.load", @"Load data...")];
+    //    dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), ^(){
+    //        EMError *error = nil;
+    //        EMGroup *group = [[EMClient sharedClient].groupManager getGroupSpecificationFromServerWithId:weakSelf.groupId error:&error];
+    //        dispatch_async(dispatch_get_main_queue(), ^{
+    //            [weakSelf hideHud];
+    //        });
+    //
+    //        if (!error) {
+    //            weakSelf.group = group;
+    //            EMConversation *conversation = [[EMClient sharedClient].chatManager getConversation:group.groupId type:EMConversationTypeGroupChat createIfNotExist:YES];
+    //            if ([group.groupId isEqualToString:conversation.conversationId]) {
+    //                NSMutableDictionary *ext = [NSMutableDictionary dictionaryWithDictionary:conversation.ext];
+    //                [ext setObject:group.subject forKey:@"subject"];
+    //                [ext setObject:[NSNumber numberWithBool:group.isPublic] forKey:@"isPublic"];
+    //                conversation.ext = ext;
+    //            }
+    //
+    //            dispatch_async(dispatch_get_main_queue(), ^{
+    //                [weakSelf fetchGroupMembers];
+    //            });
+    //        }
+    //        else{
+    //            dispatch_async(dispatch_get_main_queue(), ^{
+    //                [weakSelf showHint:NSLocalizedString(@"group.fetchInfoFail", @"failed to get the group details, please try again later")];
+    //            });
+    //        }
+    //    });
 }
 
 - (void)fetchMembersWithPage:(NSInteger)aPage

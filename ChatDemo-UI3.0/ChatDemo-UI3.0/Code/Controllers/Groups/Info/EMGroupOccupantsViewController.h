@@ -1,5 +1,5 @@
 //
-//  EMGroupMembersViewController.h
+//  EMGroupOccupantsViewController.h
 //  ChatDemo-UI3.0
 //
 //  Created by XieYajie on 06/01/2017.
@@ -8,7 +8,7 @@
 
 #import "EMBaseRefreshTableController.h"
 
-@interface EMGroupMembersViewController : EMBaseRefreshTableController
+@interface EMGroupOccupantsViewController : EMBaseRefreshTableController
 
 - (instancetype)initWithGroup:(EMGroup *)aGroup;
 

@@ -66,7 +66,7 @@
     self.navigationItem.leftBarButtonItem = backItem;
     
     UIButton *doneButton = [[UIButton alloc] initWithFrame:CGRectMake(0, 0, 60, 50)];
-    [doneButton setTitle:NSLocalizedString(@"common.done", @"Done") forState:UIControlStateNormal];
+    [doneButton setTitle:NSLocalizedString(@"button.save", @"Save") forState:UIControlStateNormal];
     [doneButton addTarget:self action:@selector(doneAction) forControlEvents:UIControlEventTouchUpInside];
     UIBarButtonItem *doneItem = [[UIBarButtonItem alloc] initWithCustomView:doneButton];
     self.navigationItem.rightBarButtonItem = doneItem;

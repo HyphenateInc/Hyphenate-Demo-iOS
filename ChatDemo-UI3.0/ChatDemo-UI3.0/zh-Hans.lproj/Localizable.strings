@@ -12,6 +12,7 @@
 "button.remove" = "移除";
 "button.black" = "拉黑";
 "button.mute" = "禁言";
+"button.demote" = "降级";
 "button.more" = "查看更多";
 "button.prompt" = "警告";
 "button.ok" = "确定";
@@ -35,6 +36,7 @@
 "title.create" = "创建";
 "title.transferOwner" = "转让群主";
 "title.updateGroupName" = "更新群组名称";
+"title.occupantList" = "所有成员";
 "title.adminList" = "管理员列表";
 "title.blacklist" = "黑名单列表";
 "title.muteList" = "禁言列表";

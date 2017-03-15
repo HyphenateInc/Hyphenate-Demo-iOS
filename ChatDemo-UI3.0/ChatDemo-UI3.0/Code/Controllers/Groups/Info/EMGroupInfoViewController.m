@@ -14,10 +14,10 @@
 #import "EMUserModel.h"
 #import "EMAlertView.h"
 #import "EMMemberCell.h"
+#import "EMGroupOccupantsViewController.h"
 #import "EMGroupAdminsViewController.h"
 #import "EMGroupMutesViewController.h"
 #import "EMGroupBansViewController.h"
-#import "EMGroupMembersViewController.h"
 #import "EMGroupTransferOwnerViewController.h"
 #import "EMMemberSelectViewController.h"
 #import "EMGroupUpdateSubjectViewController.h"
@@ -420,8 +420,8 @@
 
 - (void)moreMemberAction
 {
-//    EMGroupMembersViewController *membersController = [[EMGroupMembersViewController alloc] initWithGroup:self.group];
-//    [self.navigationController pushViewController:membersController animated:YES];
+    EMGroupOccupantsViewController *allController = [[EMGroupOccupantsViewController alloc] initWithGroup:self.group];
+    [self.navigationController pushViewController:allController animated:YES];
 }
 
 - (void)clearMessagesAction

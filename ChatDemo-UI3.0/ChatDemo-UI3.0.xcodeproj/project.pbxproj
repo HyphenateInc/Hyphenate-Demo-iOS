@@ -17,7 +17,7 @@
 		3A79D10A1E77AAF40085AB6E /* EMGroupInfoViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 3A79D1091E77AAF40085AB6E /* EMGroupInfoViewController.m */; };
 		3A79D1151E77AB080085AB6E /* EMGroupAdminsViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 3A79D10C1E77AB080085AB6E /* EMGroupAdminsViewController.m */; };
 		3A79D1161E77AB080085AB6E /* EMGroupBansViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 3A79D10E1E77AB080085AB6E /* EMGroupBansViewController.m */; };
-		3A79D1171E77AB080085AB6E /* EMGroupMembersViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 3A79D1101E77AB080085AB6E /* EMGroupMembersViewController.m */; };
+		3A79D1171E77AB080085AB6E /* EMGroupOccupantsViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 3A79D1101E77AB080085AB6E /* EMGroupOccupantsViewController.m */; };
 		3A79D1181E77AB080085AB6E /* EMGroupMutesViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 3A79D1121E77AB080085AB6E /* EMGroupMutesViewController.m */; };
 		3A79D1191E77AB080085AB6E /* EMGroupTransferOwnerViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 3A79D1141E77AB080085AB6E /* EMGroupTransferOwnerViewController.m */; };
 		3A79D1211E77E4F80085AB6E /* EMGroupUpdateSubjectViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 3A79D1201E77E4F80085AB6E /* EMGroupUpdateSubjectViewController.m */; };
@@ -458,8 +458,8 @@
 		3A79D10C1E77AB080085AB6E /* EMGroupAdminsViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = EMGroupAdminsViewController.m; sourceTree = "<group>"; };
 		3A79D10D1E77AB080085AB6E /* EMGroupBansViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = EMGroupBansViewController.h; sourceTree = "<group>"; };
 		3A79D10E1E77AB080085AB6E /* EMGroupBansViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = EMGroupBansViewController.m; sourceTree = "<group>"; };
-		3A79D10F1E77AB080085AB6E /* EMGroupMembersViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = EMGroupMembersViewController.h; sourceTree = "<group>"; };
-		3A79D1101E77AB080085AB6E /* EMGroupMembersViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = EMGroupMembersViewController.m; sourceTree = "<group>"; };
+		3A79D10F1E77AB080085AB6E /* EMGroupOccupantsViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = EMGroupOccupantsViewController.h; sourceTree = "<group>"; };
+		3A79D1101E77AB080085AB6E /* EMGroupOccupantsViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = EMGroupOccupantsViewController.m; sourceTree = "<group>"; };
 		3A79D1111E77AB080085AB6E /* EMGroupMutesViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = EMGroupMutesViewController.h; sourceTree = "<group>"; };
 		3A79D1121E77AB080085AB6E /* EMGroupMutesViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = EMGroupMutesViewController.m; sourceTree = "<group>"; };
 		3A79D1131E77AB080085AB6E /* EMGroupTransferOwnerViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = EMGroupTransferOwnerViewController.h; sourceTree = "<group>"; };
@@ -1051,8 +1051,8 @@
 				3A79D10C1E77AB080085AB6E /* EMGroupAdminsViewController.m */,
 				3A79D10D1E77AB080085AB6E /* EMGroupBansViewController.h */,
 				3A79D10E1E77AB080085AB6E /* EMGroupBansViewController.m */,
-				3A79D10F1E77AB080085AB6E /* EMGroupMembersViewController.h */,
-				3A79D1101E77AB080085AB6E /* EMGroupMembersViewController.m */,
+				3A79D10F1E77AB080085AB6E /* EMGroupOccupantsViewController.h */,
+				3A79D1101E77AB080085AB6E /* EMGroupOccupantsViewController.m */,
 				3A79D1111E77AB080085AB6E /* EMGroupMutesViewController.h */,
 				3A79D1121E77AB080085AB6E /* EMGroupMutesViewController.m */,
 				3A79D1131E77AB080085AB6E /* EMGroupTransferOwnerViewController.h */,
@@ -2466,7 +2466,7 @@
 				D24327E51DAA395F00EDCDAB /* EMCDDeviceManagerBase.m in Sources */,
 				D285387B1DB1EBB50027D4E1 /* EMPushDisplaynameViewController.m in Sources */,
 				D24327F01DAA444C00EDCDAB /* UIView+HyphenateView.m in Sources */,
-				3A79D1171E77AB080085AB6E /* EMGroupMembersViewController.m in Sources */,
+				3A79D1171E77AB080085AB6E /* EMGroupOccupantsViewController.m in Sources */,
 				D243280D1DAE1A7300EDCDAB /* EMEmoji.m in Sources */,
 				D24327F41DAA44AC00EDCDAB /* EMSDKHelper.m in Sources */,
 				D2426AEB1DCCA70B009C1632 /* UIImageView+HeadImage.m in Sources */,
