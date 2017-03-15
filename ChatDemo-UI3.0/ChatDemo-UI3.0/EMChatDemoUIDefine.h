@@ -19,7 +19,7 @@
 
 #define KNOTIFICATION_LOGINCHANGE @"loginStateChange"
 #define KNOTIFICATION_UPDATEUNREADCOUNT @"setupUnreadMessageCount"
-
+#define KNOTIFICATIONNAME_DELETEALLMESSAGE @"RemoveAllMessages"
 #define KNOTIFICATION_CALL @"callOutWithChatter"
 
 #endif /* EMChatDemoUIDefine_h */

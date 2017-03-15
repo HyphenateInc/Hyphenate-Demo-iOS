@@ -90,6 +90,9 @@
     }
     
     [self setupViewLayout];
+    
+    
+    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(deleteAllMessages:) name:KNOTIFICATIONNAME_DELETEALLMESSAGE object:nil];
 }
 
 - (void)viewDidAppear:(BOOL)animated
@@ -656,8 +659,7 @@
 
 - (void)enterDetailView
 {
-    EMGroup *group = [EMGroup groupWithId:_conversation.conversationId];
-    EMGroupInfoViewController *groupInfoViewController = [[EMGroupInfoViewController alloc] initWithGroup:group];
+    EMGroupInfoViewController *groupInfoViewController = [[EMGroupInfoViewController alloc] initWithGroupId:_conversation.conversationId];
     [self.navigationController pushViewController:groupInfoViewController animated:YES];
     
 }
@@ -665,6 +667,24 @@
 - (void)backAction
 {
     [self.navigationController popViewControllerAnimated:YES];
+}
+
+- (void)deleteAllMessages:(id)sender
+{
+    if (self.dataSource.count == 0) {
+        return;
+    }
+    
+    if ([sender isKindOfClass:[NSNotification class]]) {
+        NSString *groupId = (NSString *)[(NSNotification *)sender object];
+        BOOL isDelete = [groupId isEqualToString:self.conversation.conversationId];
+        if (self.conversation.type != EMConversationTypeChat && isDelete) {
+            [self.conversation deleteAllMessages:nil];
+            [self.dataSource removeAllObjects];
+            
+            [self.tableView reloadData];
+        }
+    }
 }
 
 #pragma mark - GestureRecognizer

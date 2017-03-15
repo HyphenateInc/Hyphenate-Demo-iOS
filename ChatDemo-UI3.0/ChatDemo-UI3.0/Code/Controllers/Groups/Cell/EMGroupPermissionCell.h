@@ -9,13 +9,13 @@
 
 #import <UIKit/UIKit.h>
 
-typedef NS_ENUM(NSUInteger, EMGroupPermissionType) {
-    EMGroupPermissionType_groupType            =      0,
-    EMGroupPermissionType_canAllInvite,
-    EMGroupPermissionType_openJoin,
-    EMGroupPermissionType_mute,
-    EMGroupPermissionType_pushSetting,
-    EMGroupPermissionType_groupId
+typedef NS_ENUM(NSUInteger, EMGroupSettingType) {
+    EMGroupSettingType_groupType            =      0,
+    EMGroupSettingType_canAllInvite,
+    EMGroupSettingType_openJoin,
+    EMGroupSettingType_mute,
+    EMGroupSettingType_pushSetting,
+    EMGroupSettingType_groupId
 };
 @class EMGroupPermissionModel;
 
@@ -33,7 +33,7 @@ typedef NS_ENUM(NSUInteger, EMGroupPermissionType) {
 
 @interface EMGroupPermissionModel : NSObject
 
-@property (nonatomic, assign) EMGroupPermissionType type;
+@property (nonatomic, assign) EMGroupSettingType type;
 
 @property (nonatomic, assign) BOOL isEdit;
 

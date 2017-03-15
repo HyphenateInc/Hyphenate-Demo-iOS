@@ -102,14 +102,14 @@
     model.title = NSLocalizedString(@"group.isPublic", @"Appear in group search");
     model.isEdit = YES;
     model.switchState = NO;
-    model.type = EMGroupPermissionType_groupType;
+    model.type = EMGroupSettingType_groupType;
     [_groupPermissions addObject:model];
     
     model = [[EMGroupPermissionModel alloc] init];
     model.title = NSLocalizedString(@"group.allowedOccupantInvite", @"Allow members to invite");
     model.isEdit = YES;
     model.switchState = NO;
-    model.type = EMGroupPermissionType_canAllInvite;
+    model.type = EMGroupSettingType_canAllInvite;
     [_groupPermissions addObject:model];
 }
 
@@ -121,11 +121,11 @@
     model = _groupPermissions.lastObject;
     if (_isPublic) {
         model.title = NSLocalizedString(@"group.openJoin", @"Join the group freely");
-        model.type = EMGroupPermissionType_openJoin;
+        model.type = EMGroupSettingType_openJoin;
     }
     else {
         model.title = NSLocalizedString(@"group.allowedOccupantInvite", @"Allow members to invite");
-        model.type = EMGroupPermissionType_canAllInvite;
+        model.type = EMGroupSettingType_canAllInvite;
     }
     [_groupPermissions replaceObjectAtIndex:1 withObject:model];
     [self.tableView reloadData];
@@ -214,7 +214,7 @@
 }
 
 - (void)permissionSelectAction:(UISwitch *)permissionSwitch {
-    if (permissionSwitch.tag == EMGroupPermissionType_groupType) {
+    if (permissionSwitch.tag == EMGroupSettingType_groupType) {
         _isPublic = permissionSwitch.isOn;
         [self updatePermission];
     }
@@ -298,7 +298,7 @@
 - (void)collectionView:(UICollectionView *)collectionView didSelectItemAtIndexPath:(NSIndexPath *)indexPath {
     [collectionView deselectItemAtIndexPath:indexPath animated:YES];
     if (indexPath.section == 0) {
-        EMMemberSelectViewController *selectVc = [[EMMemberSelectViewController alloc] initWithInvitees:_invitees];
+        EMMemberSelectViewController *selectVc = [[EMMemberSelectViewController alloc] initWithInvitees:_invitees maxInviteCount:0];
         selectVc.style = EMContactSelectStyle_Add;
         UINavigationController *nav = [[UINavigationController alloc] initWithRootViewController:selectVc];
         selectVc.title = NSLocalizedString(@"title.addParticipants", @"Add Participants");
