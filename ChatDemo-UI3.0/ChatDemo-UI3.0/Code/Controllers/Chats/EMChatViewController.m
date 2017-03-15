@@ -75,7 +75,7 @@
     self.chatToolBar.delegate = self;
     [self tableViewDidTriggerHeaderRefresh];
     
-    [[EMClient sharedClient].chatManager addDelegate:self];
+    [[EMClient sharedClient].chatManager addDelegate:self delegateQueue:nil];
     
     if (_conversation.type == EMConversationTypeChat) {
         self.navigationItem.leftBarButtonItem = [[UIBarButtonItem alloc] initWithCustomView:self.backButton];

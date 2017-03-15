@@ -20,7 +20,10 @@
     
     NSString * _audioCategory;
 }
+
 @property (nonatomic, strong) UITapGestureRecognizer *tapRecognizer;
+
+@property (nonatomic, strong) AVAudioPlayer *ringPlayer;
 
 
 @end
@@ -55,12 +58,19 @@
 - (void)viewDidLoad
 {
     [super viewDidLoad];
+    
     [self setupSubViews];
     
+    [self _beginRing];
 }
 
+- (void)dealloc
+{
+    [self _stopRing];
+}
 
 #pragma mark - Tap hide video actions
+
 - (UITapGestureRecognizer *)tapRecognizer
 {
     if (!_tapRecognizer) {
@@ -152,6 +162,7 @@
 
 - (void)reloadConnectedUI
 {
+    [self _stopRing];
     self.statusLabel.hidden = YES;
     self.timeLabel.hidden = NO;
     [self startTimer];
@@ -199,6 +210,7 @@
 
 - (void)reloadCallDisconnectedUI
 {
+    [self _stopRing];
     self.statusLabel.hidden = NO;
     self.speakerOutButton.enabled = NO;
     self.silenceButton.enabled = NO;
@@ -270,6 +282,8 @@
 
 - (IBAction)cancelCallAction:(UIButton *)sender
 {
+    [self _stopRing];
+    
     if (_isCaller) {
         
         [self close];
@@ -287,6 +301,8 @@
 }
 
 - (IBAction)answerCallAction:(UIButton *)sender {
+    
+    [self _stopRing];
     
     if (_isCaller) {
         
@@ -313,6 +329,8 @@
 
 - (void)close
 {
+    [self _stopRing];
+    
     _callSession.remoteVideoView.hidden = YES;
     _callSession = nil;
     
@@ -328,6 +346,27 @@
         [self dismissViewControllerAnimated:YES completion:nil];
     });
     
+}
+
+#pragma mark - ring
+
+- (void)_beginRing
+{
+    NSString *musicPath = [[NSBundle mainBundle] pathForResource:@"callRing" ofType:@"mp3"];
+    NSURL *url = [[NSURL alloc] initFileURLWithPath:musicPath];
+    
+    self.ringPlayer = [[AVAudioPlayer alloc] initWithContentsOfURL:url error:nil];
+    [self.ringPlayer setVolume:1];
+    self.ringPlayer.numberOfLoops = -1;
+    if([self.ringPlayer prepareToPlay]) {
+        [self.ringPlayer play];
+    }
+}
+
+- (void)_stopRing
+{
+    [self.ringPlayer stop];
+    self.ringPlayer = nil;
 }
 
 #pragma mark - Timer reload time

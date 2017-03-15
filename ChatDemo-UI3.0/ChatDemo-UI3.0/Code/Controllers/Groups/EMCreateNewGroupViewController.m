@@ -102,14 +102,14 @@
     model.title = NSLocalizedString(@"group.isPublic", @"Appear in group search");
     model.isEdit = YES;
     model.switchState = NO;
-    model.type = EMGroupSettingType_groupType;
+    model.type = EMGroupInfoType_groupType;
     [_groupPermissions addObject:model];
     
     model = [[EMGroupPermissionModel alloc] init];
     model.title = NSLocalizedString(@"group.allowedOccupantInvite", @"Allow members to invite");
     model.isEdit = YES;
     model.switchState = NO;
-    model.type = EMGroupSettingType_canAllInvite;
+    model.type = EMGroupInfoType_canAllInvite;
     [_groupPermissions addObject:model];
 }
 
@@ -121,11 +121,11 @@
     model = _groupPermissions.lastObject;
     if (_isPublic) {
         model.title = NSLocalizedString(@"group.openJoin", @"Join the group freely");
-        model.type = EMGroupSettingType_openJoin;
+        model.type = EMGroupInfoType_openJoin;
     }
     else {
         model.title = NSLocalizedString(@"group.allowedOccupantInvite", @"Allow members to invite");
-        model.type = EMGroupSettingType_canAllInvite;
+        model.type = EMGroupInfoType_canAllInvite;
     }
     [_groupPermissions replaceObjectAtIndex:1 withObject:model];
     [self.tableView reloadData];
@@ -214,7 +214,7 @@
 }
 
 - (void)permissionSelectAction:(UISwitch *)permissionSwitch {
-    if (permissionSwitch.tag == EMGroupSettingType_groupType) {
+    if (permissionSwitch.tag == EMGroupInfoType_groupType) {
         _isPublic = permissionSwitch.isOn;
         [self updatePermission];
     }
