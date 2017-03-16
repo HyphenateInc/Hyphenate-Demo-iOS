@@ -41,6 +41,7 @@
 "title.blacklist" = "Blacklist";
 "title.muteList" = "Mute List";
 "title.inviteContacts" = "Invite Contacts";
+"title.addAdmin" = "Add Admin";
 
 //setting title
 "title.setting.about" = "About";

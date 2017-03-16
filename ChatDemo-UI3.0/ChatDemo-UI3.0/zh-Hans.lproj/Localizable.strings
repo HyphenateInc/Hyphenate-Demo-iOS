@@ -41,6 +41,7 @@
 "title.blacklist" = "黑名单列表";
 "title.muteList" = "禁言列表";
 "title.inviteContacts" = "邀请联系人";
+"title.addAdmin" = "添加管理员";
 
 //setting title
 "title.setting.about" = "关于";

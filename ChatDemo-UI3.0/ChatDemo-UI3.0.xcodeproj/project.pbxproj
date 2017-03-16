@@ -21,6 +21,12 @@
 		3A79D1181E77AB080085AB6E /* EMGroupMutesViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 3A79D1121E77AB080085AB6E /* EMGroupMutesViewController.m */; };
 		3A79D1191E77AB080085AB6E /* EMGroupTransferOwnerViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 3A79D1141E77AB080085AB6E /* EMGroupTransferOwnerViewController.m */; };
 		3A79D1211E77E4F80085AB6E /* EMGroupUpdateSubjectViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 3A79D1201E77E4F80085AB6E /* EMGroupUpdateSubjectViewController.m */; };
+		3AA9B43A1E7A4C2D0093AD25 /* EMAddAdminViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 3AA9B4391E7A4C2D0093AD25 /* EMAddAdminViewController.m */; };
+		3AA9B43C1E7A54100093AD25 /* EMAddAdminViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 3AA9B43B1E7A54100093AD25 /* EMAddAdminViewController.xib */; };
+		3AA9B4411E7AA2FB0093AD25 /* oval@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 3AA9B43D1E7AA2FB0093AD25 /* oval@2x.png */; };
+		3AA9B4421E7AA2FB0093AD25 /* oval@3x.png in Resources */ = {isa = PBXBuildFile; fileRef = 3AA9B43E1E7AA2FB0093AD25 /* oval@3x.png */; };
+		3AA9B4431E7AA2FB0093AD25 /* Group3@3x.png in Resources */ = {isa = PBXBuildFile; fileRef = 3AA9B43F1E7AA2FB0093AD25 /* Group3@3x.png */; };
+		3AA9B4441E7AA2FB0093AD25 /* Group3@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 3AA9B4401E7AA2FB0093AD25 /* Group3@2x.png */; };
 		3AEBE3EA1E78F72C00B82986 /* EMAlertView.m in Sources */ = {isa = PBXBuildFile; fileRef = 3AEBE3E91E78F72C00B82986 /* EMAlertView.m */; };
 		3AEBE3EE1E792ED400B82986 /* EMGroupPermissionCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 3AEBE3EC1E792ED400B82986 /* EMGroupPermissionCell.m */; };
 		3AEBE3EF1E792ED400B82986 /* EMGroupPermissionCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = 3AEBE3ED1E792ED400B82986 /* EMGroupPermissionCell.xib */; };
@@ -466,6 +472,13 @@
 		3A79D1141E77AB080085AB6E /* EMGroupTransferOwnerViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = EMGroupTransferOwnerViewController.m; sourceTree = "<group>"; };
 		3A79D11F1E77E4F80085AB6E /* EMGroupUpdateSubjectViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = EMGroupUpdateSubjectViewController.h; sourceTree = "<group>"; };
 		3A79D1201E77E4F80085AB6E /* EMGroupUpdateSubjectViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = EMGroupUpdateSubjectViewController.m; sourceTree = "<group>"; };
+		3AA9B4381E7A4C2D0093AD25 /* EMAddAdminViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = EMAddAdminViewController.h; sourceTree = "<group>"; };
+		3AA9B4391E7A4C2D0093AD25 /* EMAddAdminViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = EMAddAdminViewController.m; sourceTree = "<group>"; };
+		3AA9B43B1E7A54100093AD25 /* EMAddAdminViewController.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = EMAddAdminViewController.xib; sourceTree = "<group>"; };
+		3AA9B43D1E7AA2FB0093AD25 /* oval@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "oval@2x.png"; sourceTree = "<group>"; };
+		3AA9B43E1E7AA2FB0093AD25 /* oval@3x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "oval@3x.png"; sourceTree = "<group>"; };
+		3AA9B43F1E7AA2FB0093AD25 /* Group3@3x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "Group3@3x.png"; sourceTree = "<group>"; };
+		3AA9B4401E7AA2FB0093AD25 /* Group3@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "Group3@2x.png"; sourceTree = "<group>"; };
 		3AEBE3E81E78F72C00B82986 /* EMAlertView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = EMAlertView.h; sourceTree = "<group>"; };
 		3AEBE3E91E78F72C00B82986 /* EMAlertView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = EMAlertView.m; sourceTree = "<group>"; };
 		3AEBE3EB1E792ED400B82986 /* EMGroupPermissionCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = EMGroupPermissionCell.h; sourceTree = "<group>"; };
@@ -1062,6 +1075,9 @@
 				3A79D1141E77AB080085AB6E /* EMGroupTransferOwnerViewController.m */,
 				3A79D1081E77AAF40085AB6E /* EMGroupInfoViewController.h */,
 				3A79D1091E77AAF40085AB6E /* EMGroupInfoViewController.m */,
+				3AA9B4381E7A4C2D0093AD25 /* EMAddAdminViewController.h */,
+				3AA9B4391E7A4C2D0093AD25 /* EMAddAdminViewController.m */,
+				3AA9B43B1E7A54100093AD25 /* EMAddAdminViewController.xib */,
 			);
 			path = Info;
 			sourceTree = "<group>";
@@ -1888,6 +1904,10 @@
 		D2BF7DF71D914DB20090AA66 /* Profile */ = {
 			isa = PBXGroup;
 			children = (
+				3AA9B43D1E7AA2FB0093AD25 /* oval@2x.png */,
+				3AA9B43E1E7AA2FB0093AD25 /* oval@3x.png */,
+				3AA9B43F1E7AA2FB0093AD25 /* Group3@3x.png */,
+				3AA9B4401E7AA2FB0093AD25 /* Group3@2x.png */,
 				3A79D1031E7797120085AB6E /* check@2x.png */,
 				3A79D1041E7797120085AB6E /* Button_AddUser@2x.png */,
 				3A79D0FF1E77970C0085AB6E /* shape_left@2x.png */,
@@ -2062,6 +2082,7 @@
 				D2BF7E2F1D914DB30090AA66 /* Icon_New chat.png in Resources */,
 				D2BF7E6E1D914DB30090AA66 /* Button_Mute active.png in Resources */,
 				D2BF7E551D914DB30090AA66 /* Button_Answer@3x.png in Resources */,
+				3AA9B4421E7AA2FB0093AD25 /* oval@3x.png in Resources */,
 				D2BF7E261D914DB30090AA66 /* Button_Decline.png in Resources */,
 				D2BF7EE31D914DB30090AA66 /* Chats_active.png in Resources */,
 				D2BF7E9B1D914DB30090AA66 /* Button_Record cancel.png in Resources */,
@@ -2199,6 +2220,7 @@
 				D2BF7E271D914DB30090AA66 /* Button_Decline@2x.png in Resources */,
 				D2BF7E3E1D914DB30090AA66 /* Toggle off.png in Resources */,
 				D2BF7F031D914DB30090AA66 /* Request accepted@3x.png in Resources */,
+				3AA9B4441E7AA2FB0093AD25 /* Group3@2x.png in Resources */,
 				D2BF7EB61D914DB30090AA66 /* Icon_Image.png in Resources */,
 				D2BF7F111D914DB30090AA66 /* logo11.png in Resources */,
 				D2BF7E891D914DB30090AA66 /* Icon_Check.png in Resources */,
@@ -2238,6 +2260,7 @@
 				D2BF7F131D914DB30090AA66 /* logo11@3x.png in Resources */,
 				D22B7A301DB0F93300C8DD40 /* iconCall.png in Resources */,
 				D2BF7E371D914DB30090AA66 /* Icon_Requests@3x.png in Resources */,
+				3AA9B4411E7AA2FB0093AD25 /* oval@2x.png in Resources */,
 				D2835FF31D94EDB400EC7A4A /* icon_emoji_disable@2x.png in Resources */,
 				D2BF7ECF1D914DB30090AA66 /* Icon_Clear@2x.png in Resources */,
 				D2BF7F271D914DB30090AA66 /* logo7@3x.png in Resources */,
@@ -2365,8 +2388,10 @@
 				D2BF7ED01D914DB30090AA66 /* Icon_Clear@3x.png in Resources */,
 				7166346E1DB0EF9200C92E27 /* EMMemberSelectViewController.xib in Resources */,
 				D2BF7E6A1D914DB30090AA66 /* Button_Minimize disabled@3x.png in Resources */,
+				3AA9B43C1E7A54100093AD25 /* EMAddAdminViewController.xib in Resources */,
 				D2BF7E741D914DB30090AA66 /* Button_Mute.png in Resources */,
 				D2BF7F231D914DB30090AA66 /* logo6@2x.png in Resources */,
+				3AA9B4431E7AA2FB0093AD25 /* Group3@3x.png in Resources */,
 				D2BF7EB91D914DB30090AA66 /* Icon_Location.png in Resources */,
 				D2BF7EA11D914DB30090AA66 /* Disabled.png in Resources */,
 				714E9DC91DD32DAA009D1E2D /* default_group_avatar@2x.png in Resources */,
@@ -2471,6 +2496,7 @@
 				3AEBE3F11E792FB000B82986 /* AppDelegate.m in Sources */,
 				D24327E51DAA395F00EDCDAB /* EMCDDeviceManagerBase.m in Sources */,
 				D285387B1DB1EBB50027D4E1 /* EMPushDisplaynameViewController.m in Sources */,
+				3AA9B43A1E7A4C2D0093AD25 /* EMAddAdminViewController.m in Sources */,
 				D24327F01DAA444C00EDCDAB /* UIView+HyphenateView.m in Sources */,
 				3A79D1171E77AB080085AB6E /* EMGroupOccupantsViewController.m in Sources */,
 				D243280D1DAE1A7300EDCDAB /* EMEmoji.m in Sources */,

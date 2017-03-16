@@ -10,6 +10,7 @@
 
 #import "EMMemberCell.h"
 #import "UIViewController+HUD.h"
+#import "EMAddAdminViewController.h"
 
 @interface EMGroupAdminsViewController ()
 
@@ -33,22 +34,32 @@
 - (void)viewDidLoad {
     [super viewDidLoad];
     
-    self.title = NSLocalizedString(@"title.adminList", @"Admin List");
-    
-    UIButton *backButton = [[UIButton alloc] initWithFrame:CGRectMake(0, 0, 44, 44)];
-    backButton.accessibilityIdentifier = @"back";
-    [backButton setImage:[UIImage imageNamed:@"Icon_Back"] forState:UIControlStateNormal];
-    [backButton addTarget:self.navigationController action:@selector(popViewControllerAnimated:) forControlEvents:UIControlEventTouchUpInside];
-    UIBarButtonItem *backItem = [[UIBarButtonItem alloc] initWithCustomView:backButton];
-    [self.navigationItem setLeftBarButtonItem:backItem];
-    
-    self.showRefreshHeader = YES;
+    [self _setupNavigationBar];
     [self.tableView reloadData];
 }
 
 - (void)didReceiveMemoryWarning {
     [super didReceiveMemoryWarning];
     // Dispose of any resources that can be recreated.
+}
+
+#pragma mark - Navigation Bar
+
+- (void)_setupNavigationBar
+{
+    self.title = NSLocalizedString(@"title.adminList", @"Admin List");
+    
+    UIButton *backButton = [[UIButton alloc] initWithFrame:CGRectMake(0, 0, 50, 50)];
+    [backButton setImage:[UIImage imageNamed:@"Icon_Back"] forState:UIControlStateNormal];
+    [backButton addTarget:self.navigationController action:@selector(popViewControllerAnimated:) forControlEvents:UIControlEventTouchUpInside];
+    UIBarButtonItem *backItem = [[UIBarButtonItem alloc] initWithCustomView:backButton];
+    self.navigationItem.leftBarButtonItem = backItem;
+    
+    UIButton *addButton = [[UIButton alloc] initWithFrame:CGRectMake(0, 0, 60, 50)];
+    [addButton setImage:[UIImage imageNamed:@"Icon_Add"] forState:UIControlStateNormal];
+    [addButton addTarget:self action:@selector(addAdminAction) forControlEvents:UIControlEventTouchUpInside];
+    UIBarButtonItem *addItem = [[UIBarButtonItem alloc] initWithCustomView:addButton];
+    self.navigationItem.rightBarButtonItem = addItem;
 }
 
 #pragma mark - Table view data source
@@ -140,6 +151,12 @@
 //            }
 //        });
     });
+}
+
+- (void)addAdminAction
+{
+    EMAddAdminViewController *addController = [[EMAddAdminViewController alloc] initWithGroupId:self.group.groupId];
+    [self.navigationController pushViewController:addController animated:YES];
 }
 
 #pragma mark - data
