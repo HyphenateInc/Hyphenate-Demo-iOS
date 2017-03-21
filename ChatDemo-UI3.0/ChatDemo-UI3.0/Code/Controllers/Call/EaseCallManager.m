@@ -9,7 +9,7 @@
 
 #import "EaseCallManager.h"
 
-@interface EaseCallManager()<EMCallManagerDelegate>
+@interface EaseCallManager()<EMCallManagerDelegate, EMCallBuilderDelegate>
 {
     NSTimer *_callTimer;
 }
@@ -34,6 +34,7 @@ static EaseCallManager *callManager = nil;
     self = [super init];
     if (self) {
         [[EMClient sharedClient].callManager addDelegate:self delegateQueue:nil];
+        [[EMClient sharedClient].callManager setBuilderDelegate:self];
         EMCallOptions *options = [[EMClient sharedClient].callManager getCallOptions];
         [options setIsSendPushIfOffline:[[[NSUserDefaults standardUserDefaults] objectForKey:@"callPushChanged"] boolValue]];
         [[EMClient sharedClient].callManager setCallOptions:options];
@@ -273,8 +274,18 @@ static EaseCallManager *callManager = nil;
     }
 }
 
+#pragma mark - EMCallBuilderDelegate
 
-
+- (void)callRemoteOffline:(NSString *)aRemoteName
+{
+    NSString *text = [[EMClient sharedClient].callManager getCallOptions].offlineMessageText;
+    EMTextMessageBody *body = [[EMTextMessageBody alloc] initWithText:text];
+    NSString *fromStr = [EMClient sharedClient].currentUsername;
+    EMMessage *message = [[EMMessage alloc] initWithConversationID:aRemoteName from:fromStr to:aRemoteName body:body ext:@{@"em_apns_ext":@{@"em_push_title":text}}];
+    message.chatType = EMChatTypeChat;
+    
+    [[EMClient sharedClient].chatManager sendMessage:message progress:nil completion:nil];
+}
 
 
 - (void)dealloc

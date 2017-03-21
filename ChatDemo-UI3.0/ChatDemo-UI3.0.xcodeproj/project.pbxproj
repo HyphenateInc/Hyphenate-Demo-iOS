@@ -8,6 +8,14 @@
 
 /* Begin PBXBuildFile section */
 		30E5DE31A68CB65C97673D9B /* libPods-ChatDemo-UI3.0.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 6CD1B189658F9B85B7BFA9CD /* libPods-ChatDemo-UI3.0.a */; };
+		3A7DFC681E6EA1200041322F /* EaseCallManager.m in Sources */ = {isa = PBXBuildFile; fileRef = 3A7DFC5D1E6EA1200041322F /* EaseCallManager.m */; };
+		3A7DFC691E6EA1200041322F /* EaseCallView_Video.xib in Resources */ = {isa = PBXBuildFile; fileRef = 3A7DFC5E1E6EA1200041322F /* EaseCallView_Video.xib */; };
+		3A7DFC6A1E6EA1200041322F /* EaseCallView_Voice.xib in Resources */ = {isa = PBXBuildFile; fileRef = 3A7DFC5F1E6EA1200041322F /* EaseCallView_Voice.xib */; };
+		3A7DFC6B1E6EA1200041322F /* EaseCallViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 3A7DFC611E6EA1200041322F /* EaseCallViewController.m */; };
+		3A7DFC6C1E6EA1200041322F /* EaseVideoInfoViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 3A7DFC631E6EA1200041322F /* EaseVideoInfoViewController.m */; };
+		3A7DFC6D1E6EA1200041322F /* EaseVideoInfoViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 3A7DFC641E6EA1200041322F /* EaseVideoInfoViewController.xib */; };
+		3A7DFC6E1E6EA1200041322F /* EaseVideoInfoViewController.strings in Resources */ = {isa = PBXBuildFile; fileRef = 3A7DFC651E6EA1200041322F /* EaseVideoInfoViewController.strings */; };
+		3A7DFC701E6EA1330041322F /* callRing.mp3 in Resources */ = {isa = PBXBuildFile; fileRef = 3A7DFC6F1E6EA1330041322F /* callRing.mp3 */; };
 		711159011DB7278B005158BB /* NSArray+EMSortContacts.m in Sources */ = {isa = PBXBuildFile; fileRef = 711159001DB7278B005158BB /* NSArray+EMSortContacts.m */; };
 		7140373D1DCEA2E90041353D /* NSObject+EMAlertView.m in Sources */ = {isa = PBXBuildFile; fileRef = 7140373C1DCEA2E90041353D /* NSObject+EMAlertView.m */; };
 		714E9DC31DD32B0A009D1E2D /* default_avatar.png in Resources */ = {isa = PBXBuildFile; fileRef = 714E9DC11DD32B0A009D1E2D /* default_avatar.png */; };
@@ -160,11 +168,6 @@
 		D285387A1DB1EBB50027D4E1 /* EMChatsSettingViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = D28538701DB1EBB50027D4E1 /* EMChatsSettingViewController.m */; };
 		D285387B1DB1EBB50027D4E1 /* EMPushDisplaynameViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = D28538721DB1EBB50027D4E1 /* EMPushDisplaynameViewController.m */; };
 		D285387C1DB1EBB50027D4E1 /* EMPushNotificationViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = D28538741DB1EBB50027D4E1 /* EMPushNotificationViewController.m */; };
-		D28538871DB1EBD80027D4E1 /* EaseCallManager.m in Sources */ = {isa = PBXBuildFile; fileRef = D285387F1DB1EBD80027D4E1 /* EaseCallManager.m */; };
-		D28538881DB1EBD80027D4E1 /* EaseCallView_Video.xib in Resources */ = {isa = PBXBuildFile; fileRef = D28538801DB1EBD80027D4E1 /* EaseCallView_Video.xib */; };
-		D28538891DB1EBD80027D4E1 /* EaseCallView_Voice.xib in Resources */ = {isa = PBXBuildFile; fileRef = D28538811DB1EBD80027D4E1 /* EaseCallView_Voice.xib */; };
-		D285388A1DB1EBD80027D4E1 /* EaseCallViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = D28538831DB1EBD80027D4E1 /* EaseCallViewController.m */; };
-		D285388B1DB1EBD80027D4E1 /* EaseVideoInfoViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = D28538851DB1EBD80027D4E1 /* EaseVideoInfoViewController.m */; };
 		D285388D1DB20BBE0027D4E1 /* EMMainViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = D283452D1D90042F00FD48A9 /* EMMainViewController.m */; };
 		D285388E1DB20BC60027D4E1 /* EMLaunchViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = D2BF7CC51D91306A0090AA66 /* EMLaunchViewController.m */; };
 		D285388F1DB20BD90027D4E1 /* EMChatsViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = D28345481D900B2700FD48A9 /* EMChatsViewController.m */; };
@@ -174,7 +177,6 @@
 		D29502691DB87932001B9954 /* EMLoginViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = D295026B1DB87932001B9954 /* EMLoginViewController.xib */; };
 		D29502711DB9D13E001B9954 /* EMMessageTextView.m in Sources */ = {isa = PBXBuildFile; fileRef = D29502701DB9D13E001B9954 /* EMMessageTextView.m */; };
 		D29502741DBB2BF3001B9954 /* EMMessageModel.m in Sources */ = {isa = PBXBuildFile; fileRef = D29502731DBB2BF3001B9954 /* EMMessageModel.m */; };
-		D2A9BED81DD9CFFD00C7A497 /* EaseVideoInfoViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = D2A9BED71DD9CFFD00C7A497 /* EaseVideoInfoViewController.xib */; };
 		D2AA4DD01D9227A400967E0E /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = D2AA4DCE1D9227A400967E0E /* Main.storyboard */; };
 		D2AA4DEA1D9271A600967E0E /* EMChatsCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = D2AA4DE91D9271A600967E0E /* EMChatsCell.xib */; };
 		D2AA4DED1D92746800967E0E /* EMChatsCell.m in Sources */ = {isa = PBXBuildFile; fileRef = D2AA4DEC1D92746800967E0E /* EMChatsCell.m */; };
@@ -433,6 +435,18 @@
 
 /* Begin PBXFileReference section */
 		1633BADC43B42D35B0A0969D /* Pods-ChatDemo-UI3.0.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-ChatDemo-UI3.0.debug.xcconfig"; path = "Pods/Target Support Files/Pods-ChatDemo-UI3.0/Pods-ChatDemo-UI3.0.debug.xcconfig"; sourceTree = "<group>"; };
+		3A7DFC5C1E6EA1200041322F /* EaseCallManager.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = EaseCallManager.h; sourceTree = "<group>"; };
+		3A7DFC5D1E6EA1200041322F /* EaseCallManager.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = EaseCallManager.m; sourceTree = "<group>"; };
+		3A7DFC5E1E6EA1200041322F /* EaseCallView_Video.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = EaseCallView_Video.xib; sourceTree = "<group>"; };
+		3A7DFC5F1E6EA1200041322F /* EaseCallView_Voice.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = EaseCallView_Voice.xib; sourceTree = "<group>"; };
+		3A7DFC601E6EA1200041322F /* EaseCallViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = EaseCallViewController.h; sourceTree = "<group>"; };
+		3A7DFC611E6EA1200041322F /* EaseCallViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = EaseCallViewController.m; sourceTree = "<group>"; };
+		3A7DFC621E6EA1200041322F /* EaseVideoInfoViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = EaseVideoInfoViewController.h; sourceTree = "<group>"; };
+		3A7DFC631E6EA1200041322F /* EaseVideoInfoViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = EaseVideoInfoViewController.m; sourceTree = "<group>"; };
+		3A7DFC641E6EA1200041322F /* EaseVideoInfoViewController.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = EaseVideoInfoViewController.xib; sourceTree = "<group>"; };
+		3A7DFC661E6EA1200041322F /* en */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = en; path = en.lproj/EaseVideoInfoViewController.strings; sourceTree = "<group>"; };
+		3A7DFC671E6EA1200041322F /* zh-Hans */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = "zh-Hans"; path = "zh-Hans.lproj/EaseVideoInfoViewController.strings"; sourceTree = "<group>"; };
+		3A7DFC6F1E6EA1330041322F /* callRing.mp3 */ = {isa = PBXFileReference; lastKnownFileType = audio.mp3; path = callRing.mp3; sourceTree = "<group>"; };
 		6CD1B189658F9B85B7BFA9CD /* libPods-ChatDemo-UI3.0.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = "libPods-ChatDemo-UI3.0.a"; sourceTree = BUILT_PRODUCTS_DIR; };
 		711158FF1DB7278B005158BB /* NSArray+EMSortContacts.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "NSArray+EMSortContacts.h"; sourceTree = "<group>"; };
 		711159001DB7278B005158BB /* NSArray+EMSortContacts.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "NSArray+EMSortContacts.m"; sourceTree = "<group>"; };
@@ -687,14 +701,6 @@
 		D28538721DB1EBB50027D4E1 /* EMPushDisplaynameViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = EMPushDisplaynameViewController.m; sourceTree = "<group>"; };
 		D28538731DB1EBB50027D4E1 /* EMPushNotificationViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = EMPushNotificationViewController.h; sourceTree = "<group>"; };
 		D28538741DB1EBB50027D4E1 /* EMPushNotificationViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = EMPushNotificationViewController.m; sourceTree = "<group>"; };
-		D285387E1DB1EBD80027D4E1 /* EaseCallManager.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = EaseCallManager.h; sourceTree = "<group>"; };
-		D285387F1DB1EBD80027D4E1 /* EaseCallManager.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = EaseCallManager.m; sourceTree = "<group>"; };
-		D28538801DB1EBD80027D4E1 /* EaseCallView_Video.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = EaseCallView_Video.xib; sourceTree = "<group>"; };
-		D28538811DB1EBD80027D4E1 /* EaseCallView_Voice.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = EaseCallView_Voice.xib; sourceTree = "<group>"; };
-		D28538821DB1EBD80027D4E1 /* EaseCallViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = EaseCallViewController.h; sourceTree = "<group>"; };
-		D28538831DB1EBD80027D4E1 /* EaseCallViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = EaseCallViewController.m; sourceTree = "<group>"; };
-		D28538841DB1EBD80027D4E1 /* EaseVideoInfoViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = EaseVideoInfoViewController.h; sourceTree = "<group>"; };
-		D28538851DB1EBD80027D4E1 /* EaseVideoInfoViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = EaseVideoInfoViewController.m; sourceTree = "<group>"; };
 		D295026A1DB87932001B9954 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.xib; name = Base; path = Base.lproj/EMLoginViewController.xib; sourceTree = "<group>"; };
 		D295026C1DB8793A001B9954 /* en */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = en; path = en.lproj/EMLoginViewController.strings; sourceTree = "<group>"; };
 		D295026E1DB8793C001B9954 /* zh-Hans */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = "zh-Hans"; path = "zh-Hans.lproj/EMLoginViewController.strings"; sourceTree = "<group>"; };
@@ -702,7 +708,6 @@
 		D29502701DB9D13E001B9954 /* EMMessageTextView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = EMMessageTextView.m; sourceTree = "<group>"; };
 		D29502721DBB2BF3001B9954 /* EMMessageModel.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = EMMessageModel.h; sourceTree = "<group>"; };
 		D29502731DBB2BF3001B9954 /* EMMessageModel.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = EMMessageModel.m; sourceTree = "<group>"; };
-		D2A9BED71DD9CFFD00C7A497 /* EaseVideoInfoViewController.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = EaseVideoInfoViewController.xib; sourceTree = "<group>"; };
 		D2AA4DCF1D9227A400967E0E /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/Main.storyboard; sourceTree = "<group>"; };
 		D2AA4DE91D9271A600967E0E /* EMChatsCell.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = EMChatsCell.xib; sourceTree = "<group>"; };
 		D2AA4DEB1D92746800967E0E /* EMChatsCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = EMChatsCell.h; sourceTree = "<group>"; };
@@ -1010,6 +1015,24 @@
 				6CD1B189658F9B85B7BFA9CD /* libPods-ChatDemo-UI3.0.a */,
 			);
 			name = Frameworks;
+			sourceTree = "<group>";
+		};
+		3A7DFC5B1E6EA1200041322F /* Call */ = {
+			isa = PBXGroup;
+			children = (
+				3A7DFC6F1E6EA1330041322F /* callRing.mp3 */,
+				3A7DFC5C1E6EA1200041322F /* EaseCallManager.h */,
+				3A7DFC5D1E6EA1200041322F /* EaseCallManager.m */,
+				3A7DFC5E1E6EA1200041322F /* EaseCallView_Video.xib */,
+				3A7DFC5F1E6EA1200041322F /* EaseCallView_Voice.xib */,
+				3A7DFC601E6EA1200041322F /* EaseCallViewController.h */,
+				3A7DFC611E6EA1200041322F /* EaseCallViewController.m */,
+				3A7DFC621E6EA1200041322F /* EaseVideoInfoViewController.h */,
+				3A7DFC631E6EA1200041322F /* EaseVideoInfoViewController.m */,
+				3A7DFC641E6EA1200041322F /* EaseVideoInfoViewController.xib */,
+				3A7DFC651E6EA1200041322F /* EaseVideoInfoViewController.strings */,
+			);
+			path = Call;
 			sourceTree = "<group>";
 		};
 		716633E31DB0DE1F00C92E27 /* AddContact */ = {
@@ -1390,6 +1413,7 @@
 		D28345261D90029600FD48A9 /* Controllers */ = {
 			isa = PBXGroup;
 			children = (
+				3A7DFC5B1E6EA1200041322F /* Call */,
 				716634201DB0E86900C92E27 /* Groups */,
 				716634101DB0E1AB00C92E27 /* Base */,
 				D28345311D90048600FD48A9 /* Chats */,
@@ -1411,7 +1435,6 @@
 		D28345311D90048600FD48A9 /* Chats */ = {
 			isa = PBXGroup;
 			children = (
-				D285387D1DB1EBD80027D4E1 /* Call */,
 				D2AA4DE81D92712400967E0E /* Views */,
 				D28345471D900B2700FD48A9 /* EMChatsViewController.h */,
 				D28345481D900B2700FD48A9 /* EMChatsViewController.m */,
@@ -1468,22 +1491,6 @@
 				D28345441D90082700FD48A9 /* EMSettingsViewController.xib */,
 			);
 			path = Settings;
-			sourceTree = "<group>";
-		};
-		D285387D1DB1EBD80027D4E1 /* Call */ = {
-			isa = PBXGroup;
-			children = (
-				D2A9BED71DD9CFFD00C7A497 /* EaseVideoInfoViewController.xib */,
-				D285387E1DB1EBD80027D4E1 /* EaseCallManager.h */,
-				D285387F1DB1EBD80027D4E1 /* EaseCallManager.m */,
-				D28538801DB1EBD80027D4E1 /* EaseCallView_Video.xib */,
-				D28538811DB1EBD80027D4E1 /* EaseCallView_Voice.xib */,
-				D28538821DB1EBD80027D4E1 /* EaseCallViewController.h */,
-				D28538831DB1EBD80027D4E1 /* EaseCallViewController.m */,
-				D28538841DB1EBD80027D4E1 /* EaseVideoInfoViewController.h */,
-				D28538851DB1EBD80027D4E1 /* EaseVideoInfoViewController.m */,
-			);
-			path = Call;
 			sourceTree = "<group>";
 		};
 		D2AA4DE81D92712400967E0E /* Views */ = {
@@ -1976,6 +1983,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				D2BF7E671D914DB30090AA66 /* Button_End@3x.png in Resources */,
+				3A7DFC6A1E6EA1200041322F /* EaseCallView_Voice.xib in Resources */,
 				D2BF7F191D914DB30090AA66 /* logo3.png in Resources */,
 				714E9DCA1DD32DAA009D1E2D /* default_group_avatar@3x.png in Resources */,
 				D27AC3481DE3EF13002C6020 /* Icon_error_white.png in Resources */,
@@ -1987,7 +1995,6 @@
 				D2CAE2021D9A498B00B9A532 /* EMChatBaseCell.xib in Resources */,
 				D2BF7EA81D914DB30090AA66 /* Icon_Camera active@2x.png in Resources */,
 				D2BF7E2F1D914DB30090AA66 /* Icon_New chat.png in Resources */,
-				D28538891DB1EBD80027D4E1 /* EaseCallView_Voice.xib in Resources */,
 				D2BF7E6E1D914DB30090AA66 /* Button_Mute active.png in Resources */,
 				D2BF7E551D914DB30090AA66 /* Button_Answer@3x.png in Resources */,
 				D2BF7E261D914DB30090AA66 /* Button_Decline.png in Resources */,
@@ -2098,6 +2105,7 @@
 				D2BF7E491D914DB30090AA66 /* Button_Delete@3x.png in Resources */,
 				D2BF7EB31D914DB30090AA66 /* Icon_Image active.png in Resources */,
 				D2BF7E951D914DB30090AA66 /* Icon_Video.png in Resources */,
+				3A7DFC6E1E6EA1200041322F /* EaseVideoInfoViewController.strings in Resources */,
 				D2BF7F011D914DB30090AA66 /* Request accepted.png in Resources */,
 				D2835FFE1D94FFD800EC7A4A /* Icon_Location_disable.png in Resources */,
 				D22B7A341DB0F93300C8DD40 /* iconVideo@2x.png in Resources */,
@@ -2181,6 +2189,7 @@
 				D2BF7EAF1D914DB30090AA66 /* Icon_Emoji@3x.png in Resources */,
 				D2BF7F2C1D914DB30090AA66 /* logo9@2x.png in Resources */,
 				D2BF7E2D1D914DB30090AA66 /* Icon_Invitations@2x.png in Resources */,
+				3A7DFC691E6EA1200041322F /* EaseCallView_Video.xib in Resources */,
 				D2BF7EB01D914DB30090AA66 /* Icon_File.png in Resources */,
 				D2BF7E921D914DB30090AA66 /* Icon_Play.png in Resources */,
 				D2BF7EFC1D914DB30090AA66 /* Settings_active@2x.png in Resources */,
@@ -2193,7 +2202,6 @@
 				D2BF7F0B1D914DB30090AA66 /* Button_Video@2x.png in Resources */,
 				D2BF7ED21D914DB30090AA66 /* Icon_New@2x.png in Resources */,
 				D2BF7F1B1D914DB30090AA66 /* logo3@3x.png in Resources */,
-				D2A9BED81DD9CFFD00C7A497 /* EaseVideoInfoViewController.xib in Resources */,
 				D2BF7E9D1D914DB30090AA66 /* Button_Record cancel@3x.png in Resources */,
 				714E9DC41DD32B0A009D1E2D /* default_avatar@3x.png in Resources */,
 				D28360061D95009C00EC7A4A /* Icon_File_disable@3x.png in Resources */,
@@ -2213,7 +2221,6 @@
 				D2BF7EDA1D914DB30090AA66 /* Logo_green.png in Resources */,
 				D2BF7E9E1D914DB30090AA66 /* Button_Record.png in Resources */,
 				D2BF7E631D914DB30090AA66 /* Button_Current Location@2x.png in Resources */,
-				D28538881DB1EBD80027D4E1 /* EaseCallView_Video.xib in Resources */,
 				D2BF7F121D914DB30090AA66 /* logo11@2x.png in Resources */,
 				D2BF7E4B1D914DB30090AA66 /* Button_Radio Active@2x.png in Resources */,
 				D2BF7E8B1D914DB30090AA66 /* Icon_Check@3x.png in Resources */,
@@ -2222,6 +2229,7 @@
 				D2BF7F021D914DB30090AA66 /* Request accepted@2x.png in Resources */,
 				D20E26D71DCA011C00B3FAC6 /* icon_info.png in Resources */,
 				D2BF7E871D914DB30090AA66 /* Icon_Call@2x.png in Resources */,
+				3A7DFC701E6EA1330041322F /* callRing.mp3 in Resources */,
 				D2BF7F041D914DB30090AA66 /* Button_Call.png in Resources */,
 				D2BF7E291D914DB30090AA66 /* Button_Join.png in Resources */,
 				71D4A1FB1D9C9359006FACB7 /* EMContactInfoCell.xib in Resources */,
@@ -2263,6 +2271,7 @@
 				716633F61DB0DE5600C92E27 /* feedback.png in Resources */,
 				D2BF7F241D914DB30090AA66 /* logo6@3x.png in Resources */,
 				D2BF7EF51D914DB30090AA66 /* Settings.png in Resources */,
+				3A7DFC6D1E6EA1200041322F /* EaseVideoInfoViewController.xib in Resources */,
 				D2BF7E381D914DB30090AA66 /* Swipe_Delete.png in Resources */,
 				D2BF7E7B1D914DB30090AA66 /* Button_Speaker disabled@2x.png in Resources */,
 				D2BF7F0A1D914DB30090AA66 /* Button_Video.png in Resources */,
@@ -2383,8 +2392,8 @@
 				D285388E1DB20BC60027D4E1 /* EMLaunchViewController.m in Sources */,
 				D285388D1DB20BBE0027D4E1 /* EMMainViewController.m in Sources */,
 				D28538781DB1EBB50027D4E1 /* EMBaseSettingController.m in Sources */,
+				3A7DFC6B1E6EA1200041322F /* EaseCallViewController.m in Sources */,
 				D28538751DB1EBB50027D4E1 /* EMAboutViewController.m in Sources */,
-				D285388B1DB1EBD80027D4E1 /* EaseVideoInfoViewController.m in Sources */,
 				D24328101DAE1ABD00EDCDAB /* EMEmojiEmoticons.m in Sources */,
 				D24327E41DAA395F00EDCDAB /* EMCDDeviceManager+Remind.m in Sources */,
 				D2CAE20D1D9A8B1300B9A532 /* EMChatTextBubbleView.m in Sources */,
@@ -2402,7 +2411,6 @@
 				D24327E11DAA395F00EDCDAB /* EMCDDeviceManager+Media.m in Sources */,
 				D24328131DAE1B4600EDCDAB /* EMConvertToCommonEmoticonsHelper.m in Sources */,
 				D24327E31DAA395F00EDCDAB /* EMCDDeviceManager+ProximitySensor.m in Sources */,
-				D28538871DB1EBD80027D4E1 /* EaseCallManager.m in Sources */,
 				D2CAE2051D9A4CCB00B9A532 /* EMChatBaseCell.m in Sources */,
 				71D4A1D11D9C9229006FACB7 /* UIImage+ImageEffect.m in Sources */,
 				71D4A1EA1D9C934C006FACB7 /* EMContactInfoViewController.m in Sources */,
@@ -2426,6 +2434,7 @@
 				D2F372A81DD06DF400C726E7 /* EMFaceView.m in Sources */,
 				D24327F11DAA444C00EDCDAB /* UIViewController+DismissKeyboard.m in Sources */,
 				711159011DB7278B005158BB /* NSArray+EMSortContacts.m in Sources */,
+				3A7DFC681E6EA1200041322F /* EaseCallManager.m in Sources */,
 				D24327B91DAA024A00EDCDAB /* EMMessageReadManager.m in Sources */,
 				D24327E81DAA395F00EDCDAB /* EMVoiceConverter.mm in Sources */,
 				D285387A1DB1EBB50027D4E1 /* EMChatsSettingViewController.m in Sources */,
@@ -2441,7 +2450,6 @@
 				D24327E61DAA395F00EDCDAB /* amrFileCodec.mm in Sources */,
 				D2CAE21C1D9BDCFD00B9A532 /* EMChatVideoBubbleView.m in Sources */,
 				D2CAE2101D9A93D800B9A532 /* EMChatBaseBubbleView.m in Sources */,
-				D285388A1DB1EBD80027D4E1 /* EaseCallViewController.m in Sources */,
 				D2CAE2161D9BB8D200B9A532 /* EMChatAudioBubbleView.m in Sources */,
 				D2CAE2131D9B7DB000B9A532 /* EMChatImageBubbleView.m in Sources */,
 				D24327DF1DAA395F00EDCDAB /* EMAudioPlayerUtil.m in Sources */,
@@ -2449,6 +2457,7 @@
 				D2F372A91DD06DF400C726E7 /* EMFacialView.m in Sources */,
 				716634161DB0E1AB00C92E27 /* EMBaseRefreshTableController.m in Sources */,
 				716634051DB0E03F00C92E27 /* EMApplyManager.m in Sources */,
+				3A7DFC6C1E6EA1200041322F /* EaseVideoInfoViewController.m in Sources */,
 				7166340F1DB0E17C00C92E27 /* EMGroupModel.m in Sources */,
 				D2426AE21DCC8273009C1632 /* EMNameViewController.m in Sources */,
 				7166346D1DB0EF9200C92E27 /* EMMemberSelectViewController.m in Sources */,
@@ -2466,6 +2475,15 @@
 /* End PBXSourcesBuildPhase section */
 
 /* Begin PBXVariantGroup section */
+		3A7DFC651E6EA1200041322F /* EaseVideoInfoViewController.strings */ = {
+			isa = PBXVariantGroup;
+			children = (
+				3A7DFC661E6EA1200041322F /* en */,
+				3A7DFC671E6EA1200041322F /* zh-Hans */,
+			);
+			name = EaseVideoInfoViewController.strings;
+			sourceTree = "<group>";
+		};
 		716634371DB0EC4600C92E27 /* EMGroupInfoViewController.xib */ = {
 			isa = PBXVariantGroup;
 			children = (
