@@ -277,7 +277,9 @@ static EMChatDemoHelper *helper = nil;
         return;
     }
 
-    [[EMClient sharedClient].groupManager getGroupSpecificationFromServerWithId:aGroupId completion:^(EMGroup *aGroup, EMError *aError) {
+    [[EMClient sharedClient].groupManager getGroupSpecificationFromServerByID:aGroupId
+                                                           includeMembersList:YES
+                                                                   completion:^(EMGroup *aGroup, EMError *aError) {
         if (![[EMApplyManager defaultManager] isExistingRequest:aInviter
                                                         groupId:aGroupId
                                                      applyStyle:EMApplyStyle_groupInvitation])

@@ -214,7 +214,9 @@
     WEAK_SELF
     [MBProgressHUD showHUDAddedTo:self.view animated:YES];
     if ([self isGroupOwner]) {
-        [[EMClient sharedClient].groupManager destroyGroup:self.currentGroup.groupId finishCompletion:^(EMError *aError) {
+        [[EMClient sharedClient].groupManager destroyGroup:self.currentGroup.groupId
+                                                completion:^(EMGroup *aGroup, EMError *aError) {
+
             [MBProgressHUD hideAllHUDsForView:weakSelf.view animated:YES];
             if (aError) {
                 [weakSelf showAlertWithMessage:NSLocalizedString(@"group.destroyFailure", @"Destroy group failure")];
@@ -226,7 +228,8 @@
         }];
     }
     else {
-        [[EMClient sharedClient].groupManager leaveGroup:self.currentGroup.groupId completion:^(EMError *aError) {
+        [[EMClient sharedClient].groupManager leaveGroup:self.currentGroup.groupId
+                                              completion:^(EMGroup *aGroup, EMError *aError) {
             [MBProgressHUD hideAllHUDsForView:weakSelf.view animated:YES];
             if (aError) {
                 [weakSelf showAlertWithMessage:NSLocalizedString(@"group.leaveFailure", @"Leave group failure")];
