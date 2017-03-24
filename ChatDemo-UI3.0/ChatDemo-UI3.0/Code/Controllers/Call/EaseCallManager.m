@@ -43,6 +43,12 @@ static EaseCallManager *callManager = nil;
     return self;
 }
 
+- (void)dealloc
+{
+    [[EMClient sharedClient].callManager removeDelegate:self];
+    [[NSNotificationCenter defaultCenter] removeObserver:self name:KNOTIFICATION_CALL object:nil];
+}
+
 - (void)makeCall:(NSNotification *)notify
 {
     if (notify.object) {
@@ -287,10 +293,4 @@ static EaseCallManager *callManager = nil;
     [[EMClient sharedClient].chatManager sendMessage:message progress:nil completion:nil];
 }
 
-
-- (void)dealloc
-{
-    [[EMClient sharedClient].callManager removeDelegate:self];
-    [[NSNotificationCenter defaultCenter] removeObserver:self name:KNOTIFICATION_CALL object:nil];
-}
 @end
