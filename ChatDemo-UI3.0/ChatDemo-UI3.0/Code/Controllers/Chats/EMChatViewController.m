@@ -301,23 +301,15 @@
                                                                                      body:body
                                                                                       ext:nil];
                     
-                    messageFromBot.chatType = [self _messageType];      // inherite message type
-                    messageFromBot.status = EMMessageStatusSuccessed;   // marked as delivered
+                    messageFromBot.chatType = [self _messageType];          // inherite message type
+                    messageFromBot.status = EMMessageStatusSuccessed;       // marked as delivered
+                    messageFromBot.direction = EMMessageDirectionReceive;
                     
                     [self.conversation insertMessage:messageFromBot error:nil];
                     
                     [self _addMessageToDataSource:messageFromBot];
                     [self _loadMoreMessage];
                     [self _scrollViewToBottom:YES];
-                    
-//                    [[EMClient sharedClient].chatManager importMessages:@[messageFromBot]
-//                                                             completion:^(EMError *aError) {
-//                                                                 if (aError) NSLog(@"bot import message error: %@", aError);
-//                                                                 
-//                                                                 [self _addMessageToDataSource:messageFromBot];
-//                                                                 [self _loadMoreMessage];
-//                                                                 [self _scrollViewToBottom:YES];
-//                                                             }];
                 }
             }
             
