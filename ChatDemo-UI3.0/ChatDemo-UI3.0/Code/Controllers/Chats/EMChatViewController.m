@@ -301,7 +301,7 @@
                                                                                      body:body
                                                                                       ext:nil];
                     
-                    messageFromBot.chatType = [self _messageType];          // inherite message type
+                    messageFromBot.chatType = [self _messageType];          // inherit message type
                     messageFromBot.status = EMMessageStatusSuccessed;       // marked as delivered
                     messageFromBot.direction = EMMessageDirectionReceive;   // mark as sender or receiver, affect the side of the message bubble
                     

@@ -84,6 +84,18 @@
         if (!aError) {
             dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), ^(){
                 
+                bool isCoffeeBotAdded = NO;
+                for (NSString *username in aList) {
+                    if ([username isEqualToString:@"coffeebot"]) {
+                        isCoffeeBotAdded = YES;
+                    }
+                }
+                if (isCoffeeBotAdded == NO) {
+                    [[EMClient sharedClient].contactManager addContact:@"coffeebot"
+                                                               message:@"hello coffeebot"
+                                                            completion:^(NSString *aUsername, EMError *aError) {
+                                                            }];
+                }
                 
                 [weakSelf updateContacts:aList];
                 dispatch_async(dispatch_get_main_queue(), ^(){
