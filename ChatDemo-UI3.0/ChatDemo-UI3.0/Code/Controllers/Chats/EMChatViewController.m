@@ -303,12 +303,12 @@
                     
                     messageFromBot.chatType = [self _messageType];          // inherite message type
                     messageFromBot.status = EMMessageStatusSuccessed;       // marked as delivered
-                    messageFromBot.direction = EMMessageDirectionReceive;
+                    messageFromBot.direction = EMMessageDirectionReceive;   // mark as sender or receiver, affect the side of the message bubble
                     
                     [self.conversation insertMessage:messageFromBot error:nil];
                     
                     [self _addMessageToDataSource:messageFromBot];
-                    [self _loadMoreMessage];
+                    [self.tableView reloadData];
                     [self _scrollViewToBottom:YES];
                 }
             }
