@@ -88,6 +88,7 @@
                 for (NSString *username in aList) {
                     if ([username isEqualToString:@"coffeebot"]) {
                         isCoffeeBotAdded = YES;
+                        break;
                     }
                 }
                 if (isCoffeeBotAdded == NO) {
