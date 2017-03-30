@@ -8,16 +8,21 @@ source 'https://github.com/CocoaPods/Specs.git'
 
 target 'ChatDemo-UI3.0' do
     
+    # Hyphenate chat
     pod 'Hyphenate', '~> 3.2.3'
 
+    # coffee bot with api.ai
+    pod 'ApiAI'
+    
+    # others
     pod 'MWPhotoBrowser', '~> 2.1.2'
 
-#    pod 'GoogleCloudMessaging', '~> 1.2'
+    # Analytics
     pod 'Google/Analytics'
-
     pod 'Fabric'
     pod 'Crashlytics'
 
+    # database
     pod 'Parse'
 
 end

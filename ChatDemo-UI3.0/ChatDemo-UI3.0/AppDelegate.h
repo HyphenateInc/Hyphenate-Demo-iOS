@@ -8,10 +8,14 @@
  */
 
 #import <UIKit/UIKit.h>
+#import <ApiAI/ApiAI.h>
 
 @interface AppDelegate : UIResponder <UIApplicationDelegate>
 
 @property (strong, nonatomic) UIWindow *window;
+
+// api.ai
+@property(nonatomic, strong) ApiAI *apiAI;
 
 
 @end

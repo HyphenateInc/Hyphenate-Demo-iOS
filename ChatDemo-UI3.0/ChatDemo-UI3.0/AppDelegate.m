@@ -71,6 +71,15 @@
     [self _registerAPNS];
     [self registerNotifications];
     
+    // api.ai
+    self.apiAI = [[ApiAI alloc] init];
+    
+    // Define API.AI configuration here.
+    id <AIConfiguration> configuration = [[AIDefaultConfiguration alloc] init];
+    configuration.clientAccessToken = @"11f983b4bc134911a03e2f86873392ed";
+    
+    self.apiAI.configuration = configuration;
+    
     // Fabric
     [Fabric with:@[[Crashlytics class]]];
     

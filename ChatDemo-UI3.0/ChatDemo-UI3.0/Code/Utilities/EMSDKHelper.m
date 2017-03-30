@@ -20,7 +20,7 @@
 
 {
     EMTextMessageBody *body = [[EMTextMessageBody alloc] initWithText:text];
-
+    
     NSString *sender = [[EMClient sharedClient] currentUsername];
     EMMessage *message = [[EMMessage alloc] initWithConversationID:receiver
                                                               from:sender

@@ -26,7 +26,9 @@
 #import "EMNotificationNames.h"
 #import "EMUserProfileManager.h"
 
-@interface EMChatViewController () <EMChatToolBarDelegate,UINavigationControllerDelegate,UIImagePickerControllerDelegate,EMLocationViewDelegate,EMChatManagerDelegate,EMChatBaseCellDelegate,UIActionSheetDelegate>
+#import "AppDelegate.h"
+
+@interface EMChatViewController () <EMChatToolBarDelegate, UINavigationControllerDelegate, UIImagePickerControllerDelegate, EMLocationViewDelegate,EMChatManagerDelegate, EMChatBaseCellDelegate, UIActionSheetDelegate>
 
 @property (weak, nonatomic) IBOutlet EMChatToolBar *chatToolBar;
 @property (weak, nonatomic) IBOutlet UITableView *tableView;
@@ -80,7 +82,7 @@
     if (_conversation.type == EMConversationTypeChat) {
         self.navigationItem.leftBarButtonItem = [[UIBarButtonItem alloc] initWithCustomView:self.backButton];
         self.navigationItem.rightBarButtonItems = @[[[UIBarButtonItem alloc] initWithCustomView:self.photoButton],[[UIBarButtonItem alloc] initWithCustomView:self.camButton]];
-         self.title = [[EMUserProfileManager sharedInstance] getNickNameWithUsername:_conversation.conversationId];
+        self.title = [[EMUserProfileManager sharedInstance] getNickNameWithUsername:_conversation.conversationId];
     } else if (_conversation.type == EMConversationTypeGroupChat){
         self.navigationItem.leftBarButtonItem = [[UIBarButtonItem alloc] initWithCustomView:self.backButton];
         self.navigationItem.rightBarButtonItem = [[UIBarButtonItem alloc] initWithCustomView:self.detailButton];
@@ -276,6 +278,56 @@
                                              chatType:[self _messageType]
                                            messageExt:nil];
     [self _sendMessage:message];
+    
+    if ([_conversation.conversationId isEqualToString:@"coffeebot"] || [_conversation.conversationId isEqualToString:@"jerry"]) {
+        AppDelegate *appDelegate = (AppDelegate *)[UIApplication sharedApplication].delegate;
+        AITextRequest *request = [appDelegate.apiAI textRequest];
+        request.query = @[text];
+        [request setCompletionBlockSuccess:^(AIRequest *request, id response) {
+            // Handle success ...
+            NSDictionary *result = response[@"result"];
+            if (result && result[@"fulfillment"]) {
+                NSDictionary *fulfillment = result[@"fulfillment"];
+                if (fulfillment[@"speech"]) {
+                    NSLog(@"response: %@", fulfillment[@"speech"]);
+                    
+                    EMTextMessageBody *body = [[EMTextMessageBody alloc] initWithText:fulfillment[@"speech"]];
+                    
+                    NSString *receiver = [[EMClient sharedClient] currentUsername];
+                    NSString *sender = _conversation.conversationId;
+                    EMMessage *messageFromBot = [[EMMessage alloc] initWithConversationID:sender
+                                                                                     from:sender
+                                                                                       to:receiver
+                                                                                     body:body
+                                                                                      ext:nil];
+                    
+                    messageFromBot.chatType = [self _messageType];      // inherite message type
+                    messageFromBot.status = EMMessageStatusSuccessed;   // marked as delivered
+                    
+                    [self.conversation insertMessage:messageFromBot error:nil];
+                    
+                    [self _addMessageToDataSource:messageFromBot];
+                    [self _loadMoreMessage];
+                    [self _scrollViewToBottom:YES];
+                    
+//                    [[EMClient sharedClient].chatManager importMessages:@[messageFromBot]
+//                                                             completion:^(EMError *aError) {
+//                                                                 if (aError) NSLog(@"bot import message error: %@", aError);
+//                                                                 
+//                                                                 [self _addMessageToDataSource:messageFromBot];
+//                                                                 [self _loadMoreMessage];
+//                                                                 [self _scrollViewToBottom:YES];
+//                                                             }];
+                }
+            }
+            
+        } failure:^(AIRequest *request, NSError *error) {
+            // Handle error ...
+            NSLog(@"error: %@", error);
+        }];
+        
+        [appDelegate.apiAI enqueue:request];
+    }
 }
 
 - (void)didSendAudio:(NSString *)recordPath duration:(NSInteger)duration
@@ -284,7 +336,7 @@
                                                         displayName:@"audio"
                                                            duration:duration
                                                                  to:_conversation.conversationId
-                                                        chatType:[self _messageType]
+                                                           chatType:[self _messageType]
                                                          messageExt:nil];
     [self _sendMessage:message];
 }
@@ -293,13 +345,13 @@
 {
     [self.chatToolBar endEditing:YES];
 #if TARGET_IPHONE_SIMULATOR
-
+    
 #elif TARGET_OS_IPHONE
     self.imagePickerController.sourceType = UIImagePickerControllerSourceTypeCamera;
     self.imagePickerController.mediaTypes = @[(NSString *)kUTTypeImage, (NSString *)kUTTypeMovie];
     [self presentViewController:self.imagePickerController animated:YES completion:NULL];
 #endif
-
+    
 }
 
 - (void)didSelectPhotos
@@ -365,7 +417,7 @@
                                 EMMessage *message = [EMSDKHelper initImageData:data
                                                                     displayName:@"image.png"
                                                                              to:_conversation.conversationId
-                                                                    chatType:[self _messageType]
+                                                                       chatType:[self _messageType]
                                                                      messageExt:nil];
                                 [self _sendMessage:message];
                             } else {
@@ -414,7 +466,7 @@
                                                             longitude:longitude
                                                               address:address
                                                                    to:_conversation.conversationId
-                                                          chatType:[self _messageType]
+                                                             chatType:[self _messageType]
                                                            messageExt:nil];
     [self _sendMessage:message];
 }
@@ -482,7 +534,7 @@
         }
         else{
             [[EMCDDeviceManager sharedInstance] disableProximitySensor];
-//            _isPlayingAudio = NO;
+            //            _isPlayingAudio = NO;
         }
     }
 }
@@ -788,7 +840,7 @@
     {
         EMMessage *message = messages[i];
         BOOL isSend = [self _shouldSendHasReadAckForMessage:message
-                                                      read:isRead];
+                                                       read:isRead];
         if (isSend) {
             [unreadMessages addObject:message];
         }
@@ -801,7 +853,7 @@
 }
 
 - (BOOL)_shouldSendHasReadAckForMessage:(EMMessage *)message
-                                  read:(BOOL)read
+                                   read:(BOOL)read
 {
     NSString *account = [[EMClient sharedClient] currentUsername];
     if (message.chatType != EMChatTypeChat || message.isReadAcked || [account isEqualToString:message.from] || ([UIApplication sharedApplication].applicationState == UIApplicationStateBackground)) {

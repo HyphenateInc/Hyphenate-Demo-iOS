@@ -88,21 +88,16 @@
     CGContextRef context = UIGraphicsGetCurrentContext();
     CGContextSetFillColorWithColor(context, [UIColor clearColor].CGColor);
     CGContextFillRect(context, rect);
-
-//    CGContextSetStrokeColorWithColor(context, RGBACOLOR(189, 189, 189, 1).CGColor);
-//    CGContextStrokeRect(context, CGRectMake(0, 0, rect.size.width, 0.5));
-
-//    CGContextSetStrokeColorWithColor(context, RGBACOLOR(0xe5, 0xe5, 0xe5, 1).CGColor);
-//    CGContextStrokeRect(context, CGRectMake(0, rect.size.height - 0.5, rect.size.width, 0.5));
     
     _inputTextView.width = kDefaultTextViewWidth;
 }
+
 #pragma mark - getter
 
 - (EMChatRecordView*)recordView
 {
     if (_recordView == nil) {
-        _recordView = (EMChatRecordView*)[[[NSBundle mainBundle]loadNibNamed:@"EMChatRecordView" owner:nil options:nil] firstObject];
+        _recordView = (EMChatRecordView*)[[[NSBundle mainBundle] loadNibNamed:@"EMChatRecordView" owner:nil options:nil] firstObject];
         _recordView.delegate = self;
     }
     return _recordView;
