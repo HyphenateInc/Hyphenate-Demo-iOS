@@ -279,7 +279,7 @@
                                            messageExt:nil];
     [self _sendMessage:message];
     
-    if ([_conversation.conversationId isEqualToString:@"coffeebot"] || [_conversation.conversationId isEqualToString:@"jerry"]) {
+    if ([_conversation.conversationId isEqualToString:@"coffeebot"]) {
         AppDelegate *appDelegate = (AppDelegate *)[UIApplication sharedApplication].delegate;
         AITextRequest *request = [appDelegate.apiAI textRequest];
         request.query = @[text];
