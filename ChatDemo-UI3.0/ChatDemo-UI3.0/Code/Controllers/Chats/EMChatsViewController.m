@@ -68,8 +68,8 @@
 
 - (void)registerNotifications{
     [self unregisterNotifications];
-    [[EMClient sharedClient].chatManager addDelegate:self];
-    [[EMClient sharedClient].groupManager addDelegate:self];
+    [[EMClient sharedClient].chatManager addDelegate:self delegateQueue:nil];
+    [[EMClient sharedClient].groupManager addDelegate:self delegateQueue:nil];
 }
 
 - (void)unregisterNotifications{
