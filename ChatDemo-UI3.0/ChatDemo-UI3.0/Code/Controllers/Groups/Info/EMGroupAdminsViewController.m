@@ -34,6 +34,8 @@
 - (void)viewDidLoad {
     [super viewDidLoad];
     
+    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(updateUI:) name:@"UpdateGroupAdminList" object:nil];
+    
     [self _setupNavigationBar];
     [self.tableView reloadData];
 }
@@ -96,7 +98,7 @@
 
 - (nullable NSArray<UITableViewRowAction *> *)tableView:(UITableView *)tableView editActionsForRowAtIndexPath:(NSIndexPath *)indexPath
 {
-    UITableViewRowAction *deleteAction = [UITableViewRowAction rowActionWithStyle:UITableViewRowActionStyleDefault title:NSLocalizedString(@"button.demote", @"Demote") handler:^(UITableViewRowAction * _Nonnull action, NSIndexPath * _Nonnull indexPath) {
+    UITableViewRowAction *deleteAction = [UITableViewRowAction rowActionWithStyle:UITableViewRowActionStyleDefault title:NSLocalizedString(@"button.remove", @"Remove") handler:^(UITableViewRowAction * _Nonnull action, NSIndexPath * _Nonnull indexPath) {
         [self editActionsForRowAtIndexPath:indexPath actionIndex:0];
     }];
     deleteAction.backgroundColor = [UIColor redColor];
@@ -111,7 +113,12 @@
     }];
     muteAction.backgroundColor = [UIColor colorWithRed: 116 / 255.0 green: 134 / 255.0 blue: 147 / 255.0 alpha:1.0];
     
-    return @[deleteAction, blackAction, muteAction];
+    UITableViewRowAction *toMemberAction = [UITableViewRowAction rowActionWithStyle:UITableViewRowActionStyleDefault title:NSLocalizedString(@"button.demote", @"Demote") handler:^(UITableViewRowAction * _Nonnull action, NSIndexPath * _Nonnull indexPath) {
+        [self editActionsForRowAtIndexPath:indexPath actionIndex:3];
+    }];
+    toMemberAction.backgroundColor = [UIColor colorWithRed: 50 / 255.0 green: 63 / 255.0 blue: 72 / 255.0 alpha:1.0];
+    
+    return @[deleteAction, blackAction, muteAction, toMemberAction];
 }
 
 #pragma mark - Action
@@ -157,6 +164,18 @@
 {
     EMAddAdminViewController *addController = [[EMAddAdminViewController alloc] initWithGroupId:self.group.groupId];
     [self.navigationController pushViewController:addController animated:YES];
+}
+
+- (void)updateUI:(NSNotification *)aNotification
+{
+    id obj = aNotification.object;
+    if (obj && [obj isKindOfClass:[EMGroup class]]) {
+        self.group = (EMGroup *)obj;
+    }
+    
+    [self.dataArray removeAllObjects];
+    [self.dataArray addObjectsFromArray:self.group.adminList];
+    [self.tableView reloadData];
 }
 
 #pragma mark - data

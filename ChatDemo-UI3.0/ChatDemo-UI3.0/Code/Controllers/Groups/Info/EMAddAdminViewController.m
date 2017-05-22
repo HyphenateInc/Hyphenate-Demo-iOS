@@ -212,6 +212,33 @@
 
 - (void)doneAction
 {
+    NSMutableArray *failArray = [[NSMutableArray alloc] init];
+    NSMutableString *alertMsg = [[NSMutableString alloc] initWithString:@"Fail："];
+    
+    [MBProgressHUD showHUDAddedTo:self.view animated:YES];
+    __weak typeof(self) weakSelf = self;
+    dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), ^(){
+        EMError *error = nil;
+        EMGroup *group = nil;
+        for (NSString *userName in weakSelf.selectedArray) {
+            error = nil;
+            [[EMClient sharedClient].groupManager addAdmin:userName toGroup:weakSelf.groupId error:&error];
+            if (error) {
+                [failArray addObject:userName];
+                [alertMsg appendFormat:@" %@", userName];
+            }
+        }
+        
+        dispatch_async(dispatch_get_main_queue(), ^{
+            [MBProgressHUD hideHUDForView:weakSelf.view animated:YES];
+            if ([failArray count] > 0) {
+                [weakSelf showAlertWithMessage:alertMsg];
+            }
+            [[NSNotificationCenter defaultCenter] postNotificationName:@"UpdateGroupAdminList" object:group];
+            [[NSNotificationCenter defaultCenter] postNotificationName:@"UpdateGroupDetail" object:group];
+            [weakSelf.navigationController popViewControllerAnimated:YES];
+        });
+    });
     
 }
 
@@ -219,6 +246,10 @@
 
 - (void)tableViewDidTriggerHeaderRefresh
 {
+    self.cursor = @"";
+    [self fetchMembersWithCursor:self.cursor isHeader:YES];
+    
+    /*
     __weak typeof(self) weakSelf = self;
     [self showHudInView:self.view hint:NSLocalizedString(@"hud.load", @"Load data...")];
     dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), ^(){
@@ -231,7 +262,6 @@
         if (!error) {
             weakSelf.groupId = group.groupId;
             [weakSelf.dataArray removeAllObjects];
-            [weakSelf.dataArray addObjectsFromArray:group.adminList];
             dispatch_async(dispatch_get_main_queue(), ^{
                 weakSelf.cursor = @"";
                 [weakSelf fetchMembersWithCursor:weakSelf.cursor isHeader:YES];
@@ -243,6 +273,7 @@
             });
         }
     });
+    */
 }
 
 - (void)tableViewDidTriggerFooterRefresh
@@ -260,6 +291,11 @@
         weakSelf.cursor = aResult.cursor;
         [weakSelf hideHud];
         [weakSelf tableViewDidFinishTriggerHeader:aIsHeader];
+        
+        if (aIsHeader) {
+            [weakSelf.dataArray removeAllObjects];
+        }
+        
         if (!aError) {
             [weakSelf.dataArray addObjectsFromArray:aResult.list];
             [weakSelf.tableView reloadData];

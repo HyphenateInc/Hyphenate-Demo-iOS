@@ -88,10 +88,11 @@
             cell.showAccessoryViewInDelete = NO;
             cell.rightLabel.text = @"owner";
         } else {
+            cell.showAccessoryViewInDelete = [self _isShowCellAccessoryView];
             cell.rightLabel.text = @"admin";
         }
     } else {
-        cell.showAccessoryViewInDelete = YES;
+        cell.showAccessoryViewInDelete = [self _isShowCellAccessoryView];
         cell.leftLabel.text = [self.dataArray objectAtIndex:row];
     }
     
@@ -133,10 +134,10 @@
     UITableViewRowAction *toAdminAction = [UITableViewRowAction rowActionWithStyle:UITableViewRowActionStyleDefault title:NSLocalizedString(@"button.toAdmin", @"ToAdmin") handler:^(UITableViewRowAction * _Nonnull action, NSIndexPath * _Nonnull indexPath) {
         [self editActionsForRowAtIndexPath:indexPath actionIndex:3];
     }];
-    toAdminAction.backgroundColor = [UIColor colorWithRed: 116 / 255.0 green: 134 / 255.0 blue: 147 / 255.0 alpha:1.0];
+    toAdminAction.backgroundColor = [UIColor colorWithRed: 50 / 255.0 green: 63 / 255.0 blue: 72 / 255.0 alpha:1.0];
     
     if (indexPath.section == 1) {
-        return @[toAdminAction, deleteAction, blackAction, muteAction];
+        return @[deleteAction, blackAction, muteAction, toAdminAction];
     }
     
     return @[deleteAction, blackAction, muteAction];
@@ -160,14 +161,29 @@
         EMError *error = nil;
         if (buttonIndex == 0) { //Remove
             weakSelf.group = [[EMClient sharedClient].groupManager removeOccupants:@[userName] fromGroup:weakSelf.group.groupId error:&error];
+            if (!error) {
+                if (indexPath.section == 0) {
+                    [weakSelf.ownerAndAdmins removeObject:userName];
+                } else {
+                    [weakSelf.dataArray removeObject:userName];
+                }
+            }
         } else if (buttonIndex == 1) { //Blacklist
             weakSelf.group = [[EMClient sharedClient].groupManager blockOccupants:@[userName] fromGroup:weakSelf.group.groupId error:&error];
+            if (!error) {
+                if (indexPath.section == 0) {
+                    [weakSelf.ownerAndAdmins removeObject:userName];
+                } else {
+                    [weakSelf.dataArray removeObject:userName];
+                }
+            }
         } else if (buttonIndex == 2) {  //Mute
             weakSelf.group = [[EMClient sharedClient].groupManager muteMembers:@[userName] muteMilliseconds:-1 fromGroup:weakSelf.group.groupId error:&error];
         } else if (buttonIndex == 3) {  //To Admin
             weakSelf.group = [[EMClient sharedClient].groupManager addAdmin:userName toGroup:weakSelf.group.groupId error:&error];
             if (!error) {
                 [weakSelf.ownerAndAdmins addObject:userName];
+                [weakSelf.dataArray removeObject:userName];
             }
         }
         
@@ -175,7 +191,6 @@
             [weakSelf hideHud];
             if (!error) {
                 if (buttonIndex != 2) {
-                    [weakSelf.dataArray removeObject:userName];
                     [weakSelf.tableView reloadData];
                 } else {
                     [weakSelf showHint:NSLocalizedString(@"group.mute.success", @"Mute success")];
@@ -188,6 +203,17 @@
             }
         });
     });
+}
+
+#pragma mark - private
+
+- (BOOL)_isShowCellAccessoryView
+{
+    if (self.group.permissionType == EMGroupPermissionTypeOwner || self.group.permissionType == EMGroupPermissionTypeAdmin) {
+        return YES;
+    }
+    
+    return NO;
 }
 
 #pragma mark - data
