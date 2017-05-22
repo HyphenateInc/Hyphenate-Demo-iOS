@@ -138,16 +138,16 @@
         NSString *newOwner = [self.dataArray objectAtIndex:self.selectedIndexPath.row];
         
         __weak typeof(self) weakSelf = self;
-        dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), ^(){
-            EMError *error = nil;
-            weakSelf.group = [[EMClient sharedClient].groupManager updateGroupOwner:self.group.groupId newOwner:newOwner error:&error];
-            [weakSelf hideHud];
-            if (error) {
+        [[EMClient sharedClient].groupManager updateGroupOwner:self.group.groupId newOwner:newOwner completion:^(EMGroup *aGroup, EMError *aError) {
+            [MBProgressHUD hideHUDForView:weakSelf.view animated:YES];
+            weakSelf.group = aGroup;
+            if (aError) {
                 [weakSelf showHint:NSLocalizedString(@"group.changeOwnerFail", @"Failed to change owner")];
             } else {
+                [[NSNotificationCenter defaultCenter] postNotificationName:@"UpdateGroupDetail" object:weakSelf.group];
                 [weakSelf backAction];
             }
-        });
+        }];
     }
 }
 
@@ -157,6 +157,7 @@
 {
     __weak typeof(self) weakSelf = self;
     [self showHudInView:self.view hint:NSLocalizedString(@"hud.load", @"Load data...")];
+    
     dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), ^(){
         EMError *error = nil;
         EMGroup *group = [[EMClient sharedClient].groupManager getGroupSpecificationFromServerWithId:weakSelf.group.groupId error:&error];

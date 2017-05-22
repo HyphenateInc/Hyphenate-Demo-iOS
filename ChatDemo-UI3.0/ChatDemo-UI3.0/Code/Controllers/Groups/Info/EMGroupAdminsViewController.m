@@ -25,7 +25,7 @@
     self = [super init];
     if (self) {
         self.group = aGroup;
-//        [self.dataArray addObjectsFromArray:self.group.adminList];
+        [self.dataArray addObjectsFromArray:self.group.adminList];
     }
     
     return self;
@@ -87,9 +87,9 @@
 
 - (BOOL)tableView:(UITableView *)tableView canEditRowAtIndexPath:(NSIndexPath *)indexPath
 {
-//    if (self.group.permissionType == EMGroupPermissionTypeOwner) {
-//        return YES;
-//    }
+    if (self.group.permissionType == EMGroupPermissionTypeOwner) {
+        return YES;
+    }
     
     return NO;
 }

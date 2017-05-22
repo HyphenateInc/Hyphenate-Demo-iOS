@@ -138,7 +138,7 @@
     __weak typeof(self) weakSelf = self;
     [MBProgressHUD showHUDAddedTo:self.view animated:YES];
     [[EMClient sharedClient].groupManager getGroupBlacklistFromServerWithId:self.group.groupId pageNumber:self.page pageSize:pageSize completion:^(NSArray *aMembers, EMError *aError) {
-        [weakSelf hideHud];
+        [MBProgressHUD hideHUDForView:self.view animated:YES];
         [weakSelf tableViewDidFinishTriggerHeader:aIsHeader];
         if (!aError) {
             if (aIsHeader) {

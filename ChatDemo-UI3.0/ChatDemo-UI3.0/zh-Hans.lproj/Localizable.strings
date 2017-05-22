@@ -13,6 +13,7 @@
 "button.black" = "拉黑";
 "button.mute" = "禁言";
 "button.demote" = "降级";
+"button.toAdmin" = "升级";
 "button.more" = "查看更多";
 "button.prompt" = "警告";
 "button.ok" = "确定";

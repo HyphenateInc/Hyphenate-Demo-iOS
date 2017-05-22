@@ -110,7 +110,7 @@
         return YES;
     }
     
-    return YES;
+    return NO;
 }
 
 - (nullable NSArray<UITableViewRowAction *> *)tableView:(UITableView *)tableView editActionsForRowAtIndexPath:(NSIndexPath *)indexPath
@@ -130,6 +130,15 @@
     }];
     muteAction.backgroundColor = [UIColor colorWithRed: 116 / 255.0 green: 134 / 255.0 blue: 147 / 255.0 alpha:1.0];
     
+    UITableViewRowAction *toAdminAction = [UITableViewRowAction rowActionWithStyle:UITableViewRowActionStyleDefault title:NSLocalizedString(@"button.toAdmin", @"ToAdmin") handler:^(UITableViewRowAction * _Nonnull action, NSIndexPath * _Nonnull indexPath) {
+        [self editActionsForRowAtIndexPath:indexPath actionIndex:3];
+    }];
+    toAdminAction.backgroundColor = [UIColor colorWithRed: 116 / 255.0 green: 134 / 255.0 blue: 147 / 255.0 alpha:1.0];
+    
+    if (indexPath.section == 1) {
+        return @[toAdminAction, deleteAction, blackAction, muteAction];
+    }
+    
     return @[deleteAction, blackAction, muteAction];
 }
 
@@ -137,7 +146,13 @@
 
 - (void)editActionsForRowAtIndexPath:(NSIndexPath *)indexPath actionIndex:(NSInteger)buttonIndex
 {
-    NSString *userName = [self.dataArray objectAtIndex:indexPath.row];
+    NSString *userName = @"";
+    if (indexPath.section == 0) {
+        userName = [self.ownerAndAdmins objectAtIndex:indexPath.row];
+    } else {
+        userName = [self.dataArray objectAtIndex:indexPath.row];
+    }
+    
     [self showHudInView:self.view hint:NSLocalizedString(@"hud.wait", @"Pleae wait...")];
     
     __weak typeof(self) weakSelf = self;
@@ -151,6 +166,9 @@
             weakSelf.group = [[EMClient sharedClient].groupManager muteMembers:@[userName] muteMilliseconds:-1 fromGroup:weakSelf.group.groupId error:&error];
         } else if (buttonIndex == 3) {  //To Admin
             weakSelf.group = [[EMClient sharedClient].groupManager addAdmin:userName toGroup:weakSelf.group.groupId error:&error];
+            if (!error) {
+                [weakSelf.ownerAndAdmins addObject:userName];
+            }
         }
         
         dispatch_async(dispatch_get_main_queue(), ^{
@@ -201,6 +219,10 @@
                 [ext setObject:[NSNumber numberWithBool:aGroup.isPublic] forKey:@"isPublic"];
                 conversation.ext = ext;
             }
+            
+            [weakSelf.ownerAndAdmins removeAllObjects];
+            [weakSelf.ownerAndAdmins addObject:aGroup.owner];
+            [weakSelf.ownerAndAdmins addObjectsFromArray:aGroup.adminList];
             
             weakSelf.cursor = @"";
             [weakSelf fetchMembersWithCursor:weakSelf.cursor isHeader:YES];

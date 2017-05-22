@@ -40,6 +40,7 @@
     [super viewDidLoad];
     
     self.view.backgroundColor = [UIColor whiteColor];
+    [self _setupNavigationBar];
 
     CGRect frame = CGRectMake(20, 20, self.view.frame.size.width - 40, 40);
     self.subjectField = [[UITextField alloc] initWithFrame:frame];

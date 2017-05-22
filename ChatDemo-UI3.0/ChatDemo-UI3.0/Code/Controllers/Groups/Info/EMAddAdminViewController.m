@@ -50,7 +50,7 @@
     self.cursor = @"";
     
     self.tableView.rowHeight = 50;
-    [self.tableView reloadData];
+    [self tableViewDidTriggerHeaderRefresh];
 }
 
 - (void)didReceiveMemoryWarning {
@@ -234,7 +234,7 @@
             [weakSelf.dataArray addObjectsFromArray:group.adminList];
             dispatch_async(dispatch_get_main_queue(), ^{
                 weakSelf.cursor = @"";
-                [weakSelf fetchMembersWithPage:weakSelf.page isHeader:YES];
+                [weakSelf fetchMembersWithCursor:weakSelf.cursor isHeader:YES];
             });
         }
         else{
@@ -247,16 +247,16 @@
 
 - (void)tableViewDidTriggerFooterRefresh
 {
-    [self fetchMembersWithPage:self.page isHeader:NO];
+    [self fetchMembersWithCursor:self.cursor isHeader:NO];
 }
 
-- (void)fetchMembersWithPage:(NSInteger)aPage
-                    isHeader:(BOOL)aIsHeader
+- (void)fetchMembersWithCursor:(NSString *)aCursor
+                      isHeader:(BOOL)aIsHeader
 {
     NSInteger pageSize = 50;
     __weak typeof(self) weakSelf = self;
     [self showHudInView:self.view hint:NSLocalizedString(@"hud.load", @"Load data...")];
-    [[EMClient sharedClient].groupManager getGroupMemberListFromServerWithId:self.groupId cursor:self.cursor pageSize:pageSize completion:^(EMCursorResult *aResult, EMError *aError) {
+    [[EMClient sharedClient].groupManager getGroupMemberListFromServerWithId:self.groupId cursor:aCursor pageSize:pageSize completion:^(EMCursorResult *aResult, EMError *aError) {
         weakSelf.cursor = aResult.cursor;
         [weakSelf hideHud];
         [weakSelf tableViewDidFinishTriggerHeader:aIsHeader];

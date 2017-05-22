@@ -13,6 +13,7 @@
 "button.black" = "ToBlack";
 "button.mute" = "Mute";
 "button.demote" = "Demote";
+"button.toAdmin" = "ToAdmin";
 "button.more" = "Load More";
 "button.prompt" = "Prompt";
 "button.ok" = "OK";

@@ -168,9 +168,9 @@
         self.moreCellIndex = count - 1;
     } else if (section == 2) {
         if (self.group.permissionType == EMGroupPermissionTypeOwner || self.group.permissionType == EMGroupPermissionTypeAdmin) {
-            count = 6;
+            count = 10;
         } else {
-            count = 4;
+            count = 5;
         }
     }
     
@@ -473,12 +473,47 @@
 
 - (void)blockMessageChangeValue
 {
+    [MBProgressHUD showHUDAddedTo:self.view animated:YES];
+    
+    __weak typeof(self) weakSelf = self;
+    if (self.blockMsgSwitch.isOn) {
+        [[EMClient sharedClient].groupManager blockGroup:self.group.groupId completion:^(EMGroup *aGroup, EMError *aError) {
+            [MBProgressHUD hideHUDForView:weakSelf.view animated:YES];
+            
+            weakSelf.group = aGroup;
+            if (aError) {
+                [weakSelf.blockMsgSwitch setOn:NO animated:YES];
+                [weakSelf showHint:NSLocalizedString(@"hud.fail", @"Operation failed")];
+            }
+        }];
+    } else {
+        [[EMClient sharedClient].groupManager unblockGroup:self.group.groupId completion:^(EMGroup *aGroup, EMError *aError) {
+            [MBProgressHUD hideHUDForView:weakSelf.view animated:YES];
+            
+            weakSelf.group = aGroup;
+            if (aError) {
+                [weakSelf.blockMsgSwitch setOn:YES animated:YES];
+                [weakSelf showHint:NSLocalizedString(@"hud.fail", @"Operation failed")];
+            }
+        }];
+    }
     
 }
 
 - (void)pushChangeValue
 {
+    [MBProgressHUD showHUDAddedTo:self.view animated:YES];
     
+    __weak typeof(self) weakSelf = self;
+    [[EMClient sharedClient].groupManager updatePushServiceForGroup:self.group.groupId isPushEnabled:self.pushSwitch.isOn completion:^(EMGroup *aGroup, EMError *aError) {
+        [MBProgressHUD hideHUDForView:weakSelf.view animated:YES];
+        
+        weakSelf.group = aGroup;
+        if (aError) {
+            [weakSelf.pushSwitch setOn:!weakSelf.group.isPushNotificationEnabled animated:YES];
+            [weakSelf showHint:NSLocalizedString(@"hud.fail", @"Operation failed")];
+        }
+    }];
 }
 
 - (void)updateUI:(NSNotification *)aNotif
@@ -506,7 +541,7 @@
     }
     
     [self.blockMsgSwitch setOn:self.group.isBlocked animated:YES];
-    [self.blockMsgSwitch setOn:self.group.isPushNotificationEnabled animated:YES];
+    [self.pushSwitch setOn:self.group.isPushNotificationEnabled animated:YES];
     
     [self.tableView reloadData];
 }
