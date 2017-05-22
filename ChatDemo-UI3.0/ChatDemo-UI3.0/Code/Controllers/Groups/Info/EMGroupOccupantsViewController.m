@@ -13,6 +13,7 @@
 
 @interface EMGroupOccupantsViewController ()
 
+@property (nonatomic, strong) NSString *groupId;
 @property (nonatomic, strong) EMGroup *group;
 @property (nonatomic, strong) NSString *cursor;
 
@@ -22,11 +23,11 @@
 
 @implementation EMGroupOccupantsViewController
 
-- (instancetype)initWithGroup:(EMGroup *)aGroup
+- (instancetype)initWithGroupId:(NSString *)aGroupId
 {
     self = [super init];
     if (self) {
-        self.group = aGroup;
+        self.groupId = aGroupId;
     }
     
     return self;
@@ -38,8 +39,6 @@
     self.title = NSLocalizedString(@"title.occupantList", @"Occupant List");
     
     _ownerAndAdmins = [[NSMutableArray alloc] init];
-    [_ownerAndAdmins addObjectsFromArray:@[@"001", @"002"]];
-    [self.dataArray addObjectsFromArray:@[@"003", @"004"]];
     
     UIButton *backButton = [[UIButton alloc] initWithFrame:CGRectMake(0, 0, 44, 44)];
     backButton.accessibilityIdentifier = @"back";
@@ -65,8 +64,7 @@
 
 - (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section {
     if (section == 0) {
-//        return [self.ownerAndAdmins count];
-        return 2;
+        return [self.ownerAndAdmins count];
     }
     
     return [self.dataArray count];
@@ -108,9 +106,9 @@
         return NO;
     }
     
-//    if (self.group.permissionType == EMGroupPermissionTypeOwner || self.group.permissionType == EMGroupPermissionTypeAdmin) {
-//        return YES;
-//    }
+    if (self.group.permissionType == EMGroupPermissionTypeOwner || self.group.permissionType == EMGroupPermissionTypeAdmin) {
+        return YES;
+    }
     
     return YES;
 }
@@ -139,39 +137,39 @@
 
 - (void)editActionsForRowAtIndexPath:(NSIndexPath *)indexPath actionIndex:(NSInteger)buttonIndex
 {
-//    NSString *userName = [self.dataArray objectAtIndex:indexPath.row];
-//    [self showHudInView:self.view hint:NSLocalizedString(@"hud.wait", @"Pleae wait...")];
-//    
-//    __weak typeof(self) weakSelf = self;
-//    dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), ^{
-//        EMError *error = nil;
-//        if (buttonIndex == 0) { //Remove
-//            weakSelf.group = [[EMClient sharedClient].groupManager removeOccupants:@[userName] fromGroup:weakSelf.group.groupId error:&error];
-//        } else if (buttonIndex == 1) { //Blacklist
-//            weakSelf.group = [[EMClient sharedClient].groupManager blockOccupants:@[userName] fromGroup:weakSelf.group.groupId error:&error];
-//        } else if (buttonIndex == 2) {  //Mute
-//            weakSelf.group = [[EMClient sharedClient].groupManager muteMembers:@[userName] muteMilliseconds:-1 fromGroup:weakSelf.group.groupId error:&error];
-//        } else if (buttonIndex == 3) {  //To Admin
-//            weakSelf.group = [[EMClient sharedClient].groupManager addAdmin:userName toGroup:weakSelf.group.groupId error:&error];
-//        }
-//        
-//        dispatch_async(dispatch_get_main_queue(), ^{
-//            [weakSelf hideHud];
-//            if (!error) {
-//                if (buttonIndex != 2) {
-//                    [weakSelf.dataArray removeObject:userName];
-//                    [weakSelf.tableView reloadData];
-//                } else {
-//                    [weakSelf showHint:NSLocalizedString(@"group.mute.success", @"Mute success")];
-//                }
-//                
-//                [[NSNotificationCenter defaultCenter] postNotificationName:@"UpdateGroupDetail" object:weakSelf.group];
-//            }
-//            else {
-//                [weakSelf showHint:error.errorDescription];
-//            }
-//        });
-//    });
+    NSString *userName = [self.dataArray objectAtIndex:indexPath.row];
+    [self showHudInView:self.view hint:NSLocalizedString(@"hud.wait", @"Pleae wait...")];
+    
+    __weak typeof(self) weakSelf = self;
+    dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), ^{
+        EMError *error = nil;
+        if (buttonIndex == 0) { //Remove
+            weakSelf.group = [[EMClient sharedClient].groupManager removeOccupants:@[userName] fromGroup:weakSelf.group.groupId error:&error];
+        } else if (buttonIndex == 1) { //Blacklist
+            weakSelf.group = [[EMClient sharedClient].groupManager blockOccupants:@[userName] fromGroup:weakSelf.group.groupId error:&error];
+        } else if (buttonIndex == 2) {  //Mute
+            weakSelf.group = [[EMClient sharedClient].groupManager muteMembers:@[userName] muteMilliseconds:-1 fromGroup:weakSelf.group.groupId error:&error];
+        } else if (buttonIndex == 3) {  //To Admin
+            weakSelf.group = [[EMClient sharedClient].groupManager addAdmin:userName toGroup:weakSelf.group.groupId error:&error];
+        }
+        
+        dispatch_async(dispatch_get_main_queue(), ^{
+            [weakSelf hideHud];
+            if (!error) {
+                if (buttonIndex != 2) {
+                    [weakSelf.dataArray removeObject:userName];
+                    [weakSelf.tableView reloadData];
+                } else {
+                    [weakSelf showHint:NSLocalizedString(@"group.mute.success", @"Mute success")];
+                }
+                
+                [[NSNotificationCenter defaultCenter] postNotificationName:@"UpdateGroupDetail" object:weakSelf.group];
+            }
+            else {
+                [weakSelf showHint:error.errorDescription];
+            }
+        });
+    });
 }
 
 #pragma mark - data
@@ -180,75 +178,66 @@
 {
     self.cursor = @"";
     [self fetchGroupInfo];
-//    [self fetchMembersWithPage:self.page isHeader:YES];
-    [self tableViewDidFinishTriggerHeader:YES];
 }
 
 - (void)tableViewDidTriggerFooterRefresh
 {
-    [self fetchMembersWithPage:self.page isHeader:NO];
+    [self fetchMembersWithCursor:self.cursor isHeader:NO];
 }
 
 - (void)fetchGroupInfo
 {
-    //    __weak typeof(self) weakSelf = self;
-    //    [self showHudInView:self.view hint:NSLocalizedString(@"hud.load", @"Load data...")];
-    //    dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), ^(){
-    //        EMError *error = nil;
-    //        EMGroup *group = [[EMClient sharedClient].groupManager getGroupSpecificationFromServerWithId:weakSelf.groupId error:&error];
-    //        dispatch_async(dispatch_get_main_queue(), ^{
-    //            [weakSelf hideHud];
-    //        });
-    //
-    //        if (!error) {
-    //            weakSelf.group = group;
-    //            EMConversation *conversation = [[EMClient sharedClient].chatManager getConversation:group.groupId type:EMConversationTypeGroupChat createIfNotExist:YES];
-    //            if ([group.groupId isEqualToString:conversation.conversationId]) {
-    //                NSMutableDictionary *ext = [NSMutableDictionary dictionaryWithDictionary:conversation.ext];
-    //                [ext setObject:group.subject forKey:@"subject"];
-    //                [ext setObject:[NSNumber numberWithBool:group.isPublic] forKey:@"isPublic"];
-    //                conversation.ext = ext;
-    //            }
-    //
-    //            dispatch_async(dispatch_get_main_queue(), ^{
-    //                [weakSelf fetchGroupMembers];
-    //            });
-    //        }
-    //        else{
-    //            dispatch_async(dispatch_get_main_queue(), ^{
-    //                [weakSelf showHint:NSLocalizedString(@"group.fetchInfoFail", @"failed to get the group details, please try again later")];
-    //            });
-    //        }
-    //    });
+    __weak typeof(self) weakSelf = self;
+    [self showHudInView:self.view hint:NSLocalizedString(@"hud.load", @"Load data...")];
+    [[EMClient sharedClient].groupManager getGroupSpecificationFromServerWithId:self.groupId completion:^(EMGroup *aGroup, EMError *aError) {
+        [weakSelf hideHud];
+        
+        if (!aError) {
+            weakSelf.group = aGroup;
+            EMConversation *conversation = [[EMClient sharedClient].chatManager getConversation:aGroup.groupId type:EMConversationTypeGroupChat createIfNotExist:YES];
+            if ([aGroup.groupId isEqualToString:conversation.conversationId]) {
+                NSMutableDictionary *ext = [NSMutableDictionary dictionaryWithDictionary:conversation.ext];
+                [ext setObject:aGroup.subject forKey:@"subject"];
+                [ext setObject:[NSNumber numberWithBool:aGroup.isPublic] forKey:@"isPublic"];
+                conversation.ext = ext;
+            }
+            
+            weakSelf.cursor = @"";
+            [weakSelf fetchMembersWithCursor:weakSelf.cursor isHeader:YES];
+        }
+        else{
+            [weakSelf showHint:NSLocalizedString(@"group.fetchInfoFail", @"failed to get the group details, please try again later")];
+        }
+    }];
 }
 
-- (void)fetchMembersWithPage:(NSInteger)aPage
-                    isHeader:(BOOL)aIsHeader
+- (void)fetchMembersWithCursor:(NSString *)aCursor
+                      isHeader:(BOOL)aIsHeader
 {
     NSInteger pageSize = 50;
     __weak typeof(self) weakSelf = self;
     [self showHudInView:self.view hint:NSLocalizedString(@"hud.load", @"Load data...")];
-//    [[EMClient sharedClient].groupManager getGroupMemberListFromServerWithId:self.group.groupId cursor:self.cursor pageSize:pageSize completion:^(EMCursorResult *aResult, EMError *aError) {
-//        weakSelf.cursor = aResult.cursor;
-//        [weakSelf hideHud];
-//        [weakSelf tableViewDidFinishTriggerHeader:aIsHeader];
-//        if (!aError) {
-//            if (aIsHeader) {
-//                [weakSelf.dataArray removeAllObjects];
-//            }
-//            
-//            [weakSelf.dataArray addObjectsFromArray:aResult.list];
-//            [weakSelf.tableView reloadData];
-//        } else {
-//            [weakSelf showHint:NSLocalizedString(@"group.member.fetchFail", @"Failed to get the group details, please try again later")];
-//        }
-//        
-//        if ([aResult.list count] == 0) {
-//            weakSelf.showRefreshFooter = NO;
-//        } else {
-//            weakSelf.showRefreshFooter = YES;
-//        }
-//    }];
+    [[EMClient sharedClient].groupManager getGroupMemberListFromServerWithId:self.groupId cursor:aCursor pageSize:pageSize completion:^(EMCursorResult *aResult, EMError *aError) {
+        weakSelf.cursor = aResult.cursor;
+        [weakSelf hideHud];
+        [weakSelf tableViewDidFinishTriggerHeader:aIsHeader];
+        if (!aError) {
+            if (aIsHeader) {
+                [weakSelf.dataArray removeAllObjects];
+            }
+            
+            [weakSelf.dataArray addObjectsFromArray:aResult.list];
+            [weakSelf.tableView reloadData];
+        } else {
+            [weakSelf showHint:NSLocalizedString(@"group.member.fetchFail", @"Failed to get the group details, please try again later")];
+        }
+        
+        if ([aResult.list count] == 0) {
+            weakSelf.showRefreshFooter = NO;
+        } else {
+            weakSelf.showRefreshFooter = YES;
+        }
+    }];
 }
 
 @end

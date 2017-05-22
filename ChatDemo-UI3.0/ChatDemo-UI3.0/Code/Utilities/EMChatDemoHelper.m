@@ -277,29 +277,29 @@ static EMChatDemoHelper *helper = nil;
         return;
     }
 
-//    [[EMClient sharedClient].groupManager getGroupSpecificationFromServerWithId:aGroupId completion:^(EMGroup *aGroup, EMError *aError) {
-//        if (![[EMApplyManager defaultManager] isExistingRequest:aInviter
-//                                                        groupId:aGroupId
-//                                                     applyStyle:EMApplyStyle_groupInvitation])
-//        {
-//            EMApplyModel *model = [[EMApplyModel alloc] init];
-//            model.groupId = aGroupId;
-//            model.groupSubject = aGroup.subject;
-//            model.applyHyphenateId = aInviter;
-//            model.applyNickName = aInviter;
-//            model.reason = aMessage;
-//            model.style = EMApplyStyle_groupInvitation;
-//            [[EMApplyManager defaultManager] addApplyRequest:model];
-//        }
-//        
-//        if (self.mainVC && helper) {
-//            [helper setupUntreatedApplyCount];
-//        }
-//        
-//        if (self.contactsVC) {
-//            [self.contactsVC reloadGroupNotifications];
-//        }
-//    }];
+    [[EMClient sharedClient].groupManager getGroupSpecificationFromServerWithId:aGroupId completion:^(EMGroup *aGroup, EMError *aError) {
+        if (![[EMApplyManager defaultManager] isExistingRequest:aInviter
+                                                        groupId:aGroupId
+                                                     applyStyle:EMApplyStyle_groupInvitation])
+        {
+            EMApplyModel *model = [[EMApplyModel alloc] init];
+            model.groupId = aGroupId;
+            model.groupSubject = aGroup.subject;
+            model.applyHyphenateId = aInviter;
+            model.applyNickName = aInviter;
+            model.reason = aMessage;
+            model.style = EMApplyStyle_groupInvitation;
+            [[EMApplyManager defaultManager] addApplyRequest:model];
+        }
+        
+        if (self.mainVC && helper) {
+            [helper setupUntreatedApplyCount];
+        }
+        
+        if (self.contactsVC) {
+            [self.contactsVC reloadGroupNotifications];
+        }
+    }];
 }
 
 @end

@@ -100,20 +100,20 @@
         __weak typeof(self) weakSelf = self;
         dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), ^{
             EMError *error = nil;
-//            weakSelf.group = [[EMClient sharedClient].groupManager unmuteMembers:@[userName] fromGroup:weakSelf.group.groupId error:&error];
-//            
-//            dispatch_async(dispatch_get_main_queue(), ^{
-//                [weakSelf hideHud];
-//                if (!error) {
-//                    [weakSelf.dataArray removeObject:userName];
-//                    [weakSelf.tableView reloadData];
-//                    
-//                    [[NSNotificationCenter defaultCenter] postNotificationName:@"UpdateGroupDetail" object:weakSelf.group];
-//                }
-//                else {
-//                    [weakSelf showHint:error.errorDescription];
-//                }
-//            });
+            weakSelf.group = [[EMClient sharedClient].groupManager unmuteMembers:@[userName] fromGroup:weakSelf.group.groupId error:&error];
+            
+            dispatch_async(dispatch_get_main_queue(), ^{
+                [weakSelf hideHud];
+                if (!error) {
+                    [weakSelf.dataArray removeObject:userName];
+                    [weakSelf.tableView reloadData];
+                    
+                    [[NSNotificationCenter defaultCenter] postNotificationName:@"UpdateGroupDetail" object:weakSelf.group];
+                }
+                else {
+                    [weakSelf showHint:error.errorDescription];
+                }
+            });
         });
     }
 }
@@ -138,27 +138,27 @@
     NSInteger pageSize = 50;
     __weak typeof(self) weakSelf = self;
     [self showHudInView:self.view hint:NSLocalizedString(@"hud.load", @"Load data...")];
-//    [[EMClient sharedClient].groupManager getGroupMuteListFromServerWithId:self.group.groupId pageNumber:self.page pageSize:pageSize completion:^(NSArray *aMembers, EMError *aError) {
-//        [weakSelf hideHud];
-//        [weakSelf tableViewDidFinishTriggerHeader:aIsHeader reload:NO];
-//        if (!aError) {
-//            if (aIsHeader) {
-//                [weakSelf.dataArray removeAllObjects];
-//            }
-//
-//            [weakSelf.dataArray addObjectsFromArray:aMembers];
-//            [weakSelf.tableView reloadData];
-//        } else {
-//            NSString *errorStr = [NSString stringWithFormat:NSLocalizedString(@"group.mute.fetchFail", @"fail to get mutes: %@"), aError.errorDescription];
-//            [weakSelf showHint:errorStr];
-//        }
-//        
-//        if ([aMembers count] < pageSize) {
-//            self.showRefreshFooter = NO;
-//        } else {
-//            self.showRefreshFooter = YES;
-//        }
-//    }];
+    [[EMClient sharedClient].groupManager getGroupMuteListFromServerWithId:self.group.groupId pageNumber:self.page pageSize:pageSize completion:^(NSArray *aMembers, EMError *aError) {
+        [weakSelf hideHud];
+        [weakSelf tableViewDidFinishTriggerHeader:aIsHeader];
+        if (!aError) {
+            if (aIsHeader) {
+                [weakSelf.dataArray removeAllObjects];
+            }
+
+            [weakSelf.dataArray addObjectsFromArray:aMembers];
+            [weakSelf.tableView reloadData];
+        } else {
+            NSString *errorStr = [NSString stringWithFormat:NSLocalizedString(@"group.mute.fetchFail", @"fail to get mutes: %@"), aError.errorDescription];
+            [weakSelf showHint:errorStr];
+        }
+        
+        if ([aMembers count] < pageSize) {
+            self.showRefreshFooter = NO;
+        } else {
+            self.showRefreshFooter = YES;
+        }
+    }];
 }
 
 

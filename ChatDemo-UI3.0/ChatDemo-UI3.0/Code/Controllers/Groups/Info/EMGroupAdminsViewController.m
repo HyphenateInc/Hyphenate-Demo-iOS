@@ -123,33 +123,33 @@
     
     __weak typeof(self) weakSelf = self;
     dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), ^{
-//        EMError *error = nil;
-//        if (buttonIndex == 0) { //remove
-//            weakSelf.group = [[EMClient sharedClient].groupManager removeOccupants:@[userName] fromGroup:weakSelf.group.groupId error:&error];
-//        } else if (buttonIndex == 1) { //blacklist
-//            weakSelf.group = [[EMClient sharedClient].groupManager blockOccupants:@[userName] fromGroup:weakSelf.group.groupId error:&error];
-//        } else if (buttonIndex == 2) {  //mute
-//            weakSelf.group = [[EMClient sharedClient].groupManager muteMembers:@[userName] muteMilliseconds:-1 fromGroup:weakSelf.group.groupId error:&error];
-//        }  else if (buttonIndex == 3) {  //to member
-//            weakSelf.group = [[EMClient sharedClient].groupManager removeAdmin:userName fromGroup:weakSelf.group.groupId error:&error];
-//        }
-//        
-//        dispatch_async(dispatch_get_main_queue(), ^{
-//            [weakSelf hideHud];
-//            if (!error) {
-//                if (buttonIndex != 2) {
-//                    [weakSelf.dataArray removeObject:userName];
-//                    [weakSelf.tableView reloadData];
-//                } else {
-//                    [weakSelf showHint:NSLocalizedString(@"group.mute.success", @"Mute success")];
-//                }
-//                
-//                [[NSNotificationCenter defaultCenter] postNotificationName:@"UpdateGroupDetail" object:weakSelf.group];
-//            }
-//            else {
-//                [weakSelf showHint:error.errorDescription];
-//            }
-//        });
+        EMError *error = nil;
+        if (buttonIndex == 0) { //remove
+            weakSelf.group = [[EMClient sharedClient].groupManager removeOccupants:@[userName] fromGroup:weakSelf.group.groupId error:&error];
+        } else if (buttonIndex == 1) { //blacklist
+            weakSelf.group = [[EMClient sharedClient].groupManager blockOccupants:@[userName] fromGroup:weakSelf.group.groupId error:&error];
+        } else if (buttonIndex == 2) {  //mute
+            weakSelf.group = [[EMClient sharedClient].groupManager muteMembers:@[userName] muteMilliseconds:-1 fromGroup:weakSelf.group.groupId error:&error];
+        }  else if (buttonIndex == 3) {  //to member
+            weakSelf.group = [[EMClient sharedClient].groupManager removeAdmin:userName fromGroup:weakSelf.group.groupId error:&error];
+        }
+        
+        dispatch_async(dispatch_get_main_queue(), ^{
+            [weakSelf hideHud];
+            if (!error) {
+                if (buttonIndex != 2) {
+                    [weakSelf.dataArray removeObject:userName];
+                    [weakSelf.tableView reloadData];
+                } else {
+                    [weakSelf showHint:NSLocalizedString(@"group.mute.success", @"Mute success")];
+                }
+                
+                [[NSNotificationCenter defaultCenter] postNotificationName:@"UpdateGroupDetail" object:weakSelf.group];
+            }
+            else {
+                [weakSelf showHint:error.errorDescription];
+            }
+        });
     });
 }
 
@@ -166,26 +166,26 @@
     __weak typeof(self) weakSelf = self;
     [self showHudInView:self.view hint:NSLocalizedString(@"hud.load", @"Load data...")];
     dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), ^(){
-//        EMError *error = nil;
-//        EMGroup *group = [[EMClient sharedClient].groupManager getGroupSpecificationFromServerWithId:weakSelf.group.groupId error:&error];
-//        dispatch_async(dispatch_get_main_queue(), ^{
-//            [weakSelf hideHud];
-//        });
-//        
-//        [weakSelf tableViewDidFinishTriggerHeader:YES];
-//        if (!error) {
-//            weakSelf.group = group;
-//            dispatch_async(dispatch_get_main_queue(), ^{
-//                [weakSelf.dataArray removeAllObjects];
-//                [weakSelf.dataArray addObjectsFromArray:weakSelf.group.adminList];
-//                [weakSelf.tableView reloadData];
-//            });
-//        }
-//        else{
-//            dispatch_async(dispatch_get_main_queue(), ^{
-//                [weakSelf showHint:NSLocalizedString(@"group.admin.fetchFail", @"failed to get the admin list, please try again later")];
-//            });
-//        }
+        EMError *error = nil;
+        EMGroup *group = [[EMClient sharedClient].groupManager getGroupSpecificationFromServerWithId:weakSelf.group.groupId error:&error];
+        dispatch_async(dispatch_get_main_queue(), ^{
+            [weakSelf hideHud];
+        });
+        
+        [weakSelf tableViewDidFinishTriggerHeader:YES];
+        if (!error) {
+            weakSelf.group = group;
+            dispatch_async(dispatch_get_main_queue(), ^{
+                [weakSelf.dataArray removeAllObjects];
+                [weakSelf.dataArray addObjectsFromArray:weakSelf.group.adminList];
+                [weakSelf.tableView reloadData];
+            });
+        }
+        else{
+            dispatch_async(dispatch_get_main_queue(), ^{
+                [weakSelf showHint:NSLocalizedString(@"group.admin.fetchFail", @"failed to get the admin list, please try again later")];
+            });
+        }
     });
 }
 

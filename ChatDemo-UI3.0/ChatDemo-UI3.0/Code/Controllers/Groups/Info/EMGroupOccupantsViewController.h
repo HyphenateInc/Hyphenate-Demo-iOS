@@ -10,6 +10,6 @@
 
 @interface EMGroupOccupantsViewController : EMBaseRefreshTableController
 
-- (instancetype)initWithGroup:(EMGroup *)aGroup;
+- (instancetype)initWithGroupId:(NSString *)aGroupId;
 
 @end

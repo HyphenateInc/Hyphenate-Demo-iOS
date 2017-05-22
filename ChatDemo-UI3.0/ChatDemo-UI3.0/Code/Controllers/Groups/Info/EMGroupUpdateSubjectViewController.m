@@ -109,17 +109,22 @@
 - (void)saveAction
 {
     EMConversation *conversation = [[EMClient sharedClient].chatManager getConversation:self.groupId type:EMConversationTypeGroupChat createIfNotExist:NO];
-    EMError *error = nil;
-    EMGroup *retGroup = [[EMClient sharedClient].groupManager changeGroupSubject:self.subjectField.text forGroup:self.groupId error:&error];
-    if (!error) {
-        if ([self.groupId isEqualToString:conversation.conversationId]) {
-            NSMutableDictionary *ext = [NSMutableDictionary dictionaryWithDictionary:conversation.ext];
-            [ext setObject:retGroup.subject forKey:@"subject"];
-            [ext setObject:[NSNumber numberWithBool:retGroup.isPublic] forKey:@"isPublic"];
-            conversation.ext = ext;
+    
+    __weak typeof(self) weakSelf = self;
+    [MBProgressHUD showHUDAddedTo:self.view animated:YES];
+    [[EMClient sharedClient].groupManager updateGroupSubject:self.subjectField.text forGroup:self.groupId completion:^(EMGroup *aGroup, EMError *aError) {
+        [MBProgressHUD hideAllHUDsForView:weakSelf.view animated:NO];
+        
+        if (!aError) {
+            if ([weakSelf.groupId isEqualToString:conversation.conversationId]) {
+                NSMutableDictionary *ext = [NSMutableDictionary dictionaryWithDictionary:conversation.ext];
+                [ext setObject:aGroup.subject forKey:@"subject"];
+                [ext setObject:[NSNumber numberWithBool:aGroup.isPublic] forKey:@"isPublic"];
+                conversation.ext = ext;
+            }
         }
-    }
-    [self back];
+        [weakSelf back];
+    }];
 }
 
 @end

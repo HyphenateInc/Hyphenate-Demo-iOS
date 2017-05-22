@@ -22,6 +22,7 @@
 #import "EMMemberSelectViewController.h"
 #import "EMGroupUpdateSubjectViewController.h"
 #import "EMMemberSelectViewController.h"
+#import "EMNotificationNames.h"
 
 @interface EMGroupInfoViewController ()<EMGroupUIProtocol>
 
@@ -150,14 +151,12 @@
 - (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section {
     NSInteger count = 0;
     if (section == 0) {
-//        count = [self.group.adminList count];
-//        if (count > 2) {
-//            count = 3;
-//        } else {
-//            count += 1;
-//        }
-        
-        count = 1;
+        count = [self.group.adminList count];
+        if (count > 2) {
+            count = 3;
+        } else {
+            count += 1;
+        }
     } else if(section == 1) {
         count = [self.showMembers count];
         if (count > 3) {
@@ -168,13 +167,11 @@
         
         self.moreCellIndex = count - 1;
     } else if (section == 2) {
-//        if (self.group.permissionType == EMGroupPermissionTypeOwner || self.group.permissionType == EMGroupPermissionTypeAdmin) {
-//            count = 6;
-//        } else {
-//            count = 4;
-//        }
-        
-        return 10;
+        if (self.group.permissionType == EMGroupPermissionTypeOwner || self.group.permissionType == EMGroupPermissionTypeAdmin) {
+            count = 6;
+        } else {
+            count = 4;
+        }
     }
     
     return count;
@@ -260,7 +257,7 @@
             cell.leftLabel.text = self.group.owner;
             cell.rightLabel.text = @"owner";
         } else {
-//            cell.leftLabel.text = [self.group.adminList objectAtIndex:(row - 1)];
+            cell.leftLabel.text = [self.group.adminList objectAtIndex:(row - 1)];
             cell.rightLabel.text = @"admin";
         }
     } else if (section == 1) {
@@ -309,22 +306,22 @@
             break;
         case 5:
         {
-//            if (self.group.permissionType == EMGroupPermissionTypeOwner) {
+            if (self.group.permissionType == EMGroupPermissionTypeOwner) {
                 EMGroupTransferOwnerViewController *transferController = [[EMGroupTransferOwnerViewController alloc] initWithGroup:self.group];
                 [self.navigationController pushViewController:transferController animated:YES];
-//            } else {
-//                [self showHint:@"只有Owner能进行此操作"];
-//            }
+            } else {
+                [self showHint:@"只有Owner能进行此操作"];
+            }
         }
             break;
         case 6:
         {
-//            if (self.group.permissionType == EMGroupPermissionTypeOwner) {
+            if (self.group.permissionType == EMGroupPermissionTypeOwner) {
                 EMGroupUpdateSubjectViewController *updateController = [[EMGroupUpdateSubjectViewController alloc] initWithGroupId:self.groupId subject:self.group.subject];
                 [self.navigationController pushViewController:updateController animated:YES];
-//            } else {
-//                [self showHint:@"只有Owner能进行此操作"];
-//            }
+            } else {
+                [self showHint:@"只有Owner能进行此操作"];
+            }
         }
             break;
         case 7:
@@ -356,13 +353,13 @@
 
 - (void)addSelectOccupants:(NSArray<EMUserModel *> *)modelArray
 {
-//    NSInteger maxUsersCount = self.group.setting.maxUsersCount;
-//    if (([selectedSources count] + self.group.occupantsCount) > maxUsersCount) {
-//        UIAlertView *alertView = [[UIAlertView alloc] initWithTitle:NSLocalizedString(@"group.maxUserCount", nil) message:nil delegate:nil cancelButtonTitle:NSLocalizedString(@"ok", @"OK") otherButtonTitles:nil, nil];
-//        [alertView show];
-//
-//        return NO;
-//    }
+    NSInteger maxUsersCount = self.group.setting.maxUsersCount;
+    if (([modelArray count] + self.group.occupantsCount) > maxUsersCount) {
+        UIAlertView *alertView = [[UIAlertView alloc] initWithTitle:NSLocalizedString(@"group.maxUserCount", nil) message:nil delegate:nil cancelButtonTitle:NSLocalizedString(@"ok", @"OK") otherButtonTitles:nil, nil];
+        [alertView show];
+
+        return;
+    }
 
     [self.navigationController popToViewController:self animated:YES];
     
@@ -401,10 +398,9 @@
 - (void)addMemberAction
 {
     NSMutableArray *occupants = [[NSMutableArray alloc] init];
-    [occupants addObject:@"001"];
-//    [occupants addObject:self.group.owner];
-//    [occupants addObjectsFromArray:self.group.adminList];
-//    [occupants addObjectsFromArray:self.group.memberList];
+    [occupants addObject:self.group.owner];
+    [occupants addObjectsFromArray:self.group.adminList];
+    [occupants addObjectsFromArray:self.group.memberList];
     
     NSMutableArray *occupantModels = [[NSMutableArray alloc] init];
     for (NSString *username in occupants) {
@@ -420,7 +416,7 @@
 
 - (void)moreMemberAction
 {
-    EMGroupOccupantsViewController *allController = [[EMGroupOccupantsViewController alloc] initWithGroup:self.group];
+    EMGroupOccupantsViewController *allController = [[EMGroupOccupantsViewController alloc] initWithGroupId:self.groupId];
     [self.navigationController pushViewController:allController animated:YES];
 }
 
@@ -439,38 +435,40 @@
 
 - (void)leaveAction
 {
-//    __weak typeof(self) weakSelf = self;
-//    if (self.group.permissionType == EMGroupPermissionTypeOwner) {
-//        [self showHudInView:self.view hint:NSLocalizedString(@"group.destroy", @"dissolution of the group")];
-//        dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), ^(){
-//            EMError *error = [[EMClient sharedClient].groupManager destroyGroup:weakSelf.group.groupId];
-//            dispatch_async(dispatch_get_main_queue(), ^{
-//                [weakSelf hideHud];
-//                if (error) {
-//                    [weakSelf showHint:NSLocalizedString(@"group.destroyFailure", @"dissolution of group failure")];
-//                }
-//                else{
-//                    [[NSNotificationCenter defaultCenter] postNotificationName:@"ExitChat" object:nil];
-//                }
-//            });
-//        });
-//        
-//    } else {
-//        [self showHudInView:self.view hint:NSLocalizedString(@"group.leave", @"Leave group")];
-//        dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), ^(){
-//            EMError *error = nil;
-//            [[EMClient sharedClient].groupManager leaveGroup:weakSelf.group.groupId error:&error];
-//            dispatch_async(dispatch_get_main_queue(), ^{
-//                [weakSelf hideHud];
-//                if (error) {
-//                    [weakSelf showHint:NSLocalizedString(@"group.leaveFailure", @"exit the group failure")];
-//                }
-//                else{
-//                    [[NSNotificationCenter defaultCenter] postNotificationName:@"ExitChat" object:nil];
-//                }
-//            });
-//        });
-//    }
+    __weak typeof(self) weakSelf = self;
+    if (self.group.permissionType == EMGroupPermissionTypeOwner) {
+        [self showHudInView:self.view hint:NSLocalizedString(@"group.destroy", @"dissolution of the group")];
+        dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), ^(){
+            EMError *error = [[EMClient sharedClient].groupManager destroyGroup:weakSelf.group.groupId];
+            dispatch_async(dispatch_get_main_queue(), ^{
+                [weakSelf hideHud];
+                if (error) {
+                    [weakSelf showHint:NSLocalizedString(@"group.destroyFailure", @"dissolution of group failure")];
+                }
+                else{
+                    [[NSNotificationCenter defaultCenter] postNotificationName:@"ExitChat" object:weakSelf.groupId];
+                    [[NSNotificationCenter defaultCenter] postNotificationName:KEM_REFRESH_GROUPLIST_NOTIFICATION object:nil];
+                }
+            });
+        });
+        
+    } else {
+        [self showHudInView:self.view hint:NSLocalizedString(@"group.leave", @"Leave group")];
+        dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), ^(){
+            EMError *error = nil;
+            [[EMClient sharedClient].groupManager leaveGroup:weakSelf.group.groupId error:&error];
+            dispatch_async(dispatch_get_main_queue(), ^{
+                [weakSelf hideHud];
+                if (error) {
+                    [weakSelf showHint:NSLocalizedString(@"group.leaveFailure", @"exit the group failure")];
+                }
+                else{
+                    [[NSNotificationCenter defaultCenter] postNotificationName:@"ExitChat" object:weakSelf.groupId];
+                    [[NSNotificationCenter defaultCenter] postNotificationName:KEM_REFRESH_GROUPLIST_NOTIFICATION object:nil];
+                }
+            });
+        });
+    }
 }
 
 - (void)blockMessageChangeValue
@@ -495,11 +493,11 @@
 
 - (void)reloadUI
 {
-//    if (self.group.permissionType == EMGroupPermissionTypeOwner) {
-//        [self.leaveButton setTitle:NSLocalizedString(@"group.destroy", @"Destroy Group") forState:UIControlStateNormal];
-//    } else {
-//        [self.leaveButton setTitle:NSLocalizedString(@"group.leave", @"Leave Group") forState:UIControlStateNormal];
-//    }
+    if (self.group.permissionType == EMGroupPermissionTypeOwner) {
+        [self.leaveButton setTitle:NSLocalizedString(@"group.destroy", @"Destroy Group") forState:UIControlStateNormal];
+    } else {
+        [self.leaveButton setTitle:NSLocalizedString(@"group.leave", @"Leave Group") forState:UIControlStateNormal];
+    }
     
     if ([self isCanInvite]) {
         self.navigationItem.rightBarButtonItem = self.addMemberItem;
@@ -515,64 +513,55 @@
 
 - (BOOL)isCanInvite
 {
-//    return ([self isGroupOwner] || _currentGroup.setting.style == EMGroupStylePrivateMemberCanInvite);
-    
-    return YES;
+    return (self.group.permissionType == EMGroupPermissionTypeOwner || self.group.permissionType == EMGroupPermissionTypeAdmin || self.group.setting.style == EMGroupStylePrivateMemberCanInvite);
 }
 
 #pragma mark - DataSource
 
 - (void)tableViewDidTriggerHeaderRefresh
 {
-    
+    [self fetchGroupInfo];
 }
 
 - (void)fetchGroupInfo
 {
-//    __weak typeof(self) weakSelf = self;
-//    [self showHudInView:self.view hint:NSLocalizedString(@"hud.load", @"Load data...")];
-//    dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), ^(){
-//        EMError *error = nil;
-//        EMGroup *group = [[EMClient sharedClient].groupManager getGroupSpecificationFromServerWithId:weakSelf.groupId error:&error];
-//        dispatch_async(dispatch_get_main_queue(), ^{
-//            [weakSelf hideHud];
-//        });
-//        
-//        if (!error) {
-//            weakSelf.group = group;
-//            EMConversation *conversation = [[EMClient sharedClient].chatManager getConversation:group.groupId type:EMConversationTypeGroupChat createIfNotExist:YES];
-//            if ([group.groupId isEqualToString:conversation.conversationId]) {
-//                NSMutableDictionary *ext = [NSMutableDictionary dictionaryWithDictionary:conversation.ext];
-//                [ext setObject:group.subject forKey:@"subject"];
-//                [ext setObject:[NSNumber numberWithBool:group.isPublic] forKey:@"isPublic"];
-//                conversation.ext = ext;
-//            }
-//            
-//            dispatch_async(dispatch_get_main_queue(), ^{
-//                [weakSelf fetchGroupMembers];
-//            });
-//        }
-//        else{
-//            dispatch_async(dispatch_get_main_queue(), ^{
-//                [weakSelf showHint:NSLocalizedString(@"group.fetchInfoFail", @"failed to get the group details, please try again later")];
-//            });
-//        }
-//    });
+    __weak typeof(self) weakSelf = self;
+    [self showHudInView:self.view hint:NSLocalizedString(@"hud.load", @"Load data...")];
+    [[EMClient sharedClient].groupManager getGroupSpecificationFromServerWithId:self.groupId completion:^(EMGroup *aGroup, EMError *aError) {
+        [weakSelf hideHud];
+        
+        if (!aError) {
+            weakSelf.group = aGroup;
+            EMConversation *conversation = [[EMClient sharedClient].chatManager getConversation:aGroup.groupId type:EMConversationTypeGroupChat createIfNotExist:YES];
+            if ([aGroup.groupId isEqualToString:conversation.conversationId]) {
+                NSMutableDictionary *ext = [NSMutableDictionary dictionaryWithDictionary:conversation.ext];
+                [ext setObject:aGroup.subject forKey:@"subject"];
+                [ext setObject:[NSNumber numberWithBool:aGroup.isPublic] forKey:@"isPublic"];
+                conversation.ext = ext;
+            }
+            
+            [weakSelf fetchGroupMembers];
+        }
+        else{
+            [weakSelf showHint:NSLocalizedString(@"group.fetchInfoFail", @"failed to get the group details, please try again later")];
+        }
+    }];
 }
 
 - (void)fetchGroupMembers
 {
-//    __weak typeof(self) weakSelf = self;
-//    [self showHudInView:self.view hint:NSLocalizedString(@"hud.load", @"Load data...")];
-//    [[EMClient sharedClient].groupManager getGroupMemberListFromServerWithId:self.groupId cursor:@"" pageSize:10 completion:^(EMCursorResult *aResult, EMError *aError) {
-//        [weakSelf hideHud];
-//        if (!aError) {
-//            weakSelf.showMembers = aResult.list;
-//            [weakSelf reloadUI];
-//        } else {
-//            [weakSelf showHint:NSLocalizedString(@"group.fetchInfoFail", @"failed to get the group details, please try again later")];
-//        }
-//    }];
+    __weak typeof(self) weakSelf = self;
+    [self showHudInView:self.view hint:NSLocalizedString(@"hud.load", @"Load data...")];
+    [[EMClient sharedClient].groupManager getGroupMemberListFromServerWithId:self.groupId cursor:@"" pageSize:10 completion:^(EMCursorResult *aResult, EMError *aError) {
+        [weakSelf hideHud];
+        [weakSelf tableViewDidFinishTriggerHeader:YES];
+        if (!aError) {
+            weakSelf.showMembers = aResult.list;
+            [weakSelf reloadUI];
+        } else {
+            [weakSelf showHint:NSLocalizedString(@"group.fetchInfoFail", @"failed to get the group details, please try again later")];
+        }
+    }];
 }
 
 

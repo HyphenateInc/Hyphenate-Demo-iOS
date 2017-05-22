@@ -17,8 +17,6 @@
 
 @interface EMGroupsViewController ()
 
-@property (nonatomic, strong) NSMutableArray *groups;
-
 @end
 
 @implementation EMGroupsViewController
@@ -57,40 +55,17 @@
     [self.navigationItem setLeftBarButtonItem:leftBar];
 }
 
-- (void)tableViewDidTriggerHeaderRefresh
-{
-    __weak typeof(self) weakSelf = self;
-    [MBProgressHUD showHUDAddedTo:[UIApplication sharedApplication].keyWindow animated:YES];
-    [[EMClient sharedClient].groupManager getJoinedGroupsFromServerWithCompletion:^(NSArray *aList, EMError *aError) {
-        [MBProgressHUD hideHUDForView:[UIApplication sharedApplication].keyWindow animated:YES];
-        [weakSelf tableViewDidFinishTriggerHeader:YES];
-        if (!aError && aList.count > 0) {
-            
-            [weakSelf.groups removeAllObjects];
-            for (EMGroup *group in aList) {
-                EMGroupModel *model = [[EMGroupModel alloc] initWithObject:group];
-                if (model) {
-                    [weakSelf.groups addObject:model];
-                }
-            }
-            dispatch_async(dispatch_get_main_queue(), ^(){
-                [weakSelf.tableView reloadData];
-            });
-        }
-    }];
-}
-
 - (void)loadGroupsFromServer {
     [self tableViewDidTriggerHeaderRefresh];
 }
 
 - (void)loadGroupsFromCache {
     NSArray *myGroups = [[EMClient sharedClient].groupManager getJoinedGroups];
-    [self.groups removeAllObjects];
+    [self.dataArray removeAllObjects];
     for (EMGroup *group in myGroups) {
         EMGroupModel *model = [[EMGroupModel alloc] initWithObject:group];
         if (model) {
-            [self.groups addObject:model];
+            [self.dataArray addObject:model];
         }
     }
     [self tableViewDidFinishTriggerHeader:YES];
@@ -103,15 +78,6 @@
 
 - (void)removeNotifications {
     [[NSNotificationCenter defaultCenter] removeObserver:self name:KEM_REFRESH_GROUPLIST_NOTIFICATION object:nil];
-}
-
-#pragma mark - Lazy Method
-
-- (NSMutableArray *)groups {
-    if (!_groups) {
-        _groups = [NSMutableArray array];
-    }
-    return _groups;
 }
 
 #pragma mark - Action
@@ -131,11 +97,11 @@
 
 - (void)refreshGroupList:(NSNotification *)notification {
     NSArray *groupList = [[EMClient sharedClient].groupManager getJoinedGroups];
-    [self.groups removeAllObjects];
+    [self.dataArray removeAllObjects];
     for (EMGroup *group in groupList) {
         EMGroupModel *model = [[EMGroupModel alloc] initWithObject:group];
         if (model) {
-            [self.groups addObject:model];
+            [self.dataArray addObject:model];
         }
     }
     [self.tableView reloadData];
@@ -155,7 +121,7 @@
 
 - (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section {
 
-    return _groups.count;
+    return self.dataArray.count;
 }
 
 
@@ -165,7 +131,7 @@
     if (!cell) {
         cell = [[[NSBundle mainBundle] loadNibNamed:@"EMGroupCell" owner:self options:nil] lastObject];
     }
-    cell.model = _groups[indexPath.row];
+    cell.model = self.dataArray[indexPath.row];
     
     return cell;
 }
@@ -174,13 +140,51 @@
 
 - (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath {
     [tableView deselectRowAtIndexPath:indexPath animated:YES];
-    EMGroupModel *model = _groups[indexPath.row];
+    EMGroupModel *model = self.dataArray[indexPath.row];
     EMChatViewController *chatViewController = [[EMChatViewController alloc] initWithConversationId:model.hyphenateId conversationType:EMConversationTypeGroupChat];
     [self.navigationController pushViewController:chatViewController animated:YES];
 }
 
 - (CGFloat)tableView:(UITableView *)tableView heightForRowAtIndexPath:(NSIndexPath *)indexPath {
     return 70.0f;
+}
+
+#pragma mark - Data
+
+- (void)tableViewDidTriggerHeaderRefresh
+{
+    self.page = 1;
+    [self fetchJoinedGroupWithPage:self.page isHeader:YES];
+}
+
+- (void)tableViewDidTriggerFooterRefresh
+{
+    self.page += 1;
+    [self fetchJoinedGroupWithPage:self.page isHeader:NO];
+}
+
+- (void)fetchJoinedGroupWithPage:(NSInteger)aPage
+                        isHeader:(BOOL)aIsHeader
+{
+    __weak typeof(self) weakSelf = self;
+    [MBProgressHUD showHUDAddedTo:[UIApplication sharedApplication].keyWindow animated:YES];
+    [[EMClient sharedClient].groupManager getJoinedGroupsFromServerWithPage:self.page pageSize:50 completion:^(NSArray *aList, EMError *aError) {
+        [MBProgressHUD hideHUDForView:[UIApplication sharedApplication].keyWindow animated:YES];
+        [weakSelf tableViewDidFinishTriggerHeader:aIsHeader];
+        if (!aError && aList.count > 0) {
+            [weakSelf.dataArray removeAllObjects];
+            for (EMGroup *group in aList) {
+                EMGroupModel *model = [[EMGroupModel alloc] initWithObject:group];
+                if (model) {
+                    [weakSelf.dataArray addObject:model];
+                }
+            }
+            
+            dispatch_async(dispatch_get_main_queue(), ^(){
+                [weakSelf.tableView reloadData];
+            });
+        }
+    }];
 }
 
 @end

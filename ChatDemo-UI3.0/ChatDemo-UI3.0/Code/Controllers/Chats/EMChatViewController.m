@@ -85,6 +85,8 @@
         self.navigationItem.leftBarButtonItem = [[UIBarButtonItem alloc] initWithCustomView:self.backButton];
         self.navigationItem.rightBarButtonItem = [[UIBarButtonItem alloc] initWithCustomView:self.detailButton];
         self.title = [[EMConversationModel alloc] initWithConversation:self.conversation].title;
+        
+        [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(leaveGroupAction:) name:@"ExitChat" object:nil];
     } else if (_conversation.type == EMConversationTypeChatRoom){
         self.navigationItem.leftBarButtonItem = [[UIBarButtonItem alloc] initWithCustomView:self.backButton];
     }
@@ -683,6 +685,18 @@
             [self.dataSource removeAllObjects];
             
             [self.tableView reloadData];
+        }
+    }
+}
+
+- (void)leaveGroupAction:(NSNotification *)aNotification
+{
+    id obj = aNotification.object;
+    if ([obj isKindOfClass:[NSString class]]) {
+        NSString *groupId = (NSString *)obj;
+        if ([groupId length] > 0 && [groupId isEqualToString:self.conversationId]) {
+            [self.navigationController popToViewController:self animated:YES];
+            [self backAction];
         }
     }
 }

@@ -22,6 +22,8 @@
 @property (nonatomic, strong) UILabel *headerLabel;
 @property (nonatomic, strong) UIScrollView *headerScrollView;
 
+@property (nonatomic,strong) NSString *cursor;
+
 @end
 
 @implementation EMAddAdminViewController
@@ -45,7 +47,7 @@
     
     self.selectedArray = [[NSMutableArray alloc] init];
     self.scrollViewArray = [[NSMutableArray alloc] init];
-    [self.dataArray addObjectsFromArray:@[@"001", @"002"]];
+    self.cursor = @"";
     
     self.tableView.rowHeight = 50;
     [self.tableView reloadData];
@@ -220,26 +222,26 @@
     __weak typeof(self) weakSelf = self;
     [self showHudInView:self.view hint:NSLocalizedString(@"hud.load", @"Load data...")];
     dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), ^(){
-        //        EMError *error = nil;
-        //        EMGroup *group = [[EMClient sharedClient].groupManager getGroupSpecificationFromServerWithId:weakSelf.groupId error:&error];
-        //        dispatch_async(dispatch_get_main_queue(), ^{
-        //            [weakSelf hideHud];
-        //        });
-        //
-        //        if (!error) {
-        //            weakSelf.group = group;
-        //            [weakSelf.dataArray removeAllObjects];
-        //            [weakSelf.dataArray addObjectsFromArray:weakSelf.group.adminList];
-        //            dispatch_async(dispatch_get_main_queue(), ^{
-        //                weakSelf.cursor = @"";
-        //                [weakSelf fetchMembersWithPage:weakSelf.page isHeader:YES];
-        //            });
-        //        }
-        //        else{
-        //            dispatch_async(dispatch_get_main_queue(), ^{
-        //                [weakSelf showHint:NSLocalizedString(@"group.fetchInfoFail", @"failed to get the group details, please try again later")];
-        //            });
-        //        }
+        EMError *error = nil;
+        EMGroup *group = [[EMClient sharedClient].groupManager getGroupSpecificationFromServerWithId:weakSelf.groupId error:&error];
+        dispatch_async(dispatch_get_main_queue(), ^{
+            [weakSelf hideHud];
+        });
+
+        if (!error) {
+            weakSelf.groupId = group.groupId;
+            [weakSelf.dataArray removeAllObjects];
+            [weakSelf.dataArray addObjectsFromArray:group.adminList];
+            dispatch_async(dispatch_get_main_queue(), ^{
+                weakSelf.cursor = @"";
+                [weakSelf fetchMembersWithPage:weakSelf.page isHeader:YES];
+            });
+        }
+        else{
+            dispatch_async(dispatch_get_main_queue(), ^{
+                [weakSelf showHint:NSLocalizedString(@"group.fetchInfoFail", @"failed to get the group details, please try again later")];
+            });
+        }
     });
 }
 
@@ -254,23 +256,23 @@
     NSInteger pageSize = 50;
     __weak typeof(self) weakSelf = self;
     [self showHudInView:self.view hint:NSLocalizedString(@"hud.load", @"Load data...")];
-    //    [[EMClient sharedClient].groupManager getGroupMemberListFromServerWithId:self.groupId cursor:self.cursor pageSize:pageSize completion:^(EMCursorResult *aResult, EMError *aError) {
-    //        weakSelf.cursor = aResult.cursor;
-    //        [weakSelf hideHud];
-    //        [weakSelf tableViewDidFinishTriggerHeader:aIsHeader];
-    //        if (!aError) {
-    //            [weakSelf.dataArray addObjectsFromArray:aResult.list];
-    //            [weakSelf.tableView reloadData];
-    //        } else {
-    //            [weakSelf showHint:NSLocalizedString(@"group.member.fetchFail", @"failed to get the member list, please try again later")];
-    //        }
-    //        
-    //        if ([aResult.list count] == 0) {
-    //            weakSelf.showRefreshFooter = NO;
-    //        } else {
-    //            weakSelf.showRefreshFooter = YES;
-    //        }
-    //    }];
+    [[EMClient sharedClient].groupManager getGroupMemberListFromServerWithId:self.groupId cursor:self.cursor pageSize:pageSize completion:^(EMCursorResult *aResult, EMError *aError) {
+        weakSelf.cursor = aResult.cursor;
+        [weakSelf hideHud];
+        [weakSelf tableViewDidFinishTriggerHeader:aIsHeader];
+        if (!aError) {
+            [weakSelf.dataArray addObjectsFromArray:aResult.list];
+            [weakSelf.tableView reloadData];
+        } else {
+            [weakSelf showHint:NSLocalizedString(@"group.member.fetchFail", @"failed to get the member list, please try again later")];
+        }
+        
+        if ([aResult.list count] == 0) {
+            weakSelf.showRefreshFooter = NO;
+        } else {
+            weakSelf.showRefreshFooter = YES;
+        }
+    }];
 }
 
 
