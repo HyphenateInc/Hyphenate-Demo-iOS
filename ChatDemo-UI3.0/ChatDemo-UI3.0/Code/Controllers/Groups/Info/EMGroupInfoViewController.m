@@ -21,7 +21,6 @@
 #import "EMGroupTransferOwnerViewController.h"
 #import "EMMemberSelectViewController.h"
 #import "EMGroupUpdateSubjectViewController.h"
-#import "EMMemberSelectViewController.h"
 #import "EMNotificationNames.h"
 
 @interface EMGroupInfoViewController ()<EMGroupUIProtocol>
@@ -411,7 +410,8 @@
     selectionController.style = EMContactSelectStyle_Invite;
     selectionController.title = NSLocalizedString(@"title.inviteContacts", @"Invite Contacts");
     selectionController.delegate = self;
-    [self.navigationController pushViewController:selectionController animated:YES];
+    UINavigationController *nav = [[UINavigationController alloc] initWithRootViewController:selectionController];
+    [self presentViewController:nav animated:YES completion:nil];
 }
 
 - (void)moreMemberAction

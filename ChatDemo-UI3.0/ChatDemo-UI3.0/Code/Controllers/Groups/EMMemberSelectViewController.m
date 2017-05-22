@@ -217,6 +217,7 @@
     if (_delegate && [_delegate respondsToSelector:@selector(addSelectOccupants:)]) {
         [_delegate addSelectOccupants:_selectContacts];
     }
+    
     [self dismissViewControllerAnimated:YES completion:nil];
 }
 
