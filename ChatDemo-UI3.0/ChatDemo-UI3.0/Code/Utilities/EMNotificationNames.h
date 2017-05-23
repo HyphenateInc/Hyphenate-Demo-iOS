@@ -12,3 +12,5 @@
 #define KEM_REFRESH_GROUP_INFO  @"UpdateGroupDetail"
 
 #define KEM_REFRESH_CHATROOMLIST_NOTIFICATION     @"refreshChatrooms_notification"
+
+#define KEM_LEAVE_GROUP  @"leaveGroup"

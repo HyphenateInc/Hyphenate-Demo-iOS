@@ -451,7 +451,7 @@
                     [weakSelf showHint:NSLocalizedString(@"group.destroyFailure", @"dissolution of group failure")];
                 }
                 else{
-                    [[NSNotificationCenter defaultCenter] postNotificationName:@"ExitChat" object:weakSelf.groupId];
+                    [[NSNotificationCenter defaultCenter] postNotificationName:KEM_LEAVE_GROUP object:weakSelf.groupId];
                     [[NSNotificationCenter defaultCenter] postNotificationName:KEM_REFRESH_GROUPLIST_NOTIFICATION object:nil];
                 }
             });
@@ -468,7 +468,7 @@
                     [weakSelf showHint:NSLocalizedString(@"group.leaveFailure", @"exit the group failure")];
                 }
                 else{
-                    [[NSNotificationCenter defaultCenter] postNotificationName:@"ExitChat" object:weakSelf.groupId];
+                    [[NSNotificationCenter defaultCenter] postNotificationName:KEM_LEAVE_GROUP object:weakSelf.groupId];
                     [[NSNotificationCenter defaultCenter] postNotificationName:KEM_REFRESH_GROUPLIST_NOTIFICATION object:nil];
                 }
             });
