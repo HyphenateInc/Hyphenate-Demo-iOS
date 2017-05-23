@@ -238,6 +238,7 @@
 "common.cancel" = "取消";
 "common.ok" = "确定";
 "common.groups" = "群组列表";
+"common.chatrooms" = "聊天室列表";
 "common.next" = "下一步";
 "common.done" = "完成";
 "common.cameraPhoto" = "拍照";
