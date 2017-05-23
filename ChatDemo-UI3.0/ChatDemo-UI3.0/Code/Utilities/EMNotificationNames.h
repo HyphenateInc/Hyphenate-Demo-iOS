@@ -9,3 +9,6 @@
 
 #define KEM_REFRESH_GROUPLIST_NOTIFICATION     @"refreshGroups_notification"
 #define KEM_REMOVEGROUP_NOTIFICATION           @"removeGroups_notification"
+#define KEM_REFRESH_GROUP_INFO  @"UpdateGroupDetail"
+
+#define KEM_REFRESH_CHATROOMLIST_NOTIFICATION     @"refreshChatrooms_notification"

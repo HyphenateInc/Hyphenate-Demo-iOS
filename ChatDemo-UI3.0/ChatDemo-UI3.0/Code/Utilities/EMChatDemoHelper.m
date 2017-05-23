@@ -13,6 +13,7 @@
 #import "EMGroupsViewController.h"
 #import "EMChatViewController.h"
 #import "EMGroupInfoViewController.h"
+#import "EMNotificationNames.h"
 
 static EMChatDemoHelper *helper = nil;
 
@@ -264,7 +265,8 @@ static EMChatDemoHelper *helper = nil;
     [self showAlertWithMessage:aReason];
 }
 
-- (void)joinGroupRequestDidApprove:(EMGroup *)aGroup {
+- (void)joinGroupRequestDidApprove:(EMGroup *)aGroup
+{
     NSString *msgstr = [NSString stringWithFormat:NSLocalizedString(@"group.agreedAndJoined", @"agreed to join the group of \'%@\'"), aGroup.subject];
     [self showAlertWithMessage:msgstr];
 }
@@ -300,6 +302,94 @@ static EMChatDemoHelper *helper = nil;
             [self.contactsVC reloadGroupNotifications];
         }
     }];
+}
+
+- (void)groupInvitationDidDecline:(EMGroup *)aGroup
+                          invitee:(NSString *)aInvitee
+                           reason:(NSString *)aReason
+{
+    NSString *message = [NSString stringWithFormat:@"%@ 拒绝群组\"%@\"的入群邀请", aInvitee, aGroup.subject];
+    UIAlertView *alertView = [[UIAlertView alloc] initWithTitle:NSLocalizedString(@"prompt", @"Prompt") message:message delegate:nil cancelButtonTitle:NSLocalizedString(@"ok", @"OK") otherButtonTitles:nil, nil];
+    [alertView show];
+}
+
+- (void)groupInvitationDidAccept:(EMGroup *)aGroup
+                         invitee:(NSString *)aInvitee
+{
+    [[NSNotificationCenter defaultCenter] postNotificationName:KEM_REFRESH_GROUP_INFO object:aGroup];
+    NSString *message = [NSString stringWithFormat:@"%@ 已同意群组\"%@\"的入群邀请", aInvitee, aGroup.subject];
+    UIAlertView *alertView = [[UIAlertView alloc] initWithTitle:NSLocalizedString(@"prompt", @"Prompt") message:message delegate:nil cancelButtonTitle:NSLocalizedString(@"ok", @"OK") otherButtonTitles:nil, nil];
+    [alertView show];
+}
+
+- (void)groupMuteListDidUpdate:(EMGroup *)aGroup
+             addedMutedMembers:(NSArray *)aMutedMembers
+                    muteExpire:(NSInteger)aMuteExpire
+{
+    [[NSNotificationCenter defaultCenter] postNotificationName:KEM_REFRESH_GROUP_INFO object:aGroup];
+    
+    UIAlertView *alertView = [[UIAlertView alloc] initWithTitle:@"群组更新" message:@"禁言群成员" delegate:nil cancelButtonTitle:@"确定" otherButtonTitles:nil, nil];
+    [alertView show];
+}
+
+- (void)groupMuteListDidUpdate:(EMGroup *)aGroup
+           removedMutedMembers:(NSArray *)aMutedMembers
+{
+    [[NSNotificationCenter defaultCenter] postNotificationName:KEM_REFRESH_GROUP_INFO object:aGroup];
+    
+    UIAlertView *alertView = [[UIAlertView alloc] initWithTitle:@"群组更新" message:@"解除禁言" delegate:nil cancelButtonTitle:@"确定" otherButtonTitles:nil, nil];
+    [alertView show];
+}
+
+- (void)groupAdminListDidUpdate:(EMGroup *)aGroup
+                     addedAdmin:(NSString *)aAdmin
+{
+    [[NSNotificationCenter defaultCenter] postNotificationName:KEM_REFRESH_GROUP_INFO object:aGroup];
+    
+    NSString *msg = [NSString stringWithFormat:@"%@ 变为管理员", aAdmin];
+    UIAlertView *alertView = [[UIAlertView alloc] initWithTitle:@"管理员更新" message:msg delegate:nil cancelButtonTitle:@"确定" otherButtonTitles:nil, nil];
+    [alertView show];
+}
+
+- (void)groupAdminListDidUpdate:(EMGroup *)aGroup
+                   removedAdmin:(NSString *)aAdmin
+{
+    [[NSNotificationCenter defaultCenter] postNotificationName:KEM_REFRESH_GROUP_INFO object:aGroup];
+    
+    NSString *msg = [NSString stringWithFormat:@"%@ 被移出管理员", aAdmin];
+    UIAlertView *alertView = [[UIAlertView alloc] initWithTitle:@"管理员更新" message:msg delegate:nil cancelButtonTitle:@"确定" otherButtonTitles:nil, nil];
+    [alertView show];
+}
+
+- (void)groupOwnerDidUpdate:(EMGroup *)aGroup
+                   newOwner:(NSString *)aNewOwner
+                   oldOwner:(NSString *)aOldOwner
+{
+    [[NSNotificationCenter defaultCenter] postNotificationName:KEM_REFRESH_GROUP_INFO object:aGroup];
+    
+    NSString *msg = [NSString stringWithFormat:@"群主由 %@ 变为 %@", aOldOwner, aNewOwner];
+    UIAlertView *alertView = [[UIAlertView alloc] initWithTitle:@"群主更新" message:msg delegate:nil cancelButtonTitle:@"确定" otherButtonTitles:nil, nil];
+    [alertView show];
+}
+
+- (void)userDidJoinGroup:(EMGroup *)aGroup
+                    user:(NSString *)aUsername
+{
+    [[NSNotificationCenter defaultCenter] postNotificationName:KEM_REFRESH_GROUP_INFO object:aGroup];
+    
+    NSString *msg = [NSString stringWithFormat:@"%@ 加入群组 %@", aUsername, aGroup.subject];
+    UIAlertView *alertView = [[UIAlertView alloc] initWithTitle:@"群成员更新" message:msg delegate:nil cancelButtonTitle:@"确定" otherButtonTitles:nil, nil];
+    [alertView show];
+}
+
+- (void)userDidLeaveGroup:(EMGroup *)aGroup
+                     user:(NSString *)aUsername
+{
+    [[NSNotificationCenter defaultCenter] postNotificationName:KEM_REFRESH_GROUP_INFO object:aGroup];
+    
+    NSString *msg = [NSString stringWithFormat:@"%@ 离开群组 %@", aUsername, aGroup.subject];
+    UIAlertView *alertView = [[UIAlertView alloc] initWithTitle:@"群成员更新" message:msg delegate:nil cancelButtonTitle:@"确定" otherButtonTitles:nil, nil];
+    [alertView show];
 }
 
 @end

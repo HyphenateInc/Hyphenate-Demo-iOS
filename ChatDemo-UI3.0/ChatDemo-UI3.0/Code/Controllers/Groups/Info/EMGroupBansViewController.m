@@ -10,6 +10,7 @@
 
 #import "EMMemberCell.h"
 #import "UIViewController+HUD.h"
+#import "EMNotificationNames.h"
 
 @interface EMGroupBansViewController ()
 
@@ -108,7 +109,7 @@
                 [weakSelf.dataArray removeObject:userName];
                 [weakSelf.tableView reloadData];
                 
-                [[NSNotificationCenter defaultCenter] postNotificationName:@"UpdateGroupDetail" object:weakSelf.group];
+                [[NSNotificationCenter defaultCenter] postNotificationName:KEM_REFRESH_GROUP_INFO object:weakSelf.group];
             }
             else {
                 [weakSelf showHint:error.errorDescription];

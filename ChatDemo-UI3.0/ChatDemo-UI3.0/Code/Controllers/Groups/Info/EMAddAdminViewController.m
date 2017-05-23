@@ -10,6 +10,7 @@
 
 #import "EMMemberCell.h"
 #import "UIViewController+HUD.h"
+#import "EMNotificationNames.h"
 
 @interface EMAddAdminViewController ()
 
@@ -235,7 +236,7 @@
                 [weakSelf showAlertWithMessage:alertMsg];
             }
             [[NSNotificationCenter defaultCenter] postNotificationName:@"UpdateGroupAdminList" object:group];
-            [[NSNotificationCenter defaultCenter] postNotificationName:@"UpdateGroupDetail" object:group];
+            [[NSNotificationCenter defaultCenter] postNotificationName:KEM_REFRESH_GROUP_INFO object:group];
             [weakSelf.navigationController popViewControllerAnimated:YES];
         });
     });

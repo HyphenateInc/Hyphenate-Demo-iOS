@@ -10,6 +10,7 @@
 
 #import "EMMemberCell.h"
 #import "UIViewController+HUD.h"
+#import "EMNotificationNames.h"
 
 @interface EMGroupTransferOwnerViewController ()
 
@@ -144,7 +145,7 @@
             if (aError) {
                 [weakSelf showHint:NSLocalizedString(@"group.changeOwnerFail", @"Failed to change owner")];
             } else {
-                [[NSNotificationCenter defaultCenter] postNotificationName:@"UpdateGroupDetail" object:weakSelf.group];
+                [[NSNotificationCenter defaultCenter] postNotificationName:KEM_REFRESH_GROUP_INFO object:weakSelf.group];
                 [weakSelf backAction];
             }
         }];

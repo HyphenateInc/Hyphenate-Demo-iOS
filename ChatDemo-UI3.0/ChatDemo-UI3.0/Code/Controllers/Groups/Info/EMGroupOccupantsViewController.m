@@ -10,6 +10,7 @@
 
 #import "EMMemberCell.h"
 #import "UIViewController+HUD.h"
+#import "EMNotificationNames.h"
 
 @interface EMGroupOccupantsViewController ()
 
@@ -196,7 +197,7 @@
                     [weakSelf showHint:NSLocalizedString(@"group.mute.success", @"Mute success")];
                 }
                 
-                [[NSNotificationCenter defaultCenter] postNotificationName:@"UpdateGroupDetail" object:weakSelf.group];
+                [[NSNotificationCenter defaultCenter] postNotificationName:KEM_REFRESH_GROUP_INFO object:weakSelf.group];
             }
             else {
                 [weakSelf showHint:error.errorDescription];

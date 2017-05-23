@@ -11,6 +11,7 @@
 #import "EMMemberCell.h"
 #import "UIViewController+HUD.h"
 #import "EMAddAdminViewController.h"
+#import "EMNotificationNames.h"
 
 @interface EMGroupAdminsViewController ()
 
@@ -43,6 +44,11 @@
 - (void)didReceiveMemoryWarning {
     [super didReceiveMemoryWarning];
     // Dispose of any resources that can be recreated.
+}
+
+- (void)dealloc
+{
+    [[NSNotificationCenter defaultCenter] removeObserver:self];
 }
 
 #pragma mark - Navigation Bar
@@ -151,7 +157,7 @@
                     [weakSelf showHint:NSLocalizedString(@"group.mute.success", @"Mute success")];
                 }
                 
-                [[NSNotificationCenter defaultCenter] postNotificationName:@"UpdateGroupDetail" object:weakSelf.group];
+                [[NSNotificationCenter defaultCenter] postNotificationName:KEM_REFRESH_GROUP_INFO object:weakSelf.group];
             }
             else {
                 [weakSelf showHint:error.errorDescription];
