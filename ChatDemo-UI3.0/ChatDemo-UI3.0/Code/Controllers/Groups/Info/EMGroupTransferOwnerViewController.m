@@ -1,10 +1,11 @@
-//
-//  EMGroupTransferOwnerViewController.m
-//  ChatDemo-UI3.0
-//
-//  Created by XieYajie on 09/03/2017.
-//  Copyright © 2017 XieYajie. All rights reserved.
-//
+/************************************************************
+ *  * Hyphenate
+ * __________________
+ * Copyright (C) 2016 Hyphenate Inc. All rights reserved.
+ *
+ * NOTICE: All information contained herein is, and remains
+ * the property of Hyphenate Inc.
+ */
 
 #import "EMGroupTransferOwnerViewController.h"
 
