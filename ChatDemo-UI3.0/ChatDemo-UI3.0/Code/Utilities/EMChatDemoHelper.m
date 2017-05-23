@@ -34,6 +34,7 @@ static EMChatDemoHelper *helper = nil;
     [[EMClient sharedClient].chatManager removeDelegate:self];
     [[EMClient sharedClient].groupManager removeDelegate:self];
     [[EMClient sharedClient].contactManager removeDelegate:self];
+    [[EMClient sharedClient].roomManager removeDelegate:self];
 }
 
 - (id)init
@@ -51,6 +52,7 @@ static EMChatDemoHelper *helper = nil;
     [[EMClient sharedClient].chatManager addDelegate:self delegateQueue:nil];
     [[EMClient sharedClient].groupManager addDelegate:self delegateQueue:nil];
     [[EMClient sharedClient].contactManager addDelegate:self delegateQueue:nil];
+    [[EMClient sharedClient].roomManager addDelegate:self delegateQueue:nil];
 }
 
 
@@ -308,8 +310,8 @@ static EMChatDemoHelper *helper = nil;
                           invitee:(NSString *)aInvitee
                            reason:(NSString *)aReason
 {
-    NSString *message = [NSString stringWithFormat:@"%@ 拒绝群组\"%@\"的入群邀请", aInvitee, aGroup.subject];
-    UIAlertView *alertView = [[UIAlertView alloc] initWithTitle:NSLocalizedString(@"prompt", @"Prompt") message:message delegate:nil cancelButtonTitle:NSLocalizedString(@"ok", @"OK") otherButtonTitles:nil, nil];
+    NSString *message = [NSString stringWithFormat:NSLocalizedString(@"group.declineInvitation", @"%@ decline to join the group [%@]"), aInvitee, aGroup.subject];
+    UIAlertView *alertView = [[UIAlertView alloc] initWithTitle:NSLocalizedString(@"group.notifications", @"Group Notification") message:message delegate:nil cancelButtonTitle:NSLocalizedString(@"ok", @"OK") otherButtonTitles:nil, nil];
     [alertView show];
 }
 
@@ -317,8 +319,8 @@ static EMChatDemoHelper *helper = nil;
                          invitee:(NSString *)aInvitee
 {
     [[NSNotificationCenter defaultCenter] postNotificationName:KEM_REFRESH_GROUP_INFO object:aGroup];
-    NSString *message = [NSString stringWithFormat:@"%@ 已同意群组\"%@\"的入群邀请", aInvitee, aGroup.subject];
-    UIAlertView *alertView = [[UIAlertView alloc] initWithTitle:NSLocalizedString(@"prompt", @"Prompt") message:message delegate:nil cancelButtonTitle:NSLocalizedString(@"ok", @"OK") otherButtonTitles:nil, nil];
+    NSString *message = [NSString stringWithFormat:NSLocalizedString(@"group.acceptInvitation", @"%@ has agreed to join the group [%@]"), aInvitee, aGroup.subject];
+    UIAlertView *alertView = [[UIAlertView alloc] initWithTitle:NSLocalizedString(@"group.notifications", @"Group Notification") message:message delegate:nil cancelButtonTitle:NSLocalizedString(@"ok", @"OK") otherButtonTitles:nil, nil];
     [alertView show];
 }
 
@@ -328,7 +330,12 @@ static EMChatDemoHelper *helper = nil;
 {
     [[NSNotificationCenter defaultCenter] postNotificationName:KEM_REFRESH_GROUP_INFO object:aGroup];
     
-    UIAlertView *alertView = [[UIAlertView alloc] initWithTitle:@"群组更新" message:@"禁言群成员" delegate:nil cancelButtonTitle:@"确定" otherButtonTitles:nil, nil];
+    NSMutableString *msg = [NSMutableString stringWithString:NSLocalizedString(@"group.mute.added", @"Added to mute list:")];
+    for (NSString *username in aMutedMembers) {
+        [msg appendFormat:@" %@", username];
+    }
+    
+    UIAlertView *alertView = [[UIAlertView alloc] initWithTitle:NSLocalizedString(@"group.notifications", @"Group Notification") message:msg delegate:nil cancelButtonTitle:NSLocalizedString(@"ok", @"OK") otherButtonTitles:nil, nil];
     [alertView show];
 }
 
@@ -337,7 +344,11 @@ static EMChatDemoHelper *helper = nil;
 {
     [[NSNotificationCenter defaultCenter] postNotificationName:KEM_REFRESH_GROUP_INFO object:aGroup];
     
-    UIAlertView *alertView = [[UIAlertView alloc] initWithTitle:@"群组更新" message:@"解除禁言" delegate:nil cancelButtonTitle:@"确定" otherButtonTitles:nil, nil];
+    NSMutableString *msg = [NSMutableString stringWithString:NSLocalizedString(@"group.mute.removed", @"Removed from mute list:")];
+    for (NSString *username in aMutedMembers) {
+        [msg appendFormat:@" %@", username];
+    }
+    UIAlertView *alertView = [[UIAlertView alloc] initWithTitle:NSLocalizedString(@"group.notifications", @"Group Notification") message:msg delegate:nil cancelButtonTitle:NSLocalizedString(@"ok", @"OK") otherButtonTitles:nil, nil];
     [alertView show];
 }
 
@@ -346,8 +357,8 @@ static EMChatDemoHelper *helper = nil;
 {
     [[NSNotificationCenter defaultCenter] postNotificationName:KEM_REFRESH_GROUP_INFO object:aGroup];
     
-    NSString *msg = [NSString stringWithFormat:@"%@ 变为管理员", aAdmin];
-    UIAlertView *alertView = [[UIAlertView alloc] initWithTitle:@"管理员更新" message:msg delegate:nil cancelButtonTitle:@"确定" otherButtonTitles:nil, nil];
+    NSString *msg = [NSString stringWithFormat:NSLocalizedString(@"group.memberToAdmin", @"%@ is upgraded to administrator"), aAdmin];
+    UIAlertView *alertView = [[UIAlertView alloc] initWithTitle:NSLocalizedString(@"group.notifications", @"Group Notification") message:msg delegate:nil cancelButtonTitle:NSLocalizedString(@"ok", @"OK") otherButtonTitles:nil, nil];
     [alertView show];
 }
 
@@ -356,8 +367,8 @@ static EMChatDemoHelper *helper = nil;
 {
     [[NSNotificationCenter defaultCenter] postNotificationName:KEM_REFRESH_GROUP_INFO object:aGroup];
     
-    NSString *msg = [NSString stringWithFormat:@"%@ 被移出管理员", aAdmin];
-    UIAlertView *alertView = [[UIAlertView alloc] initWithTitle:@"管理员更新" message:msg delegate:nil cancelButtonTitle:@"确定" otherButtonTitles:nil, nil];
+    NSString *msg = [NSString stringWithFormat:NSLocalizedString(@"group.AdminToMember", @"%@ is downgraded to members"), aAdmin];
+    UIAlertView *alertView = [[UIAlertView alloc] initWithTitle:NSLocalizedString(@"group.notifications", @"Group Notification") message:msg delegate:nil cancelButtonTitle:NSLocalizedString(@"ok", @"OK") otherButtonTitles:nil, nil];
     [alertView show];
 }
 
@@ -367,8 +378,8 @@ static EMChatDemoHelper *helper = nil;
 {
     [[NSNotificationCenter defaultCenter] postNotificationName:KEM_REFRESH_GROUP_INFO object:aGroup];
     
-    NSString *msg = [NSString stringWithFormat:@"群主由 %@ 变为 %@", aOldOwner, aNewOwner];
-    UIAlertView *alertView = [[UIAlertView alloc] initWithTitle:@"群主更新" message:msg delegate:nil cancelButtonTitle:@"确定" otherButtonTitles:nil, nil];
+    NSString *msg = [NSString stringWithFormat:NSLocalizedString(@"group.owner.updated", @"The group owner changed from %@ to %@"), aOldOwner, aNewOwner];
+    UIAlertView *alertView = [[UIAlertView alloc] initWithTitle:NSLocalizedString(@"group.notifications", @"Group Notification") message:msg delegate:nil cancelButtonTitle:NSLocalizedString(@"ok", @"OK") otherButtonTitles:nil, nil];
     [alertView show];
 }
 
@@ -377,8 +388,8 @@ static EMChatDemoHelper *helper = nil;
 {
     [[NSNotificationCenter defaultCenter] postNotificationName:KEM_REFRESH_GROUP_INFO object:aGroup];
     
-    NSString *msg = [NSString stringWithFormat:@"%@ 加入群组 %@", aUsername, aGroup.subject];
-    UIAlertView *alertView = [[UIAlertView alloc] initWithTitle:@"群成员更新" message:msg delegate:nil cancelButtonTitle:@"确定" otherButtonTitles:nil, nil];
+    NSString *msg = [NSString stringWithFormat:NSLocalizedString(@"group.member.joined", @"%@ has joined to the group [%@]"), aUsername, aGroup.subject];
+    UIAlertView *alertView = [[UIAlertView alloc] initWithTitle:NSLocalizedString(@"group.notifications", @"Group Notification") message:msg delegate:nil cancelButtonTitle:NSLocalizedString(@"ok", @"OK") otherButtonTitles:nil, nil];
     [alertView show];
 }
 
@@ -387,9 +398,82 @@ static EMChatDemoHelper *helper = nil;
 {
     [[NSNotificationCenter defaultCenter] postNotificationName:KEM_REFRESH_GROUP_INFO object:aGroup];
     
-    NSString *msg = [NSString stringWithFormat:@"%@ 离开群组 %@", aUsername, aGroup.subject];
-    UIAlertView *alertView = [[UIAlertView alloc] initWithTitle:@"群成员更新" message:msg delegate:nil cancelButtonTitle:@"确定" otherButtonTitles:nil, nil];
+    NSString *msg = [NSString stringWithFormat:NSLocalizedString(@"group.member.leaved", @"%@ has leaved from the group [%@]"), aUsername, aGroup.subject];
+    UIAlertView *alertView = [[UIAlertView alloc] initWithTitle:NSLocalizedString(@"group.notifications", @"Group Notification") message:msg delegate:nil cancelButtonTitle:NSLocalizedString(@"ok", @"OK") otherButtonTitles:nil, nil];
     [alertView show];
 }
+
+#pragma mark - EMChatroomManagerDelegate
+
+- (void)didReceiveKickedFromChatroom:(EMChatroom *)aChatroom
+                              reason:(EMChatroomBeKickedReason)aReason
+{
+    NSString *roomId = nil;
+    if (aReason == EMChatroomBeKickedReasonDestroyed) {
+        roomId = aChatroom.chatroomId;
+    }
+    [[NSNotificationCenter defaultCenter] postNotificationName:KEM_END_CHAT object:roomId];
+}
+
+- (void)chatroomMuteListDidUpdate:(EMChatroom *)aChatroom
+                addedMutedMembers:(NSArray *)aMutes
+                       muteExpire:(NSInteger)aMuteExpire
+{
+    [[NSNotificationCenter defaultCenter] postNotificationName:KEM_REFRESH_CHATROOM_INFO object:aChatroom];
+    
+    NSMutableString *msg = [NSMutableString stringWithString:NSLocalizedString(@"chatroom.mute.added", @"Added to mute list:")];
+    for (NSString *username in aMutes) {
+        [msg appendFormat:@" %@", username];
+    }
+    
+    UIAlertView *alertView = [[UIAlertView alloc] initWithTitle:NSLocalizedString(@"chatroom.notifications", @"Chatroom Notification") message:msg delegate:nil cancelButtonTitle:NSLocalizedString(@"ok", @"OK") otherButtonTitles:nil, nil];
+    [alertView show];
+}
+
+- (void)chatroomMuteListDidUpdate:(EMChatroom *)aChatroom
+              removedMutedMembers:(NSArray *)aMutes
+{
+    [[NSNotificationCenter defaultCenter] postNotificationName:KEM_REFRESH_CHATROOM_INFO object:aChatroom];
+    
+    NSMutableString *msg = [NSMutableString stringWithString:NSLocalizedString(@"chatroom.mute.removed", @"Removed from mute list:")];
+    for (NSString *username in aMutes) {
+        [msg appendFormat:@" %@", username];
+    }
+    
+    UIAlertView *alertView = [[UIAlertView alloc] initWithTitle:NSLocalizedString(@"chatroom.notifications", @"Chatroom Notification") message:msg delegate:nil cancelButtonTitle:NSLocalizedString(@"ok", @"OK") otherButtonTitles:nil, nil];
+    [alertView show];
+}
+
+- (void)chatroomAdminListDidUpdate:(EMChatroom *)aChatroom
+                        addedAdmin:(NSString *)aAdmin
+{
+    [[NSNotificationCenter defaultCenter] postNotificationName:KEM_REFRESH_CHATROOM_INFO object:aChatroom];
+    
+    NSString *msg = [NSString stringWithFormat:NSLocalizedString(@"chatroom.memberToAdmin", @"%@ is upgraded to administrator"), aAdmin];
+    UIAlertView *alertView = [[UIAlertView alloc] initWithTitle:NSLocalizedString(@"chatroom.notifications", @"Chatroom Notification") message:msg delegate:nil cancelButtonTitle:NSLocalizedString(@"ok", @"OK") otherButtonTitles:nil, nil];
+    [alertView show];
+}
+
+- (void)chatroomAdminListDidUpdate:(EMChatroom *)aChatroom
+                      removedAdmin:(NSString *)aAdmin
+{
+    [[NSNotificationCenter defaultCenter] postNotificationName:KEM_REFRESH_CHATROOM_INFO object:aChatroom];
+    
+    NSString *msg = [NSString stringWithFormat:NSLocalizedString(@"chatroom.AdminToMember", @"%@ is downgraded to members"), aAdmin];
+    UIAlertView *alertView = [[UIAlertView alloc] initWithTitle:NSLocalizedString(@"chatroom.notifications", @"Chatroom Notification") message:msg delegate:nil cancelButtonTitle:NSLocalizedString(@"ok", @"OK") otherButtonTitles:nil, nil];
+    [alertView show];
+}
+
+- (void)chatroomOwnerDidUpdate:(EMChatroom *)aChatroom
+                      newOwner:(NSString *)aNewOwner
+                      oldOwner:(NSString *)aOldOwner
+{
+    [[NSNotificationCenter defaultCenter] postNotificationName:KEM_REFRESH_CHATROOM_INFO object:aChatroom];
+    
+    NSString *msg = [NSString stringWithFormat:NSLocalizedString(@"chatroom.owner.updated", @"The chatroom owner changed from %@ to %@"), aOldOwner, aNewOwner];
+    UIAlertView *alertView = [[UIAlertView alloc] initWithTitle:NSLocalizedString(@"chatroom.notifications", @"Chatroom Notification") message:msg delegate:nil cancelButtonTitle:NSLocalizedString(@"ok", @"OK") otherButtonTitles:nil, nil];
+    [alertView show];
+}
+
 
 @end

@@ -26,10 +26,11 @@
 #import "EMNotificationNames.h"
 #import "EMUserProfileManager.h"
 
+#import "EMChatroomInfoViewController.h"
 #import "UIViewController+HUD.h"
 #import "NSObject+EMAlertView.h"
 
-@interface EMChatViewController () <EMChatToolBarDelegate,UINavigationControllerDelegate,UIImagePickerControllerDelegate,EMLocationViewDelegate,EMChatManagerDelegate,EMChatBaseCellDelegate,UIActionSheetDelegate>
+@interface EMChatViewController () <EMChatToolBarDelegate,UINavigationControllerDelegate,UIImagePickerControllerDelegate,EMLocationViewDelegate,EMChatManagerDelegate, EMChatroomManagerDelegate,EMChatBaseCellDelegate,UIActionSheetDelegate>
 
 @property (weak, nonatomic) IBOutlet EMChatToolBar *chatToolBar;
 @property (weak, nonatomic) IBOutlet UITableView *tableView;
@@ -122,6 +123,7 @@
         [[EMClient sharedClient].chatManager deleteConversation:_conversation.conversationId isDeleteMessages:YES completion:nil];
     }
     [[EMClient sharedClient].chatManager removeDelegate:self];
+    [[EMClient sharedClient].roomManager removeDelegate:self];
     [[NSNotificationCenter defaultCenter] removeObserver:self
                                                     name:KEM_REMOVEGROUP_NOTIFICATION
                                                   object:nil];
@@ -140,7 +142,7 @@
         self.navigationItem.rightBarButtonItem = [[UIBarButtonItem alloc] initWithCustomView:self.detailButton];
         self.title = [[EMConversationModel alloc] initWithConversation:self.conversation].title;
         
-        [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(leaveGroupAction:) name:KEM_LEAVE_GROUP object:nil];
+        [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(endChatWithConversationId:) name:KEM_END_CHAT object:nil];
     } else if (_conversation.type == EMConversationTypeChatRoom) {
         self.navigationItem.rightBarButtonItem = [[UIBarButtonItem alloc] initWithCustomView:self.detailButton];
     }
@@ -639,31 +641,6 @@
     _longPressIndexPath = nil;
 }
 
-#pragma mark - EMChatManagerChatroomDelegate
-
-- (void)didReceiveUserJoinedChatroom:(EMChatroom *)aChatroom
-                            username:(NSString *)aUsername
-{
-    [self showHint:[NSString stringWithFormat:NSLocalizedString(@"chatroom.join", @"\'%@\'join chatroom\'%@\'"), aUsername, aChatroom.chatroomId]];
-}
-
-- (void)didReceiveUserLeavedChatroom:(EMChatroom *)aChatroom
-                            username:(NSString *)aUsername
-{
-    [self showHint:[NSString stringWithFormat:NSLocalizedString(@"chatroom.leave.hint", @"\'%@\'leave chatroom\'%@\'"), aUsername, aChatroom.chatroomId]];
-}
-
-- (void)didReceiveKickedFromChatroom:(EMChatroom *)aChatroom
-                              reason:(EMChatroomBeKickedReason)aReason
-{
-    if ([_conversation.conversationId isEqualToString:aChatroom.chatroomId])
-    {
-        [self showHint:[NSString stringWithFormat:NSLocalizedString(@"chatroom.remove", @"be removed from chatroom\'%@\'"), aChatroom.chatroomId]];
-        [self.navigationController popToViewController:self animated:NO];
-        [self.navigationController popViewControllerAnimated:YES];
-    }
-}
-
 #pragma mark - action
 
 - (void)tableViewDidTriggerHeaderRefresh
@@ -703,7 +680,8 @@
         EMGroupInfoViewController *groupInfoViewController = [[EMGroupInfoViewController alloc] initWithGroupId:_conversation.conversationId];
         [self.navigationController pushViewController:groupInfoViewController animated:YES];
     } else if (_conversation.type == EMConversationTypeChatRoom) {
-        
+        EMChatroomInfoViewController *infoController = [[EMChatroomInfoViewController alloc] initWithChatroomId:self.conversation.conversationId];
+        [self.navigationController pushViewController:infoController animated:YES];
     }
 }
 
@@ -743,13 +721,12 @@
     }
 }
 
-- (void)leaveGroupAction:(NSNotification *)aNotification
+- (void)endChatWithConversationId:(NSNotification *)aNotification
 {
     id obj = aNotification.object;
     if ([obj isKindOfClass:[NSString class]]) {
-        NSString *groupId = (NSString *)obj;
-        if ([groupId length] > 0 && [groupId isEqualToString:self.conversationId]) {
-            [self.navigationController popToViewController:self animated:YES];
+        NSString *conversationId = (NSString *)obj;
+        if ([conversationId length] > 0 && [conversationId isEqualToString:self.conversationId]) {
             [self backAction];
         }
     }
@@ -988,5 +965,31 @@
         }
     }
 }
+
+#pragma mark - EMChatManagerChatroomDelegate
+
+- (void)userDidJoinChatroom:(EMChatroom *)aChatroom
+                       user:(NSString *)aUsername
+{
+    [self showHint:[NSString stringWithFormat:NSLocalizedString(@"chatroom.join", @"\'%@\'join chatroom\'%@\'"), aUsername, aChatroom.chatroomId]];
+}
+
+- (void)userDidLeaveChatroom:(EMChatroom *)aChatroom
+                        user:(NSString *)aUsername
+{
+    [self showHint:[NSString stringWithFormat:NSLocalizedString(@"chatroom.leave.hint", @"\'%@\'leave chatroom\'%@\'"), aUsername, aChatroom.chatroomId]];
+}
+
+- (void)didDismissFromChatroom:(EMChatroom *)aChatroom
+                        reason:(EMChatroomBeKickedReason)aReason
+{
+    if ([_conversation.conversationId isEqualToString:aChatroom.chatroomId])
+    {
+        [self showHint:[NSString stringWithFormat:NSLocalizedString(@"chatroom.remove", @"be removed from chatroom\'%@\'"), aChatroom.chatroomId]];
+        [self.navigationController popToViewController:self animated:NO];
+        [self.navigationController popViewControllerAnimated:YES];
+    }
+}
+
 
 @end

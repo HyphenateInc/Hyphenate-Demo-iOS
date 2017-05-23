@@ -63,15 +63,12 @@
     [self _setupSubviews];
     
     self.tableView.backgroundColor = [UIColor colorWithRed: 226 / 255.0 green: 231 / 255.0 blue: 235 / 255.0 alpha:1.0];
-    self.tableView.tableFooterView = [[UIView alloc] initWithFrame:CGRectMake(0, 0, self.tableView.frame.size.width, 30)];
     self.tableView.rowHeight = 50;
     self.tableView.sectionHeaderHeight = 20;
     self.tableView.sectionIndexBackgroundColor = [UIColor redColor];
     self.tableView.tableFooterView = self.footerView;
-    [self.tableView reloadData];
     
     [self tableViewDidTriggerHeaderRefresh];
-    [self reloadUI];
 }
 
 - (void)didReceiveMemoryWarning {
@@ -109,14 +106,6 @@
     //footer view
     _footerView = [[UIView alloc] initWithFrame:CGRectMake(0, 0, self.tableView.frame.size.width, 70)];
     _footerView.backgroundColor = [UIColor clearColor];
-    
-//    UIButton *clearButton = [[UIButton alloc] initWithFrame:CGRectMake(0, 20, _footerView.frame.size.width, 50)];
-//    clearButton.accessibilityIdentifier = @"clear_message";
-//    [clearButton setTitle:NSLocalizedString(@"message.clear", @"Clear All Messages") forState:UIControlStateNormal];
-//    [clearButton setTitleColor:[UIColor whiteColor] forState:UIControlStateNormal];
-//    [clearButton addTarget:self action:@selector(clearMessagesAction) forControlEvents:UIControlEventTouchUpInside];
-//    [clearButton setBackgroundColor:[UIColor colorWithRed:21 / 255.0 green:155 / 255.0 blue:80 / 255.0 alpha:1.0]];
-//    [_footerView addSubview:clearButton];
     
     _leaveButton = [[UIButton alloc] initWithFrame:CGRectMake(0, 20, _footerView.frame.size.width, 50)];
     _leaveButton.accessibilityIdentifier = @"leave";
@@ -451,7 +440,7 @@
                     [weakSelf showHint:NSLocalizedString(@"group.destroyFailure", @"dissolution of group failure")];
                 }
                 else{
-                    [[NSNotificationCenter defaultCenter] postNotificationName:KEM_LEAVE_GROUP object:weakSelf.groupId];
+                    [[NSNotificationCenter defaultCenter] postNotificationName:KEM_END_CHAT object:weakSelf.groupId];
                     [[NSNotificationCenter defaultCenter] postNotificationName:KEM_REFRESH_GROUPLIST_NOTIFICATION object:nil];
                 }
             });
@@ -468,7 +457,7 @@
                     [weakSelf showHint:NSLocalizedString(@"group.leaveFailure", @"exit the group failure")];
                 }
                 else{
-                    [[NSNotificationCenter defaultCenter] postNotificationName:KEM_LEAVE_GROUP object:weakSelf.groupId];
+                    [[NSNotificationCenter defaultCenter] postNotificationName:KEM_END_CHAT object:weakSelf.groupId];
                     [[NSNotificationCenter defaultCenter] postNotificationName:KEM_REFRESH_GROUPLIST_NOTIFICATION object:nil];
                 }
             });

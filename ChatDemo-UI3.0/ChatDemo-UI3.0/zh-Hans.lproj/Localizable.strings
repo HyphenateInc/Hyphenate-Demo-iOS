@@ -13,7 +13,7 @@
 "button.black" = "拉黑";
 "button.mute" = "禁言";
 "button.demote" = "降级";
-"button.toAdmin" = "升级";
+"button.upgrade" = "升级";
 "button.more" = "查看更多";
 "button.prompt" = "警告";
 "button.ok" = "确定";
@@ -33,6 +33,7 @@
 "title.newGroup" = "新建群组";
 "title.addParticipants" = "添加成员";
 "title.groupInfo" = "群组详情";
+"title.chatroomInfo" = "聊天室详情";
 "title.memberList" = "成员列表";
 "title.create" = "创建";
 "title.transferOwner" = "转让群主";
@@ -226,6 +227,15 @@
 "group.removingOccupant" = "正在删除成员...";
 "group.sectionHeaderOwnerAndAdmin" = " 群主 / 管理员列表";
 "group.sectionHeaderMembers" = " 群成员";
+"group.declineInvitation" = "%@拒绝加入群组[%@]";
+"group.acceptInvitation" = "%@已同意加入群组[%@]";
+"group.memberToAdmin" = "%@ 升级为管理员";
+"group.AdminToMember" = "%@ 降级为普通成员";
+"group.mute.added" = "被加入禁言列表:";
+"group.mute.removed" = "被移出禁言列表:";
+"group.owner.updated" = "群主由 %@ 变成 %@";
+"group.member.joined" = "%@已经加入了群组[%@]";
+"group.member.leaved" = "%@已经离开了群组[%@]";
 
 //Group Bans
 "group.ban.removing" = "正在将成员移出黑名单...";
@@ -268,11 +278,12 @@
 "chatroom.somebodyInvite" = "%@ 邀请你加入聊天室\'%@\'";
 "chatroom.id" = "聊天室Id";
 "chatroom.owner" = "创建者";
-"chatroom.admins" = "管理员";
+"chatroom.admins" = "管理员列表";
 "chatroom.onlineMembers" = "在线成员列表";
 "chatroom.blacklist" = "黑名单列表";
-"chatroom.mutes" = "被禁言成员";
+"chatroom.mutes" = "被禁言成员列表";
 "chatroom.occupantCount" = "聊天室在线人数";
+"chatroom.subject" = "主题";
 "chatroom.description" = "描述";
 "chatroom.joining" = "正在加入...";
 "chatroom.leaving" = "正在退出...";
@@ -291,3 +302,14 @@
 "chatroom.leave" = "退出聊天室";
 "chatroom.destroyFail" = "解散聊天室失败";
 "chatroom.leaveFail" = "退出聊天室失败";
+
+"chatroom.changeOwner" = "更改Owner";
+"chatroom.changeSubject" = "更改主题";
+"chatroom.changeDes" = "更改描述";
+
+"chatroom.notifications" = "聊天室通知";
+"chatroom.memberToAdmin" = "%@ 升级为管理员";
+"chatroom.AdminToMember" = "%@ 降级为普通成员";
+"chatroom.mute.added" = "被加入禁言列表:";
+"chatroom.mute.removed" = "被移出禁言列表:";
+"chatroom.owner.updated" = "Owner由 %@ 变成 %@";

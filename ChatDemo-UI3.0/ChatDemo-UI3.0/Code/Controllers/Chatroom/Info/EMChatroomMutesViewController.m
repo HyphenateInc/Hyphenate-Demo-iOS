@@ -7,26 +7,25 @@
  * the property of Hyphenate Inc.
  */
 
-#import "EMGroupBansViewController.h"
+#import "EMChatroomMutesViewController.h"
 
 #import "EMMemberCell.h"
 #import "UIViewController+HUD.h"
 #import "EMNotificationNames.h"
 
-@interface EMGroupBansViewController ()
+@interface EMChatroomMutesViewController ()
 
-@property (nonatomic, strong) EMGroup *group;
+@property (nonatomic, strong) EMChatroom *chatroom;
 
 @end
 
-@implementation EMGroupBansViewController
+@implementation EMChatroomMutesViewController
 
-- (instancetype)initWithGroup:(EMGroup *)aGroup
+- (instancetype)initWithChatroom:(EMChatroom *)aChatroom
 {
     self = [super init];
     if (self) {
-        self.group = aGroup;
-        [self.dataArray addObjectsFromArray:self.group.blacklist];
+        self.chatroom = aChatroom;
     }
     
     return self;
@@ -36,7 +35,7 @@
 - (void)viewDidLoad {
     [super viewDidLoad];
     
-    self.title = NSLocalizedString(@"title.blacklist", @"Blacklist");
+    self.title = NSLocalizedString(@"title.muteList", @"Mute List");
     
     UIButton *backButton = [[UIButton alloc] initWithFrame:CGRectMake(0, 0, 44, 44)];
     backButton.accessibilityIdentifier = @"back";
@@ -95,28 +94,25 @@
 
 - (void)tableView:(UITableView *)tableView commitEditingStyle:(UITableViewCellEditingStyle)editingStyle forRowAtIndexPath:(NSIndexPath *)indexPath
 {
-    NSString *userName = [self.dataArray objectAtIndex:indexPath.row];
+    if (editingStyle == UITableViewCellEditingStyleDelete) {
+        NSString *userName = [self.dataArray objectAtIndex:indexPath.row];
 
-    [self showHudInView:self.view hint:NSLocalizedString(@"hud.wait", @"Pleae wait...")];
-    
-    __weak typeof(self) weakSelf = self;
-    dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), ^{
-        EMError *error = nil;
-        weakSelf.group = [[EMClient sharedClient].groupManager unblockOccupants:@[userName] forGroup:weakSelf.group.groupId error:&error];
-        
-        dispatch_async(dispatch_get_main_queue(), ^{
+        [self showHudInView:self.view hint:NSLocalizedString(@"hud.wait", @"Pleae wait...")];
+        __weak typeof(self) weakSelf = self;
+        [[EMClient sharedClient].roomManager unmuteMembers:@[userName] fromChatroom:weakSelf.chatroom.chatroomId completion:^(EMChatroom *aChatroom, EMError *aError) {
             [weakSelf hideHud];
-            if (!error) {
+            if (!aError) {
+                weakSelf.chatroom = aChatroom;
                 [weakSelf.dataArray removeObject:userName];
                 [weakSelf.tableView reloadData];
                 
-                [[NSNotificationCenter defaultCenter] postNotificationName:KEM_REFRESH_GROUP_INFO object:weakSelf.group];
+                [[NSNotificationCenter defaultCenter] postNotificationName:KEM_REFRESH_CHATROOM_INFO object:weakSelf.chatroom];
             }
             else {
-                [weakSelf showHint:error.errorDescription];
+                [weakSelf showHint:aError.errorDescription];
             }
-        });
-    });
+        }];
+    }
 }
 
 #pragma mark - data
@@ -138,28 +134,30 @@
 {
     NSInteger pageSize = 50;
     __weak typeof(self) weakSelf = self;
-    [MBProgressHUD showHUDAddedTo:self.view animated:YES];
-    [[EMClient sharedClient].groupManager getGroupBlacklistFromServerWithId:self.group.groupId pageNumber:self.page pageSize:pageSize completion:^(NSArray *aMembers, EMError *aError) {
-        [MBProgressHUD hideHUDForView:self.view animated:YES];
+    [self showHudInView:self.view hint:NSLocalizedString(@"hud.load", @"Load data...")];
+    [[EMClient sharedClient].roomManager getChatroomMuteListFromServerWithId:self.chatroom.chatroomId pageNumber:aPage pageSize:pageSize completion:^(NSArray *aList, EMError *aError) {
+        [weakSelf hideHud];
         [weakSelf tableViewDidFinishTriggerHeader:aIsHeader];
+        
         if (!aError) {
             if (aIsHeader) {
                 [weakSelf.dataArray removeAllObjects];
             }
-
-            [weakSelf.dataArray addObjectsFromArray:aMembers];
+            
+            [weakSelf.dataArray addObjectsFromArray:aList];
             [weakSelf.tableView reloadData];
         } else {
-            NSString *errorStr = [NSString stringWithFormat:NSLocalizedString(@"group.ban.fetchFail", @"Fail to get blacklist: %@"), aError.errorDescription];
+            NSString *errorStr = [NSString stringWithFormat:NSLocalizedString(@"group.mute.fetchFail", @"fail to get mutes: %@"), aError.errorDescription];
             [weakSelf showHint:errorStr];
         }
         
-        if ([aMembers count] < pageSize) {
+        if ([aList count] < pageSize) {
             self.showRefreshFooter = NO;
         } else {
             self.showRefreshFooter = YES;
         }
     }];
 }
+
 
 @end

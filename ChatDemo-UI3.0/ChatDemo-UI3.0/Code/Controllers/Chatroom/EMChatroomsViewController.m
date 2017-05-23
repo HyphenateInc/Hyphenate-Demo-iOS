@@ -29,18 +29,20 @@
     [super viewDidLoad];
     
     [self setupNavBar];
-    [self addNotifications];
     
     self.tableView.rowHeight = 50;
     self.tableView.tableFooterView = [[UIView alloc] init];
     [self tableViewDidTriggerHeaderRefresh];
 }
 
-- (void)dealloc {
-    [self removeNotifications];
+- (void)dealloc
+{
 }
 
-- (void)setupNavBar {
+#pragma mark - Layout subviews
+
+- (void)setupNavBar
+{
     self.title = NSLocalizedString(@"common.chatrooms", @"Chatrooms");
     
     UIButton *leftBtn = [UIButton buttonWithType:UIButtonTypeCustom];
@@ -52,21 +54,6 @@
     [self.navigationItem setLeftBarButtonItem:leftBar];
 }
 
-- (void)loadChatroomsFromServer
-{
-    [self tableViewDidTriggerHeaderRefresh];
-}
-
-- (void)addNotifications
-{
-    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(refreshChatroomList:) name:KEM_REFRESH_CHATROOMLIST_NOTIFICATION object:nil];
-}
-
-- (void)removeNotifications
-{
-    [[NSNotificationCenter defaultCenter] removeObserver:self name:KEM_REFRESH_CHATROOMLIST_NOTIFICATION object:nil];
-}
-
 #pragma mark - Action
 
 - (void)backAction
@@ -75,20 +62,6 @@
 }
 
 #pragma mark - Notification Method
-
-- (void)refreshChatroomList:(NSNotification *)notification
-{
-//    NSArray *groupList = [[EMClient sharedClient].roomManager getJoinedGroups];
-//    [self.dataArray removeAllObjects];
-//    for (EMGroup *group in groupList) {
-//        EMGroupModel *model = [[EMGroupModel alloc] initWithObject:group];
-//        if (model) {
-//            [self.dataArray addObject:model];
-//        }
-//    }
-//    [self.tableView reloadData];
-}
-
 
 - (void)didReceiveMemoryWarning {
     [super didReceiveMemoryWarning];

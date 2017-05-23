@@ -10,6 +10,11 @@
 		30E5DE31A68CB65C97673D9B /* libPods-ChatDemo-UI3.0.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 6CD1B189658F9B85B7BFA9CD /* libPods-ChatDemo-UI3.0.a */; };
 		3A4BB1B01ED3DD6F00B07FCA /* EMChatroomCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 3A4BB1AE1ED3DD6F00B07FCA /* EMChatroomCell.m */; };
 		3A4BB1B11ED3DD6F00B07FCA /* EMChatroomCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = 3A4BB1AF1ED3DD6F00B07FCA /* EMChatroomCell.xib */; };
+		3A4BB1B51ED422BA00B07FCA /* EMChatroomInfoViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 3A4BB1B41ED422BA00B07FCA /* EMChatroomInfoViewController.m */; };
+		3A4BB1CA1ED43D7700B07FCA /* EMChatroomAdminsViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 3A4BB1C31ED43D7700B07FCA /* EMChatroomAdminsViewController.m */; };
+		3A4BB1CB1ED43D7700B07FCA /* EMChatroomBansViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 3A4BB1C51ED43D7700B07FCA /* EMChatroomBansViewController.m */; };
+		3A4BB1CC1ED43D7700B07FCA /* EMChatroomMutesViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 3A4BB1C71ED43D7700B07FCA /* EMChatroomMutesViewController.m */; };
+		3A4BB1CD1ED43D7700B07FCA /* EMChatroomMembersViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 3A4BB1C91ED43D7700B07FCA /* EMChatroomMembersViewController.m */; };
 		3A57BFAD1ED30EF600CF9C8C /* EMChatroomsViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 3A57BFAC1ED30EF600CF9C8C /* EMChatroomsViewController.m */; };
 		3A79D0FD1E7796540085AB6E /* EMMemberCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 3A79D0FB1E7796540085AB6E /* EMMemberCell.m */; };
 		3A79D0FE1E7796540085AB6E /* EMMemberCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = 3A79D0FC1E7796540085AB6E /* EMMemberCell.xib */; };
@@ -457,6 +462,16 @@
 		3A4BB1AD1ED3DD6F00B07FCA /* EMChatroomCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = EMChatroomCell.h; sourceTree = "<group>"; };
 		3A4BB1AE1ED3DD6F00B07FCA /* EMChatroomCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = EMChatroomCell.m; sourceTree = "<group>"; };
 		3A4BB1AF1ED3DD6F00B07FCA /* EMChatroomCell.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = EMChatroomCell.xib; sourceTree = "<group>"; };
+		3A4BB1B31ED422BA00B07FCA /* EMChatroomInfoViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = EMChatroomInfoViewController.h; sourceTree = "<group>"; };
+		3A4BB1B41ED422BA00B07FCA /* EMChatroomInfoViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = EMChatroomInfoViewController.m; sourceTree = "<group>"; };
+		3A4BB1C21ED43D7700B07FCA /* EMChatroomAdminsViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = EMChatroomAdminsViewController.h; sourceTree = "<group>"; };
+		3A4BB1C31ED43D7700B07FCA /* EMChatroomAdminsViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = EMChatroomAdminsViewController.m; sourceTree = "<group>"; };
+		3A4BB1C41ED43D7700B07FCA /* EMChatroomBansViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = EMChatroomBansViewController.h; sourceTree = "<group>"; };
+		3A4BB1C51ED43D7700B07FCA /* EMChatroomBansViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = EMChatroomBansViewController.m; sourceTree = "<group>"; };
+		3A4BB1C61ED43D7700B07FCA /* EMChatroomMutesViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = EMChatroomMutesViewController.h; sourceTree = "<group>"; };
+		3A4BB1C71ED43D7700B07FCA /* EMChatroomMutesViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = EMChatroomMutesViewController.m; sourceTree = "<group>"; };
+		3A4BB1C81ED43D7700B07FCA /* EMChatroomMembersViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = EMChatroomMembersViewController.h; sourceTree = "<group>"; };
+		3A4BB1C91ED43D7700B07FCA /* EMChatroomMembersViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = EMChatroomMembersViewController.m; sourceTree = "<group>"; };
 		3A57BFAB1ED30EF600CF9C8C /* EMChatroomsViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = EMChatroomsViewController.h; sourceTree = "<group>"; };
 		3A57BFAC1ED30EF600CF9C8C /* EMChatroomsViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = EMChatroomsViewController.m; sourceTree = "<group>"; };
 		3A79D0FA1E7796540085AB6E /* EMMemberCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = EMMemberCell.h; sourceTree = "<group>"; };
@@ -1076,9 +1091,27 @@
 			path = Cell;
 			sourceTree = "<group>";
 		};
+		3A4BB1B21ED4228E00B07FCA /* Info */ = {
+			isa = PBXGroup;
+			children = (
+				3A4BB1C21ED43D7700B07FCA /* EMChatroomAdminsViewController.h */,
+				3A4BB1C31ED43D7700B07FCA /* EMChatroomAdminsViewController.m */,
+				3A4BB1C41ED43D7700B07FCA /* EMChatroomBansViewController.h */,
+				3A4BB1C51ED43D7700B07FCA /* EMChatroomBansViewController.m */,
+				3A4BB1C61ED43D7700B07FCA /* EMChatroomMutesViewController.h */,
+				3A4BB1C71ED43D7700B07FCA /* EMChatroomMutesViewController.m */,
+				3A4BB1C81ED43D7700B07FCA /* EMChatroomMembersViewController.h */,
+				3A4BB1C91ED43D7700B07FCA /* EMChatroomMembersViewController.m */,
+				3A4BB1B31ED422BA00B07FCA /* EMChatroomInfoViewController.h */,
+				3A4BB1B41ED422BA00B07FCA /* EMChatroomInfoViewController.m */,
+			);
+			path = Info;
+			sourceTree = "<group>";
+		};
 		3A57BFAA1ED30ECB00CF9C8C /* Chatroom */ = {
 			isa = PBXGroup;
 			children = (
+				3A4BB1B21ED4228E00B07FCA /* Info */,
 				3A4BB1AC1ED3DC4C00B07FCA /* Cell */,
 				3A57BFAB1ED30EF600CF9C8C /* EMChatroomsViewController.h */,
 				3A57BFAC1ED30EF600CF9C8C /* EMChatroomsViewController.m */,
@@ -2535,6 +2568,7 @@
 				D24327E71DAA395F00EDCDAB /* wav.mm in Sources */,
 				D2CAE2191D9BDCEE00B9A532 /* EMChatLocationBubbleView.m in Sources */,
 				D24327E11DAA395F00EDCDAB /* EMCDDeviceManager+Media.m in Sources */,
+				3A4BB1CB1ED43D7700B07FCA /* EMChatroomBansViewController.m in Sources */,
 				D24328131DAE1B4600EDCDAB /* EMConvertToCommonEmoticonsHelper.m in Sources */,
 				3A79D1211E77E4F80085AB6E /* EMGroupUpdateSubjectViewController.m in Sources */,
 				D24327E31DAA395F00EDCDAB /* EMCDDeviceManager+ProximitySensor.m in Sources */,
@@ -2555,11 +2589,13 @@
 				716634241DB0E86900C92E27 /* EMGroupsViewController.m in Sources */,
 				7166340E1DB0E17C00C92E27 /* EMApplyModel.m in Sources */,
 				3A79D1191E77AB080085AB6E /* EMGroupTransferOwnerViewController.m in Sources */,
+				3A4BB1CD1ED43D7700B07FCA /* EMChatroomMembersViewController.m in Sources */,
 				716634781DB0EFD900C92E27 /* EMRefreshFootViewCell.m in Sources */,
 				7140373D1DCEA2E90041353D /* NSObject+EMAlertView.m in Sources */,
 				71D4A1F71D9C9359006FACB7 /* EMContactCell.m in Sources */,
 				D28345041D8FD1D400FD48A9 /* main.m in Sources */,
 				D2F372A81DD06DF400C726E7 /* EMFaceView.m in Sources */,
+				3A4BB1CA1ED43D7700B07FCA /* EMChatroomAdminsViewController.m in Sources */,
 				3A4BB1B01ED3DD6F00B07FCA /* EMChatroomCell.m in Sources */,
 				D24327F11DAA444C00EDCDAB /* UIViewController+DismissKeyboard.m in Sources */,
 				3A79D0FD1E7796540085AB6E /* EMMemberCell.m in Sources */,
@@ -2568,6 +2604,7 @@
 				D24327B91DAA024A00EDCDAB /* EMMessageReadManager.m in Sources */,
 				D24327E81DAA395F00EDCDAB /* EMVoiceConverter.mm in Sources */,
 				3A57BFAD1ED30EF600CF9C8C /* EMChatroomsViewController.m in Sources */,
+				3A4BB1B51ED422BA00B07FCA /* EMChatroomInfoViewController.m in Sources */,
 				D285387A1DB1EBB50027D4E1 /* EMChatsSettingViewController.m in Sources */,
 				D24510AD1D962A7E006DB36F /* EMChatRecordView.m in Sources */,
 				D2AA4DF91D9398FF00967E0E /* EMChatViewController.m in Sources */,
@@ -2586,6 +2623,7 @@
 				D2CAE2131D9B7DB000B9A532 /* EMChatImageBubbleView.m in Sources */,
 				D24327DF1DAA395F00EDCDAB /* EMAudioPlayerUtil.m in Sources */,
 				7166345C1DB0EE9F00C92E27 /* EMGroupMemberListViewController.m in Sources */,
+				3A4BB1CC1ED43D7700B07FCA /* EMChatroomMutesViewController.m in Sources */,
 				D2F372A91DD06DF400C726E7 /* EMFacialView.m in Sources */,
 				716634161DB0E1AB00C92E27 /* EMBaseRefreshTableController.m in Sources */,
 				716634051DB0E03F00C92E27 /* EMApplyManager.m in Sources */,

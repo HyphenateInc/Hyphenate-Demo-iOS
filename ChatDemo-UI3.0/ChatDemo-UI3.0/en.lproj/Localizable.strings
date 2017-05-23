@@ -13,7 +13,7 @@
 "button.black" = "ToBlack";
 "button.mute" = "Mute";
 "button.demote" = "Demote";
-"button.toAdmin" = "ToAdmin";
+"button.upgrade" = "Upgrade";
 "button.more" = "Load More";
 "button.prompt" = "Prompt";
 "button.ok" = "OK";
@@ -33,6 +33,7 @@
 "title.newGroup" = "New Group";
 "title.addParticipants" = "Add Participants";
 "title.groupInfo" = "Group Info";
+"title.chatroomInfo" = "Chatroom Info";
 "title.memberList" = "Member List";
 "title.create" = "Create";
 "title.transferOwner" = "Transfer Owner";
@@ -223,6 +224,15 @@
 "group.removingOccupant" = "Deleting member...";
 "group.sectionHeaderOwnerAndAdmin" = " Owner and Admin List";
 "group.sectionHeaderMembers" = " Member List";
+"group.declineInvitation" = "%@ decline to join the group [%@]";
+"group.acceptInvitation" = "%@ has agreed to join the group [%@]";
+"group.memberToAdmin" = "%@ is upgraded to administrator";
+"group.AdminToMember" = "%@ is downgraded to members";
+"group.mute.added" = "Added to mute list:";
+"group.mute.removed" = "Removed from mute list:";
+"group.owner.updated" = "The group owner changed from %@ to %@";
+"group.member.joined" = "%@ has joined to the group [%@]";
+"group.member.leaved" = "%@ has leaved from the group [%@]";
 
 //Group Bans
 "group.ban.removing" = "members are removing from the blacklist...";
@@ -270,6 +280,7 @@
 "chatroom.blacklist" = "Blacklist";
 "chatroom.mutes" = "Mute List";
 "chatroom.occupantCount" = "members count";
+"chatroom.subject" = "Subject";
 "chatroom.description" = "description";
 "chatroom.joining" = "Joining...";
 "chatroom.leaving" = "Leaving...";
@@ -288,3 +299,14 @@
 "chatroom.leave" = "Leave the chatroom";
 "chatroom.destroyFail" = "Destroy the chatroom failure";
 "chatroom.leaveFail" = "Leave the chatroom failure";
+
+"chatroom.changeOwner" = "Change owner";
+"chatroom.changeSubject" = "Change subject";
+"chatroom.changeDes" = "Change description";
+
+"chatroom.notifications" = "Chatroom Notification";
+"chatroom.memberToAdmin" = "%@ is upgraded to administrator";
+"chatroom.AdminToMember" = "%@ is downgraded to members";
+"chatroom.mute.added" = "Added to mute list:";
+"chatroom.mute.removed" = "Removed from mute list:";
+"chatroom.owner.updated" = "The Chatroom owner changed from %@ to %@";

@@ -7,26 +7,26 @@
  * the property of Hyphenate Inc.
  */
 
-#import "EMGroupBansViewController.h"
+#import "EMChatroomBansViewController.h"
 
 #import "EMMemberCell.h"
 #import "UIViewController+HUD.h"
 #import "EMNotificationNames.h"
 
-@interface EMGroupBansViewController ()
+@interface EMChatroomBansViewController ()
 
-@property (nonatomic, strong) EMGroup *group;
+@property (nonatomic, strong) EMChatroom *chatroom;
 
 @end
 
-@implementation EMGroupBansViewController
+@implementation EMChatroomBansViewController
 
-- (instancetype)initWithGroup:(EMGroup *)aGroup
+- (instancetype)initWithChatroom:(EMChatroom *)aChatroom
 {
     self = [super init];
     if (self) {
-        self.group = aGroup;
-        [self.dataArray addObjectsFromArray:self.group.blacklist];
+        self.chatroom = aChatroom;
+        [self.dataArray addObjectsFromArray:self.chatroom.blacklist];
     }
     
     return self;
@@ -45,7 +45,6 @@
     UIBarButtonItem *backItem = [[UIBarButtonItem alloc] initWithCustomView:backButton];
     [self.navigationItem setLeftBarButtonItem:backItem];
     
-    self.showRefreshHeader = YES;
     [self tableViewDidTriggerHeaderRefresh];
 }
 
@@ -100,23 +99,18 @@
     [self showHudInView:self.view hint:NSLocalizedString(@"hud.wait", @"Pleae wait...")];
     
     __weak typeof(self) weakSelf = self;
-    dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), ^{
-        EMError *error = nil;
-        weakSelf.group = [[EMClient sharedClient].groupManager unblockOccupants:@[userName] forGroup:weakSelf.group.groupId error:&error];
-        
-        dispatch_async(dispatch_get_main_queue(), ^{
-            [weakSelf hideHud];
-            if (!error) {
-                [weakSelf.dataArray removeObject:userName];
-                [weakSelf.tableView reloadData];
-                
-                [[NSNotificationCenter defaultCenter] postNotificationName:KEM_REFRESH_GROUP_INFO object:weakSelf.group];
-            }
-            else {
-                [weakSelf showHint:error.errorDescription];
-            }
-        });
-    });
+    [[EMClient sharedClient].roomManager unblockMembers:@[userName] fromChatroom:self.chatroom.chatroomId completion:^(EMChatroom *aChatroom, EMError *aError) {
+        [weakSelf hideHud];
+        if (!aError) {
+            [weakSelf.dataArray removeObject:userName];
+            [weakSelf.tableView reloadData];
+            
+            [[NSNotificationCenter defaultCenter] postNotificationName:KEM_REFRESH_CHATROOM_INFO object:weakSelf.chatroom];
+        }
+        else {
+            [weakSelf showHint:aError.errorDescription];
+        }
+    }];
 }
 
 #pragma mark - data
@@ -139,22 +133,23 @@
     NSInteger pageSize = 50;
     __weak typeof(self) weakSelf = self;
     [MBProgressHUD showHUDAddedTo:self.view animated:YES];
-    [[EMClient sharedClient].groupManager getGroupBlacklistFromServerWithId:self.group.groupId pageNumber:self.page pageSize:pageSize completion:^(NSArray *aMembers, EMError *aError) {
+    [[EMClient sharedClient].roomManager getChatroomBlacklistFromServerWithId:self.chatroom.chatroomId pageNumber:aPage pageSize:pageSize completion:^(NSArray *aList, EMError *aError) {
         [MBProgressHUD hideHUDForView:self.view animated:YES];
         [weakSelf tableViewDidFinishTriggerHeader:aIsHeader];
+        
         if (!aError) {
             if (aIsHeader) {
                 [weakSelf.dataArray removeAllObjects];
             }
-
-            [weakSelf.dataArray addObjectsFromArray:aMembers];
+            
+            [weakSelf.dataArray addObjectsFromArray:aList];
             [weakSelf.tableView reloadData];
         } else {
             NSString *errorStr = [NSString stringWithFormat:NSLocalizedString(@"group.ban.fetchFail", @"Fail to get blacklist: %@"), aError.errorDescription];
             [weakSelf showHint:errorStr];
         }
         
-        if ([aMembers count] < pageSize) {
+        if ([aList count] < pageSize) {
             self.showRefreshFooter = NO;
         } else {
             self.showRefreshFooter = YES;
