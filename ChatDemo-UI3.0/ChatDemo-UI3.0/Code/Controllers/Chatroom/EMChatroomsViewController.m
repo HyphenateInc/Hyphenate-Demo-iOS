@@ -16,6 +16,7 @@
 #import "EMChatViewController.h"
 
 #import "EMChatroomCell.h"
+#import "UIViewController+HUD.h"
 #import "NSObject+EMAlertView.h"
 
 @interface EMChatroomsViewController ()
@@ -121,10 +122,13 @@
 
 #pragma mark - UITableViewDelegate
 
-- (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath {
+- (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath
+{
     [tableView deselectRowAtIndexPath:indexPath animated:YES];
     EMChatroom *chatroom = self.dataArray[indexPath.row];
+    
     EMChatViewController *chatViewController = [[EMChatViewController alloc] initWithConversationId:chatroom.chatroomId conversationType:EMConversationTypeChatRoom];
+    chatViewController.title = chatroom.subject;
     [self.navigationController pushViewController:chatViewController animated:YES];
 }
 

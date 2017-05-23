@@ -260,3 +260,31 @@
 
 //network
 "network.disconnection" = "Network disconnection";
+
+//Chatroom detail
+"chatroom.somebodyInvite" = "%@ invite you to join chatroom \'%@\'";
+"chatroom.id" = "chatroomId";
+"chatroom.owner" = "Owner";
+"chatroom.admins" = "Admin List";
+"chatroom.onlineMembers" = "Online member List";
+"chatroom.blacklist" = "Blacklist";
+"chatroom.mutes" = "Mute List";
+"chatroom.occupantCount" = "members count";
+"chatroom.description" = "description";
+"chatroom.joining" = "Joining...";
+"chatroom.leaving" = "Leaving...";
+"chatroom.fetchInfoFail" = "Failed to get the chatroom details";
+"chatroom.joinFailed" = "join chatroom \'%@\' failed";
+"chatroom.join" = "\'%@\'join chatroom\'%@\'";
+"chatroom.leave.hint" = "\'%@\'leave chatroom\'%@\'";
+"chatroom.remove" = "be removed from chatroom\'%@\'";
+"chatroom.create.inputName" = "Please input chatroom name";
+"chatroom.create.inputDescribe" = "Please input chatroom description";
+"chatroom.create.ongoing" = "create a chatroom...";
+"chatroom.create.success" = "create chatroom success";
+"chatroom.create.fail" = "Failed to create a chatroom, please operate again";
+
+"chatroom.destroy" = "Destroy the chatroom";
+"chatroom.leave" = "Leave the chatroom";
+"chatroom.destroyFail" = "Destroy the chatroom failure";
+"chatroom.leaveFail" = "Leave the chatroom failure";

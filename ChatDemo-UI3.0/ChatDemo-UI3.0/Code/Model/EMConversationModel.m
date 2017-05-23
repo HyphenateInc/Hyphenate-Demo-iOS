@@ -26,6 +26,8 @@
                     break;
                 }
             }
+        } else if (_conversation.type == EMConversationTypeChatRoom) {
+            _title = conversation.
         }
     }
     return self;
