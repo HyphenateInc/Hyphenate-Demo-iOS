@@ -229,10 +229,10 @@
     else if (row == 6) { //members
         EMChatroomMembersViewController *membersController = [[EMChatroomMembersViewController alloc] initWithChatroom:self.chatroom];
         [self.navigationController pushViewController:membersController animated:YES];
-    } else if (row == 8) { //mutes
+    } else if (row == 7) { //mutes
         EMChatroomMutesViewController *mutesController = [[EMChatroomMutesViewController alloc] initWithChatroom:self.chatroom];
         [self.navigationController pushViewController:mutesController animated:YES];
-    } else if (row == 9) { //bans
+    } else if (row == 8) { //bans
         EMChatroomBansViewController *bansController = [[EMChatroomBansViewController alloc] initWithChatroom:self.chatroom];
         [self.navigationController pushViewController:bansController animated:YES];
     }
