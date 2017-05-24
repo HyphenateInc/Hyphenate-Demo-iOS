@@ -306,35 +306,32 @@
 {
     __weak typeof(self) weakSelf = self;
     [self showHudInView:self.view hint:NSLocalizedString(@"chatroom.destroy", @"destroy the chatroom")];
-    dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), ^(){
-        EMError *error = [[EMClient sharedClient].roomManager destroyChatroom:weakSelf.chatroom.chatroomId];
+    [[EMClient sharedClient].roomManager destroyChatroom:self.chatroom.chatroomId completion:^(EMError *aError) {
         [weakSelf hideHud];
-        if (error) {
+        if (aError) {
             [weakSelf showHint:NSLocalizedString(@"chatroom.destroyFail", @"destroy the chatroom failure")];
         }
         else{
-            [[NSNotificationCenter defaultCenter] postNotificationName:KEM_END_CHAT object:weakSelf.chatroom.chatroomId];
+            [[NSNotificationCenter defaultCenter] postNotificationName:KEM_END_CHAT object:weakSelf.chatroom];
+            [weakSelf backAction];
         }
-    });
+    }];
 }
 
 - (void)leaveAction
 {
     __weak typeof(self) weakSelf = self;
     [self showHudInView:self.view hint:NSLocalizedString(@"chatroom.leave", @"leave the chatroom")];
-    dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), ^(){
-        EMError *error = nil;
-        [[EMClient sharedClient].roomManager leaveChatroom:weakSelf.chatroom.chatroomId error:&error];
-        dispatch_async(dispatch_get_main_queue(), ^{
-            [weakSelf hideHud];
-            if (error) {
-                [weakSelf showHint:NSLocalizedString(@"chatroom.leaveFail", @"leave the chatroom failure")];
-            }
-            else{
-                [[NSNotificationCenter defaultCenter] postNotificationName:KEM_END_CHAT object:weakSelf.chatroom.chatroomId];
-            }
-        });
-    });
+    [[EMClient sharedClient].roomManager leaveChatroom:self.chatroom.chatroomId completion:^(EMError *aError) {
+        [weakSelf hideHud];
+        if (aError) {
+            [weakSelf showHint:NSLocalizedString(@"chatroom.leaveFail", @"leave the chatroom failure")];
+        }
+        else{
+            [[NSNotificationCenter defaultCenter] postNotificationName:KEM_END_CHAT object:weakSelf.chatroom];
+            [weakSelf backAction];
+        }
+    }];
 }
 
 #pragma mark - DataSource

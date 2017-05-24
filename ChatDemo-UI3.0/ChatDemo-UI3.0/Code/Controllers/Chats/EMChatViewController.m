@@ -70,6 +70,7 @@
         self.edgesForExtendedLayout = UIRectEdgeNone;
     }
     
+    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(endChatWithConversationId:) name:KEM_END_CHAT object:nil];
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(deleteAllMessages:) name:KNOTIFICATIONNAME_DELETEALLMESSAGE object:nil];
     
     UITapGestureRecognizer *tap = [[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(keyBoardHidden:)];
@@ -141,8 +142,6 @@
     } else if (_conversation.type == EMConversationTypeGroupChat) {
         self.navigationItem.rightBarButtonItem = [[UIBarButtonItem alloc] initWithCustomView:self.detailButton];
         self.title = [[EMConversationModel alloc] initWithConversation:self.conversation].title;
-        
-        [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(endChatWithConversationId:) name:KEM_END_CHAT object:nil];
     } else if (_conversation.type == EMConversationTypeChatRoom) {
         self.navigationItem.rightBarButtonItem = [[UIBarButtonItem alloc] initWithCustomView:self.detailButton];
     }
@@ -696,9 +695,11 @@
             if (aError) {
                 [self showAlertWithMessage:[NSString stringWithFormat:@"Leave chatroom '%@' failed [%@]", weakSelf.conversation.conversationId, aError.errorDescription] ];
             }
+            [weakSelf.navigationController popToViewController:self animated:YES];
             [weakSelf.navigationController popViewControllerAnimated:YES];
         }];
     } else {
+        [self.navigationController popToViewController:self animated:YES];
         [self.navigationController popViewControllerAnimated:YES];
     }
 }
@@ -728,6 +729,12 @@
         NSString *conversationId = (NSString *)obj;
         if ([conversationId length] > 0 && [conversationId isEqualToString:self.conversationId]) {
             [self backAction];
+        }
+    } else if ([obj isKindOfClass:[EMChatroom class]] && self.conversation.type == EMConversationTypeChatRoom) {
+        EMChatroom *chatroom = (EMChatroom *)obj;
+        if ([chatroom.chatroomId isEqualToString:self.conversationId]) {
+            [self.navigationController popToViewController:self animated:YES];
+            [self.navigationController popViewControllerAnimated:YES];
         }
     }
 }
