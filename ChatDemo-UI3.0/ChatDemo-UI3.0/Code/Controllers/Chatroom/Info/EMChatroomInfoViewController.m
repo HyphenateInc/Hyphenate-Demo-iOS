@@ -312,6 +312,7 @@
             [weakSelf showHint:NSLocalizedString(@"chatroom.destroyFail", @"destroy the chatroom failure")];
         }
         else{
+            [[NSNotificationCenter defaultCenter] postNotificationName:KEM_DESTROY_CHATROOM_NOTIFICATION object:weakSelf.chatroom];
             [[NSNotificationCenter defaultCenter] postNotificationName:KEM_END_CHAT object:weakSelf.chatroom];
             [weakSelf backAction];
         }

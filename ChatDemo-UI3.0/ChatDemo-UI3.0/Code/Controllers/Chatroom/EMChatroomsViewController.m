@@ -28,6 +28,8 @@
 - (void)viewDidLoad {
     [super viewDidLoad];
     
+    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(destroyChatroom:) name:KEM_DESTROY_CHATROOM_NOTIFICATION object:nil];
+    
     [self setupNavBar];
     
     self.tableView.rowHeight = 50;
@@ -37,6 +39,7 @@
 
 - (void)dealloc
 {
+    [[NSNotificationCenter defaultCenter] removeObserver:self];
 }
 
 #pragma mark - Layout subviews
@@ -107,6 +110,23 @@
 
 - (CGFloat)tableView:(UITableView *)tableView heightForRowAtIndexPath:(NSIndexPath *)indexPath {
     return 70.0f;
+}
+
+#pragma mark - Notification
+
+- (void)destroyChatroom:(NSNotification *)aNotification
+{
+    id obj = aNotification.object;
+    if (obj && [obj isKindOfClass:[EMChatroom class]]) {
+        EMChatroom *chatroom = (EMChatroom *)obj;
+        for (EMChatroom *room in self.dataArray) {
+            if ([room.chatroomId isEqualToString:chatroom.chatroomId]) {
+                [self.dataArray removeObject:room];
+                [self.tableView reloadData];
+                break;
+            }
+        }
+    }
 }
 
 #pragma mark - Data
