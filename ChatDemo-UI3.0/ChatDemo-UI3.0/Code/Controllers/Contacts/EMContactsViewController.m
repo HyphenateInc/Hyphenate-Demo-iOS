@@ -285,7 +285,7 @@
         if (indexPath.row == 0) {
             cell.titleLabel.text = NSLocalizedString(@"common.groups", @"Groups");
         } else if (indexPath.row == 1) {
-            cell.titleLabel.text = NSLocalizedString(@"common.chatrooms", @"Chatrooms");
+            cell.titleLabel.text = NSLocalizedString(@"common.chatrooms", @"Chat Rooms");
         }
         
         return cell;

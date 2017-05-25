@@ -25,7 +25,8 @@
 
 @implementation EMChatroomsViewController
 
-- (void)viewDidLoad {
+- (void)viewDidLoad
+{
     [super viewDidLoad];
     
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(destroyChatroom:) name:KEM_DESTROY_CHATROOM_NOTIFICATION object:nil];
