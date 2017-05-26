@@ -62,7 +62,8 @@
     return self;
 }
 
-- (void)viewDidLoad {
+- (void)viewDidLoad
+{
     [super viewDidLoad];
     // Do any additional setup after loading the view from its nib.
     
@@ -113,16 +114,13 @@
                                                object:nil];
 }
 
-- (void)didReceiveMemoryWarning {
-    [super didReceiveMemoryWarning];
-    // Dispose of any resources that can be recreated.
-}
-
 - (void)dealloc
 {
+    // delete the conversation if no message found
     if (_conversation.latestMessage == nil) {
         [[EMClient sharedClient].chatManager deleteConversation:_conversation.conversationId isDeleteMessages:YES completion:nil];
     }
+    
     [[EMClient sharedClient].chatManager removeDelegate:self];
     [[EMClient sharedClient].roomManager removeDelegate:self];
     [[NSNotificationCenter defaultCenter] removeObserver:self
@@ -690,7 +688,6 @@
         [self showHudInView:self.view hint:NSLocalizedString(@"chatroom.leaving", @"Leaving the chatroom...")];
         WEAK_SELF
         [[EMClient sharedClient].roomManager leaveChatroom:_conversation.conversationId completion:^(EMError *aError) {
-            [[EMClient sharedClient].chatManager deleteConversation:weakSelf.conversation.conversationId isDeleteMessages:YES completion:nil];
             [weakSelf hideHud];
             if (aError) {
                 [self showAlertWithMessage:[NSString stringWithFormat:@"Leave chatroom '%@' failed [%@]", weakSelf.conversation.conversationId, aError.errorDescription] ];
