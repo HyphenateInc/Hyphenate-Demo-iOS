@@ -7,10 +7,10 @@
  * the property of Hyphenate Inc.
  */
 
-#import <UIKit/UIKit.h>
+#import "EMBaseRefreshTableController.h"
 
-@interface EMGroupInfoViewController : UIViewController
+@interface EMAddAdminViewController : EMBaseRefreshTableController
 
-- (instancetype)initWithGroup:(EMGroup *)group;
+- (instancetype)initWithGroupId:(NSString *)aGroupId;
 
 @end

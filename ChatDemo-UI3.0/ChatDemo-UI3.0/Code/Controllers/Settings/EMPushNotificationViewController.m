@@ -305,7 +305,7 @@
 
 - (void)activePush:(UISwitch *)sender
 {
-        EMPushOptions *pushOptions = [[EMClient sharedClient] pushOptions];
+    EMPushOptions *pushOptions = [[EMClient sharedClient] pushOptions];
     if (sender.isOn) {
         _noDisturbStatus = EMPushNoDisturbStatusDay;
         pushOptions.noDisturbingStartH = 0;

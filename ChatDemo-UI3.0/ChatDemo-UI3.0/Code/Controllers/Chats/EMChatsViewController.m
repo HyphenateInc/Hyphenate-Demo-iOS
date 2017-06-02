@@ -40,10 +40,8 @@
     
     self.tableView.autoresizingMask = UIViewAutoresizingFlexibleTopMargin |UIViewAutoresizingFlexibleHeight;
     _isSearchState = NO;
-    WEAK_SELF
-    self.headerRefresh = ^(BOOL isRefreshing){
-        [weakSelf tableViewDidTriggerHeaderRefresh];
-    };
+    
+    [self tableViewDidTriggerHeaderRefresh];
 }
 
 - (void)viewWillAppear:(BOOL)animated
@@ -273,7 +271,7 @@
                 EMConversationModel *model = [[EMConversationModel alloc] initWithConversation:conversation];
                 [weakSelf.dataSource addObject:model];
             }
-            [self endHeaderRefresh];
+            [self tableViewDidFinishTriggerHeader:YES];
             [weakSelf.tableView reloadData];
         });
     });
@@ -297,7 +295,7 @@
                 EMConversationModel *model = [[EMConversationModel alloc] initWithConversation:conversation];
                 [weakSelf.dataSource addObject:model];
             }
-            [self endHeaderRefresh];
+            [self tableViewDidFinishTriggerHeader:YES];
             [weakSelf.tableView reloadData];
         });
     });

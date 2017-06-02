@@ -298,7 +298,7 @@
 - (void)collectionView:(UICollectionView *)collectionView didSelectItemAtIndexPath:(NSIndexPath *)indexPath {
     [collectionView deselectItemAtIndexPath:indexPath animated:YES];
     if (indexPath.section == 0) {
-        EMMemberSelectViewController *selectVc = [[EMMemberSelectViewController alloc] initWithInvitees:_invitees];
+        EMMemberSelectViewController *selectVc = [[EMMemberSelectViewController alloc] initWithInvitees:_invitees maxInviteCount:0];
         selectVc.style = EMContactSelectStyle_Add;
         UINavigationController *nav = [[UINavigationController alloc] initWithRootViewController:selectVc];
         selectVc.title = NSLocalizedString(@"title.addParticipants", @"Add Participants");
