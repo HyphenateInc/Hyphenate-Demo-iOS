@@ -9,13 +9,7 @@
 
 #import "EMBaseRefreshTableController.h"
 
-#define KEM_BASE_REFRESH_TINTCOLOR   CoolGrayColor
-#define KEM_BASE_REFRESH_ATTRIBUTES  @{NSForegroundColorAttributeName:KEM_BASE_REFRESH_TINTCOLOR}
-
-#define KEM_BASE_REFRESH_DROPDOWN    NSLocalizedString(@"loading.dropdown", @"Drop down loading...")
-#define KEM_BASE_REFRESH_START       NSLocalizedString(@"loading.start", @"Start loading...")
-#define KEM_BASE_REFRESH_END         NSLocalizedString(@"loading.end", @"Loading completed...")
-
+#import "MJRefresh.h"
 
 @interface EMBaseRefreshTableController ()
 
@@ -24,66 +18,76 @@
 @end
 
 @implementation EMBaseRefreshTableController
+
+- (instancetype)initWithStyle:(UITableViewStyle)style
 {
-    CGPoint _defaultOffset;
+    self = [super initWithStyle:style];
+    if (self) {
+        _dataArray = [[NSMutableArray alloc] init];
+        _defaultFooterView = [[UIView alloc] init];
+    }
+    
+    return self;
 }
 
 - (void)viewDidLoad {
     [super viewDidLoad];
-    _defaultOffset = self.tableView.contentOffset;
-    [self setupRefreshControl];
-    self.tableView.tableFooterView = self.tableViewFoot;
-}
-
-- (void)setupRefreshControl {
-    self.refreshControl = [[UIRefreshControl alloc] init];
-    self.refreshControl.tintColor = KEM_BASE_REFRESH_TINTCOLOR;
-    self.refreshControl.attributedTitle = [[NSAttributedString alloc] initWithString:KEM_BASE_REFRESH_DROPDOWN
-                                                                          attributes:KEM_BASE_REFRESH_ATTRIBUTES];
-    [self.refreshControl addTarget:self action:@selector(refreshHeaderAction) forControlEvents:UIControlEventValueChanged];
-}
-
-- (UIView *)tableViewFoot {
-    return [UIView new];
-}
-
-- (void)endHeaderRefresh {
-    if (self.refreshControl.isRefreshing) {
-        [self.refreshControl endRefreshing];
-        [self.tableView setContentOffset:_defaultOffset animated:YES];
-    }
-    else {
-        self.refreshControl.attributedTitle = [[NSAttributedString alloc] initWithString:KEM_BASE_REFRESH_END
-                                                                              attributes:KEM_BASE_REFRESH_ATTRIBUTES];
-    }
-}
-
-- (void)refreshHeaderAction {
-    if (self.refreshControl.refreshing) {
-        self.refreshControl.attributedTitle = [[NSAttributedString alloc] initWithString:KEM_BASE_REFRESH_START
-                                                                              attributes:KEM_BASE_REFRESH_ATTRIBUTES];
-        if (self.headerRefresh) {
-            self.headerRefresh(self.refreshControl.refreshing);
-        }
-        else {
-            [self.refreshControl endRefreshing];
-            self.refreshControl.attributedTitle = [[NSAttributedString alloc] initWithString:KEM_BASE_REFRESH_END
-                                                                                      attributes:KEM_BASE_REFRESH_ATTRIBUTES];
-        }
-    }
-}
-
-#pragma mark - UIScrollViewDelegate
-- (void)scrollViewDidScroll:(UIScrollView *)scrollView {
-    if (!self.refreshControl.refreshing && scrollView.contentOffset.y == _defaultOffset.y) {
-        self.refreshControl.attributedTitle = [[NSAttributedString alloc] initWithString:KEM_BASE_REFRESH_DROPDOWN
-                                                                                  attributes:KEM_BASE_REFRESH_ATTRIBUTES];
-    }
+    
+    self.showRefreshHeader = YES;
+    self.showRefreshFooter = NO;
+    
+    self.tableView.tableFooterView = self.defaultFooterView;
 }
 
 - (void)didReceiveMemoryWarning {
     [super didReceiveMemoryWarning];
     // Dispose of any resources that can be recreated.
+}
+
+- (NSMutableArray *)dataArray
+{
+    if (_dataArray == nil) {
+        _dataArray = [[NSMutableArray alloc] init];
+    }
+    
+    return _dataArray;
+}
+
+#pragma mark - setter
+
+- (void)setShowRefreshHeader:(BOOL)showRefreshHeader
+{
+    if (_showRefreshHeader != showRefreshHeader) {
+        _showRefreshHeader = showRefreshHeader;
+        if (_showRefreshHeader) {
+            __weak typeof(self) weakSelf = self;
+            self.tableView.mj_header = [MJRefreshNormalHeader headerWithRefreshingBlock:^{
+                [weakSelf tableViewDidTriggerHeaderRefresh];
+            }];
+            self.tableView.mj_header.accessibilityIdentifier = @"refresh_header";
+            //            header.updatedTimeHidden = YES;
+        }
+        else{
+            [self.tableView setMj_header:nil];
+        }
+    }
+}
+
+- (void)setShowRefreshFooter:(BOOL)showRefreshFooter
+{
+    if (_showRefreshFooter != showRefreshFooter) {
+        _showRefreshFooter = showRefreshFooter;
+        if (_showRefreshFooter) {
+            __weak typeof(self) weakSelf = self;
+            self.tableView.mj_footer = [MJRefreshBackNormalFooter footerWithRefreshingBlock:^{
+                [weakSelf tableViewDidTriggerFooterRefresh];
+            }];
+            self.tableView.mj_footer.accessibilityIdentifier = @"refresh_footer";
+        }
+        else{
+            [self.tableView setMj_footer:nil];
+        }
+    }
 }
 
 #pragma mark - Table view data source
@@ -94,6 +98,31 @@
 
 - (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section {
     return 0;
+}
+
+#pragma mark - public refresh
+
+- (void)tableViewDidTriggerHeaderRefresh
+{
+    
+}
+
+- (void)tableViewDidTriggerFooterRefresh
+{
+    
+}
+
+- (void)tableViewDidFinishTriggerHeader:(BOOL)isHeader
+{
+    __weak typeof(self) weakSelf = self;
+    dispatch_async(dispatch_get_main_queue(), ^{
+        if (isHeader) {
+            [weakSelf.tableView.mj_header endRefreshing];
+        }
+        else{
+            [weakSelf.tableView.mj_footer endRefreshing];
+        }
+    });
 }
 
 

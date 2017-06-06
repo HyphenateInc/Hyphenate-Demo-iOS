@@ -11,6 +11,7 @@
 #import "EMContactListSectionHeader.h"
 #import "EMAddContactViewController.h"
 #import "EMContactInfoViewController.h"
+#import "EMChatroomsViewController.h"
 #import "EMGroupTitleCell.h"
 #import "EMContactCell.h"
 #import "EMUserModel.h"
@@ -53,12 +54,8 @@
     [self setupNavigationItem:self.navigationItem];
     [self reloadGroupNotifications];
     [self reloadContactRequests];
-    [self loadContactsFromServer];
     
-    WEAK_SELF
-    self.headerRefresh = ^(BOOL isRefreshing){
-        [weakSelf loadContactsFromServer];
-    };
+    [self tableViewDidTriggerHeaderRefresh];
 }
 
 - (void)setupNavigationItem:(UINavigationItem *)navigationItem {
@@ -74,28 +71,33 @@
     navigationItem.titleView = self.searchBar;
 }
 
-- (void)loadContactsFromServer {
+- (void)tableViewDidTriggerHeaderRefresh {
     if (_isSearchState) {
-        [self endHeaderRefresh];
+        [self tableViewDidFinishTriggerHeader:YES];
         return;
     }
+    
     WEAK_SELF
     [[EMClient sharedClient].contactManager getContactsFromServerWithCompletion:^(NSArray *aList, EMError *aError) {
         if (!aError) {
             dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), ^(){
                 [weakSelf updateContacts:aList];
+                
+                [weakSelf tableViewDidFinishTriggerHeader:YES];
                 dispatch_async(dispatch_get_main_queue(), ^(){
                     [weakSelf.tableView reloadData];
-                    [weakSelf endHeaderRefresh];
                 });
             });
         }
         else {
-            dispatch_async(dispatch_get_main_queue(), ^(){
-                [weakSelf endHeaderRefresh];
-            });
+            [weakSelf tableViewDidFinishTriggerHeader:YES];
         }
     }];
+}
+
+- (void)loadContactsFromServer
+{
+    [self tableViewDidTriggerHeaderRefresh];
 }
 
 - (void)reloadContacts {
@@ -240,7 +242,7 @@
         case 1:
             return _contactRequests.count;
         case 2:
-            return 1;
+            return 2;
     }
     NSArray *array = _contacts[section - KEM_CONTACT_BASICSECTION_NUM];
     return array.count;
@@ -280,7 +282,12 @@
         if (!cell) {
             cell = (EMGroupTitleCell *)[[[NSBundle mainBundle] loadNibNamed:@"EMGroupTitleCell" owner:self options:nil] lastObject];
         }
-        cell.titleLabel.text = NSLocalizedString(@"common.groups", @"Groups");
+        if (indexPath.row == 0) {
+            cell.titleLabel.text = NSLocalizedString(@"common.groups", @"Groups");
+        } else if (indexPath.row == 1) {
+            cell.titleLabel.text = NSLocalizedString(@"common.chatrooms", @"Chat Rooms");
+        }
+        
         return cell;
     }
     
@@ -324,8 +331,14 @@
 - (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath {
     [tableView deselectRowAtIndexPath:indexPath animated:YES];
     if (indexPath.section == 2 && !_isSearchState) {
-        EMGroupsViewController *groupsVc = [[EMGroupsViewController alloc] initWithNibName:@"EMGroupsViewController" bundle:nil];
-        [self.navigationController pushViewController:groupsVc animated:YES];
+        if (indexPath.row == 0) {
+            EMGroupsViewController *groupsVc = [[EMGroupsViewController alloc] initWithNibName:@"EMGroupsViewController" bundle:nil];
+            [self.navigationController pushViewController:groupsVc animated:YES];
+        } else if (indexPath.row == 1) {
+            EMChatroomsViewController *chatroomsVC = [[EMChatroomsViewController alloc] init];
+            [self.navigationController pushViewController:chatroomsVC animated:YES];
+        }
+        
         return;
     }
     

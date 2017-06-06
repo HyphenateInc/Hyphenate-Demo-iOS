@@ -41,7 +41,7 @@
         defaultImageName = @"default_group_avatar.png";
         _descriptionLabel.hidden = NO;
         _tiitleLabel.text = _model.groupSubject.length > 0 ? _model.groupSubject : _model.groupId;
-        _descriptionLabel.text = [NSString stringWithFormat:@"%ld %@",(long)_model.groupMemberCount,NSLocalizedString(@"title.members", @"Members")];
+        _descriptionLabel.text = [NSString stringWithFormat:@"%ld %@",(long)_model.groupMemberCount,NSLocalizedString(@"title.memberList", @"Member List")];
         if (_model.style == EMApplyStyle_joinGroup) {
             _descriptionLabel.text = [NSString stringWithFormat:@"%@ wants to join",_model.applyNickName];
         }
