@@ -32,6 +32,8 @@
 
 @property (strong, nonatomic) NSMutableArray<NSMutableArray *> *unselectedContacts;
 
+@property (nonatomic) NSInteger maxInviteCount;
+
 @end
 
 @interface EMSectionTitleHeader : UIView
@@ -52,12 +54,15 @@
     BOOL _isSearchState;
 }
 
-- (instancetype)initWithInvitees:(NSArray *)hasInvitees {
+- (instancetype)initWithInvitees:(NSArray *)aHasInvitees
+                  maxInviteCount:(NSInteger)aCount
+{
     self = [super initWithNibName:@"EMMemberSelectViewController" bundle:nil];
     if (self) {
         _selectContacts = [NSMutableArray array];
         _unselectedContacts = [NSMutableArray array];
-        _hasInvitees = [NSMutableArray arrayWithArray:hasInvitees];
+        _hasInvitees = [NSMutableArray arrayWithArray:aHasInvitees];
+        _maxInviteCount = aCount;
     }
     return self;
 }
@@ -212,6 +217,7 @@
     if (_delegate && [_delegate respondsToSelector:@selector(addSelectOccupants:)]) {
         [_delegate addSelectOccupants:_selectContacts];
     }
+    
     [self dismissViewControllerAnimated:YES completion:nil];
 }
 

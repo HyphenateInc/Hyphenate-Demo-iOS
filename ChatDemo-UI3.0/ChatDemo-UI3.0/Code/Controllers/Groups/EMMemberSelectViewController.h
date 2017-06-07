@@ -23,6 +23,7 @@ typedef NS_ENUM(NSUInteger, EMContactSelectStyle) {
 
 @property (nonatomic, assign) id<EMGroupUIProtocol> delegate;
 
-- (instancetype)initWithInvitees:(NSArray *)hasInvitees;
+- (instancetype)initWithInvitees:(NSArray *)aHasInvitees
+                  maxInviteCount:(NSInteger)aCount;
 
 @end

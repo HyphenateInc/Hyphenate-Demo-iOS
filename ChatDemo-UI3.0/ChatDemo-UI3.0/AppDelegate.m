@@ -53,6 +53,10 @@
     
     [options setApnsCertName:apnsCertName];
     [options setEnableConsoleLog:YES];
+    [options setIsDeleteMessagesWhenExitGroup:NO];
+    [options setIsDeleteMessagesWhenExitChatRoom:NO];
+    [options setUsingHttpsOnly:YES];
+    
     [[EMClient sharedClient] initializeSDKWithOptions:options];
     
     [[NSNotificationCenter defaultCenter] addObserver:self
@@ -174,7 +178,7 @@
 - (void)registerNotifications
 {
     [self unregisterNotifications];
-    [[EMClient sharedClient] addDelegate:self];
+    [[EMClient sharedClient] addDelegate:self delegateQueue:nil];
 }
 
 - (void)unregisterNotifications
