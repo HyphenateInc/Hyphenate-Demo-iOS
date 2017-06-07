@@ -55,6 +55,7 @@
     [options setEnableConsoleLog:YES];
     [options setIsDeleteMessagesWhenExitGroup:NO];
     [options setIsDeleteMessagesWhenExitChatRoom:NO];
+    [options setUsingHttpsOnly:YES];
     
     [[EMClient sharedClient] initializeSDKWithOptions:options];
     
