@@ -165,7 +165,8 @@
 {
     if (_backButton == nil) {
         _backButton = [UIButton buttonWithType:UIButtonTypeCustom];
-        _backButton.frame = CGRectMake(0, 0, 8, 15);
+        _backButton.frame = CGRectMake(0, 0, 50, 50);
+        _backButton.imageView.contentMode = UIViewContentModeScaleAspectFit;
         [_backButton addTarget:self action:@selector(backAction) forControlEvents:UIControlEventTouchUpInside];
         [_backButton setImage:[UIImage imageNamed:@"Icon_Back"] forState:UIControlStateNormal];
     }
@@ -685,7 +686,7 @@
 - (void)backAction
 {
     if (_conversation.type == EMConversationTypeChatRoom) {
-        [self showHudInView:self.view hint:NSLocalizedString(@"chatroom.leaving", @"Leaving the chatroom...")];
+        [self showHudInView:[UIApplication sharedApplication].keyWindow hint:NSLocalizedString(@"chatroom.leaving", @"Leaving the chatroom...")];
         WEAK_SELF
         [[EMClient sharedClient].roomManager leaveChatroom:_conversation.conversationId completion:^(EMError *aError) {
             [weakSelf hideHud];
@@ -760,7 +761,13 @@
             
             [weakSelf showAlertWithMessage:[NSString stringWithFormat:NSLocalizedString(@"chatroom.joinFailed",@"join chatroom \'%@\' failed"), aChatroomId]];
             [weakSelf backAction];
+        } else {
+            NSMutableDictionary *ext = [NSMutableDictionary dictionaryWithDictionary:weakSelf.conversation.ext];
+            [ext setObject:aChatroom.subject forKey:@"subject"];
+            weakSelf.conversation.ext = ext;
+            weakSelf.title = aChatroom.subject;
             
+            [[NSNotificationCenter defaultCenter] postNotificationName:KEM_UPDATE_CONVERSATIONS object:nil];
         }
     }];
 }

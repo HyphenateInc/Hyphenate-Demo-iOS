@@ -16,3 +16,5 @@
 #define KEM_DESTROY_CHATROOM_NOTIFICATION     @"destroyChatroom_notification"
 
 #define KEM_END_CHAT  @"endChat_notification"
+
+#define KEM_UPDATE_CONVERSATIONS @"UpdateConversations"

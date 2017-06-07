@@ -14,6 +14,7 @@
 #import "EMRealtimeSearchUtil.h"
 #import "EMChatViewController.h"
 #import "EMConversationModel.h"
+#import "EMNotificationNames.h"
 
 @interface EMChatsViewController () <EMChatManagerDelegate, EMGroupManagerDelegate, UISearchBarDelegate, UITableViewDelegate, UITableViewDataSource, UISearchDisplayDelegate>
 {
@@ -40,6 +41,8 @@
     
     self.tableView.autoresizingMask = UIViewAutoresizingFlexibleTopMargin |UIViewAutoresizingFlexibleHeight;
     _isSearchState = NO;
+    
+    [[NSNotificationCenter defaultCenter] addObserver:self.tableView selector:@selector(reloadData) name:KEM_UPDATE_CONVERSATIONS object:nil];
     
     [self tableViewDidTriggerHeaderRefresh];
 }
