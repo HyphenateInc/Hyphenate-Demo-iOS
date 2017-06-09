@@ -104,6 +104,11 @@
     [tableView deselectRowAtIndexPath:indexPath animated:YES];
     EMChatroom *chatroom = self.dataArray[indexPath.row];
     
+    EMConversation *conversation = [[EMClient sharedClient].chatManager getConversation:chatroom.chatroomId type:EMConversationTypeChatRoom createIfNotExist:YES];
+    NSMutableDictionary *ext = [NSMutableDictionary dictionaryWithDictionary:conversation.ext];
+    [ext setObject:chatroom.subject forKey:@"subject"];
+    conversation.ext = ext;
+    
     EMChatViewController *chatViewController = [[EMChatViewController alloc] initWithConversationId:chatroom.chatroomId conversationType:EMConversationTypeChatRoom];
     chatViewController.title = chatroom.subject;
     [self.navigationController pushViewController:chatViewController animated:YES];
