@@ -1,5 +1,6 @@
 # Uncomment this line to define a global platform for your project
-# platform :ios, '8.0'
+platform :ios, '8.0'
+
 # Uncomment this line if you're using Swift
 # use_frameworks!
 
@@ -9,20 +10,20 @@ source 'https://github.com/CocoaPods/Specs.git'
 target 'ChatDemo-UI3.0' do
     
     # Hyphenate chat
-    pod 'Hyphenate', '~> 3.2.3'
+    pod 'Hyphenate', '~> 3.3.1'
 
-    # coffee bot with api.ai
-    pod 'ApiAI'
-    
-    # others
     pod 'MWPhotoBrowser', '~> 2.1.2'
+    pod 'MJRefresh'
 
-    # Analytics
-    pod 'Google/Analytics'
+    pod 'Firebase/Core'
+
     pod 'Fabric'
     pod 'Crashlytics'
 
-    # database
     pod 'Parse'
+    
+    # coffee bot with api.ai
+    pod 'ApiAI'
+
 
 end

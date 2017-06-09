@@ -18,6 +18,12 @@
     self = [super init];
     if (self) {
         _conversation = conversation;
+        
+        NSString *subject = [conversation.ext objectForKey:@"subject"];
+        if ([subject length] > 0) {
+            _title = subject;
+        }
+        
         if (_conversation.type == EMConversationTypeGroupChat) {
             NSArray *groups = [[EMClient sharedClient].groupManager getJoinedGroups];
             for (EMGroup *group in groups) {
@@ -26,6 +32,10 @@
                     break;
                 }
             }
+        }
+        
+        if ([_title length] == 0) {
+            _title = _conversation.conversationId;
         }
     }
     return self;

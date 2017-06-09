@@ -14,6 +14,7 @@
 #import "EMRealtimeSearchUtil.h"
 #import "EMChatViewController.h"
 #import "EMConversationModel.h"
+#import "EMNotificationNames.h"
 
 @interface EMChatsViewController () <EMChatManagerDelegate, EMGroupManagerDelegate, UISearchBarDelegate, UITableViewDelegate, UITableViewDataSource, UISearchDisplayDelegate>
 {
@@ -40,10 +41,10 @@
     
     self.tableView.autoresizingMask = UIViewAutoresizingFlexibleTopMargin |UIViewAutoresizingFlexibleHeight;
     _isSearchState = NO;
-    WEAK_SELF
-    self.headerRefresh = ^(BOOL isRefreshing){
-        [weakSelf tableViewDidTriggerHeaderRefresh];
-    };
+    
+    [[NSNotificationCenter defaultCenter] addObserver:self.tableView selector:@selector(reloadData) name:KEM_UPDATE_CONVERSATIONS object:nil];
+    
+    [self tableViewDidTriggerHeaderRefresh];
 }
 
 - (void)viewWillAppear:(BOOL)animated
@@ -68,8 +69,8 @@
 
 - (void)registerNotifications{
     [self unregisterNotifications];
-    [[EMClient sharedClient].chatManager addDelegate:self];
-    [[EMClient sharedClient].groupManager addDelegate:self];
+    [[EMClient sharedClient].chatManager addDelegate:self delegateQueue:nil];
+    [[EMClient sharedClient].groupManager addDelegate:self delegateQueue:nil];
 }
 
 - (void)unregisterNotifications{
@@ -273,7 +274,7 @@
                 EMConversationModel *model = [[EMConversationModel alloc] initWithConversation:conversation];
                 [weakSelf.dataSource addObject:model];
             }
-            [self endHeaderRefresh];
+            [self tableViewDidFinishTriggerHeader:YES];
             [weakSelf.tableView reloadData];
         });
     });
@@ -297,7 +298,7 @@
                 EMConversationModel *model = [[EMConversationModel alloc] initWithConversation:conversation];
                 [weakSelf.dataSource addObject:model];
             }
-            [self endHeaderRefresh];
+            [self tableViewDidFinishTriggerHeader:YES];
             [weakSelf.tableView reloadData];
         });
     });
