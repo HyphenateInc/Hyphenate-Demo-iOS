@@ -141,6 +141,12 @@
 - (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath {
     [tableView deselectRowAtIndexPath:indexPath animated:YES];
     EMGroupModel *model = self.dataArray[indexPath.row];
+    EMConversation *conversation = [[EMClient sharedClient].chatManager getConversation:model.hyphenateId type:EMConversationTypeGroupChat createIfNotExist:YES];
+    NSMutableDictionary *ext = [NSMutableDictionary dictionaryWithDictionary:conversation.ext];
+    [ext setObject:model.subject forKey:@"subject"];
+    [ext setObject:[NSNumber numberWithBool:model.group.isPublic] forKey:@"isPublic"];
+    conversation.ext = ext;
+    
     EMChatViewController *chatViewController = [[EMChatViewController alloc] initWithConversationId:model.hyphenateId conversationType:EMConversationTypeGroupChat];
     [self.navigationController pushViewController:chatViewController animated:YES];
 }
