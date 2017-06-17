@@ -87,7 +87,6 @@
 "chat.clearMsg" = "是否确定删除所有消息？";
 
 //call
-
 "call.calling" = "呼叫中";
 "call.initFailed" = "请求通话失败";
 "call.ok" = "确定";
@@ -234,6 +233,7 @@
 "group.mute.added" = "被加入禁言列表:";
 "group.mute.removed" = "被移出禁言列表:";
 "group.owner.updated" = "群主由 %@ 变成 %@";
+"group.owner.permission" = "只有Owner能进行此操作";
 "group.member.joined" = "%@已经加入了群组[%@]";
 "group.member.leaved" = "%@已经离开了群组[%@]";
 

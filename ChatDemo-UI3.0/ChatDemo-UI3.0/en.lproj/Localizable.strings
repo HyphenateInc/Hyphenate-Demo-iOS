@@ -156,7 +156,6 @@
 "contact.noinput" = "No input contact name";
 "contact.repeatContact" = "This contact has been added";
 "contact.addOwner" = "Not allowed to send their own friends to apply for";
-
 "contact.name" = "Name";
 "contact.hyphenateId" = "Hyphenate ID";
 "contact.apnsnickname" = "iOS APNS";
@@ -231,6 +230,7 @@
 "group.mute.added" = "Added to mute list:";
 "group.mute.removed" = "Removed from mute list:";
 "group.owner.updated" = "The group owner changed from %@ to %@";
+"group.owner.permission" = "Only owner can perform this operation";
 "group.member.joined" = "%@ has joined to the group [%@]";
 "group.member.leaved" = "%@ has leaved from the group [%@]";
 
