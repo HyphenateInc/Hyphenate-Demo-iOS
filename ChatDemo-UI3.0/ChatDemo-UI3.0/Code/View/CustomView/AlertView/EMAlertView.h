@@ -14,7 +14,7 @@
 @interface EMAlertView : UIAlertView
 
 /**
- *  弹出提示框
+ *  pop up view
  *
  *  @param title             <#title description#>
  *  @param message           <#message description#>

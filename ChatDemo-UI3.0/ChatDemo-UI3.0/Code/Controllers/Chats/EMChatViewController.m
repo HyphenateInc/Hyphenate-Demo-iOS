@@ -56,6 +56,10 @@
 {
     self = [super init];
     if (self) {
+        if ([UIDevice currentDevice].systemVersion.floatValue >= 7) {
+            self.edgesForExtendedLayout = UIRectEdgeNone;
+        }
+        
         _conversation = [[EMClient sharedClient].chatManager getConversation:conversationId type:type createIfNotExist:YES];
         [_conversation markAllMessagesAsRead:nil];
     }
@@ -66,10 +70,6 @@
 {
     [super viewDidLoad];
     // Do any additional setup after loading the view from its nib.
-    
-    if ([UIDevice currentDevice].systemVersion.floatValue >= 7) {
-        self.edgesForExtendedLayout = UIRectEdgeNone;
-    }
     
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(endChatWithConversationId:) name:KEM_END_CHAT object:nil];
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(deleteAllMessages:) name:KNOTIFICATIONNAME_DELETEALLMESSAGE object:nil];
@@ -87,7 +87,6 @@
     [[EMClient sharedClient].roomManager addDelegate:self delegateQueue:nil];
     
     [self _setupNavigationBar];
-    [self _setupViewLayout];
     
     if (_conversation.type == EMConversationTypeChatRoom) {
         [self _joinChatroom:_conversation.conversationId];
@@ -143,15 +142,6 @@
     } else if (_conversation.type == EMConversationTypeChatRoom) {
         self.navigationItem.rightBarButtonItem = [[UIBarButtonItem alloc] initWithCustomView:self.detailButton];
     }
-}
-
-- (void)_setupViewLayout
-{
-    self.tableView.width = KScreenWidth;
-    self.tableView.height = KScreenHeight - self.chatToolBar.height - 64;
-    
-    self.chatToolBar.width = KScreenWidth;
-    self.chatToolBar.top = KScreenHeight - self.chatToolBar.height - 64;
 }
 
 #pragma mark - getter

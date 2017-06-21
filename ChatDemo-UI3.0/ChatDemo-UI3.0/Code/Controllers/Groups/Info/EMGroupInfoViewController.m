@@ -303,7 +303,7 @@
                 EMGroupTransferOwnerViewController *transferController = [[EMGroupTransferOwnerViewController alloc] initWithGroup:self.group];
                 [self.navigationController pushViewController:transferController animated:YES];
             } else {
-                [self showHint:@"只有Owner能进行此操作"];
+                [self showHint:NSLocalizedString(@"group.owner.permission", @"Only owner can perform this operation")];
             }
         }
             break;
@@ -313,7 +313,7 @@
                 EMGroupUpdateSubjectViewController *updateController = [[EMGroupUpdateSubjectViewController alloc] initWithGroupId:self.groupId subject:self.group.subject];
                 [self.navigationController pushViewController:updateController animated:YES];
             } else {
-                [self showHint:@"只有Owner能进行此操作"];
+                [self showHint:NSLocalizedString(@"group.owner.permission", @"Only owner can perform this operation")];
             }
         }
             break;

@@ -11,37 +11,38 @@
 
 @interface EMBaseRefreshTableController : UITableViewController
 
-/** @brief 默认的tableFooterView */
+/** @brief default tableFooterView */
 @property (strong, nonatomic) UIView *defaultFooterView;
 
-/** @brief tableView的数据源，用户UI显示 */
+/** @brief data source of tableView */
 @property (strong, nonatomic) NSMutableArray *dataArray;
 
-/** @brief 当前加载的页数 */
+/** @brief current loaded page */
 @property (nonatomic) int page;
 
-/** @brief 是否启用下拉加载更多，默认为NO */
-@property (nonatomic) BOOL showRefreshHeader;
-/** @brief 是否启用上拉加载更多，默认为NO */
+/** 
+ @brief if enable pull down to load more. default is NO
+ @property (nonatomic) BOOL showRefreshHeader;
+ */
 @property (nonatomic) BOOL showRefreshFooter;
 
 /*!
  @method
- @brief 下拉加载更多(下拉刷新)
+ @brief pull down to load more
  */
 - (void)tableViewDidTriggerHeaderRefresh;
 
 /*!
  @method
- @brief 上拉加载更多
+ @brief load more
  */
 - (void)tableViewDidTriggerFooterRefresh;
 
 /*!
  @method
- @brief 加载结束
- @discussion 加载结束后，通过参数reload来判断是否需要调用tableView的reloadData，判断isHeader来停止加载
- @param isHeader   是否结束下拉加载(或者上拉加载)
+ @brief finish loading
+ @discussion finish loading. Use the parameter reload to determine if call reloadData of tableView reloadData，check isHeader to stop the loading
+ @param isHeader  if end pull down/up to load
  */
 - (void)tableViewDidFinishTriggerHeader:(BOOL)isHeader;
 
