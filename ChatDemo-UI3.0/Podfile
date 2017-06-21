@@ -3,13 +3,14 @@ platform :ios, '8.0'
 
 # Uncomment this line if you're using Swift
 # use_frameworks!
+inhibit_all_warnings!
 
 # Import CocoaPods sources
 source 'https://github.com/CocoaPods/Specs.git'
 
 target 'ChatDemo-UI3.0' do
     
-    pod 'Hyphenate', '~> 3.3.1'
+    pod 'Hyphenate', '= 3.3.1'
 
     pod 'MWPhotoBrowser', '~> 2.1.2'
     pod 'MJRefresh'
