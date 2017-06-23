@@ -20,9 +20,13 @@
 /** @brief current loaded page */
 @property (nonatomic) int page;
 
-/** 
+/**
  @brief if enable pull down to load more. default is NO
- @property (nonatomic) BOOL showRefreshHeader;
+ */
+@property (nonatomic) BOOL showRefreshHeader;
+
+/** 
+ @brief if enable pull up to load more. default is NO
  */
 @property (nonatomic) BOOL showRefreshFooter;
 
