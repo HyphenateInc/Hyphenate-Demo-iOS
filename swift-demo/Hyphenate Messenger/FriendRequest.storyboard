@@ -1,0 +1,90 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="11201" systemVersion="16A323" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" colorMatched="YES" initialViewController="cRa-iU-gme">
+    <dependencies>
+        <deployment identifier="iOS"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="11161"/>
+        <capability name="Constraints to layout margins" minToolsVersion="6.0"/>
+        <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
+    </dependencies>
+    <scenes>
+        <!--Friend Request View Controller-->
+        <scene sceneID="YMw-c7-c3p">
+            <objects>
+                <viewController id="cRa-iU-gme" customClass="FriendRequestViewController" customModule="Hyphenate_Messenger" customModuleProvider="target" sceneMemberID="viewController">
+                    <layoutGuides>
+                        <viewControllerLayoutGuide type="top" id="oA8-7f-YL0"/>
+                        <viewControllerLayoutGuide type="bottom" id="bNl-Ch-c17"/>
+                    </layoutGuides>
+                    <view key="view" contentMode="scaleToFill" id="Hv4-4g-vwv">
+                        <rect key="frame" x="0.0" y="0.0" width="375" height="667"/>
+                        <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+                        <subviews>
+                            <activityIndicatorView hidden="YES" opaque="NO" contentMode="scaleToFill" horizontalHuggingPriority="750" verticalHuggingPriority="750" hidesWhenStopped="YES" style="whiteLarge" translatesAutoresizingMaskIntoConstraints="NO" id="6TL-w5-3jp"/>
+                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Label" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="sHd-ae-TA4">
+                                <constraints>
+                                    <constraint firstAttribute="width" constant="120" id="aEA-Rw-dP0"/>
+                                </constraints>
+                                <fontDescription key="fontDescription" type="system" pointSize="17"/>
+                                <color key="textColor" cocoaTouchSystemColor="darkTextColor"/>
+                                <nil key="highlightedColor"/>
+                            </label>
+                            <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="r5R-c4-wRl">
+                                <color key="backgroundColor" red="0.27803102140000002" green="0.80563414099999997" blue="0.018333645539999999" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+                                <state key="normal" image="buttonAdd">
+                                    <color key="titleColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
+                                </state>
+                                <userDefinedRuntimeAttributes>
+                                    <userDefinedRuntimeAttribute type="boolean" keyPath="layer.masksToBounds" value="YES"/>
+                                    <userDefinedRuntimeAttribute type="number" keyPath="layer.cornerRadius">
+                                        <integer key="value" value="4"/>
+                                    </userDefinedRuntimeAttribute>
+                                </userDefinedRuntimeAttributes>
+                                <connections>
+                                    <action selector="addAction:" destination="cRa-iU-gme" eventType="touchUpInside" id="9j6-G6-hLn"/>
+                                </connections>
+                            </button>
+                            <textField opaque="NO" clipsSubviews="YES" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="center" placeholder="Enter Hyphenate ID" textAlignment="natural" minimumFontSize="17" translatesAutoresizingMaskIntoConstraints="NO" id="MJ0-54-E1V" customClass="HyphenateTextField" customModule="Hyphenate_Messenger" customModuleProvider="target">
+                                <constraints>
+                                    <constraint firstAttribute="height" constant="40" id="m0y-Rk-fw0"/>
+                                </constraints>
+                                <fontDescription key="fontDescription" type="system" pointSize="15"/>
+                                <textInputTraits key="textInputTraits" returnKeyType="done"/>
+                                <userDefinedRuntimeAttributes>
+                                    <userDefinedRuntimeAttribute type="boolean" keyPath="layer.masksToBounds" value="YES"/>
+                                    <userDefinedRuntimeAttribute type="number" keyPath="layer.cornerRadius">
+                                        <integer key="value" value="4"/>
+                                    </userDefinedRuntimeAttribute>
+                                </userDefinedRuntimeAttributes>
+                                <connections>
+                                    <outlet property="delegate" destination="cRa-iU-gme" id="kup-6g-JmM"/>
+                                </connections>
+                            </textField>
+                        </subviews>
+                        <color key="backgroundColor" red="1" green="1" blue="1" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+                        <constraints>
+                            <constraint firstItem="r5R-c4-wRl" firstAttribute="top" secondItem="MJ0-54-E1V" secondAttribute="bottom" constant="20" id="2Dm-GV-kO5"/>
+                            <constraint firstItem="MJ0-54-E1V" firstAttribute="top" secondItem="Hv4-4g-vwv" secondAttribute="topMargin" constant="212" id="2Nv-lf-VDC"/>
+                            <constraint firstItem="sHd-ae-TA4" firstAttribute="top" secondItem="oA8-7f-YL0" secondAttribute="bottom" constant="153" id="Kta-sE-ieH"/>
+                            <constraint firstItem="MJ0-54-E1V" firstAttribute="leading" secondItem="Hv4-4g-vwv" secondAttribute="leadingMargin" constant="20" id="Nkq-om-Con"/>
+                            <constraint firstItem="r5R-c4-wRl" firstAttribute="centerX" secondItem="Hv4-4g-vwv" secondAttribute="centerX" id="PE6-Bg-hr3"/>
+                            <constraint firstAttribute="trailingMargin" secondItem="MJ0-54-E1V" secondAttribute="trailing" constant="20" id="Rpy-b5-tFK"/>
+                            <constraint firstItem="sHd-ae-TA4" firstAttribute="centerX" secondItem="Hv4-4g-vwv" secondAttribute="centerX" id="dQB-ba-R5M"/>
+                            <constraint firstItem="6TL-w5-3jp" firstAttribute="top" secondItem="sHd-ae-TA4" secondAttribute="bottom" constant="127" id="j62-Nj-RAT"/>
+                            <constraint firstItem="sHd-ae-TA4" firstAttribute="centerX" secondItem="6TL-w5-3jp" secondAttribute="centerX" id="yKc-aH-wo9"/>
+                        </constraints>
+                    </view>
+                    <connections>
+                        <outlet property="inputTextfield" destination="MJ0-54-E1V" id="NjR-Ah-Uxy"/>
+                        <outlet property="spinner" destination="6TL-w5-3jp" id="QY8-ep-9aS"/>
+                        <outlet property="statusLabel" destination="sHd-ae-TA4" id="7ef-pJ-lDx"/>
+                    </connections>
+                </viewController>
+                <placeholder placeholderIdentifier="IBFirstResponder" id="OCt-NC-h2D" userLabel="First Responder" sceneMemberID="firstResponder"/>
+            </objects>
+            <point key="canvasLocation" x="636" y="10.344827586206897"/>
+        </scene>
+    </scenes>
+    <resources>
+        <image name="buttonAdd" width="70" height="40"/>
+    </resources>
+</document>
