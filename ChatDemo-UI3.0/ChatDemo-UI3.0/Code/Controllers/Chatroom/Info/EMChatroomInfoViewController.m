@@ -22,6 +22,7 @@
 #define ALERTVIEW_CHANGE_OWNER 100
 #define ALERTVIEW_CHANGE_SUNJECT 102
 #define ALERTVIEW_CHANGE_DES 103
+#define ALERTVIEW_CHANGE_ANNOUNCEMENT 104
 
 @interface EMChatroomInfoViewController ()<UIAlertViewDelegate>
 
@@ -118,10 +119,10 @@
 - (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section
 {
     if (self.chatroom.permissionType == EMChatroomPermissionTypeOwner || self.chatroom.permissionType == EMChatroomPermissionTypeAdmin) {
-        return 9;
+        return 10;
     }
     
-    return 7;
+    return 8;
 }
 
 - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath
@@ -156,10 +157,19 @@
             cell.accessoryType = UITableViewCellAccessoryNone;
         }
     } else if (indexPath.row == 3) {
+        cell.textLabel.text = NSLocalizedString(@"chatroom.announcement", @"announcement");
+        cell.detailTextLabel.text = self.chatroom.announcement;
+        
+        if (self.chatroom.permissionType == EMChatroomPermissionTypeOwner || self.chatroom.permissionType == EMChatroomPermissionTypeAdmin) {
+            cell.accessoryType = UITableViewCellAccessoryDisclosureIndicator;
+        } else {
+            cell.accessoryType = UITableViewCellAccessoryNone;
+        }
+    } else if (indexPath.row == 4) {
         cell.textLabel.text = NSLocalizedString(@"chatroom.occupantCount", @"members count");
         cell.accessoryType = UITableViewCellAccessoryNone;
         cell.detailTextLabel.text = [NSString stringWithFormat:@"%i / %i", (int)self.chatroom.occupantsCount, (int)self.chatroom.maxOccupantsCount];
-    } else if (indexPath.row == 4) {
+    } else if (indexPath.row == 5) {
         cell.textLabel.text = NSLocalizedString(@"chatroom.owner", @"Owner");
         
         cell.detailTextLabel.text = self.chatroom.owner;
@@ -170,18 +180,18 @@
         else {
             cell.accessoryType = UITableViewCellAccessoryNone;
         }
-    } else if (indexPath.row == 5) {
+    } else if (indexPath.row == 6) {
         cell.textLabel.text = NSLocalizedString(@"chatroom.admins", @"Admins");
         cell.accessoryType = UITableViewCellAccessoryDisclosureIndicator;
         cell.detailTextLabel.text = [NSString stringWithFormat:@"%i", (int)[self.chatroom.adminList count]];
-    } else if (indexPath.row == 6) {
+    } else if (indexPath.row == 7) {
         cell.textLabel.text = NSLocalizedString(@"chatroom.onlineMembers", @"Online Members");
         cell.accessoryType = UITableViewCellAccessoryDisclosureIndicator;
 //        cell.detailTextLabel.text = @(self.chatroom.occupantsCount).stringValue;
-    } else if (indexPath.row == 7) {
+    } else if (indexPath.row == 8) {
         cell.textLabel.text = NSLocalizedString(@"chatroom.mutes", @"Mutes");
         cell.accessoryType = UITableViewCellAccessoryDisclosureIndicator;
-    } else if (indexPath.row == 8) {
+    } else if (indexPath.row == 9) {
         cell.textLabel.text = NSLocalizedString(@"chatroom.blacklist", @"Blacklist");
         cell.accessoryType = UITableViewCellAccessoryDisclosureIndicator;
     }
@@ -214,7 +224,16 @@
         
         [alert show];
         
-    } else if (row == 4 && self.chatroom.permissionType == EMChatroomPermissionTypeOwner) { //owner
+    } if (row == 3 && (self.chatroom.permissionType == EMChatroomPermissionTypeOwner || self.chatroom.permissionType == EMChatroomPermissionTypeAdmin)) {
+        UIAlertView *alert = [[UIAlertView alloc] initWithTitle:nil message:NSLocalizedString(@"chatroom.changeAnnouncement", @"Change announcement") delegate:self cancelButtonTitle:NSLocalizedString(@"cancel", @"Cancel") otherButtonTitles:NSLocalizedString(@"ok", @"OK"), nil];
+        alert.tag = ALERTVIEW_CHANGE_ANNOUNCEMENT;
+        [alert setAlertViewStyle:UIAlertViewStylePlainTextInput];
+        UITextField *textField = [alert textFieldAtIndex:0];
+        textField.text = self.chatroom.announcement;
+        
+        [alert show];
+        
+    } else if (row == 5 && self.chatroom.permissionType == EMChatroomPermissionTypeOwner) { //owner
         UIAlertView *alert = [[UIAlertView alloc] initWithTitle:nil message:NSLocalizedString(@"chatroom.changeOwner", @"Change Owner") delegate:self cancelButtonTitle:NSLocalizedString(@"cancel", @"Cancel") otherButtonTitles:NSLocalizedString(@"ok", @"OK"), nil];
          alert.tag = ALERTVIEW_CHANGE_OWNER;
         [alert setAlertViewStyle:UIAlertViewStylePlainTextInput];
@@ -222,17 +241,17 @@
         textField.text = self.chatroom.owner;
         
         [alert show];
-    } else if (row == 5) { //admins
+    } else if (row == 6) { //admins
         EMChatroomAdminsViewController *adminController = [[EMChatroomAdminsViewController alloc] initWithChatroom:self.chatroom];
         [self.navigationController pushViewController:adminController animated:YES];
     }
-    else if (row == 6) { //members
+    else if (row == 7) { //members
         EMChatroomMembersViewController *membersController = [[EMChatroomMembersViewController alloc] initWithChatroom:self.chatroom];
         [self.navigationController pushViewController:membersController animated:YES];
-    } else if (row == 7) { //mutes
+    } else if (row == 8) { //mutes
         EMChatroomMutesViewController *mutesController = [[EMChatroomMutesViewController alloc] initWithChatroom:self.chatroom];
         [self.navigationController pushViewController:mutesController animated:YES];
-    } else if (row == 8) { //bans
+    } else if (row == 9) { //bans
         EMChatroomBansViewController *bansController = [[EMChatroomBansViewController alloc] initWithChatroom:self.chatroom];
         [self.navigationController pushViewController:bansController animated:YES];
     }
@@ -284,6 +303,19 @@
     if (alertView.tag == ALERTVIEW_CHANGE_DES) {
         [self showHudInView:self.view hint:NSLocalizedString(@"hud.wait", @"Pleae wait...")];
         [[EMClient sharedClient].roomManager updateDescription:textString forChatroom:self.chatroom.chatroomId error:&error];
+        [self hideHud];
+        if (error) {
+            [self showHint:NSLocalizedString(@"hud.fail", @"Failed to change description")];
+        } else {
+            [self.tableView reloadData];
+        }
+        
+        return;
+    }
+    
+    if (alertView.tag == ALERTVIEW_CHANGE_ANNOUNCEMENT) {
+        [self showHudInView:self.view hint:NSLocalizedString(@"hud.wait", @"Pleae wait...")];
+        [[EMClient sharedClient].roomManager updateChatroomAnnouncementWithId:_chatroomId announcement:textString error:&error];
         [self hideHud];
         if (error) {
             [self showHint:NSLocalizedString(@"hud.fail", @"Failed to change description")];
@@ -367,6 +399,12 @@
             [weakSelf reloadUI:nil];
         } else {
             [weakSelf showHint:NSLocalizedString(@"chatroom.fetchAnnouncementFail", @"failed to get announcement")];
+        }
+    }];
+    
+    [[EMClient sharedClient].roomManager getChatroomAnnouncementWithId:self.chatroomId completion:^(NSString *aAnnouncement, EMError *aError) {
+        if (!aError) {
+            [weakSelf reloadUI:nil];
         }
     }];
 }

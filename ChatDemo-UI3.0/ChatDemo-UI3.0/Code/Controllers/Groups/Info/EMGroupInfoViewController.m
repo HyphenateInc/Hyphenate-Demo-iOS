@@ -23,7 +23,9 @@
 #import "EMGroupUpdateSubjectViewController.h"
 #import "EMNotificationNames.h"
 
-@interface EMGroupInfoViewController ()<EMGroupUIProtocol>
+#define ALERTVIEW_CHANGE_ANNOUNCEMENT 100
+
+@interface EMGroupInfoViewController ()<EMGroupUIProtocol, UIAlertViewDelegate>
 
 @property (nonatomic, strong) EMGroup *group;
 @property (nonatomic, strong) NSString *groupId;
@@ -161,9 +163,9 @@
         self.moreCellIndex = count - 1;
     } else if (section == 2) {
         if (self.group.permissionType == EMGroupPermissionTypeOwner || self.group.permissionType == EMGroupPermissionTypeAdmin) {
-            count = 10;
+            count = 11;
         } else {
-            count = 5;
+            count = 6;
         }
     }
     
@@ -200,22 +202,27 @@
             cell.textLabel.text = NSLocalizedString(@"message.clear", @"Clear All Messages");
             break;
         case 5:
-            cell.textLabel.text = NSLocalizedString(@"title.transferOwner", @"Transfer Owner");
+            cell.textLabel.text = NSLocalizedString(@"title.announcement", @"Update announcement");
+            cell.detailTextLabel.text = self.group.announcement;
             cell.accessoryType = UITableViewCellAccessoryDisclosureIndicator;
             break;
         case 6:
-            cell.textLabel.text = NSLocalizedString(@"title.updateGroupName", @"Update group name");
+            cell.textLabel.text = NSLocalizedString(@"title.transferOwner", @"Transfer Owner");
             cell.accessoryType = UITableViewCellAccessoryDisclosureIndicator;
             break;
         case 7:
-            cell.textLabel.text = NSLocalizedString(@"title.adminList", @"Admin List");
+            cell.textLabel.text = NSLocalizedString(@"title.updateGroupName", @"Update group name");
             cell.accessoryType = UITableViewCellAccessoryDisclosureIndicator;
             break;
         case 8:
-            cell.textLabel.text = NSLocalizedString(@"title.blacklist", @"Blacklist");
+            cell.textLabel.text = NSLocalizedString(@"title.adminList", @"Admin List");
             cell.accessoryType = UITableViewCellAccessoryDisclosureIndicator;
             break;
         case 9:
+            cell.textLabel.text = NSLocalizedString(@"title.blacklist", @"Blacklist");
+            cell.accessoryType = UITableViewCellAccessoryDisclosureIndicator;
+            break;
+        case 10:
             cell.textLabel.text = NSLocalizedString(@"title.muteList", @"Mute List");
             cell.accessoryType = UITableViewCellAccessoryDisclosureIndicator;
             break;
@@ -300,6 +307,21 @@
         case 5:
         {
             if (self.group.permissionType == EMGroupPermissionTypeOwner) {
+                UIAlertView *alert = [[UIAlertView alloc] initWithTitle:nil message:NSLocalizedString(@"group.changeAnnouncement", @"Change announcement") delegate:self cancelButtonTitle:NSLocalizedString(@"cancel", @"Cancel") otherButtonTitles:NSLocalizedString(@"ok", @"OK"), nil];
+                alert.tag = ALERTVIEW_CHANGE_ANNOUNCEMENT;
+                [alert setAlertViewStyle:UIAlertViewStylePlainTextInput];
+                UITextField *textField = [alert textFieldAtIndex:0];
+                textField.text = self.group.announcement;
+                
+                [alert show];
+            } else {
+                [self showHint:NSLocalizedString(@"group.owner.permission", @"Only owner can perform this operation")];
+            }
+        }
+            break;
+        case 6:
+        {
+            if (self.group.permissionType == EMGroupPermissionTypeOwner) {
                 EMGroupTransferOwnerViewController *transferController = [[EMGroupTransferOwnerViewController alloc] initWithGroup:self.group];
                 [self.navigationController pushViewController:transferController animated:YES];
             } else {
@@ -307,7 +329,7 @@
             }
         }
             break;
-        case 6:
+        case 7:
         {
             if (self.group.permissionType == EMGroupPermissionTypeOwner) {
                 EMGroupUpdateSubjectViewController *updateController = [[EMGroupUpdateSubjectViewController alloc] initWithGroupId:self.groupId subject:self.group.subject];
@@ -317,20 +339,20 @@
             }
         }
             break;
-        case 7:
+        case 8:
         {
             EMGroupAdminsViewController *adminController = [[EMGroupAdminsViewController alloc] initWithGroup:self.group];
             [self.navigationController pushViewController:adminController animated:YES];
 
         }
             break;
-        case 8:
+        case 9:
         {
             EMGroupBansViewController *bansController = [[EMGroupBansViewController alloc] initWithGroup:self.group];
             [self.navigationController pushViewController:bansController animated:YES];
         }
             break;
-        case 9:
+        case 10:
         {
             EMGroupMutesViewController *mutesController = [[EMGroupMutesViewController alloc] initWithGroup:self.group];
             [self.navigationController pushViewController:mutesController animated:YES];
@@ -340,6 +362,34 @@
         default:
             break;
     }
+}
+
+#pragma mark - UIAlertViewDelegate
+
+- (void)alertView:(UIAlertView *)alertView clickedButtonAtIndex:(NSInteger)buttonIndex
+{
+    if ([alertView cancelButtonIndex] == buttonIndex) {
+        return;
+    }
+    
+    UITextField *textField = [alertView textFieldAtIndex:0];
+    NSString *textString = textField.text;
+    
+    if (alertView.tag == ALERTVIEW_CHANGE_ANNOUNCEMENT) {
+        WEAK_SELF
+        [self showHudInView:self.view hint:NSLocalizedString(@"hud.wait", @"Pleae wait...")];
+        [[EMClient sharedClient].groupManager updateGroupAnnouncementWithId:_groupId announcement:textString completion:^(EMGroup *aGroup, EMError *aError) {
+            [weakSelf hideHud];
+            if (aError) {
+                [weakSelf showHint:NSLocalizedString(@"hud.fail", @"Failed to change owner")];
+            } else {
+                [weakSelf.tableView reloadData];
+            }
+        }];
+        
+        return;
+    }
+    
 }
 
 #pragma mark - EMGroupUIProtocol
@@ -573,6 +623,12 @@
         }
         else{
             [weakSelf showHint:NSLocalizedString(@"group.fetchInfoFail", @"failed to get the group details, please try again later")];
+        }
+    }];
+    
+    [[EMClient sharedClient].groupManager getGroupAnnouncementWithId:self.groupId completion:^(NSString *aAnnouncement, EMError *aError) {
+        if (!aError) {
+            [weakSelf reloadUI];
         }
     }];
 }
