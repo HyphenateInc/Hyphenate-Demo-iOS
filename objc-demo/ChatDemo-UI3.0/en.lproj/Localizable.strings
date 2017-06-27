@@ -36,6 +36,7 @@
 "title.chatroomInfo" = "Chatroom Info";
 "title.memberList" = "Member List";
 "title.create" = "Create";
+"title.announcement" = "Update announcement";
 "title.transferOwner" = "Transfer Owner";
 "title.updateGroupName" = "Update Group Name";
 "title.occupantList" = "Occupant List";
@@ -233,6 +234,10 @@
 "group.owner.permission" = "Only owner can perform this operation";
 "group.member.joined" = "%@ has joined to the group [%@]";
 "group.member.leaved" = "%@ has leaved from the group [%@]";
+"group.changeAnnouncement" = "Change Announcement";
+"group.announcementUpdate" = "Group Announcement Update";
+"group.clearAnnouncement" = "Group:%@ Announcement is clear";
+"group.updateAnnouncement" = "Group:%@ Announcement: %@";
 
 //Group Bans
 "group.ban.removing" = "members are removing from the blacklist...";
@@ -282,6 +287,7 @@
 "chatroom.occupantCount" = "members count";
 "chatroom.subject" = "Subject";
 "chatroom.description" = "description";
+"chatroom.announcement" = "announcement";
 "chatroom.joining" = "Joining...";
 "chatroom.leaving" = "Leaving...";
 "chatroom.fetchInfoFail" = "Failed to get the chatroom details";
@@ -303,6 +309,7 @@
 "chatroom.changeOwner" = "Change owner";
 "chatroom.changeSubject" = "Change subject";
 "chatroom.changeDes" = "Change description";
+"chatroom.changeAnnouncement" = "Change announcement";
 
 "chatroom.notifications" = "Chatroom Notification";
 "chatroom.memberToAdmin" = "%@ is upgraded to administrator";
@@ -310,3 +317,6 @@
 "chatroom.mute.added" = "Added to mute list:";
 "chatroom.mute.removed" = "Removed from mute list:";
 "chatroom.owner.updated" = "The Chatroom owner changed from %@ to %@";
+"chatroom.announcementUpdate" = "Chatroom Announcement Update";
+"chatroom.clearAnnouncement" = "Chatroom:%@ Announcement is clear";
+"chatroom.updateAnnouncement" = "Chatroom:%@ Announcement: %@";

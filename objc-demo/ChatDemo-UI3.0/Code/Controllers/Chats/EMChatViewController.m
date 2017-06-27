@@ -507,6 +507,8 @@
         [moviePlayerController.moviePlayer prepareToPlay];
         moviePlayerController.moviePlayer.movieSourceType = MPMovieSourceTypeFile;
         [self presentMoviePlayerViewControllerAnimated:moviePlayerController];
+    } else if (videoBody.downloadStatus == EMDownloadStatusDownloading) {
+        return;
     } else {
         [[EMClient sharedClient].chatManager downloadMessageAttachment:model.message progress:nil completion:^(EMMessage *message, EMError *error) {
         }];

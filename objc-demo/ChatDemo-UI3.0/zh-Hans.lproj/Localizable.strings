@@ -36,6 +36,7 @@
 "title.chatroomInfo" = "聊天室详情";
 "title.memberList" = "成员列表";
 "title.create" = "创建";
+"title.announcement" = "更新公告";
 "title.transferOwner" = "转让群主";
 "title.updateGroupName" = "更新群组名称";
 "title.occupantList" = "所有成员";
@@ -236,6 +237,10 @@
 "group.owner.permission" = "只有Owner能进行此操作";
 "group.member.joined" = "%@已经加入了群组[%@]";
 "group.member.leaved" = "%@已经离开了群组[%@]";
+"group.changeAnnouncement" = "修改公告";
+"group.announcementUpdate" = "群公告更新";
+"group.clearAnnouncement" = "群组:%@ 公告被删除";
+"group.updateAnnouncement" = "群组:%@ 公告内容: %@";
 
 //Group Bans
 "group.ban.removing" = "正在将成员移出黑名单...";
@@ -285,6 +290,7 @@
 "chatroom.occupantCount" = "聊天室在线人数";
 "chatroom.subject" = "主题";
 "chatroom.description" = "描述";
+"chatroom.announcement" = "公告";
 "chatroom.joining" = "正在加入...";
 "chatroom.leaving" = "正在退出...";
 "chatroom.fetchInfoFail" = "获取聊天室详情失败";
@@ -306,6 +312,7 @@
 "chatroom.changeOwner" = "更改Owner";
 "chatroom.changeSubject" = "更改主题";
 "chatroom.changeDes" = "更改描述";
+"chatroom.changeAnnouncement" = "更改公告";
 
 "chatroom.notifications" = "聊天室通知";
 "chatroom.memberToAdmin" = "%@ 升级为管理员";
@@ -313,3 +320,6 @@
 "chatroom.mute.added" = "被加入禁言列表:";
 "chatroom.mute.removed" = "被移出禁言列表:";
 "chatroom.owner.updated" = "Owner由 %@ 变成 %@";
+"chatroom.announcementUpdate" = "聊天室公告更新";
+"chatroom.clearAnnouncement" = "聊天室:%@ 公告被删除";
+"chatroom.updateAnnouncement" = "聊天室:%@ 公告内容: %@";
