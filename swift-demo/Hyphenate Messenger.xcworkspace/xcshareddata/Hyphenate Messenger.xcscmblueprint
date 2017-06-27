@@ -1,0 +1,39 @@
+{
+  "DVTSourceControlWorkspaceBlueprintPrimaryRemoteRepositoryKey" : "2278D39B8ADCCAC3228D008631357F8EBEADA339",
+  "DVTSourceControlWorkspaceBlueprintWorkingCopyRepositoryLocationsKey" : {
+    "9ade728e-fbf4-11e3-ba84-6d5adec16df2++5774" : {
+
+    }
+  },
+  "DVTSourceControlWorkspaceBlueprintWorkingCopyStatesKey" : {
+    "2278D39B8ADCCAC3228D008631357F8EBEADA339" : 0,
+    "4401B4BEBD7FF0D694B967993B28D6AF19058E4D" : 0,
+    "9ade728e-fbf4-11e3-ba84-6d5adec16df2++5774" : 9223372036854775807
+  },
+  "DVTSourceControlWorkspaceBlueprintIdentifierKey" : "5E33134B-AB92-446E-8F96-E564BC1FD74A",
+  "DVTSourceControlWorkspaceBlueprintWorkingCopyPathsKey" : {
+    "2278D39B8ADCCAC3228D008631357F8EBEADA339" : "Hyphenate-Demo-Swift\/",
+    "4401B4BEBD7FF0D694B967993B28D6AF19058E4D" : "Hyphenate-EaseUI-iOS\/",
+    "9ade728e-fbf4-11e3-ba84-6d5adec16df2++5774" : ".."
+  },
+  "DVTSourceControlWorkspaceBlueprintNameKey" : "Hyphenate Messenger",
+  "DVTSourceControlWorkspaceBlueprintVersion" : 204,
+  "DVTSourceControlWorkspaceBlueprintRelativePathToProjectKey" : "Hyphenate Messenger\/Hyphenate Messenger.xcworkspace",
+  "DVTSourceControlWorkspaceBlueprintRemoteRepositoriesKey" : [
+    {
+      "DVTSourceControlWorkspaceBlueprintRemoteRepositoryURLKey" : "https:\/\/github.com\/HyphenateInc\/Hyphenate-Demo-Swift.git",
+      "DVTSourceControlWorkspaceBlueprintRemoteRepositorySystemKey" : "com.apple.dt.Xcode.sourcecontrol.Git",
+      "DVTSourceControlWorkspaceBlueprintRemoteRepositoryIdentifierKey" : "2278D39B8ADCCAC3228D008631357F8EBEADA339"
+    },
+    {
+      "DVTSourceControlWorkspaceBlueprintRemoteRepositoryURLKey" : "https:\/\/github.com\/HyphenateInc\/Hyphenate-EaseUI-iOS.git",
+      "DVTSourceControlWorkspaceBlueprintRemoteRepositorySystemKey" : "com.apple.dt.Xcode.sourcecontrol.Git",
+      "DVTSourceControlWorkspaceBlueprintRemoteRepositoryIdentifierKey" : "4401B4BEBD7FF0D694B967993B28D6AF19058E4D"
+    },
+    {
+      "DVTSourceControlWorkspaceBlueprintRemoteRepositoryURLKey" : "http:\/\/198.100.174.22\/svn\/jianyue",
+      "DVTSourceControlWorkspaceBlueprintRemoteRepositorySystemKey" : "com.apple.dt.Xcode.sourcecontrol.Subversion",
+      "DVTSourceControlWorkspaceBlueprintRemoteRepositoryIdentifierKey" : "9ade728e-fbf4-11e3-ba84-6d5adec16df2++5774"
+    }
+  ]
+}
