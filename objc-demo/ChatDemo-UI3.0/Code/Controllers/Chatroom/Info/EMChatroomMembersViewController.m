@@ -199,7 +199,7 @@
             [weakSelf showHint:NSLocalizedString(@"group.member.fetchFail", @"Failed to get the group details, please try again later")];
         }
         
-        if ([aResult.list count] == 0) {
+        if ([aResult.list count] < pageSize) {
             weakSelf.showRefreshFooter = NO;
         } else {
             weakSelf.showRefreshFooter = YES;
