@@ -2,6 +2,6 @@
 *.xcscheme
 UserInterfaceState.xcuserstate
 xcschememanagement.plist
-ChatDemo-UI3.0/ChatDemo-UI3.0.xcworkspace
-ChatDemo-UI3.0/Podfile.lock
-ChatDemo-UI3.0/Pods
+objc-demo/ChatDemo-UI3.0.xcworkspace
+objc-demo/Podfile.lock
+objc-demo/Pods
