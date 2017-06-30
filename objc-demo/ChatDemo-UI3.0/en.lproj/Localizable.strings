@@ -10,10 +10,10 @@
 //button
 "button.save" = "Save";
 "button.remove" = "Remove";
-"button.black" = "ToBlack";
+"button.black" = "Block";
 "button.mute" = "Mute";
 "button.demote" = "Demote";
-"button.upgrade" = "Upgrade";
+"button.upgrade" = "Up";
 "button.more" = "Load More";
 "button.prompt" = "Prompt";
 "button.ok" = "OK";
