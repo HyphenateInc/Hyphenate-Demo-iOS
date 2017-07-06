@@ -102,7 +102,7 @@
     
     _leaveButton = [[UIButton alloc] initWithFrame:CGRectMake(0, 20, _footerView.frame.size.width, 50)];
     _leaveButton.accessibilityIdentifier = @"leave";
-    [_leaveButton setTitle:NSLocalizedString(@"group.leave", @"Leave Group") forState:UIControlStateNormal];
+    [_leaveButton setTitle:NSLocalizedString(@"chatroom.leave", @"Leave the chatroom") forState:UIControlStateNormal];
     [_leaveButton setTitleColor:[UIColor whiteColor] forState:UIControlStateNormal];
     [_leaveButton addTarget:self action:@selector(leaveAction) forControlEvents:UIControlEventTouchUpInside];
     [_leaveButton setBackgroundColor:[UIColor colorWithRed:251 / 255.0 green:60 / 255.0 blue:48 / 255.0 alpha:1.0]];
