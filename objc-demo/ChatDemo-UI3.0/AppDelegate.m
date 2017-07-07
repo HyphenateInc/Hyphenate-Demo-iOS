@@ -137,7 +137,7 @@
 
 - (void)application:(UIApplication *)application didFailToRegisterForRemoteNotificationsWithError:(NSError *)error
 {
-    UIAlertView *alert = [[UIAlertView alloc] initWithTitle:NSLocalizedString(@"apns.failToRegisterApns", Fail to register apns)
+    UIAlertView *alert = [[UIAlertView alloc] initWithTitle:NSLocalizedString(@"apns.failToRegisterApns", @"Fail to register apns")
                                                     message:error.description
                                                    delegate:nil
                                           cancelButtonTitle:NSLocalizedString(@"ok", @"OK")
