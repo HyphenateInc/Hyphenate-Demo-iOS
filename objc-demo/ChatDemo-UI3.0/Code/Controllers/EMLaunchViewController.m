@@ -22,7 +22,7 @@
     [super viewDidLoad];
     
     [self setBackgroundColor];
-    [self setLauchAnimation];
+    [self setLaunchAnimation];
     
     BOOL isAutoLogin = [EMClient sharedClient].isAutoLogin;
     if (isAutoLogin){
@@ -53,7 +53,7 @@
     [self.view.layer insertSublayer:gradient atIndex:0];
 }
 
-- (void)setLauchAnimation
+- (void)setLaunchAnimation
 {
     _launchImageView.animationImages = @[[UIImage imageNamed:@"logo1"],
                                          [UIImage imageNamed:@"logo2"],
