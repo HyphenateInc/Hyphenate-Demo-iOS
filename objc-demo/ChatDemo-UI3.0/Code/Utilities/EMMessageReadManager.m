@@ -103,7 +103,9 @@ static EMMessageReadManager *manager = nil;
             {
                 photo = [MWPhoto photoWithURL:object];
             }
-            [photoArray addObject:photo];
+            if (photo) {
+                [photoArray addObject:photo];
+            }
         }
         self.photos = photoArray;
     }

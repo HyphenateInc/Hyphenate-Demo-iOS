@@ -162,16 +162,16 @@ static NSString *kGroupName = @"GroupName";
 - (void)didReceiveLocalNotification:(UILocalNotification *)notification
 {
     NSDictionary *userInfo = notification.userInfo;
+    
     if (userInfo) {
         NSArray *viewControllers = self.navigationController.viewControllers;
-        [viewControllers enumerateObjectsWithOptions:NSEnumerationReverse usingBlock:^(id obj, NSUInteger idx, BOOL *stop){
-            if (obj != self)
-            {
+        [viewControllers enumerateObjectsWithOptions:NSEnumerationReverse usingBlock:^(id obj, NSUInteger idx, BOOL *stop) {
+            
+            if (obj != self) {
                 if (![obj isKindOfClass:[EMChatViewController class]]) {
                     [self.navigationController popViewControllerAnimated:NO];
                 }
-                else
-                {
+                else {
                     NSString *conversationChatter = userInfo[kConversationChatter];
                     EMChatViewController *chatViewController = (EMChatViewController *)obj;
                     if (![chatViewController.conversationId isEqualToString:conversationChatter]) {
@@ -182,7 +182,8 @@ static NSString *kGroupName = @"GroupName";
                     }
                     *stop= YES;
                 }
-            } else {
+            }
+            else {
                 EMChatViewController *chatViewController = nil;
                 NSString *conversationChatter = userInfo[kConversationChatter];
                 EMChatType messageType = [userInfo[kMessageType] intValue];
@@ -234,7 +235,7 @@ static NSString *kGroupName = @"GroupName";
                 [self playSoundAndVibration];
                 break;
             case UIApplicationStateBackground:
-                [self showNotificationWithMessage:message];
+                [self showBackgroundNotificationWithMessage:message];
                 break;
             default:
                 break;
@@ -309,37 +310,29 @@ static NSString *kGroupName = @"GroupName";
     [[EMCDDeviceManager sharedInstance] playVibration];
 }
 
-- (void)showNotificationWithMessage:(EMMessage *)message
+- (void)showBackgroundNotificationWithMessage:(EMMessage *)message
 {
     EMPushOptions *options = [[EMClient sharedClient] pushOptions];
     NSString *alertBody = nil;
     if (options.displayStyle == EMPushDisplayStyleMessageSummary) {
         EMMessageBody *messageBody = message.body;
         NSString *messageStr = nil;
+        
         switch (messageBody.type) {
             case EMMessageBodyTypeText:
-            {
                 messageStr = ((EMTextMessageBody *)messageBody).text;
-            }
                 break;
             case EMMessageBodyTypeImage:
-            {
                 messageStr = NSLocalizedString(@"chat.image1", @"[image]");
-            }
                 break;
             case EMMessageBodyTypeLocation:
-            {
                 messageStr = NSLocalizedString(@"chat.location1", @"[location]");
-            }
                 break;
             case EMMessageBodyTypeVoice:
-            {
                 messageStr = NSLocalizedString(@"chat.voice1", @"[voice]");
-            }
                 break;
-            case EMMessageBodyTypeVideo:{
+            case EMMessageBodyTypeVideo:
                 messageStr = NSLocalizedString(@"chat.video1", @"[video]");
-            }
                 break;
             default:
                 break;
@@ -347,6 +340,7 @@ static NSString *kGroupName = @"GroupName";
         
         do {
             NSString *title = [[EMUserProfileManager sharedInstance] getNickNameWithUsername:message.from];
+            
             if (message.chatType == EMChatTypeGroupChat) {
                 NSDictionary *ext = message.ext;
                 if (ext && ext[kGroupMessageAtList]) {
@@ -407,13 +401,12 @@ static NSString *kGroupName = @"GroupName";
         if (playSound) {
             content.sound = [UNNotificationSound defaultSound];
         }
-        content.body =alertBody;
+        content.body = alertBody;
         content.userInfo = userInfo;
         UNNotificationRequest *request = [UNNotificationRequest requestWithIdentifier:message.messageId content:content trigger:trigger];
         [[UNUserNotificationCenter currentNotificationCenter] addNotificationRequest:request withCompletionHandler:nil];
     }
     else {
-        
         UILocalNotification *notification = [[UILocalNotification alloc] init];
         notification.fireDate = [NSDate date];
         notification.alertBody = alertBody;
