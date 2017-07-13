@@ -1,45 +1,36 @@
 PODS:
-  - Crashlytics (3.8.4):
-    - Fabric (~> 1.6.3)
-  - Fabric (1.6.11)
-  - Firebase/Analytics (4.0.2):
-    - Firebase/Core
-  - Firebase/Core (4.0.2):
-    - FirebaseAnalytics (= 4.0.1)
-    - FirebaseCore (= 4.0.2)
-  - FirebaseAnalytics (4.0.1):
-    - FirebaseCore (~> 4.0)
-    - FirebaseInstanceID (~> 2.0)
-    - GoogleToolboxForMac/NSData+zlib (~> 2.1)
-  - FirebaseCore (4.0.2):
-    - GoogleToolboxForMac/NSData+zlib (~> 2.1)
-  - FirebaseInstanceID (2.0.0):
-    - FirebaseCore (~> 4.0)
-  - GoogleToolboxForMac/Defines (2.1.1)
-  - GoogleToolboxForMac/NSData+zlib (2.1.1):
-    - GoogleToolboxForMac/Defines (= 2.1.1)
+  - Bolts/Tasks (1.8.4)
+  - DACircularProgress (2.3.1)
   - Hyphenate (3.3.2)
-  - SlimeRefresh (0.0.1)
+  - MBProgressHUD (0.9.2)
+  - MJRefresh (3.1.12)
+  - MWPhotoBrowser (2.1.2):
+    - DACircularProgress (~> 2.3)
+    - MBProgressHUD (~> 0.9)
+    - SDWebImage (!= 3.7.2, ~> 3.7)
+  - Parse (1.15.0):
+    - Bolts/Tasks (~> 1.8)
+  - SDWebImage (3.8.2):
+    - SDWebImage/Core (= 3.8.2)
+  - SDWebImage/Core (3.8.2)
 
 DEPENDENCIES:
-  - Crashlytics
-  - Fabric
-  - Firebase/Analytics
-  - Firebase/Core
-  - Hyphenate
-  - SlimeRefresh
+  - DACircularProgress (~> 2.3.1)
+  - Hyphenate (~> 3.3.1)
+  - MJRefresh
+  - MWPhotoBrowser (~> 2.1.2)
+  - Parse
 
 SPEC CHECKSUMS:
-  Crashlytics: 79e236942ca1e7fc641df1feb9a275360a78ab6a
-  Fabric: 5911403591946b8228ab1c51d98f1d7137e863c6
-  Firebase: c7ad0731eab26d18a3fc547dd048b0f7cd9c63ae
-  FirebaseAnalytics: 4d7040fefc3cd8b291cde35f12cf063d7963f15d
-  FirebaseCore: 1a8bf6c795ad07d2918278657954ffd2552e9c17
-  FirebaseInstanceID: 9fbf536668f4d3f0880e7438456dabd1376e294b
-  GoogleToolboxForMac: 8e329f1b599f2512c6b10676d45736bcc2cbbeb0
+  Bolts: 8a7995239dbe724f9cba2248b766d48b7ebdd322
+  DACircularProgress: 4dd437c0fc3da5161cb289e07ac449493d41db71
   Hyphenate: b596a794ec253b089a6e5c952d718aeedd85c76c
-  SlimeRefresh: c70e370dccfa8d74d4c3ff9702769d2b156a50e6
+  MBProgressHUD: 1569cf7ace17a8bac47aabfbb8580a49690386d1
+  MJRefresh: b96cdb21c4aa75a7b07654311ab2f315c497e806
+  MWPhotoBrowser: 5836d7aa041dc05a13de380c246826578adc5ea5
+  Parse: c0519f8fbf57bd0334f75cd22ac032d86ee55464
+  SDWebImage: 098e97e6176540799c27e804c96653ee0833d13c
 
-PODFILE CHECKSUM: 4fa1eae54b8d4681aacb271c27715e8a40b59476
+PODFILE CHECKSUM: f8ac201d1682cd90626c2dc213b2c8aaab36b3db
 
 COCOAPODS: 1.2.1

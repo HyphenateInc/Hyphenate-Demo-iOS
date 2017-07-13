@@ -772,6 +772,31 @@
     [[EMClient sharedClient].chatManager sendMessage:message progress:nil completion:^(EMMessage *message, EMError *error) {
         [weakSelf.tableView reloadData];
     }];
+    
+    EMImageMessageBody *body = [[EMImageMessageBody alloc] initWithData:imageData
+                                                            displayName:displayName];
+    
+    if (CGSizeEqualToSize(body.size, CGSizeZero)) {
+        if (imageData.length) {
+            UIImage *image = [UIImage imageWithData:imageData];
+            body.size = image.size;
+        }
+    }
+    
+    NSString *sender = [[EMClient sharedClient] currentUsername];
+    EMMessage *message = [[EMMessage alloc] initWithConversationID:receiver
+                                                              from:sender
+                                                                to:receiver
+                                                              body:body
+                                                               ext:messageExt];
+    
+    message.chatType = chatType;
+    
+    [[EMClient sharedClient].chatManager sendMessage:message progress:^(int progress) {
+        // update message sending progress UI
+    } completion:^(EMMessage *message, EMError *error) {
+        // handle message sent
+    }];
     [self _scrollViewToBottom:YES];
 }
 
