@@ -126,11 +126,12 @@
     }
 }
 
-#pragma mark - App Delegate
+#pragma mark - Remote Notification Registration
 
 - (void)application:(UIApplication *)application didRegisterForRemoteNotificationsWithDeviceToken:(NSData *)deviceToken
 {
-    [[EMClient sharedClient] registerForRemoteNotificationsWithDeviceToken:deviceToken completion:^(EMError *aError) {
+    [[EMClient sharedClient] registerForRemoteNotificationsWithDeviceToken:deviceToken
+                                                                completion:^(EMError *aError) {
         
     }];
 }
@@ -161,7 +162,7 @@
         return;
     }
     
-    if([application respondsToSelector:@selector(registerUserNotificationSettings:)])
+    if ([application respondsToSelector:@selector(registerUserNotificationSettings:)])
     {
         UIUserNotificationType notificationTypes = UIUserNotificationTypeBadge | UIUserNotificationTypeSound | UIUserNotificationTypeAlert;
         UIUserNotificationSettings *settings = [UIUserNotificationSettings settingsForTypes:notificationTypes categories:nil];
@@ -174,6 +175,9 @@
     }
 #endif
 }
+
+
+#pragma mark - delegate registration
 
 - (void)registerNotifications
 {

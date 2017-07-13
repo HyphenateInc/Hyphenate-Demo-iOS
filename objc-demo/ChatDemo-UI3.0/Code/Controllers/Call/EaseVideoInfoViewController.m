@@ -110,22 +110,40 @@
     _timeTimer = [NSTimer scheduledTimerWithTimeInterval:1.0 target:self selector:@selector(timeTimerAction:) userInfo:nil repeats:YES];
 }
 
+- (void)displayTimeDuration:(int)timeDuration
+{
+    int hour = timeDuration / 3600;
+    int min = (timeDuration - hour * 3600) / 60;
+    int sec = timeDuration - hour * 3600 - min * 60;
+    
+    NSString *formatedHr = [self formatTimeWithPrefixZero:hour];
+    NSString *formatedMin = [self formatTimeWithPrefixZero:min];
+    NSString *formatedSec = [self formatTimeWithPrefixZero:sec];
+    
+    if (hour > 0) {
+        _timeLabel.text = [NSString stringWithFormat:@"%@:%@:%@", formatedHr, formatedMin, formatedSec];
+    }
+    else if (min > 0){
+        _timeLabel.text = [NSString stringWithFormat:@"%@:%@", formatedMin, formatedSec];
+    }
+    else {
+        _timeLabel.text = [NSString stringWithFormat:@"00:%@", formatedSec];
+    }
+}
+
+- (NSString *)formatTimeWithPrefixZero:(int)digit {
+    if (digit < 10) {
+        return [NSString stringWithFormat:@"0%i", digit];
+    }
+    else {
+        return [NSString stringWithFormat:@"%i", digit];
+    }
+}
+
 - (void)timeTimerAction:(id)sender
 {
     _timeLength += 1;
-    int hour = _timeLength / 3600;
-    int m = (_timeLength - hour * 3600) / 60;
-    int s = _timeLength - hour * 3600 - m * 60;
-    
-    if (hour > 0) {
-        _timeLabel.text = [NSString stringWithFormat:@"%i:%i:%i", hour, m, s];
-    }
-    else if(m > 0){
-        _timeLabel.text = [NSString stringWithFormat:@"%i:%i", m, s];
-    }
-    else{
-        _timeLabel.text = [NSString stringWithFormat:@"00:%i", s];
-    }
+    [self displayTimeDuration:_timeLength];
 }
 
 @end

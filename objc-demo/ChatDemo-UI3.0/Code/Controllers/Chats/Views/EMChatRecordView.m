@@ -59,7 +59,7 @@
 - (void)endTimer
 {
     _timeLabel.hidden = YES;
-    _timeLabel.text = @"00:0";
+    [self displayTimeDuration:0];
     [_recordTimer invalidate];
 }
 
@@ -83,7 +83,7 @@
     
     int x = arc4random() % 100000;
     NSTimeInterval time = [[NSDate date] timeIntervalSince1970];
-    NSString *fileName = [NSString stringWithFormat:@"%d%d",(int)time,x];
+    NSString *fileName = [NSString stringWithFormat:@"%d%d", (int)time,x];
     
     [[EMCDDeviceManager sharedInstance] asyncStartRecordingWithFileName:fileName completion:^(NSError *error) {
          if (error) {
@@ -127,22 +127,40 @@
     self.backgroundColor = PaleGrayColor;
 }
 
+- (void)displayTimeDuration:(int)timeDuration
+{
+    int hour = timeDuration / 3600;
+    int min = (timeDuration - hour * 3600) / 60;
+    int sec = timeDuration - hour * 3600 - min * 60;
+    
+    NSString *formatedHr = [self formatTimeWithPrefixZero:hour];
+    NSString *formatedMin = [self formatTimeWithPrefixZero:min];
+    NSString *formatedSec = [self formatTimeWithPrefixZero:sec];
+    
+    if (hour > 0) {
+        _timeLabel.text = [NSString stringWithFormat:@"%@:%@:%@", formatedHr, formatedMin, formatedSec];
+    }
+    else if (min > 0){
+        _timeLabel.text = [NSString stringWithFormat:@"%@:%@", formatedMin, formatedSec];
+    }
+    else {
+        _timeLabel.text = [NSString stringWithFormat:@"00:%@", formatedSec];
+    }
+}
+
+- (NSString *)formatTimeWithPrefixZero:(int)digit {
+    if (digit < 10) {
+        return [NSString stringWithFormat:@"0%i", digit];
+    }
+    else {
+        return [NSString stringWithFormat:@"%i", digit];
+    }
+}
+
 - (void)recordTimerAction
 {
     _recordLength += 1;
-    int hour = _recordLength / 3600;
-    int m = (_recordLength - hour * 3600) / 60;
-    int s = _recordLength - hour * 3600 - m * 60;
-    
-    if (hour > 0) {
-        _timeLabel.text = [NSString stringWithFormat:@"%i:%i:%i", hour, m, s];
-    }
-    else if(m > 0){
-        _timeLabel.text = [NSString stringWithFormat:@"%i:%i", m, s];
-    }
-    else{
-        _timeLabel.text = [NSString stringWithFormat:@"00:%i", s];
-    }
+    [self displayTimeDuration:_recordLength];
 }
 
 #pragma mark - private
