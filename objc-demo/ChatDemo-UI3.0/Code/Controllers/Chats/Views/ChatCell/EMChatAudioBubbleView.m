@@ -42,7 +42,7 @@
 {
     [super layoutSubviews];
     
-    _durationLabel.frame = CGRectMake(40.f, 12.f, 24.f, 11.f);
+    _durationLabel.frame = CGRectMake(40.f, 12.f, 36.f, 11.f);
     _playView.frame = CGRectMake(5.f, 5.f, 25.f, 25.f);
 }
 
@@ -125,22 +125,38 @@
     _playView.hidden = NO;
 }
 
-- (NSString*)formatDuration:(int)duration
+- (NSString*)formatDuration:(int)timeDuration
 {
-    NSString *formatDuration;
-    if (duration < 60) {
-        formatDuration = [NSString stringWithFormat:@"0:%d",duration];
-    } else if (duration >= 60 && duration < 3600) {
-        int minutes = duration / 60;
-        int seconds = duration % 60;
-        formatDuration = [NSString stringWithFormat:@"%d:%d",minutes,seconds];
-    } else {
-        int hours = duration / 3600;
-        int minutes = (duration % 3600) / 60;
-        int seconds = duration % 60;
-        formatDuration = [NSString stringWithFormat:@"%d:%d:%d",hours,minutes,seconds];
+    NSString *formatedDuration;
+
+    int hour = timeDuration / 3600;
+    int min = (timeDuration - hour * 3600) / 60;
+    int sec = timeDuration - hour * 3600 - min * 60;
+    
+    NSString *formatedHr = [self formatTimeWithPrefixZero:hour];
+    NSString *formatedMin = [self formatTimeWithPrefixZero:min];
+    NSString *formatedSec = [self formatTimeWithPrefixZero:sec];
+    
+    if (hour > 0) {
+        formatedDuration = [NSString stringWithFormat:@"%@:%@:%@", formatedHr, formatedMin, formatedSec];
     }
-    return formatDuration;
+    else if (min > 0){
+        formatedDuration = [NSString stringWithFormat:@"%@:%@", formatedMin, formatedSec];
+    }
+    else {
+        formatedDuration = [NSString stringWithFormat:@"00:%@", formatedSec];
+    }
+    
+    return formatedDuration;
+}
+
+- (NSString *)formatTimeWithPrefixZero:(int)digit {
+    if (digit < 10) {
+        return [NSString stringWithFormat:@"0%i", digit];
+    }
+    else {
+        return [NSString stringWithFormat:@"%i", digit];
+    }
 }
 
 + (CGFloat)heightForBubbleWithMessageModel:(EMMessageModel *)model

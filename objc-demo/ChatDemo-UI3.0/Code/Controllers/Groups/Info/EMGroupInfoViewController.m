@@ -237,6 +237,7 @@
 - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath {
     NSInteger section = indexPath.section;
     NSInteger row = indexPath.row;
+    
     if (section == 1 && row == self.moreCellIndex) {
         return self.moreCell;
     }
@@ -255,10 +256,10 @@
     if (section == 0) {
         if (row == 0) {
             cell.leftLabel.text = self.group.owner;
-            cell.rightLabel.text = @"owner";
+            cell.rightLabel.text = NSLocalizedString(@"owner", @"owner");
         } else {
             cell.leftLabel.text = [self.group.adminList objectAtIndex:(row - 1)];
-            cell.rightLabel.text = @"admin";
+            cell.rightLabel.text = NSLocalizedString(@"admin", @"admin");;
         }
     } else if (section == 1) {
         cell.leftLabel.text = [self.showMembers objectAtIndex:row];

@@ -126,18 +126,19 @@
     }
 }
 
-#pragma mark - App Delegate
+#pragma mark - Remote Notification Registration
 
 - (void)application:(UIApplication *)application didRegisterForRemoteNotificationsWithDeviceToken:(NSData *)deviceToken
 {
-    [[EMClient sharedClient] registerForRemoteNotificationsWithDeviceToken:deviceToken completion:^(EMError *aError) {
+    [[EMClient sharedClient] registerForRemoteNotificationsWithDeviceToken:deviceToken
+                                                                completion:^(EMError *aError) {
         
     }];
 }
 
 - (void)application:(UIApplication *)application didFailToRegisterForRemoteNotificationsWithError:(NSError *)error
 {
-    UIAlertView *alert = [[UIAlertView alloc] initWithTitle:NSLocalizedString(@"apns.failToRegisterApns", Fail to register apns)
+    UIAlertView *alert = [[UIAlertView alloc] initWithTitle:NSLocalizedString(@"apns.failToRegisterApns", @"Fail to register apns")
                                                     message:error.description
                                                    delegate:nil
                                           cancelButtonTitle:NSLocalizedString(@"ok", @"OK")
@@ -161,7 +162,7 @@
         return;
     }
     
-    if([application respondsToSelector:@selector(registerUserNotificationSettings:)])
+    if ([application respondsToSelector:@selector(registerUserNotificationSettings:)])
     {
         UIUserNotificationType notificationTypes = UIUserNotificationTypeBadge | UIUserNotificationTypeSound | UIUserNotificationTypeAlert;
         UIUserNotificationSettings *settings = [UIUserNotificationSettings settingsForTypes:notificationTypes categories:nil];
@@ -174,6 +175,9 @@
     }
 #endif
 }
+
+
+#pragma mark - delegate registration
 
 - (void)registerNotifications
 {

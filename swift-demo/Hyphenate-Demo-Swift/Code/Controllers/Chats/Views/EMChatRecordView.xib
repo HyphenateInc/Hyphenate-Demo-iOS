@@ -1,0 +1,59 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.XIB" version="3.0" toolsVersion="12106.1" systemVersion="16F73" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" colorMatched="YES">
+    <device id="retina4_7" orientation="portrait">
+        <adaptation id="fullscreen"/>
+    </device>
+    <dependencies>
+        <deployment identifier="iOS"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="12074.1"/>
+        <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
+    </dependencies>
+    <objects>
+        <placeholder placeholderIdentifier="IBFilesOwner" id="-1" userLabel="File's Owner"/>
+        <placeholder placeholderIdentifier="IBFirstResponder" id="-2" customClass="UIResponder"/>
+        <view contentMode="scaleToFill" id="iN0-l3-epB" customClass="EMChatRecordView" customModule="Hyphenate_Demo_Swift" customModuleProvider="target">
+            <rect key="frame" x="0.0" y="0.0" width="375" height="187"/>
+            <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+            <subviews>
+                <button opaque="NO" contentMode="scaleToFill" fixedFrame="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" showsTouchWhenHighlighted="YES" adjustsImageWhenHighlighted="NO" adjustsImageWhenDisabled="NO" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="dHD-u7-s3k">
+                    <rect key="frame" x="153" y="59" width="70" height="70"/>
+                    <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                    <state key="normal" image="Button_Record.png"/>
+                    <connections>
+                        <action selector="recordButtonDragInside:" destination="iN0-l3-epB" eventType="touchDragInside" id="CEL-h3-fZV"/>
+                        <action selector="recordButtonDragOutside:" destination="iN0-l3-epB" eventType="touchDragOutside" id="m8Q-H6-X7B"/>
+                        <action selector="recordButtonTouchDown:" destination="iN0-l3-epB" eventType="touchDown" id="tx3-7X-iIo"/>
+                        <action selector="recordButtonTouchUpInside:" destination="iN0-l3-epB" eventType="touchUpInside" id="xnC-Ej-Pcg"/>
+                        <action selector="recordButtonTouchUpOutside:" destination="iN0-l3-epB" eventType="touchUpOutside" id="A5a-0r-Sca"/>
+                    </connections>
+                </button>
+                <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" text="Hold to record" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="MZK-VI-tGp">
+                    <rect key="frame" x="0.0" y="30" width="375" height="21"/>
+                    <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                    <fontDescription key="fontDescription" type="system" pointSize="17"/>
+                    <color key="textColor" red="0.51601421830000005" green="0.568175137" blue="0.60576730970000003" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+                    <nil key="highlightedColor"/>
+                </label>
+                <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" text="0:00" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="5hD-Xs-Hia">
+                    <rect key="frame" x="0.0" y="148" width="375" height="15"/>
+                    <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                    <fontDescription key="fontDescription" type="system" pointSize="15"/>
+                    <color key="textColor" red="0.99907737969999999" green="0.22950214150000001" blue="0.18888315559999999" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+                    <nil key="highlightedColor"/>
+                </label>
+            </subviews>
+            <color key="backgroundColor" red="0.89345258474349976" green="0.91363984346389771" blue="0.92608362436294556" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+            <nil key="simulatedStatusBarMetrics"/>
+            <freeformSimulatedSizeMetrics key="simulatedDestinationMetrics"/>
+            <connections>
+                <outlet property="recordButton" destination="dHD-u7-s3k" id="diI-S3-0hH"/>
+                <outlet property="recordLabel" destination="MZK-VI-tGp" id="OMh-Bp-1L7"/>
+                <outlet property="timeLabel" destination="5hD-Xs-Hia" id="TDP-4p-4re"/>
+            </connections>
+            <point key="canvasLocation" x="-94" y="-55"/>
+        </view>
+    </objects>
+    <resources>
+        <image name="Button_Record.png" width="70" height="70"/>
+    </resources>
+</document>
