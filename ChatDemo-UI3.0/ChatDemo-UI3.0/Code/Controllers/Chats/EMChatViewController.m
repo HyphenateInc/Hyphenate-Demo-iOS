@@ -685,6 +685,8 @@
 
 - (void)backAction
 {
+    
+    [[NSNotificationCenter defaultCenter] postNotificationName:KNOTIFICATION_UPDATEUNREADCOUNT object:nil];
     if (_conversation.type == EMConversationTypeChatRoom) {
         [self showHudInView:[UIApplication sharedApplication].keyWindow hint:NSLocalizedString(@"chatroom.leaving", @"Leaving the chatroom...")];
         WEAK_SELF

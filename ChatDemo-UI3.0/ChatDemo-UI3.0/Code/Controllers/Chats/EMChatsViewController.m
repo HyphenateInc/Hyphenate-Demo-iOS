@@ -52,8 +52,6 @@
     [super viewWillAppear:animated];
     [self registerNotifications];
     [self tableViewDidTriggerHeaderRefresh];
-    
-    [[NSNotificationCenter defaultCenter] postNotificationName:KNOTIFICATION_UPDATEUNREADCOUNT object:nil];
 }
 
 - (void)viewWillDisappear:(BOOL)animated
