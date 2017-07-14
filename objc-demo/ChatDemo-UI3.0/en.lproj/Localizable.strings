@@ -1,0 +1,322 @@
+/************************************************************
+ *  * Hyphenate
+ * __________________
+ * Copyright (C) 2016 Hyphenate Inc. All rights reserved.
+ *
+ * NOTICE: All information contained herein is, and remains
+ * the property of Hyphenate Inc.
+ */
+
+//button
+"button.save" = "Save";
+"button.remove" = "Remove";
+"button.black" = "Block";
+"button.mute" = "Mute";
+"button.demote" = "Demote";
+"button.upgrade" = "Up";
+"button.more" = "Load More";
+"button.prompt" = "Prompt";
+"button.ok" = "OK";
+"button.cancel" = "Cancel";
+
+//hud
+"hud.wait" = "Pleae wait...";
+"hud.load" = "Load data...";
+"hud.fail" = "Operation failed";
+"hud.success" = "Successful operation";
+
+//title
+"title.contacts" = "Contacts";
+"title.chats" = "Chats";
+"title.settings" = "Settings";
+"title.addContact" = "Add Contact";
+"title.newGroup" = "New Group";
+"title.addParticipants" = "Add Participants";
+"title.groupInfo" = "Group Info";
+"title.chatroomInfo" = "Chatroom Info";
+"title.memberList" = "Member List";
+"title.create" = "Create";
+"title.announcement" = "Update announcement";
+"title.transferOwner" = "Transfer Owner";
+"title.updateGroupName" = "Update Group Name";
+"title.occupantList" = "Occupant List";
+"title.adminList" = "Admin List";
+"title.blacklist" = "Blacklist";
+"title.muteList" = "Mute List";
+"title.inviteContacts" = "Invite Contacts";
+"title.addAdmin" = "Add Admin";
+
+//setting title
+"title.setting.about" = "About";
+"title.setting.push" = "Push Notifications";
+"title.setting.pushdisplayname" = "Push Notification Display";
+"title.setting.account" = "Account";
+"title.setting.chats" = "Chats";
+
+//login
+"login.signup.tips" = "Have an account?";
+"login.tips" = "Yay! New to Hyphenate?";
+"login.changebutton.signup" = "Sign up";
+"login.changebutton.login" = "Log in";
+"login.taken" = "Username taken";
+"login.signup.failure" = "Sign up failure";
+"login.signup.succeed" = "Sign up succeed";
+"login.failure" = "Login failure";
+"login.failure.password.notmatch" = "Password does not match username";
+"login.ok" = "Ok";
+"login.inputNameAndPswd" = "Please enter username and password";
+"login.endAutoLogin.failure" = "Automatic login failed";
+"login.endAutoLogin.succeed" = "Automatic login succeed";
+
+//chat
+"chat.not.delivered" = "Not Delivered";
+"chat.read" = "Read";
+"chat.sent" = "Sent";
+"chat.hold.record" = "Hold to record";
+"chat.release.send" = "Release to send";
+"chat.release.cancel" = "Release to cancel";
+"chat.image1" = "[image]";
+"chat.voice1" = "[voice]";
+"chat.location1" = "[location]";
+"chat.video1" = "[video]";
+"chat.file1" = "[file]";
+"chat.delete" = "Delete";
+"chat.copy" = "Copy";
+"chat.cancel" = "Cancel";
+"chat.placeHolder" = "Send Message";
+"chat.send" = "Send";
+"chat.clearMsg" = "Do you want to delete all messages?";
+
+//call
+"call.calling" = "Calling";
+"call.initFailed" = "Failed to establish the call";
+"call.ok" = "OK";
+"call.network.disconnection" = "Network disconnection";
+"call.userNotAnswer" = "User didn't answer";
+"call.declined" = "Call declined";
+"call.userBusy" = "User is busy";
+"call.failed" = "Call failed";
+"call.userOffline" = "User is offline";
+"call.incomingCall" = "Incoming Call";
+"call.incomingVideoCall" = "Incoming video call";
+
+//error
+"error.connectNetworkFail" = "No network connection!";
+"error.connectServerFail" = "Connect to the server failed!";
+"error.connectServerTimeout" = "Connect to the server timed out!";
+
+//setting
+"setting.about" = "About";
+"setting.push" = "Push Notifications";
+"setting.account" = "Account";
+"setting.chats" = "Chats";
+"setting.callPush" = "Offline Call Notification";
+
+//setting.about
+"setting.about.appversion" = "App Version";
+"setting.about.sdkversion" = "SDK Version";
+"setting.about.uiversion" = "EaseUI Library Version";
+
+//setting.push
+"setting.push.getFailed" = "Get push status failed";
+"setting.push.display" = "Display preview details";
+"setting.push.nodisturb" = "Do not disturb";
+"setting.push.enable" = "Enabled";
+"setting.push.disable" = "Disabled";
+"setting.push.displayname" = "Push notification display name";
+"setting.push.tip" = "The display name will appear in notification center.";
+"setting.push.systemPush" = "Notification";
+"setting.push.anotherTip" = "Enable/Disable Notifications via “Settings”->”Notifications” on the device.";
+"setting.push.changeStyleFailed" = "Modify push displayStyle failed";
+"setting.push.changeDisturbFailed" = "Modify noDisturb status failed";
+
+//setting.account
+"setting.account.edit" = "Edit";
+"setting.account.id" = "Hyphenate ID";
+"setting.account.signout" = "Sign Out";
+"setting.account.name" = "Name";
+"setting.uploading" = "Uploading..";
+"setting.uploadSuccess" = "Upload Successfully";
+"setting.uploadFailed" = "Upload Failed";
+
+//setting.chats
+"setting.chats.acceptInvitation" = "Accept group invites automatically";
+
+//logout
+"logout.failed" = "Logout failed";
+
+//loading
+"loading.dropdown" = "Drop down loading...";
+"loading.start" = "Start loading...";
+"loading.end" = "Loading completed...";
+
+//add contact
+"contact.enterHyphenateID" = "Enter Hyphenate ID";
+"contact.sendApplySuccess" = "Requested";
+"contact.sendApplyFail" = "send application fails, please operate again";
+"contact.noinput" = "No input contact name";
+"contact.repeatContact" = "This contact has been added";
+"contact.addOwner" = "Not allowed to send their own friends to apply for";
+"contact.name" = "Name";
+"contact.hyphenateId" = "Hyphenate ID";
+"contact.apnsnickname" = "iOS APNS";
+"contact.block" = "Block Contact";
+"contact.blockFailure" = "Block failure";
+"contact.unblockFailure" = "Unblock failure";
+"contact.delete" = "Delete Contact";
+"contact.deleteFailure" = "Delete contacts failed";
+"contact.somebodyAddWithName" = "%@ add you as a friend";
+//"contact.somebodyDeleteWithName" = "%@ delete you from %@'s contacts";
+"contact.refusedFailure" = "Refused to apply for failure";
+"contact.agreeFailure" = "Failed to agree to apply";
+"contact.requests" = "Contact Requests";
+"contact.sendContactRequest" = "You request has been sent.";
+
+//group
+"group.participants" = "Participants";
+"group.groupSubject" = "Group Subject";
+"group.isPublic" = "Appear in group search";
+"group.allowedOccupantInvite" = "Allow members to invite";
+"group.openJoin" = "Join the group freely";
+"group.groupType" = "Group Type";
+"group.isOpenJoin" = "need to agree to apply for owner";
+"group.pushNotification" = "Push Notification";
+"group.block" = "Block";
+"group.public" = "Public";
+"group.private" = "Private";
+"group.enabled" = "Enabled";
+"group.disabled" = "Disabled";
+"group.create" = "Create";
+"group.createFailure" = "Create group failure";
+"group.destroy" = "Destroy Group";
+"group.leave" = "Leave Group";
+"group.seeAll" = "See all";
+"group.requested" = "Requested";
+"group.requestFailure" = "Failed to apply to the group";
+"group.destroyFailure" = "Destroy group failure";
+"group.leaveFailure" = "Leave group failure";
+"group.blockGroupFailure" = "Block group failure";
+"group.blockGroupSuccess" = "Block group success";
+"group.unblockGroupFailure" = "Unblock group failure";
+"group.unblockGroupSuccess" = "Unblock group success";
+"group.setFailure" = "Set failure";
+"group.setSuccess" = "Set success";
+"group.removeSuccess" = "Remove group members successfully";
+"group.removeFailure" = "Remove group members failure";
+"group.applyJoin" = "%@ apply to join groups\'%@\'";
+"group.applyJoinWithName" = "%@ apply to join groups\'%@\'：%@";
+"group.invite" = "%@ invite you to group: %@ [%@]";
+"group.inviteFailure" = "invite contacts to group failure";
+"group.beRefusedToJoin" = "be refused to join the group\'%@\'";
+"group.agreedAndJoined" = "agreed and joined the group of \'%@\'";
+"group.creategroup" = "%@ create a group[%@]";
+"group.inviteToJoin" = "%@ invite you to join the group [%@]";
+"group.notifications" = "Group Notifications";
+"group.id" = "Group ID";
+"group.joinPublicGroupMessage" = "Requesting message";
+"group.updateName" = "Please input group subject";
+"group.mute.success" = "Mute success";
+"group.admin.fetchFail" = "Fail to get admin list";
+"group.member.fetchFail" = "Fail to get member list";
+"group.mute.fetchFail" = "Fail to get mute list";
+"group.fetchInfoFail" = "Failed to get the group details, please try again later";
+"group.addingOccupant" = "Add a group member...";
+"group.removingOccupant" = "Deleting member...";
+"group.sectionHeaderOwnerAndAdmin" = " Owner and Admin List";
+"group.sectionHeaderMembers" = " Member List";
+"group.declineInvitation" = "%@ decline to join the group [%@]";
+"group.acceptInvitation" = "%@ has agreed to join the group [%@]";
+"group.memberToAdmin" = "%@ is upgraded to administrator";
+"group.AdminToMember" = "%@ is downgraded to members";
+"group.mute.added" = "Added to mute list:";
+"group.mute.removed" = "Removed from mute list:";
+"group.owner.updated" = "The group owner changed from %@ to %@";
+"group.owner.permission" = "Only owner can perform this operation";
+"group.member.joined" = "%@ has joined to the group [%@]";
+"group.member.leaved" = "%@ has leaved from the group [%@]";
+"group.changeAnnouncement" = "Change Announcement";
+"group.announcementUpdate" = "Group Announcement Update";
+"group.clearAnnouncement" = "Group:%@ Announcement is clear";
+"group.updateAnnouncement" = "Group:%@ Announcement: %@";
+
+//Group Bans
+"group.ban.removing" = "members are removing from the blacklist...";
+"group.ban.adding" = "Adding to black list...";
+"group.ban.fetching" = "getting group blacklist...";
+"group.ban.fetchFail" = "fail to get blacklist: %@";
+
+//common
+"common.delete" = "Delete";
+"common.cancel" = "Cancel";
+"common.ok" = "OK";
+"common.groups" = "Groups";
+"common.chatrooms" = "Chat Rooms";
+"common.next" = "Next";
+"common.done" = "Done";
+"common.cameraPhoto" = "Take Photo";
+"common.localPhoto" = "Choose Photo";
+"common.edit" = "Edit";
+"common.remove" = "Remove";
+"common.search" = "Search";
+"common.open" = "Open";
+"common.searchFailure" = "Search failure.";
+
+//message
+"message.friendapply.agree" = "%@ agreed to add friends to apply";
+"message.friendapply.refuse" = "%@ refuse to add friends to apply";
+"message.inputGroupSubject" = "Please input a group theme";
+"message.receiveMessage" = "you have a new message";
+"message.clear" = "Clear All Messages";
+
+//apns
+"apns.failToRegisterApns" = "Fail to register apns";
+"apns.failToBindDeviceToken" = "Fail to bind device token";
+"apns.content" = "Apns content";
+
+//network
+"network.disconnection" = "Network disconnection";
+
+//Chatroom detail
+"chatroom.somebodyInvite" = "%@ invite you to join chatroom \'%@\'";
+"chatroom.id" = "chatroomId";
+"chatroom.owner" = "Owner";
+"chatroom.admins" = "Admin List";
+"chatroom.onlineMembers" = "Online member List";
+"chatroom.blacklist" = "Blacklist";
+"chatroom.mutes" = "Mute List";
+"chatroom.occupantCount" = "members count";
+"chatroom.subject" = "Subject";
+"chatroom.description" = "description";
+"chatroom.announcement" = "announcement";
+"chatroom.joining" = "Joining...";
+"chatroom.leaving" = "Leaving...";
+"chatroom.fetchInfoFail" = "Failed to get the chatroom details";
+"chatroom.joinFailed" = "join chatroom \'%@\' failed";
+"chatroom.join" = "\'%@\'join chatroom\'%@\'";
+"chatroom.leave.hint" = "\'%@\'leave chatroom\'%@\'";
+"chatroom.remove" = "be removed from chatroom\'%@\'";
+"chatroom.create.inputName" = "Please input chatroom name";
+"chatroom.create.inputDescribe" = "Please input chatroom description";
+"chatroom.create.ongoing" = "create a chatroom...";
+"chatroom.create.success" = "create chatroom success";
+"chatroom.create.fail" = "Failed to create a chatroom, please operate again";
+
+"chatroom.destroy" = "Destroy the chatroom";
+"chatroom.leave" = "Leave the chatroom";
+"chatroom.destroyFail" = "Destroy the chatroom failure";
+"chatroom.leaveFail" = "Leave the chatroom failure";
+
+"chatroom.changeOwner" = "Change owner";
+"chatroom.changeSubject" = "Change subject";
+"chatroom.changeDes" = "Change description";
+"chatroom.changeAnnouncement" = "Change announcement";
+
+"chatroom.notifications" = "Chatroom Notification";
+"chatroom.memberToAdmin" = "%@ is upgraded to administrator";
+"chatroom.AdminToMember" = "%@ is downgraded to members";
+"chatroom.mute.added" = "Added to mute list:";
+"chatroom.mute.removed" = "Removed from mute list:";
+"chatroom.owner.updated" = "The Chatroom owner changed from %@ to %@";
+"chatroom.announcementUpdate" = "Chatroom Announcement Update";
+"chatroom.clearAnnouncement" = "Chatroom:%@ Announcement is clear";
+"chatroom.updateAnnouncement" = "Chatroom:%@ Announcement: %@";

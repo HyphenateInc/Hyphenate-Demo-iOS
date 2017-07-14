@@ -1,0 +1,36 @@
+PODS:
+  - Bolts/Tasks (1.8.4)
+  - DACircularProgress (2.3.1)
+  - Hyphenate (3.3.2)
+  - MBProgressHUD (0.9.2)
+  - MJRefresh (3.1.12)
+  - MWPhotoBrowser (2.1.2):
+    - DACircularProgress (~> 2.3)
+    - MBProgressHUD (~> 0.9)
+    - SDWebImage (!= 3.7.2, ~> 3.7)
+  - Parse (1.15.0):
+    - Bolts/Tasks (~> 1.8)
+  - SDWebImage (3.8.2):
+    - SDWebImage/Core (= 3.8.2)
+  - SDWebImage/Core (3.8.2)
+
+DEPENDENCIES:
+  - DACircularProgress (~> 2.3.1)
+  - Hyphenate (~> 3.3.1)
+  - MJRefresh
+  - MWPhotoBrowser (~> 2.1.2)
+  - Parse
+
+SPEC CHECKSUMS:
+  Bolts: 8a7995239dbe724f9cba2248b766d48b7ebdd322
+  DACircularProgress: 4dd437c0fc3da5161cb289e07ac449493d41db71
+  Hyphenate: b596a794ec253b089a6e5c952d718aeedd85c76c
+  MBProgressHUD: 1569cf7ace17a8bac47aabfbb8580a49690386d1
+  MJRefresh: b96cdb21c4aa75a7b07654311ab2f315c497e806
+  MWPhotoBrowser: 5836d7aa041dc05a13de380c246826578adc5ea5
+  Parse: c0519f8fbf57bd0334f75cd22ac032d86ee55464
+  SDWebImage: 098e97e6176540799c27e804c96653ee0833d13c
+
+PODFILE CHECKSUM: f8ac201d1682cd90626c2dc213b2c8aaab36b3db
+
+COCOAPODS: 1.2.1

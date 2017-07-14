@@ -1,0 +1,33 @@
+/************************************************************
+ *  * Hyphenate
+ * __________________
+ * Copyright (C) 2016 Hyphenate Inc. All rights reserved.
+ *
+ * NOTICE: All information contained herein is, and remains
+ * the property of Hyphenate Inc.
+ */
+
+#ifndef ChatDemo_UI3_0_pch
+#define ChatDemo_UI3_0_pch
+
+// Include any system framework and library headers here that should be included in all compilation units.
+// You will also need to set the Prefix Header build setting of one or more of your targets to reference this file.
+
+#endif /* ChatDemo_UI3_0_pch */
+
+#ifdef __OBJC__
+
+#import <Hyphenate/Hyphenate.h>
+
+#import "EMChatDemoUIDefine.h"
+#import "EaseCallManager.h"
+#import "EMColorUtils.h"
+#import "UIView+HyphenateView.h"
+#import "UIImageView+WebCache.h"
+#import "MBProgressHUD.h"
+#import "NSObject+EMAlertView.h"
+#import <AVFoundation/AVFoundation.h>
+#import <UIKit/UIKit.h>
+#import <Foundation/Foundation.h>
+
+#endif

@@ -3,3 +3,10 @@ Pods/
 Podfile.lock
 xcuserdata/
 *.xcworkspace/
+*.xcscheme
+UserInterfaceState.xcuserstate
+xcschememanagement.plist
+objc-demo/ChatDemo-UI3.0.xcworkspace
+objc-demo/Podfile.lock
+objc-demo/Pods
+
