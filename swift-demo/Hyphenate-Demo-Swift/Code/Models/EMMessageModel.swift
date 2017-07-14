@@ -12,6 +12,7 @@ import Hyphenate
 class EMMessageModel: NSObject {
     var message: EMMessage?
     var isPlaying: Bool = false
+    var thumbnailImage: UIImage?
     
     init(withMesage msg: EMMessage) {
         message = msg

@@ -154,9 +154,7 @@ class EMContactsViewController: EMBaseRefreshTableViewController, UISearchBarDel
         for hyphenateId in ary {
             let model = EMUserModel.createWithHyphenateId(hyphenateId: hyphenateId)
             if model != nil{
-                let nickname = model!.nickname
-                let firstLetter = nickname!.substring(to: nickname!.index(after: nickname!.startIndex)) as NSString
-                let sectionIndex = collation.section(for: firstLetter, collationStringSelector: #selector(NSString.lowercased(with:)))
+                let sectionIndex = collation.section(for: model!, collationStringSelector: #selector(getter: EMUserModel.nickname))
                 var array = _contacts[sectionIndex] as! Array<EMUserModel>
                 array.append(model as! EMUserModel)
                 _contacts[sectionIndex] = array

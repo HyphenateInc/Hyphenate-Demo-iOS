@@ -9,12 +9,13 @@
 import UIKit
 import AVFoundation
 
-protocol EMChatRecordViewDelegate {
+@objc protocol EMChatRecordViewDelegate {
     func didFinish(recordPatch: String, duration: Int)
 }
 
 class EMChatRecordView: UIView {
-    var delegate: EMChatRecordViewDelegate?
+    
+    weak var delegate: EMChatRecordViewDelegate?
     
     @IBOutlet weak var recordLabel: UILabel!
     @IBOutlet weak var timeLabel: UILabel!

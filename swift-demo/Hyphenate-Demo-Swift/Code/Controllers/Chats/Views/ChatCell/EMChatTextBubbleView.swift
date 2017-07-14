@@ -9,7 +9,7 @@
 import UIKit
 import Hyphenate
 
-let LABEL_FONT_SIZE: CGFloat = 13
+let LABEL_FONT_SIZE: CGFloat = 11
 let BUBBLE_VIEW_PAGGING: CGFloat = 12
 let TEXTLABEL_MAX_WIDTH: CGFloat = 200
 let LABEL_LINESPACE: CGFloat = 4

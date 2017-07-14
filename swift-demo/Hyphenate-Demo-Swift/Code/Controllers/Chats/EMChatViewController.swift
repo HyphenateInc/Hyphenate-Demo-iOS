@@ -73,7 +73,7 @@ class EMChatViewController: UIViewController, EMChatToolBarDelegate, EMChatManag
         _setupNavigationBar()
         _setupViewLayout()
         
-        NotificationCenter.default.addObserver(self, selector: #selector(remoteGroupNotification(noti:)), name: NSNotification.Name(rawValue:KEM_REMOVEGROUP_NOTIFICATION), object: nil) // oc demo in "viewDidAppear"
+//        NotificationCenter.default.addObserver(self, selector: #selector(remoteGroupNotification(noti:)), name: NSNotification.Name(rawValue:KEM_REMOVEGROUP_NOTIFICATION), object: nil) // oc demo in "viewDidAppear"
     }
     
     override func viewDidAppear(_ animated: Bool) {
@@ -112,7 +112,7 @@ class EMChatViewController: UIViewController, EMChatToolBarDelegate, EMChatManag
     }
     
     deinit {
-        // TODO
+        print(" ----------------------------------------------- ChatViewController dealloc ---------------------------------------------------")
     }
     
     
@@ -209,6 +209,7 @@ class EMChatViewController: UIViewController, EMChatToolBarDelegate, EMChatManag
         return _dataSource?.count ?? 0
     }
     
+    
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         let model = _dataSource![indexPath.row]
         let CellIdentifier = EMChatBaseCell.cellIdentifier(forMessageModel: model)
@@ -222,12 +223,7 @@ class EMChatViewController: UIViewController, EMChatToolBarDelegate, EMChatManag
         
         return cell!
     }
-    
-    // MARK: - Table view delegate
-    func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
-        tableView.deselectRow(at: indexPath, animated: true)
-    }
-    
+ 
     func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
         let model = _dataSource![indexPath.row]
         return EMChatBaseCell.height(forMessageModel: model)
@@ -275,25 +271,35 @@ class EMChatViewController: UIViewController, EMChatToolBarDelegate, EMChatManag
     
     // MARK: - UIImagePickerControllerDelegate
     func imagePickerController(_ picker: UIImagePickerController, didFinishPickingMediaWithInfo info: [String : Any]) {
-        let type = info[UIImagePickerControllerMediaType] as! String
-        if type == kUTTypeMovie as String {
-            let videoURL = info[UIImagePickerControllerMediaURL] as! URL
-            let mp4 = _convert2Mp4(movURL: videoURL)
-            let fm = FileManager.default
-            if fm.fileExists(atPath: videoURL.path) {
-                do { try fm.removeItem(at: videoURL)} catch {}
+        weak var weakSelf = self
+        let compressData:(UIImagePickerController, Dictionary<String, Any>) -> (EMMessage, UIImagePickerController) = { (imagePicker, selectInfo) -> (EMMessage, UIImagePickerController) in
+            let type = selectInfo[UIImagePickerControllerMediaType] as! String
+            if type == kUTTypeMovie as String {
+                let videoURL = selectInfo[UIImagePickerControllerMediaURL] as! URL
+                let mp4 = weakSelf?._convert2Mp4(movURL: videoURL)
+                let fm = FileManager.default
+                if fm.fileExists(atPath: videoURL.path) {
+                    do { try fm.removeItem(at: videoURL)} catch {}
+                }
+                
+                let message = EMSDKHelper.createVideoMessage((mp4?.path)!, "video.mp4", 0, to: (weakSelf?._conversaiton!.conversationId)!, (weakSelf?._messageType())!, nil)
+                return (message, imagePicker)
+            } else {
+                let orgImage = selectInfo[UIImagePickerControllerOriginalImage] as! UIImage
+                let message = EMSDKHelper.createImageMessage(orgImage, "image.jpg", to: (weakSelf?._conversaiton!.conversationId)!, (weakSelf?._messageType())!, nil)
+                return (message, imagePicker)
             }
-            
-            let message = EMSDKHelper.createVideoMessage(mp4.path, "video.mp4", 0, to: _conversaiton!.conversationId, _messageType(), nil)
-            _sendMessage(message: message)
-            
-        } else {
-            let orgImage = info[UIImagePickerControllerOriginalImage] as! UIImage
-            let data = UIImageJPEGRepresentation(orgImage, 1)
-            let message = EMSDKHelper.createImageMessage(data!, "image.jpg", to: _conversaiton!.conversationId, _messageType(), nil)
-            _sendMessage(message: message)
         }
-        picker.dismiss(animated: true, completion: nil)
+        
+        MBProgressHUD.showAdded(to: picker.view, animated: true)
+        DispatchQueue.global().async {
+            let (message, imagePicker) = compressData(picker, info)
+            DispatchQueue.main.async {
+                weakSelf?._sendMessage(message: message)
+                imagePicker.dismiss(animated: true, completion: nil)
+                MBProgressHUD.hide(for: imagePicker.view, animated: true)
+            }
+        }
     }
     
     // MARK: - EMLocationViewDelegate
@@ -415,10 +421,14 @@ class EMChatViewController: UIViewController, EMChatToolBarDelegate, EMChatManag
         _addMessageToDatasource(message: message)
         tableView.reloadData()
         weak var weakSelf = self
-        EMClient.shared().chatManager.send(message, progress: nil) { (message, error) in
-            weakSelf?.tableView.reloadData()
+        DispatchQueue.global().async {
+            EMClient.shared().chatManager.send(message, progress: nil) { (message, error) in
+                DispatchQueue.main.async {
+                    weakSelf?.tableView.reloadData()
+                    weakSelf?._scrollViewToBottom(animated: true)
+                }
+            }
         }
-        _scrollViewToBottom(animated: true)
     }
     
     func _addMessageToDatasource(message: EMMessage) {
@@ -507,7 +517,7 @@ class EMChatViewController: UIViewController, EMChatToolBarDelegate, EMChatManag
     
     func _shouldSendHasReadAck(message: EMMessage,_ isRead: Bool) -> Bool {
         let account = EMClient.shared().currentUsername
-        if message.chatType != EMChatTypeChat || message.isReadAcked || account != message.from || UIApplication.shared.applicationState == UIApplicationState.background {
+        if message.chatType != EMChatTypeChat || message.isReadAcked || account == message.from || UIApplication.shared.applicationState == UIApplicationState.background {
             return false
         }
         

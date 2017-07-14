@@ -18,7 +18,7 @@ import UIKit
 
 class EMFacialView: UIView, UIScrollViewDelegate {
     
-    var delegate: EMFacialViewDelegate?
+    weak var delegate: EMFacialViewDelegate?
     var faces: Array<String>?
 
     var pageControl: UIPageControl?

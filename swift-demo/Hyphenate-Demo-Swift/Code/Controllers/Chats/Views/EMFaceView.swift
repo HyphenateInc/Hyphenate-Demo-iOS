@@ -19,7 +19,7 @@ let kButtomNum = 5
 
 class EMFaceView: UIView, EMFacialViewDelegate {
 
-    var delegate: EMFaceDelegate?
+    weak var delegate: EMFaceDelegate?
     
     private var _facialView: EMFacialView?
     private var _bottomScrollView: UIScrollView?

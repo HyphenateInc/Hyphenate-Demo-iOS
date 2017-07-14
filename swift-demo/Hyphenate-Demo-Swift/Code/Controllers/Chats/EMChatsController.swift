@@ -134,7 +134,7 @@ class EMChatsController: EMBaseRefreshTableViewController, EMChatManagerDelegate
         
         let model = dataSource[indexPath.row]
         weak var weakSelf = self
-        let deleteAction = UITableViewRowAction.init(style: UITableViewRowActionStyle.normal, title: "删除") { (action, index) in
+        let deleteAction = UITableViewRowAction.init(style: UITableViewRowActionStyle.normal, title: "Delete") { (action, index) in
             model.removeComplation {
                 weakSelf?.tableViewDidTriggerHeaderRefresh()
             }

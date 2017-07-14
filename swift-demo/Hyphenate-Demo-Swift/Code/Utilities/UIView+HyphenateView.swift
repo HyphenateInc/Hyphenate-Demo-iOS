@@ -88,4 +88,18 @@ extension UIImage {
         
         return image!      
     }
+    
+    class open func scaleImage(image: UIImage, sclae:Float) -> UIImage
+    {
+        let scaleWidth = Float(image.size.width) * sclae
+        let scaleHeight = Float(image.size.height) * sclae
+        let rect = CGRect(x: 0, y: 0, width: Int(scaleWidth), height: Int(scaleHeight))
+        UIGraphicsBeginImageContext(rect.size)
+        image.draw(in: rect)
+        
+        let image = UIGraphicsGetImageFromCurrentImageContext()
+        UIGraphicsEndImageContext()
+        
+        return image!
+    }
 }

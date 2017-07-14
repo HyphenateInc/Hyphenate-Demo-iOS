@@ -53,13 +53,26 @@ class EMChatImageBubbleView: EMChatBaseBubbleView {
     override func set(model: EMMessageModel) {
         super.set(model: model)
         let body = _model?.message?.body as! EMImageMessageBody
-        let imgData = NSData(contentsOfFile: body.localPath)
-        if imgData != nil {
-            _backImageView?.image = UIImage.init(data: imgData! as Data)
-        }
         
         if body.thumbnailLocalPath.characters.count > 0 {
             _backImageView?.image = UIImage.init(contentsOfFile: body.thumbnailLocalPath)
+            return
+        }
+        
+        if model.thumbnailImage != nil {
+            _backImageView?.image = model.thumbnailImage
+            return
+        }
+        
+        let imgData = NSData(contentsOfFile: body.localPath)
+        if imgData != nil {
+            let image = UIImage.init(data: imgData! as Data)!
+            var sclae = 1.0
+            if image.size.width > 1000 * 10 || image.size.height > 1000 * 10 {
+                sclae = 0.1
+            }
+             model.thumbnailImage = UIImage.scaleImage(image: UIImage.init(data: imgData! as Data)!, sclae: Float(sclae))
+            _backImageView?.image = model.thumbnailImage
         }
     }
     

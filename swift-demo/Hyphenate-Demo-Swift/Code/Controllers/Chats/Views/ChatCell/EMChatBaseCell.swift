@@ -40,9 +40,7 @@ class EMChatBaseCell: UITableViewCell, EMChatBaseBubbleViewDelegate {
     @IBOutlet weak var checkView: UIImageView!
     @IBOutlet weak var notDeliveredLabel: UILabel!
     @IBOutlet weak var nickLabel: UILabel!
-   
-    
-    
+
     class func chatBaseCell(withMessageModel model: EMMessageModel) -> EMChatBaseCell {
         let baseCell = Bundle.main.loadNibNamed("EMChatBaseCell", owner: nil, options: nil)?.first as! EMChatBaseCell
         baseCell._setupBubbleView(model: model)
@@ -174,7 +172,7 @@ class EMChatBaseCell: UITableViewCell, EMChatBaseBubbleViewDelegate {
                     readLabel.text = "Read"
                     checkView.isHidden = false
                 } else {
-                    readLabel.text = "Send"
+                    readLabel.text = "Sent"
                     checkView.isHidden = true
                 }
                 

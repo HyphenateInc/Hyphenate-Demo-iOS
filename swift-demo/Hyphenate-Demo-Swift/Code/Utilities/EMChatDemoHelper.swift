@@ -166,7 +166,7 @@ class EMChatDemoHelper: NSObject, EMClientDelegate, EMContactManagerDelegate, EM
     
     func didJoin(_ aGroup: EMGroup!, inviter aInviter: String!, message aMessage: String!) {
         showAlert(aInviter + " invite you to group " + aGroup.subject)
-        let vcArt = mainVC?.navigationController?.viewControllers
+//        let vcArt = mainVC?.navigationController?.viewControllers
         // TODO load group list
     }
     

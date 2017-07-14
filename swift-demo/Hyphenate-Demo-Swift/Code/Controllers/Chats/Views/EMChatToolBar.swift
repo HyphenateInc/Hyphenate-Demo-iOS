@@ -26,7 +26,7 @@ let kDefaultTextViewWidth = kScreenWidth - 30
 
 class EMChatToolBar: UIView , UITextViewDelegate, EMChatRecordViewDelegate, EMFaceDelegate{
     
-    var delegate: EMChatToolBarDelegate?
+    weak var delegate: EMChatToolBarDelegate?
     
     private var activityButtonView:UIView?
     private var isShowButtomView = false

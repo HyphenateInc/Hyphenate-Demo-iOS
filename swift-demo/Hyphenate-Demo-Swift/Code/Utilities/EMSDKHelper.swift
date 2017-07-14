@@ -33,10 +33,10 @@ class EMSDKHelper: NSObject {
         return msg!
     }
     
-    class func createImageMessage(_ imageData: Data, _ displayName: String, to receiver: String, _ chatType: EMChatType, _ ext: Dictionary<String, Any>?) -> EMMessage {
-        let body = EMImageMessageBody.init(data: imageData, displayName: displayName)
-        let image = UIImage(data: imageData)
-        body?.size = (image?.size)!
+    class func createImageMessage(_ image: UIImage, _ displayName: String, to receiver: String, _ chatType: EMChatType, _ ext: Dictionary<String, Any>?) -> EMMessage {
+        let data = UIImageJPEGRepresentation(image, 1)
+        let body = EMImageMessageBody.init(data: data, displayName: displayName)
+        body?.size = image.size
         let msg = EMMessage.init(conversationID: receiver, from: sender, to: receiver, body: body, ext: ext)
         msg!.chatType = chatType
         return msg!
