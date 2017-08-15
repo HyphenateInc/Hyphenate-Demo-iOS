@@ -112,6 +112,7 @@
 		71D4A1FB1D9C9359006FACB7 /* EMContactInfoCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = 71D4A1F31D9C9359006FACB7 /* EMContactInfoCell.xib */; };
 		71D4A1FC1D9C9359006FACB7 /* EMGroupTitleCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 71D4A1F51D9C9359006FACB7 /* EMGroupTitleCell.m */; };
 		71D4A1FD1D9C9359006FACB7 /* EMGroupTitleCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = 71D4A1F61D9C9359006FACB7 /* EMGroupTitleCell.xib */; };
+		C448516A1F42BDEA00DD8401 /* GoogleService-Info.plist in Resources */ = {isa = PBXBuildFile; fileRef = C44851691F42BDEA00DD8401 /* GoogleService-Info.plist */; };
 		C4D616A01E08B42C00E108A2 /* EMChatEmojiView.m in Sources */ = {isa = PBXBuildFile; fileRef = C4D6169F1E08B42C00E108A2 /* EMChatEmojiView.m */; };
 		C4D616A21E08B4AC00E108A2 /* EMChatEmojiView.xib in Resources */ = {isa = PBXBuildFile; fileRef = C4D616A11E08B4AC00E108A2 /* EMChatEmojiView.xib */; };
 		D20E26D71DCA011C00B3FAC6 /* icon_info.png in Resources */ = {isa = PBXBuildFile; fileRef = D20E26D41DCA011C00B3FAC6 /* icon_info.png */; };
@@ -628,6 +629,7 @@
 		71D4A1F41D9C9359006FACB7 /* EMGroupTitleCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = EMGroupTitleCell.h; sourceTree = "<group>"; };
 		71D4A1F51D9C9359006FACB7 /* EMGroupTitleCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = EMGroupTitleCell.m; sourceTree = "<group>"; };
 		71D4A1F61D9C9359006FACB7 /* EMGroupTitleCell.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = EMGroupTitleCell.xib; sourceTree = "<group>"; };
+		C44851691F42BDEA00DD8401 /* GoogleService-Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = "GoogleService-Info.plist"; sourceTree = "<group>"; };
 		C4D6169E1E08B42C00E108A2 /* EMChatEmojiView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = EMChatEmojiView.h; sourceTree = "<group>"; };
 		C4D6169F1E08B42C00E108A2 /* EMChatEmojiView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = EMChatEmojiView.m; sourceTree = "<group>"; };
 		C4D616A11E08B4AC00E108A2 /* EMChatEmojiView.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = EMChatEmojiView.xib; sourceTree = "<group>"; };
@@ -1501,6 +1503,7 @@
 				D28345101D8FD1D400FD48A9 /* LaunchScreen.storyboard */,
 				D2AA4DCE1D9227A400967E0E /* Main.storyboard */,
 				D28345131D8FD1D400FD48A9 /* Info.plist */,
+				C44851691F42BDEA00DD8401 /* GoogleService-Info.plist */,
 				D28345021D8FD1D400FD48A9 /* Supporting Files */,
 			);
 			path = "ChatDemo-UI3.0";
@@ -2218,6 +2221,7 @@
 				D2BF7EAE1D914DB30090AA66 /* Icon_Emoji@2x.png in Resources */,
 				3AEBE3EF1E792ED400B82986 /* EMGroupPermissionCell.xib in Resources */,
 				D2BF7E481D914DB30090AA66 /* Button_Delete@2x.png in Resources */,
+				C448516A1F42BDEA00DD8401 /* GoogleService-Info.plist in Resources */,
 				D2835FFD1D94FFD800EC7A4A /* Icon_Audio_disable@3x.png in Resources */,
 				D22B7A321DB0F93300C8DD40 /* iconCall@3x.png in Resources */,
 				D2BF7EE41D914DB30090AA66 /* Chats_active@2x.png in Resources */,
@@ -2495,7 +2499,7 @@
 			);
 			inputPaths = (
 				"${SRCROOT}/Pods/Target Support Files/Pods-ChatDemo-UI3.0/Pods-ChatDemo-UI3.0-frameworks.sh",
-				"${PODS_ROOT}/Hyphenate/ios_IM_Hyphenate_sdk_3.3.4/HyphenateFullSDK/Hyphenate.framework",
+				"${PODS_ROOT}/Hyphenate/ios_IM_Hyphenate_sdk_3.3.4r1/HyphenateFullSDK/Hyphenate.framework",
 			);
 			name = "[CP] Embed Pods Frameworks";
 			outputPaths = (

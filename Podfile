@@ -16,7 +16,7 @@ target 'ChatDemo-UI3.0' do
     pod 'MJRefresh'
 
     pod 'Firebase/Core'
-
+    
     pod 'Fabric'
     pod 'Crashlytics'
 
