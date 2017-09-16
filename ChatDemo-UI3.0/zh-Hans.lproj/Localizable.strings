@@ -1,0 +1,325 @@
+/************************************************************
+ *  * Hyphenate
+ * __________________
+ * Copyright (C) 2016 Hyphenate Inc. All rights reserved.
+ *
+ * NOTICE: All information contained herein is, and remains
+ * the property of Hyphenate Inc.
+ */
+
+//button
+"button.save" = "保存";
+"button.remove" = "移除";
+"button.black" = "拉黑";
+"button.mute" = "禁言";
+"button.demote" = "降级";
+"button.upgrade" = "升级";
+"button.more" = "查看更多";
+"button.prompt" = "警告";
+"button.ok" = "确定";
+"button.cancel" = "取消";
+
+//hud
+"hud.wait" = "请等待...";
+"hud.load" = "正在加载数据...";
+"hud.fail" = "操作失败";
+"hud.success" = "操作成功";
+
+//title
+"title.contacts" = "联系人";
+"title.chats" = "会话";
+"title.settings" = "设置";
+"title.addContact" = "添加联系人";
+"title.newGroup" = "新建群组";
+"title.addParticipants" = "添加成员";
+"title.groupInfo" = "群组详情";
+"title.chatroomInfo" = "聊天室详情";
+"title.memberList" = "成员列表";
+"title.create" = "创建";
+"title.announcement" = "更新公告";
+"title.transferOwner" = "转让群主";
+"title.updateGroupName" = "更新群组名称";
+"title.occupantList" = "所有成员";
+"title.adminList" = "管理员列表";
+"title.blacklist" = "黑名单列表";
+"title.muteList" = "禁言列表";
+"title.inviteContacts" = "邀请联系人";
+"title.addAdmin" = "添加管理员";
+
+//setting title
+"title.setting.about" = "关于";
+"title.setting.push" = "消息推送设置";
+"title.setting.pushdisplayname" = "推送设置显示";
+"title.setting.account" = "个人信息";
+"title.setting.chats" = "会话设置";
+
+//login
+"login.signup.tips" = "已经注册?";
+"login.tips" = "未注册账号?";
+"login.changebutton.signup" = "注册";
+"login.changebutton.login" = "登录";
+"login.taken" = "该账号已注册";
+"login.signup.failure" = "注册失败";
+"login.signup.succeed" = "注册成功";
+"login.failure" = "登陆失败";
+"login.failure.password.notmatch" = "密码与账号不匹配";
+"login.ok" = "确认";
+"login.inputNameAndPswd" = "请输入账号和密码";
+"login.endAutoLogin.failure" = "自动登录失败";
+"login.endAutoLogin.succeed" = "自动登录成功";
+
+//chat
+"chat.not.delivered" = "未送达";
+"chat.read" = "已读";
+"chat.sent" = "发送";
+"chat.hold.record" = "按住说话";
+"chat.release.send" = "松开发送";
+"chat.release.cancel" = "松开取消";
+"chat.image1" = "[图片]";
+"chat.voice1" = "[语音]";
+"chat.location1" = "[位置]";
+"chat.video1" = "[视频]";
+"chat.file1" = "[文件]";
+"chat.delete" = "删除";
+"chat.copy" = "复制";
+"chat.cancel" = "取消";
+"chat.placeHolder" = "发送消息";
+"chat.send" = "发送";
+"chat.clearMsg" = "是否确定删除所有消息？";
+
+//call
+"call.calling" = "呼叫中";
+"call.initFailed" = "请求通话失败";
+"call.ok" = "确定";
+"call.network.disconnection" = "网络未连接";
+"call.userNotAnswer" = "对方没有响应";
+"call.declined" = "对方拒接";
+"call.userBusy" = "对方忙碌";
+"call.failed" = "通话失败";
+"call.userOffline" = "对方不在线";
+"call.incomingCall" = "收到语音请求";
+"call.incomingVideoCall" = "收到视频请求";
+
+//error
+"error.connectNetworkFail" = "连接服务器失败!";
+"error.connectServerFail" = "网络未连接!";
+"error.connectServerTimeout" = "连接服务器超时!";
+
+//setting
+"setting.about" = "关于";
+"setting.push" = "推送设置";
+"setting.account" = "账号";
+"setting.chats" = "会话设置";
+"setting.callPush" = "实时通话是否发送离线推送";
+
+//setting.about
+"setting.about.appversion" = "APP 版本";
+"setting.about.sdkversion" = "SDK 版本";
+"setting.about.uiversion" = "EaseUI 版本";
+
+//setting.push
+"setting.push.getFailed" = "获取推送状态失败";
+"setting.push.display" = "显示消息详情";
+"setting.push.displayname" = "推送显示昵称";
+"setting.push.tip" = "设置苹果推送时显示昵称";
+"setting.push.nodisturb" = "免打扰";
+"setting.push.enable" = "开启";
+"setting.push.disable" = "关闭";
+"setting.push.systemPush" = "系统通知";
+"setting.push.anotherTip" = "在“设置”->“通知”开启/关闭系统通知";
+"setting.push.changeStyleFailed" = "修改推送样式失败";
+"setting.push.changeDisturbFailed" = "修改免打扰状态失败";
+
+//setting.account
+"setting.account.edit" = "编辑";
+"setting.account.id" = "账号";
+"setting.account.signout" = "登出";
+"setting.account.name" = "用户名";
+
+"setting.uploading" = "上传中..";
+"setting.uploadSuccess" = "上传成功";
+"seting.uploadFailed" = "上传失败";
+
+//setting.chats
+"setting.chats.acceptInvitation" = "自动接受群组邀请";
+
+//logout
+"logout.failed" = "退出登录失败";
+
+//loading
+"loading.dropdown" = "下拉加载...";
+"loading.start" = "开始加载...";
+"loading.end" = "加载完成...";
+
+//add contact
+"contact.enterHyphenateID" = "输入环信ID";
+"contact.sendApplySuccess" = "请求成功";
+"contact.sendApplyFail" = "发送申请失败，请重新操作";
+"contact.noinput" = "没有输入联系人名";
+"contact.repeatContact" = "已经添加此联系人";
+"contact.addOwner" = "不允许向自己发出好友申请";
+
+"contact.name" = "姓名";
+"contact.hyphenateId" = "Hyphenate ID";
+"contact.apnsnickname" = "iOS推送昵称";
+"contact.block" = "联系人加入黑名单";
+"contact.blockFailure" = "加入黑名单失败";
+"contact.unblockFailure" = "移除黑名单失败";
+"contact.delete" = "删除联系人";
+"contact.deleteFailure" = "删除联系人失败";
+"contact.somebodyAddWithName" = "%@申请加您为好友!";
+//"contact.somebodyDeleteWithName" = "%@从联系人中删除了您";
+"contact.refusedFailure" = "拒绝好友申请失败";
+"contact.agreeFailure" = "同意好友申请失败";
+"contact.requests" = "联系人申请";
+"contact.sendContactRequest" = "您的申请已经发送。";
+
+
+//Group
+"group.participants" = "成员";
+"group.groupSubject" = "群组主题";
+"group.create" = "创建";
+"group.createFailure" = "创建群组失败";
+"group.isPublic" = "是否为公开群";
+"group.allowedOccupantInvite" = "允许成员邀请";
+"group.openJoin" = "用户可自由加入";
+"group.groupType" = "群组类型";
+"group.isOpenJoin" = "需要群主同意";
+"group.pushNotification" = "群消息提醒";
+"group.block" = "屏蔽群消息";
+"group.public" = "公开";
+"group.private" = "私有";
+"group.enabled" = "启用";
+"group.disabled" = "关闭";
+"group.destroy" = "解散群组";
+"group.leave" = "离开群组";
+"group.seeAll" = "查看全部成员";
+"group.requested" = "已申请";
+"group.requestFailure" = "入群申请失败";
+"group.destroyFailure" = "解散群组失败";
+"group.leaveFailure" = "退出群组失败";
+"group.blockGroupFailure" = "屏蔽群组消息失败";
+"group.blockGroupSuccess" = "屏蔽群组消息成功";
+"group.unblockGroupFailure" = "解除群消息屏蔽失败";
+"group.unblockGroupSuccess" = "解除群消息屏蔽成功";
+"group.setFailure" = "设置失败";
+"group.setSuccess" = "设置成功";
+"group.removeSuccess" = "移除群成员成功";
+"group.removeFailure" = "移除群成员失败";
+"group.applyJoin" = "%@ 申请加入群组\'%@\'";
+"group.applyJoinWithName" = "%@ 申请加入群组\'%@\'：%@";
+"group.invite" = "%@邀请您加入群组: %@ [%@]";
+"group.inviteFailure" = "邀请联系人加入群组失败";
+"group.beRefusedToJoin" = "被拒绝加入群组\'%@\'";
+"group.agreedAndJoined" = "同意并已加入群组\'%@\'";
+"group.creategroup" = "%@创建了群组[%@]";
+"group.inviteToJoin" = "%@邀请您加入群组[%@]";
+"group.notifications" = "群组通知";
+"group.id" = "群ID";
+"group.joinPublicGroupMessage" = "请求信息";
+"group.updateName" = "请输入群组名称";
+"group.mute.success" = "禁言成功";
+"group.admin.fetchFail" = "获取管理员列表失败";
+"group.member.fetchFail" = "获取成员列表失败";
+"group.mute.fetchFail" = "获取禁言列表失败";
+"group.fetchInfoFail" = "获取群组详情失败，请稍后重试";
+"group.addingOccupant" = "添加组成员...";
+"group.removingOccupant" = "正在删除成员...";
+"group.sectionHeaderOwnerAndAdmin" = " 群主 / 管理员列表";
+"group.sectionHeaderMembers" = " 群成员";
+"group.declineInvitation" = "%@拒绝加入群组[%@]";
+"group.acceptInvitation" = "%@已同意加入群组[%@]";
+"group.memberToAdmin" = "%@ 升级为管理员";
+"group.AdminToMember" = "%@ 降级为普通成员";
+"group.mute.added" = "被加入禁言列表:";
+"group.mute.removed" = "被移出禁言列表:";
+"group.owner.updated" = "群主由 %@ 变成 %@";
+"group.owner.permission" = "只有Owner能进行此操作";
+"group.member.joined" = "%@已经加入了群组[%@]";
+"group.member.leaved" = "%@已经离开了群组[%@]";
+"group.changeAnnouncement" = "修改公告";
+"group.announcementUpdate" = "群公告更新";
+"group.clearAnnouncement" = "群组:%@ 公告被删除";
+"group.updateAnnouncement" = "群组:%@ 公告内容: %@";
+
+//Group Bans
+"group.ban.removing" = "正在将成员移出黑名单...";
+"group.ban.adding" = "正在将成员加入黑名单...";
+"group.ban.fetching" = "获取群组黑名单...";
+"group.ban.fetchFail" = "获取黑名单失败: %@";
+
+//common
+"common.delete" = "删除";
+"common.cancel" = "取消";
+"common.ok" = "确定";
+"common.groups" = "群组列表";
+"common.chatrooms" = "聊天室列表";
+"common.next" = "下一步";
+"common.done" = "完成";
+"common.cameraPhoto" = "拍照";
+"common.localPhoto" = "从相册选取图片";
+"common.edit" = "编辑";
+"common.remove" = "移除";
+"common.search" = "搜索";
+"common.open" = "打开";
+"common.searchFailure" = "搜索失败。";
+
+//message
+"message.friendapply.agree" = "%@同意了加好友申请";
+"message.friendapply.refuse" = "%@拒绝了加好友申请";
+"message.inputGroupSubject" = "请输入群组主题";
+"message.receiveMessage" = "您有一条新消息";
+"message.clear" = "清空所有消息";
+
+//apns
+"apns.failToRegisterApns" = "注册推送失败";
+"apns.failToBindDeviceToken" = "消息推送与设备绑定失败";
+"apns.content" = "推送内容";
+
+//network
+"network.disconnection" = "当前网络连接失败";
+
+//Chatroom detail
+"chatroom.somebodyInvite" = "%@ 邀请你加入聊天室\'%@\'";
+"chatroom.id" = "聊天室Id";
+"chatroom.owner" = "创建者";
+"chatroom.admins" = "管理员列表";
+"chatroom.onlineMembers" = "在线成员列表";
+"chatroom.blacklist" = "黑名单列表";
+"chatroom.mutes" = "被禁言成员列表";
+"chatroom.occupantCount" = "聊天室在线人数";
+"chatroom.subject" = "主题";
+"chatroom.description" = "描述";
+"chatroom.announcement" = "公告";
+"chatroom.joining" = "正在加入...";
+"chatroom.leaving" = "正在退出...";
+"chatroom.fetchInfoFail" = "获取聊天室详情失败";
+"chatroom.joinFailed" = "加入聊天室\'%@\'失败";
+"chatroom.join" = "\'%@\'加入聊天室\'%@\'";
+"chatroom.leave.hint" = "\'%@\'离开聊天室\'%@\'";
+"chatroom.remove" = "被踢出聊天室\'%@\'";
+"chatroom.create.inputName" = "请输入聊天室名称";
+"chatroom.create.inputDescribe" = "请输入聊天室简介";
+"chatroom.create.ongoing" = "创建聊天室...";
+"chatroom.create.success" = "创建聊天室成功";
+"chatroom.create.fail" = "创建聊天室失败，请重新操作";
+
+"chatroom.destroy" = "解散聊天室";
+"chatroom.leave" = "退出聊天室";
+"chatroom.destroyFail" = "解散聊天室失败";
+"chatroom.leaveFail" = "退出聊天室失败";
+
+"chatroom.changeOwner" = "更改Owner";
+"chatroom.changeSubject" = "更改主题";
+"chatroom.changeDes" = "更改描述";
+"chatroom.changeAnnouncement" = "更改公告";
+
+"chatroom.notifications" = "聊天室通知";
+"chatroom.memberToAdmin" = "%@ 升级为管理员";
+"chatroom.AdminToMember" = "%@ 降级为普通成员";
+"chatroom.mute.added" = "被加入禁言列表:";
+"chatroom.mute.removed" = "被移出禁言列表:";
+"chatroom.owner.updated" = "Owner由 %@ 变成 %@";
+"chatroom.announcementUpdate" = "聊天室公告更新";
+"chatroom.clearAnnouncement" = "聊天室:%@ 公告被删除";
+"chatroom.updateAnnouncement" = "聊天室:%@ 公告内容: %@";
