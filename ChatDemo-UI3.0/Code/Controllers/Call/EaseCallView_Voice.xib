@@ -1,10 +1,19 @@
-<?xml version="1.0" encoding="UTF-8" standalone="no"?>
-<document type="com.apple.InterfaceBuilder3.CocoaTouch.XIB" version="3.0" toolsVersion="11201" systemVersion="15F34" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" colorMatched="YES">
+<?xml version="1.0" encoding="UTF-8"?>
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.XIB" version="3.0" toolsVersion="13770" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" colorMatched="YES">
+    <device id="retina4_7" orientation="portrait">
+        <adaptation id="fullscreen"/>
+    </device>
     <dependencies>
         <deployment identifier="iOS"/>
-        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="11161"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="13770"/>
         <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
     </dependencies>
+    <customFonts key="customFonts">
+        <array key="HelveticaNeue.ttc">
+            <string>HelveticaNeue</string>
+            <string>HelveticaNeue-Medium</string>
+        </array>
+    </customFonts>
     <objects>
         <placeholder placeholderIdentifier="IBFilesOwner" id="-1" userLabel="File's Owner" customClass="EaseCallViewController">
             <connections>
@@ -27,16 +36,19 @@
             <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
             <subviews>
                 <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Username" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="yd5-wS-NN3">
+                    <rect key="frame" x="147.5" y="105" width="80.5" height="20.5"/>
                     <fontDescription key="fontDescription" name="HelveticaNeue-Medium" family="Helvetica Neue" pointSize="17"/>
                     <color key="textColor" red="1" green="1" blue="1" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                     <nil key="highlightedColor"/>
                 </label>
                 <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Calling" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="xXP-uL-8qo">
+                    <rect key="frame" x="164.5" y="145.5" width="46" height="17.5"/>
                     <fontDescription key="fontDescription" name="HelveticaNeue" family="Helvetica Neue" pointSize="15"/>
                     <color key="textColor" red="1" green="1" blue="1" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                     <nil key="highlightedColor"/>
                 </label>
                 <imageView userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="default_avatar.png" translatesAutoresizingMaskIntoConstraints="NO" id="hJs-XY-CIn">
+                    <rect key="frame" x="112.5" y="258.5" width="150" height="150"/>
                     <constraints>
                         <constraint firstAttribute="height" constant="150" id="mK4-vc-Yua"/>
                         <constraint firstAttribute="width" constant="150" id="o6F-W1-01B"/>
@@ -49,6 +61,7 @@
                     </userDefinedRuntimeAttributes>
                 </imageView>
                 <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="bB6-I0-Cla">
+                    <rect key="frame" x="94.5" y="492.5" width="25" height="22"/>
                     <constraints>
                         <constraint firstAttribute="height" constant="22" id="lXy-JA-PFY"/>
                         <constraint firstAttribute="width" constant="25" id="rUw-Tx-nNZ"/>
@@ -63,6 +76,7 @@
                     </connections>
                 </button>
                 <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="sjR-7e-TQK">
+                    <rect key="frame" x="256" y="490.5" width="16" height="25"/>
                     <constraints>
                         <constraint firstAttribute="width" constant="16" id="LeW-3k-3Bo"/>
                         <constraint firstAttribute="height" constant="25" id="VkB-bB-kjk"/>
@@ -75,6 +89,7 @@
                     </connections>
                 </button>
                 <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="1Rx-Ab-5mX">
+                    <rect key="frame" x="0.0" y="0.0" width="1000" height="1000"/>
                     <constraints>
                         <constraint firstAttribute="height" constant="25" id="NEM-6e-GuD"/>
                         <constraint firstAttribute="width" constant="25" id="v3a-mJ-NzD"/>
@@ -86,6 +101,7 @@
                     </connections>
                 </button>
                 <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="z7u-Zw-iSV">
+                    <rect key="frame" x="155" y="570" width="65" height="65"/>
                     <constraints>
                         <constraint firstAttribute="height" constant="65" id="ces-qT-Kex"/>
                         <constraint firstAttribute="width" constant="65" id="ghh-OG-DoT"/>
@@ -96,11 +112,13 @@
                     </connections>
                 </button>
                 <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="00:0" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="sAS-Fe-w1Z">
+                    <rect key="frame" x="158.5" y="145.5" width="58.5" height="35"/>
                     <fontDescription key="fontDescription" name="HelveticaNeue" family="Helvetica Neue" pointSize="30"/>
                     <color key="textColor" red="1" green="1" blue="1" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                     <nil key="highlightedColor"/>
                 </label>
                 <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="VEm-oM-Sbo">
+                    <rect key="frame" x="73" y="570" width="65" height="65"/>
                     <constraints>
                         <constraint firstAttribute="width" constant="65" id="AZJ-zy-o6B"/>
                         <constraint firstAttribute="height" constant="65" id="a9S-hz-i1b"/>
@@ -111,6 +129,7 @@
                     </connections>
                 </button>
                 <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="AYj-cd-f2H">
+                    <rect key="frame" x="238" y="570" width="65" height="65"/>
                     <constraints>
                         <constraint firstAttribute="height" constant="65" id="8UA-io-wmy"/>
                         <constraint firstAttribute="width" constant="65" id="x2a-BP-FD6"/>

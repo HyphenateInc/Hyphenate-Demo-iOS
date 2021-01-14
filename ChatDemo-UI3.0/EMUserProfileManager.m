@@ -152,7 +152,7 @@ static EMUserProfileManager *sharedInstance = nil;
             [object fetchIfNeeded];
         });
         NSData *imageData = UIImageJPEGRepresentation(img, 0.5);
-        PFFile *imageFile = [PFFile fileWithName:@"image.png" data:imageData];
+        PFFileObject *imageFile = [PFFileObject fileObjectWithName:@"image.png" data:imageData];
         object[kPARSE_HXUSER_AVATAR] = imageFile;
         __weak PFObject* weakObj = object;
         [object saveInBackgroundWithBlock:^(BOOL succeeded, NSError *error){
@@ -168,7 +168,7 @@ static EMUserProfileManager *sharedInstance = nil;
         [self queryPFObjectWithCompletion:^(PFObject *object, NSError *error) {
             if (object) {
                 NSData *imageData = UIImageJPEGRepresentation(img, 0.5);
-                PFFile *imageFile = [PFFile fileWithName:@"image.png" data:imageData];
+                PFFileObject *imageFile = [PFFileObject fileObjectWithName:@"image.png" data:imageData];
                 object[kPARSE_HXUSER_AVATAR] = imageFile;
                 __weak PFObject* weakObj = object;
                 [object saveInBackgroundWithBlock:^(BOOL succeeded, NSError *error){
@@ -374,7 +374,7 @@ static EMUserProfileManager *sharedInstance = nil;
     UserProfileEntity *entity = [[UserProfileEntity alloc] init];
     entity.username = object[kPARSE_HXUSER_USERNAME];
     entity.nickname = object[kPARSE_HXUSER_NICKNAME];
-    PFFile *userImageFile = object[kPARSE_HXUSER_AVATAR];
+    PFFileObject *userImageFile = object[kPARSE_HXUSER_AVATAR];
     if (userImageFile) {
         entity.imageUrl = userImageFile.url;
     }

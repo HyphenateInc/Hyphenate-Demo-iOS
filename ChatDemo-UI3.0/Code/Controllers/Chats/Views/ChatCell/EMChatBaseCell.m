@@ -224,7 +224,7 @@
             _resendButton.hidden = NO;
             _notDeliveredLabel.hidden = NO;
             
-        } else if (_model.message.status == EMMessageStatusSuccessed) {
+        } else if (_model.message.status == EMMessageStatusSucceed) {
             if (_model.message.isReadAcked) {
                 _readLabel.text = NSLocalizedString(@"chat.read", @"Read");
                 _checkView.hidden = NO;
