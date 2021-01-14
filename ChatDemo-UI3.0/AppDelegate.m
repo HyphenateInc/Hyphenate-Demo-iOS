@@ -19,9 +19,12 @@
 //#import <Crashlytics/Crashlytics.h>
 #import "AppDelegate+Parse.h"
 
+@import Firebase;
+
 @interface AppDelegate () <EMClientDelegate>
 
 @end
+
 
 @implementation AppDelegate
 
@@ -77,6 +80,9 @@
     
     // Fabric
 //    [Fabric with:@[[Crashlytics class]]];
+    
+    // Use Firebase library to configure APIs
+    [FIRApp configure];
     
     return YES;
 }
