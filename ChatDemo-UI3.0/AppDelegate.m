@@ -15,8 +15,8 @@
 #import "EMLaunchViewController.h"
 #import "EMChatDemoHelper.h"
 
-#import <Fabric/Fabric.h>
-#import <Crashlytics/Crashlytics.h>
+//#import <Fabric/Fabric.h>
+//#import <Crashlytics/Crashlytics.h>
 #import "AppDelegate+Parse.h"
 
 @import Firebase;
@@ -44,7 +44,7 @@
     [self parseApplication:application didFinishLaunchingWithOptions:launchOptions];
     
     // init HyphenateSDK
-    EMOptions *options = [EMOptions optionsWithAppkey:@"hyphenatedemo#hyphenatedemo"];
+    EMOptions *options = [EMOptions optionsWithAppkey:@"easemob-demo#chatdemoui"];
 
     // Hyphenate cert keys
     NSString *apnsCertName = nil;
@@ -79,7 +79,7 @@
     [self registerNotifications];
     
     // Fabric
-    [Fabric with:@[[Crashlytics class]]];
+//    [Fabric with:@[[Crashlytics class]]];
     
     // Use Firebase library to configure APIs
     [FIRApp configure];
@@ -161,7 +161,9 @@
         [[UNUserNotificationCenter currentNotificationCenter] requestAuthorizationWithOptions:UNAuthorizationOptionBadge | UNAuthorizationOptionSound | UNAuthorizationOptionAlert completionHandler:^(BOOL granted, NSError *error) {
             if (granted) {
 #if !TARGET_IPHONE_SIMULATOR
-                [application registerForRemoteNotifications];
+                dispatch_async(dispatch_get_main_queue(), ^{
+                    [application registerForRemoteNotifications];
+                });
 #endif
             }
         }];
