@@ -15,17 +15,6 @@ target 'ChatDemo-UI3.0' do
     pod 'MWPhotoBrowser', '~> 2.1.2'
     pod 'MJRefresh'
 
-<<<<<<< HEAD
-#   pod 'Firebase/Core'
-
-#    pod 'Fabric'
-#    pod 'Crashlytics'
-=======
-    pod 'Firebase/Core'
-    
-    pod 'Fabric'
-    pod 'Crashlytics'
->>>>>>> hyphenate/dev
 
     pod 'Parse'
 
