@@ -29,11 +29,12 @@
 #import "EMChatroomInfoViewController.h"
 #import "UIViewController+HUD.h"
 #import "NSObject+EMAlertView.h"
+#import <Masonry/Masonry.h>
 
-@interface EMChatViewController () <EMChatToolBarDelegate,UINavigationControllerDelegate,UIImagePickerControllerDelegate,EMLocationViewDelegate,EMChatManagerDelegate, EMChatroomManagerDelegate,EMChatBaseCellDelegate,UIActionSheetDelegate>
+@interface EMChatViewController () <EMChatToolBarDelegate,UINavigationControllerDelegate,UIImagePickerControllerDelegate,EMLocationViewDelegate,EMChatManagerDelegate, EMChatroomManagerDelegate,EMChatBaseCellDelegate,UIActionSheetDelegate, UITableViewDelegate, UITableViewDataSource>
 
-@property (weak, nonatomic) IBOutlet EMChatToolBar *chatToolBar;
-@property (weak, nonatomic) IBOutlet UITableView *tableView;
+@property (strong, nonatomic) EMChatToolBar *chatToolBar;
+@property (strong, nonatomic) UITableView *tableView;
 
 @property (strong, nonatomic) UIImagePickerController *imagePickerController;
 
@@ -77,8 +78,7 @@
     UITapGestureRecognizer *tap = [[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(keyBoardHidden:)];
     [self.view addGestureRecognizer:tap];
     
-    self.tableView.tableFooterView = [[UIView alloc] init];
-    [self.tableView addSubview:self.refresh];
+    [self setupSubviews];
     
     self.chatToolBar.delegate = self;
     [self tableViewDidTriggerHeaderRefresh];
@@ -91,6 +91,26 @@
     if (_conversation.type == EMConversationTypeChatRoom) {
         [self _joinChatroom:_conversation.conversationId];
     }
+}
+
+
+- (void)setupSubviews {
+    [self.tableView addSubview:self.refresh];
+    [self.view addSubview:self.tableView];
+    [self.view addSubview:self.chatToolBar];
+    [self.tableView mas_makeConstraints:^(MASConstraintMaker *make) {
+        make.top.equalTo(self.view);
+        make.left.equalTo(self.view);
+        make.right.equalTo(self.view);
+    }];
+    
+    [self.chatToolBar mas_makeConstraints:^(MASConstraintMaker *make) {
+        make.top.equalTo(self.tableView.mas_bottom).offset(0);
+        make.left.equalTo(self.view);
+        make.right.equalTo(self.view);
+        make.height.mas_equalTo(91);
+        make.bottom.equalTo(self.view.mas_bottom).offset(0);
+    }];
 }
 
 - (void)viewDidAppear:(BOOL)animated
@@ -145,6 +165,24 @@
 }
 
 #pragma mark - getter
+
+- (EMChatToolBar *)chatToolBar {
+    if (!_chatToolBar) {
+        _chatToolBar = [[NSBundle mainBundle] loadNibNamed:@"EMChatToolBar" owner:self options:nil].lastObject;
+    }
+    return _chatToolBar;
+}
+
+- (UITableView *)tableView {
+    if (!_tableView) {
+        _tableView = [[UITableView alloc] initWithFrame:CGRectZero];
+        _tableView.tableFooterView = [[UIView alloc] init];
+        _tableView.delegate = self;
+        _tableView.separatorStyle = UITableViewCellSeparatorStyleNone;
+        _tableView.dataSource = self;
+    }
+    return _tableView;
+}
 
 - (NSString*)conversationId
 {
@@ -271,8 +309,9 @@
 - (void)chatToolBarDidChangeFrameToHeight:(CGFloat)toHeight
 {
     [UIView animateWithDuration:0.25 animations:^{
-        self.tableView.top = 0.f;
-        self.tableView.height = self.view.frame.size.height - toHeight;
+        [self.chatToolBar mas_updateConstraints:^(MASConstraintMaker *make) {
+            make.bottom.equalTo(self.view).offset(-toHeight);
+        }];
     }];
     [self _scrollViewToBottom:NO];
 }
@@ -736,7 +775,7 @@
 - (void)keyBoardHidden:(UITapGestureRecognizer *)tapRecognizer
 {
     if (tapRecognizer.state == UIGestureRecognizerStateEnded) {
-        [self.chatToolBar endEditing:YES];
+        [self.view endEditing:YES];
     }
 }
 
@@ -785,9 +824,11 @@
 
 - (void)_scrollViewToBottom:(BOOL)animated
 {
-    if (self.tableView.contentSize.height > self.tableView.frame.size.height) {
-        CGPoint offset = CGPointMake(0, self.tableView.contentSize.height - self.tableView.frame.size.height);
-        [self.tableView setContentOffset:offset animated:animated];
+    if(_dataSource.count > 0){
+        dispatch_after(dispatch_time(DISPATCH_TIME_NOW, NSEC_PER_MSEC * 100), dispatch_get_main_queue(), ^{
+            NSIndexPath *indexpath = [NSIndexPath indexPathForRow:_dataSource.count-1 inSection:0];
+            [_tableView scrollToRowAtIndexPath:indexpath atScrollPosition:UITableViewScrollPositionBottom animated:animated];
+        });
     }
 }
 

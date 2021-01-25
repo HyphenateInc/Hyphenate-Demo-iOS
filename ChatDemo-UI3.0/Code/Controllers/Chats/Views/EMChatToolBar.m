@@ -14,7 +14,7 @@
 #import "EMConvertToCommonEmoticonsHelper.h"
 #import "EMFaceView.h"
 
-#define kDefaultToolBarHeight 83
+#define kDefaultToolBarHeight 91
 #define kDefaultTextViewWidth KScreenWidth - 30.f
 
 @interface EMChatToolBar () <UITextViewDelegate,EMChatRecordViewDelegate,EMFaceDelegate>
@@ -53,11 +53,10 @@
 {
     self = [super initWithCoder:aDecoder];
     if (self) {
-//        [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(chatKeyboardWillChangeFrame:) name:UIKeyboardWillChangeFrameNotification object:nil];
-        
-        [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(keyBoardWillShow:) name:UIKeyboardWillShowNotification object:nil];
-        [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(keyBoardWillHide:) name:UIKeyboardWillHideNotification object:nil];
-        
+        [[NSNotificationCenter defaultCenter] addObserver:self
+                                                 selector:@selector(keyboardWillChange:)
+                                                     name:UIKeyboardWillChangeFrameNotification
+                                                   object:nil];
     }
     return self;
 }
@@ -92,12 +91,6 @@
     CGContextSetFillColorWithColor(context, [UIColor clearColor].CGColor);
     CGContextFillRect(context, rect);
 
-//    CGContextSetStrokeColorWithColor(context, RGBACOLOR(189, 189, 189, 1).CGColor);
-//    CGContextStrokeRect(context, CGRectMake(0, 0, rect.size.width, 0.5));
-
-//    CGContextSetStrokeColorWithColor(context, RGBACOLOR(0xe5, 0xe5, 0xe5, 1).CGColor);
-//    CGContextStrokeRect(context, CGRectMake(0, rect.size.height - 0.5, rect.size.width, 0.5));
-    
     _inputTextView.width = kDefaultTextViewWidth;
 }
 #pragma mark - getter
@@ -227,32 +220,21 @@
 }
 
 #pragma mark - UIKeyboardNotification
-- (void)keyBoardWillShow:(NSNotification *)notification
-{
-    NSDictionary *userInfo = notification.userInfo;
+- (void)keyboardWillChange:(NSNotification *)aNoti {
+    NSDictionary *userInfo = aNoti.userInfo;
     CGRect endFrame = [userInfo[UIKeyboardFrameEndUserInfoKey] CGRectValue];
     CGRect beginFrame = [userInfo[UIKeyboardFrameBeginUserInfoKey] CGRectValue];
     CGFloat duration = [userInfo[UIKeyboardAnimationDurationUserInfoKey] doubleValue];
     UIViewAnimationCurve curve = [userInfo[UIKeyboardAnimationCurveUserInfoKey] integerValue];
-    
+    if (CGRectEqualToRect(beginFrame, endFrame)) {
+        return;
+    }
     void(^animations)() = ^{
         [self _willShowKeyboardFromFrame:beginFrame toFrame:endFrame];
     };
-    [UIView animateWithDuration:duration delay:0.0f options:(curve << 16 | UIViewAnimationOptionBeginFromCurrentState) animations:animations completion:nil];
-}
-
-- (void)keyBoardWillHide:(NSNotification *)notification
-{
-    NSDictionary *userInfo = notification.userInfo;
-    CGRect endFrame = [userInfo[UIKeyboardFrameEndUserInfoKey] CGRectValue];
-    CGRect beginFrame = [userInfo[UIKeyboardFrameBeginUserInfoKey] CGRectValue];
-    CGFloat duration = [userInfo[UIKeyboardAnimationDurationUserInfoKey] doubleValue];
-    UIViewAnimationCurve curve = [userInfo[UIKeyboardAnimationCurveUserInfoKey] integerValue];
-    
-    void(^animations)() = ^{
-        [self _willShowKeyboardFromFrame:beginFrame toFrame:endFrame];
-    };
-    [UIView animateWithDuration:duration delay:0.0f options:(curve << 16 | UIViewAnimationOptionBeginFromCurrentState) animations:animations completion:nil];
+    [UIView animateWithDuration:duration delay:0.0f
+                        options:(curve << 16 | UIViewAnimationOptionBeginFromCurrentState)
+                     animations:animations completion:nil];
 }
 
 #pragma mark - action
@@ -324,31 +306,18 @@
     }
 }
 
-#pragma mark - public
-
-- (BOOL)endEditing:(BOOL)force
-{
-    BOOL result = [super endEditing:force];
-    for (UIButton *button in self.moreItems) {
-        button.selected = NO;
-    }
-    [self _willShowBottomView:nil];
-    return result;
-}
-
-
 #pragma mark - private
 
 - (void)_willShowKeyboardFromFrame:(CGRect)beginFrame toFrame:(CGRect)toFrame
 {
+    NSLog(@"begin %@ -- end %@", NSStringFromCGRect(beginFrame), NSStringFromCGRect(toFrame));
     if (beginFrame.origin.y == KScreenHeight) {
         [self _willShowBottomHeight:toFrame.size.height];
         if (self.activityButtomView) {
             [self.activityButtomView removeFromSuperview];
         }
         self.activityButtomView = nil;
-    }
-    else if (toFrame.origin.y == KScreenHeight) {
+    } else if (toFrame.origin.y == KScreenHeight) {
         [self _willShowBottomHeight:0];
     } else{
         [self _willShowBottomHeight:toFrame.size.height];
@@ -360,12 +329,10 @@
     if (![self.activityButtomView isEqual:bottomView]) {
         CGFloat bottomHeight = bottomView ? bottomView.height : 0;
         [self _willShowBottomHeight:bottomHeight];
-        
         if (bottomView) {
             bottomView.top = kDefaultToolBarHeight;
             [self addSubview:bottomView];
         }
-        
         if (self.activityButtomView) {
             [self.activityButtomView removeFromSuperview];
         }
@@ -375,25 +342,7 @@
 
 - (void)_willShowBottomHeight:(CGFloat)bottomHeight
 {
-    CGRect fromFrame = self.frame;
-    CGFloat toHeight = kDefaultToolBarHeight + bottomHeight;
-    CGRect toFrame = CGRectMake(fromFrame.origin.x, fromFrame.origin.y + (fromFrame.size.height - toHeight), fromFrame.size.width, toHeight);
-    
-    if(bottomHeight == 0 && self.frame.size.height == kDefaultToolBarHeight) {
-        return;
-    }
-    
-    if (bottomHeight == 0) {
-        self.isShowButtomView = NO;
-    }
-    else{
-        self.isShowButtomView = YES;
-    }
-    
-    [UIView animateWithDuration:0.25 animations:^{
-       self.frame = toFrame;
-    }];
-    [self _willShowViewFromHeight:toHeight];
+    [self _willShowViewFromHeight:bottomHeight];
 }
 
 - (void)_willShowViewFromHeight:(CGFloat)toHeight
