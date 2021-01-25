@@ -112,6 +112,7 @@
 		71D4A1FB1D9C9359006FACB7 /* EMContactInfoCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = 71D4A1F31D9C9359006FACB7 /* EMContactInfoCell.xib */; };
 		71D4A1FC1D9C9359006FACB7 /* EMGroupTitleCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 71D4A1F51D9C9359006FACB7 /* EMGroupTitleCell.m */; };
 		71D4A1FD1D9C9359006FACB7 /* EMGroupTitleCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = 71D4A1F61D9C9359006FACB7 /* EMGroupTitleCell.xib */; };
+		90204E2B25BE7F4F00741616 /* EMChatToolBar.xib in Resources */ = {isa = PBXBuildFile; fileRef = 90204E2A25BE7F4F00741616 /* EMChatToolBar.xib */; };
 		C448516A1F42BDEA00DD8401 /* GoogleService-Info.plist in Resources */ = {isa = PBXBuildFile; fileRef = C44851691F42BDEA00DD8401 /* GoogleService-Info.plist */; };
 		C4D616A01E08B42C00E108A2 /* EMChatEmojiView.m in Sources */ = {isa = PBXBuildFile; fileRef = C4D6169F1E08B42C00E108A2 /* EMChatEmojiView.m */; };
 		C4D616A21E08B4AC00E108A2 /* EMChatEmojiView.xib in Resources */ = {isa = PBXBuildFile; fileRef = C4D616A11E08B4AC00E108A2 /* EMChatEmojiView.xib */; };
@@ -455,7 +456,6 @@
 		D2F372A91DD06DF400C726E7 /* EMFacialView.m in Sources */ = {isa = PBXBuildFile; fileRef = D2F372A71DD06DF400C726E7 /* EMFacialView.m */; };
 		D2F372AB1DD073A800C726E7 /* faceDelete@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = D2F372AA1DD073A800C726E7 /* faceDelete@2x.png */; };
 		D2F372AD1DD0755400C726E7 /* Location@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = D2F372AC1DD0755400C726E7 /* Location@2x.png */; };
-		D2F372AE1DD0777B00C726E7 /* EMChatViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = D2F372B01DD0777B00C726E7 /* EMChatViewController.xib */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -629,6 +629,7 @@
 		71D4A1F41D9C9359006FACB7 /* EMGroupTitleCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = EMGroupTitleCell.h; sourceTree = "<group>"; };
 		71D4A1F51D9C9359006FACB7 /* EMGroupTitleCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = EMGroupTitleCell.m; sourceTree = "<group>"; };
 		71D4A1F61D9C9359006FACB7 /* EMGroupTitleCell.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = EMGroupTitleCell.xib; sourceTree = "<group>"; };
+		90204E2A25BE7F4F00741616 /* EMChatToolBar.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = EMChatToolBar.xib; sourceTree = "<group>"; };
 		C44851691F42BDEA00DD8401 /* GoogleService-Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = "GoogleService-Info.plist"; sourceTree = "<group>"; };
 		C4D6169E1E08B42C00E108A2 /* EMChatEmojiView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = EMChatEmojiView.h; sourceTree = "<group>"; };
 		C4D6169F1E08B42C00E108A2 /* EMChatEmojiView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = EMChatEmojiView.m; sourceTree = "<group>"; };
@@ -1045,9 +1046,6 @@
 		D2F372A71DD06DF400C726E7 /* EMFacialView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = EMFacialView.m; sourceTree = "<group>"; };
 		D2F372AA1DD073A800C726E7 /* faceDelete@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "faceDelete@2x.png"; sourceTree = "<group>"; };
 		D2F372AC1DD0755400C726E7 /* Location@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "Location@2x.png"; sourceTree = "<group>"; };
-		D2F372AF1DD0777B00C726E7 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.xib; name = Base; path = Base.lproj/EMChatViewController.xib; sourceTree = "<group>"; };
-		D2F372B21DD0777D00C726E7 /* en */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = en; path = en.lproj/EMChatViewController.strings; sourceTree = "<group>"; };
-		D2F372B41DD0777F00C726E7 /* zh-Hans */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = "zh-Hans"; path = "zh-Hans.lproj/EMChatViewController.strings"; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -1581,7 +1579,6 @@
 				D28345491D900B2700FD48A9 /* EMChatsViewController.xib */,
 				D2AA4DF61D9398FF00967E0E /* EMChatViewController.h */,
 				D2AA4DF71D9398FF00967E0E /* EMChatViewController.m */,
-				D2F372B01DD0777B00C726E7 /* EMChatViewController.xib */,
 				D28360071D95559500EC7A4A /* EMLocationViewController.h */,
 				D28360081D95559500EC7A4A /* EMLocationViewController.m */,
 				D28360091D95559500EC7A4A /* EMLocationViewController.xib */,
@@ -1642,6 +1639,7 @@
 				D2AA4DE91D9271A600967E0E /* EMChatsCell.xib */,
 				D2835FEA1D94E80500EC7A4A /* EMChatToolBar.h */,
 				D2835FEB1D94E80500EC7A4A /* EMChatToolBar.m */,
+				90204E2A25BE7F4F00741616 /* EMChatToolBar.xib */,
 				D24510AB1D962A7E006DB36F /* EMChatRecordView.h */,
 				D24510AC1D962A7E006DB36F /* EMChatRecordView.m */,
 				D24510AE1D962D8D006DB36F /* EMChatRecordView.xib */,
@@ -2071,7 +2069,6 @@
 				D28344FD1D8FD1D400FD48A9 /* Resources */,
 				55F5D39191F1F5FF9BD4640B /* [CP] Embed Pods Frameworks */,
 				8F507D0BE0F752ED869E3A49 /* [CP] Copy Pods Resources */,
-				C49A80721DC09B7E008978A8 /* ShellScript */,
 			);
 			buildRules = (
 			);
@@ -2093,7 +2090,7 @@
 				TargetAttributes = {
 					D28344FE1D8FD1D400FD48A9 = {
 						CreatedOnToolsVersion = 8.0;
-						DevelopmentTeam = ZHZ4TMESQ4;
+						DevelopmentTeam = 499WYUV8Q2;
 						ProvisioningStyle = Automatic;
 						SystemCapabilities = {
 							com.apple.BackgroundModes = {
@@ -2111,6 +2108,7 @@
 			developmentRegion = English;
 			hasScannedForEncodings = 0;
 			knownRegions = (
+				English,
 				en,
 				Base,
 				"zh-Hans",
@@ -2152,6 +2150,7 @@
 				D2BF7EE31D914DB30090AA66 /* Chats_active.png in Resources */,
 				D2BF7E9B1D914DB30090AA66 /* Button_Record cancel.png in Resources */,
 				D2BF7F1C1D914DB30090AA66 /* logo4.png in Resources */,
+				90204E2B25BE7F4F00741616 /* EMChatToolBar.xib in Resources */,
 				D2BF7F161D914DB30090AA66 /* logo2.png in Resources */,
 				D2BF7E301D914DB30090AA66 /* Icon_New chat@2x.png in Resources */,
 				D2BF7E501D914DB30090AA66 /* Button_Upload Photo.png in Resources */,
@@ -2315,7 +2314,6 @@
 				D2BF7E4D1D914DB30090AA66 /* Button_Radio.png in Resources */,
 				D2BF7EB81D914DB30090AA66 /* Icon_Image@3x.png in Resources */,
 				D2BF7E761D914DB30090AA66 /* Button_Mute@3x.png in Resources */,
-				D2F372AE1DD0777B00C726E7 /* EMChatViewController.xib in Resources */,
 				D2BF7EF11D914DB30090AA66 /* Contacts_active@3x.png in Resources */,
 				D2BF7E651D914DB30090AA66 /* Button_End.png in Resources */,
 				D2BF7E731D914DB30090AA66 /* Button_Mute disabled@3x.png in Resources */,
@@ -2498,8 +2496,8 @@
 			files = (
 			);
 			inputPaths = (
-				"${SRCROOT}/Pods/Target Support Files/Pods-ChatDemo-UI3.0/Pods-ChatDemo-UI3.0-frameworks.sh",
-				"${PODS_ROOT}/Hyphenate/ios_IM_Hyphenate_sdk_3.3.4r1/HyphenateFullSDK/Hyphenate.framework",
+				"${PODS_ROOT}/Target Support Files/Pods-ChatDemo-UI3.0/Pods-ChatDemo-UI3.0-frameworks.sh",
+				"${PODS_ROOT}/Hyphenate/Hyphenate.framework",
 			);
 			name = "[CP] Embed Pods Frameworks";
 			outputPaths = (
@@ -2507,7 +2505,7 @@
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
-			shellScript = "\"${SRCROOT}/Pods/Target Support Files/Pods-ChatDemo-UI3.0/Pods-ChatDemo-UI3.0-frameworks.sh\"\n";
+			shellScript = "\"${PODS_ROOT}/Target Support Files/Pods-ChatDemo-UI3.0/Pods-ChatDemo-UI3.0-frameworks.sh\"\n";
 			showEnvVarsInLog = 0;
 		};
 		8F507D0BE0F752ED869E3A49 /* [CP] Copy Pods Resources */ = {
@@ -2516,32 +2514,21 @@
 			files = (
 			);
 			inputPaths = (
-				"${SRCROOT}/Pods/Target Support Files/Pods-ChatDemo-UI3.0/Pods-ChatDemo-UI3.0-resources.sh",
+				"${PODS_ROOT}/Target Support Files/Pods-ChatDemo-UI3.0/Pods-ChatDemo-UI3.0-resources.sh",
 				"${PODS_ROOT}/MJRefresh/MJRefresh/MJRefresh.bundle",
-				"$PODS_CONFIGURATION_BUILD_DIR/MWPhotoBrowser/MWPhotoBrowser.bundle",
-				"${PODS_ROOT}/Parse/Parse/Resources/en.lproj",
+				"${PODS_CONFIGURATION_BUILD_DIR}/MWPhotoBrowser/MWPhotoBrowser.bundle",
+				"${PODS_CONFIGURATION_BUILD_DIR}/Parse/Parse.bundle",
 			);
 			name = "[CP] Copy Pods Resources";
 			outputPaths = (
-				"${TARGET_BUILD_DIR}/${UNLOCALIZED_RESOURCES_FOLDER_PATH}",
+				"${TARGET_BUILD_DIR}/${UNLOCALIZED_RESOURCES_FOLDER_PATH}/MJRefresh.bundle",
+				"${TARGET_BUILD_DIR}/${UNLOCALIZED_RESOURCES_FOLDER_PATH}/MWPhotoBrowser.bundle",
+				"${TARGET_BUILD_DIR}/${UNLOCALIZED_RESOURCES_FOLDER_PATH}/Parse.bundle",
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
-			shellScript = "\"${SRCROOT}/Pods/Target Support Files/Pods-ChatDemo-UI3.0/Pods-ChatDemo-UI3.0-resources.sh\"\n";
+			shellScript = "\"${PODS_ROOT}/Target Support Files/Pods-ChatDemo-UI3.0/Pods-ChatDemo-UI3.0-resources.sh\"\n";
 			showEnvVarsInLog = 0;
-		};
-		C49A80721DC09B7E008978A8 /* ShellScript */ = {
-			isa = PBXShellScriptBuildPhase;
-			buildActionMask = 2147483647;
-			files = (
-			);
-			inputPaths = (
-			);
-			outputPaths = (
-			);
-			runOnlyForDeploymentPostprocessing = 0;
-			shellPath = /bin/sh;
-			shellScript = "\"${PODS_ROOT}/Fabric/run\" 33bb2bc04d2ed7f91da02025c362279e3406ed81 304f46ac0fe00b79b828480c3b23c6e0e44f35508cac25a01a191755ecb2f40b";
 		};
 /* End PBXShellScriptBuildPhase section */
 
@@ -2735,16 +2722,6 @@
 			name = Main.storyboard;
 			sourceTree = "<group>";
 		};
-		D2F372B01DD0777B00C726E7 /* EMChatViewController.xib */ = {
-			isa = PBXVariantGroup;
-			children = (
-				D2F372AF1DD0777B00C726E7 /* Base */,
-				D2F372B21DD0777D00C726E7 /* en */,
-				D2F372B41DD0777F00C726E7 /* zh-Hans */,
-			);
-			name = EMChatViewController.xib;
-			sourceTree = "<group>";
-		};
 /* End PBXVariantGroup section */
 
 /* Begin XCBuildConfiguration section */
@@ -2850,7 +2827,7 @@
 				CODE_SIGN_ENTITLEMENTS = "ChatDemo-UI3.0/ChatDemo-UI3.0.entitlements";
 				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
 				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
-				DEVELOPMENT_TEAM = ZHZ4TMESQ4;
+				DEVELOPMENT_TEAM = 499WYUV8Q2;
 				ENABLE_BITCODE = NO;
 				GCC_PRECOMPILE_PREFIX_HEADER = YES;
 				GCC_PREFIX_HEADER = "$(PROJECT_DIR)/ChatDemo-UI3.0/ChatDemo-UI3.0.pch";
@@ -2862,7 +2839,7 @@
 					"$(PROJECT_DIR)/ChatDemo-UI3.0/Code/Utilities/DeviceHelper/VoiceConvert/opencore-amrnb",
 					"$(PROJECT_DIR)/ChatDemo-UI3.0/Code/Utilities/DeviceHelper/VoiceConvert/opencore-amrwb",
 				);
-				PRODUCT_BUNDLE_IDENTIFIER = io.hyphenate.demo.im;
+				PRODUCT_BUNDLE_IDENTIFIER = com.easemob.enterprise.demo.ui;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 			};
 			name = Debug;
@@ -2876,7 +2853,7 @@
 				CLANG_WARN_DOCUMENTATION_COMMENTS = NO;
 				CODE_SIGN_ENTITLEMENTS = "ChatDemo-UI3.0/ChatDemo-UI3.0.entitlements";
 				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
-				DEVELOPMENT_TEAM = ZHZ4TMESQ4;
+				DEVELOPMENT_TEAM = 499WYUV8Q2;
 				ENABLE_BITCODE = NO;
 				GCC_PRECOMPILE_PREFIX_HEADER = YES;
 				GCC_PREFIX_HEADER = "$(PROJECT_DIR)/ChatDemo-UI3.0/ChatDemo-UI3.0.pch";
@@ -2888,7 +2865,7 @@
 					"$(PROJECT_DIR)/ChatDemo-UI3.0/Code/Utilities/DeviceHelper/VoiceConvert/opencore-amrnb",
 					"$(PROJECT_DIR)/ChatDemo-UI3.0/Code/Utilities/DeviceHelper/VoiceConvert/opencore-amrwb",
 				);
-				PRODUCT_BUNDLE_IDENTIFIER = io.hyphenate.demo.im;
+				PRODUCT_BUNDLE_IDENTIFIER = com.easemob.enterprise.demo.ui;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				PROVISIONING_PROFILE = "";
 				PROVISIONING_PROFILE_SPECIFIER = "";

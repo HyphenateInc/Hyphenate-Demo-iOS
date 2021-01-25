@@ -266,31 +266,27 @@
 
 - (void)displayPush:(UISwitch *)sender
 {
-    if (sender.isOn) {
-        _pushDisplayStyle = EMPushDisplayStyleMessageSummary;
-    } else {
-        _pushDisplayStyle = EMPushDisplayStyleSimpleBanner;
-    }
-    EMPushOptions *pushOptions = [[EMClient sharedClient] pushOptions];
-
-    pushOptions.displayStyle = _pushDisplayStyle;
-
+    
+    __block UISwitch *uiSwitch = sender;
     WEAK_SELF
-    [[EMClient sharedClient] updatePushNotificationOptionsToServerWithCompletion:^(EMError *aError) {
-        if (aError) {
-
-            if (pushOptions.displayStyle == EMPushDisplayStyleMessageSummary) {
-                pushOptions.displayStyle = EMPushDisplayStyleSimpleBanner;
-            } else {
-                pushOptions.displayStyle = EMPushDisplayStyleMessageSummary;
-            }
-            [sender setOn:!sender.isOn animated:YES];
-            if ([weakSelf needShowFailedAlert]) {
-                [weakSelf showAlertWithMessage:[NSString stringWithFormat:@"%@:%d", NSLocalizedString(@"setting.push.changeStyleFailed", @"Modify push displayStyle failed"), aError.code]];
-            }
+    dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), ^{
+        EMError *aError = nil;
+        if (uiSwitch.isOn) {
+            aError = [EMClient.sharedClient.pushManager updatePushDisplayStyle:EMPushDisplayStyleMessageSummary];
+        } else {
+            aError = [EMClient.sharedClient.pushManager updatePushDisplayStyle:EMPushDisplayStyleSimpleBanner];
         }
-    }];
-
+        
+        if (aError) {
+            dispatch_async(dispatch_get_main_queue(), ^{
+                [uiSwitch setOn:!uiSwitch.isOn animated:YES];
+                if ([weakSelf needShowFailedAlert]) {
+                    [weakSelf showAlertWithMessage:[NSString stringWithFormat:@"%@:%d", NSLocalizedString(@"setting.push.changeStyleFailed", @"Modify push displayStyle failed"), aError.code]];
+                }
+            });
+        }
+    });
+    
 }
 
 
@@ -305,32 +301,25 @@
 
 - (void)activePush:(UISwitch *)sender
 {
-    EMPushOptions *pushOptions = [[EMClient sharedClient] pushOptions];
-    if (sender.isOn) {
-        _noDisturbStatus = EMPushNoDisturbStatusDay;
-        pushOptions.noDisturbingStartH = 0;
-        pushOptions.noDisturbingEndH = 24;
-    } else {
-        _noDisturbStatus = EMPushNoDisturbStatusClose;
-    }
-    pushOptions.noDisturbStatus = _noDisturbStatus;
-    NSLog(@"%d",pushOptions.noDisturbStatus);
-
+    __block UISwitch *uiSwitch = sender;
     WEAK_SELF
-    [[EMClient sharedClient] updatePushNotificationOptionsToServerWithCompletion:^(EMError *aError) {
-        if (aError) {
-                
-            if (pushOptions.noDisturbStatus == EMPushNoDisturbStatusDay) {
-                pushOptions.noDisturbStatus = EMPushNoDisturbStatusClose;
-            } else {
-                pushOptions.noDisturbStatus = EMPushNoDisturbStatusDay;
-            }
-            [sender setOn:!sender.isOn animated:YES];
-            if ([weakSelf needShowFailedAlert]) {
-                [weakSelf showAlertWithMessage:[NSString stringWithFormat:@"%@:%d",NSLocalizedString(@"setting.push.changeDisturbFailed", @"Modify noDisturb status failed"),aError.code]];
-            }
+    dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), ^{
+        EMError *aError = nil;
+        if (uiSwitch.isOn) {
+            aError = [EMClient.sharedClient.pushManager disableOfflinePushStart:0 end:24];
+        } else {
+            aError = [EMClient.sharedClient.pushManager enableOfflinePush];
         }
-    }];
+        
+        if (aError) {
+            dispatch_async(dispatch_get_main_queue(), ^{
+                [uiSwitch setOn:!uiSwitch.isOn animated:YES];
+                if ([weakSelf needShowFailedAlert]) {
+                    [weakSelf showAlertWithMessage:[NSString stringWithFormat:@"%@:%d",NSLocalizedString(@"setting.push.changeDisturbFailed", @"Modify noDisturb status failed"),aError.code]];
+                }
+            });
+        }
+    });
 }
 
 
