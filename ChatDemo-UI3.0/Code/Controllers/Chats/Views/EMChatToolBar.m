@@ -100,6 +100,8 @@
     if (_recordView == nil) {
         _recordView = (EMChatRecordView*)[[[NSBundle mainBundle]loadNibNamed:@"EMChatRecordView" owner:nil options:nil] firstObject];
         _recordView.delegate = self;
+//        _recordView.backgroundColor = UIColor.blueColor;
+//        _recordView.alpha = 0.5;
     }
     return _recordView;
 }
@@ -111,6 +113,8 @@
         [_faceView setDelegate:self];
         _faceView.backgroundColor = [UIColor colorWithRed:240 / 255.0 green:242 / 255.0 blue:247 / 255.0 alpha:1.0];
         _faceView.autoresizingMask = UIViewAutoresizingFlexibleTopMargin;
+//        _faceView.backgroundColor = UIColor.yellowColor;
+//        _faceView.alpha = 0.8;
     }
     return _faceView;
 }
@@ -263,6 +267,7 @@
         }
     }
     if (button.selected) {
+        [self.faceView setHeight:187.f];
         [self.inputTextView resignFirstResponder];
         [self _willShowBottomView:self.faceView];
     } else {
@@ -329,6 +334,7 @@
     if (![self.activityButtomView isEqual:bottomView]) {
         CGFloat bottomHeight = bottomView ? bottomView.height : 0;
         [self _willShowBottomHeight:bottomHeight];
+
         if (bottomView) {
             bottomView.top = kDefaultToolBarHeight;
             [self addSubview:bottomView];

@@ -34,6 +34,7 @@
         _pageControl = [[UIPageControl alloc] init];
         [self addSubview:_scrollview];
         [self addSubview:_pageControl];
+        [self loadFacialView];
     }
     return self;
 }

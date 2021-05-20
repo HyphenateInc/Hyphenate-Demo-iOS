@@ -29,3 +29,4 @@
 - (void)setEmojiManagers:(NSArray*)emojiManagers;
 
 @end
+

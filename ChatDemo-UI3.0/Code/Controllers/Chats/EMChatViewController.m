@@ -80,7 +80,6 @@
     
     [self setupSubviews];
     
-    self.chatToolBar.delegate = self;
     [self tableViewDidTriggerHeaderRefresh];
     
     [[EMClient sharedClient].chatManager addDelegate:self delegateQueue:nil];
@@ -169,6 +168,8 @@
 - (EMChatToolBar *)chatToolBar {
     if (!_chatToolBar) {
         _chatToolBar = [[NSBundle mainBundle] loadNibNamed:@"EMChatToolBar" owner:self options:nil].lastObject;
+        _chatToolBar.delegate = self;
+//        _chatToolBar.backgroundColor = UIColor.redColor;
     }
     return _chatToolBar;
 }
@@ -310,8 +311,9 @@
 {
     [UIView animateWithDuration:0.25 animations:^{
         [self.chatToolBar mas_updateConstraints:^(MASConstraintMaker *make) {
-            make.bottom.equalTo(self.view).offset(-toHeight);
-        }];
+            make.height.mas_equalTo(91+toHeight);
+//            make.bottom.equalTo(self.view).offset(-toHeight);
+      }];
     }];
     [self _scrollViewToBottom:NO];
 }
