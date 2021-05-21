@@ -8,7 +8,7 @@
  */
 
 #import "UIImageView+HeadImage.h"
-#import "EMUserProfileManager.h"
+#import "AgoraUserProfileManager.h"
 
 @implementation UIImageView (HeadImage)
 
@@ -17,7 +17,7 @@
     if (placeholderImage == nil) {
         placeholderImage = [UIImage imageNamed:@"default_avatar"];
     }
-    UserProfileEntity *profileEntity = [[EMUserProfileManager sharedInstance] getUserProfileByUsername:username];
+    UserProfileEntity *profileEntity = [[AgoraUserProfileManager sharedInstance] getUserProfileByUsername:username];
     if (profileEntity) {
         [self sd_setImageWithURL:[NSURL URLWithString:profileEntity.imageUrl] placeholderImage:placeholderImage];
     } else {

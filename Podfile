@@ -10,7 +10,7 @@ source 'https://github.com/CocoaPods/Specs.git'
 
 target 'ChatDemo-UI3.0' do
     
-    pod 'Hyphenate'
+#    pod 'Hyphenate'
 
     pod 'MWPhotoBrowser', '~> 2.1.2'
     pod 'MJRefresh'

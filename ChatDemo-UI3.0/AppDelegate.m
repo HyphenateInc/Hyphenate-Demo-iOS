@@ -3,17 +3,17 @@
  * __________________
  * Copyright (C) 2016 Hyphenate Inc. All rights reserved.
  *
- * NOTICE: All information contained herein is, and remains
+ * NOTICE: All information contained herein is, and rAgoraains
  * the property of Hyphenate Inc.
  */
 
 #import "AppDelegate.h"
 
 #import <UserNotifications/UserNotifications.h>
-#import "EMMainViewController.h"
-#import "EMLoginViewController.h"
-#import "EMLaunchViewController.h"
-#import "EMChatDemoHelper.h"
+#import "AgoraMainViewController.h"
+#import "AgoraLoginViewController.h"
+#import "AgoraLaunchViewController.h"
+#import "AgoraChatDEMoHelper.h"
 
 //#import <Fabric/Fabric.h>
 //#import <Crashlytics/Crashlytics.h>
@@ -21,7 +21,7 @@
 
 //@import Firebase;
 
-@interface AppDelegate () <EMClientDelegate>
+@interface AppDelegate () <AgoraChatClientDelegate>
 
 @end
 
@@ -44,7 +44,11 @@
     [self parseApplication:application didFinishLaunchingWithOptions:launchOptions];
     
     // init HyphenateSDK
-    EMOptions *options = [EMOptions optionsWithAppkey:@"easemob-demo#chatdemoui"];
+    AgoraOptions *options = [AgoraOptions optionsWithAppkey:@"easemob-demo#chatdemoui"];
+//    AgoraOptions *options = [AgoraOptions optionsWithAppkey:@"1118210518231124#demo"];
+
+   
+    
 
     // Hyphenate cert keys
     NSString *apnsCertName = nil;
@@ -60,18 +64,18 @@
     [options setIsDeleteMessagesWhenExitChatRoom:NO];
     [options setUsingHttpsOnly:YES];
     
-    [[EMClient sharedClient] initializeSDKWithOptions:options];
+    [[AgoraChatClient sharedClient] initializeSDKWithOptions:options];
     
     [[NSNotificationCenter defaultCenter] addObserver:self
                                              selector:@selector(loginStateChange:)
                                                  name:KNOTIFICATION_LOGINCHANGE
                                                object:nil];
     
-    [EaseCallManager sharedManager];
+//    [EaseCallManager sharedManager];
     
     self.window = [[UIWindow alloc] initWithFrame:[UIScreen mainScreen].bounds];
     self.window.backgroundColor = [UIColor whiteColor];
-    EMLaunchViewController *launch = [[EMLaunchViewController alloc] init];
+    AgoraLaunchViewController *launch = [[AgoraLaunchViewController alloc] init];
     self.window.rootViewController = launch;
     [self.window makeKeyAndVisible];
     
@@ -92,57 +96,57 @@
     BOOL loginSuccess = [notification.object boolValue];
     if (loginSuccess) {
 
-        EMMainViewController *main = [[EMMainViewController alloc] init];
+        AgoraMainViewController *main = [[AgoraMainViewController alloc] init];
         UINavigationController *navigationController = [[UINavigationController alloc] initWithRootViewController:main];
         navigationController.interactivePopGestureRecognizer.delegate = (id)self;
         self.window.rootViewController = navigationController;
-        [EMChatDemoHelper shareHelper].mainVC = main;
+        [AgoraChatDemoHelper shareHelper].mainVC = main;
         
     } else {
-        EMLoginViewController *login = [[EMLoginViewController alloc] init];
+        AgoraLoginViewController *login = [[AgoraLoginViewController alloc] init];
         self.window.rootViewController = login;
-        [EMChatDemoHelper shareHelper].mainVC = nil;
+        [AgoraChatDemoHelper shareHelper].mainVC = nil;
     }
 }
 
 
 - (void)applicationDidEnterBackground:(UIApplication *)application
 {
-    [[EMClient sharedClient] applicationDidEnterBackground:application];
+    [[AgoraChatClient sharedClient] applicationDidEnterBackground:application];
 }
 
 
 - (void)applicationWillEnterForeground:(UIApplication *)application
 {
-    [[EMClient sharedClient] applicationWillEnterForeground:application];
+    [[AgoraChatClient sharedClient] applicationWillEnterForeground:application];
     
-    if ([EMChatDemoHelper shareHelper].pushVC) {
-        [[EMChatDemoHelper shareHelper].pushVC reloadNotificationStatus];
+    if ([AgoraChatDemoHelper shareHelper].pushVC) {
+        [[AgoraChatDemoHelper shareHelper].pushVC reloadNotificationStatus];
     }
     
-    if ([EMChatDemoHelper shareHelper].settingsVC) {
-        [[EMChatDemoHelper shareHelper].settingsVC reloadNotificationStatus];
+    if ([AgoraChatDemoHelper shareHelper].settingsVC) {
+        [[AgoraChatDemoHelper shareHelper].settingsVC reloadNotificationStatus];
     }
 }
 
 - (void)application:(UIApplication *)application didReceiveLocalNotification:(UILocalNotification *)notification
 {
-    if ([EMChatDemoHelper shareHelper].mainVC) {
-        [[EMChatDemoHelper shareHelper].mainVC didReceiveLocalNotification:notification];
+    if ([AgoraChatDemoHelper shareHelper].mainVC) {
+        [[AgoraChatDemoHelper shareHelper].mainVC didReceiveLocalNotification:notification];
     }
 }
 
-#pragma mark - Remote Notification Registration
+#pragma mark - RAgoraote Notification Registration
 
-- (void)application:(UIApplication *)application didRegisterForRemoteNotificationsWithDeviceToken:(NSData *)deviceToken
+- (void)application:(UIApplication *)application didRegisterForRAgoraoteNotificationsWithDeviceToken:(NSData *)deviceToken
 {
-    [[EMClient sharedClient] registerForRemoteNotificationsWithDeviceToken:deviceToken
-                                                                completion:^(EMError *aError) {
+    [[AgoraChatClient sharedClient] registerForRemoteNotificationsWithDeviceToken:deviceToken
+                                                                completion:^(AgoraError *aError) {
         
     }];
 }
 
-- (void)application:(UIApplication *)application didFailToRegisterForRemoteNotificationsWithError:(NSError *)error
+- (void)application:(UIApplication *)application didFailToRegisterForRAgoraoteNotificationsWithError:(NSError *)error
 {
     UIAlertView *alert = [[UIAlertView alloc] initWithTitle:NSLocalizedString(@"apns.failToRegisterApns", @"Fail to register apns")
                                                     message:error.description
@@ -178,7 +182,7 @@
     }
     
 #if !TARGET_IPHONE_SIMULATOR
-    if ([application respondsToSelector:@selector(registerForRemoteNotifications)]) {
+    if ([application respondsToSelector:@selector(registerForRAgoraoteNotifications)]) {
         [application registerForRemoteNotifications];
     }
 #endif
@@ -190,17 +194,17 @@
 - (void)registerNotifications
 {
     [self unregisterNotifications];
-    [[EMClient sharedClient] addDelegate:self delegateQueue:nil];
+    [[AgoraChatClient sharedClient] addDelegate:self delegateQueue:nil];
 }
 
 - (void)unregisterNotifications
 {
-    [[EMClient sharedClient] removeDelegate:self];
+    [[AgoraChatClient sharedClient] removeDelegate:self];
 }
 
-#pragma mark - EMClientDelegate
+#pragma mark - AgoraChatClientDelegate
 
-- (void)autoLoginDidCompleteWithError:(EMError *)aError
+- (void)autoLoginDidCompleteWithError:(AgoraError *)aError
 {
 #if DEBUG
     NSString *alertMsg = aError == nil ? NSLocalizedString(@"login.endAutoLogin.succeed", @"Automatic login succeed") : NSLocalizedString(@"login.endAutoLogin.failure", @"Automatic login failed");

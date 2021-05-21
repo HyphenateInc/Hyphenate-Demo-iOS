@@ -12,7 +12,7 @@
 
 #import "AppDelegate+Parse.h"
 #import <Parse/Parse.h>
-#import "EMUserProfileManager.h"
+#import "AgoraUserProfileManager.h"
 
 @implementation AppDelegate (Parse)
 
@@ -47,12 +47,12 @@
 
 - (void)initParse
 {
-    [[EMUserProfileManager sharedInstance] initParse];
+    [[AgoraUserProfileManager sharedInstance] initParse];
 }
 
 - (void)clearParse
 {
-    [[EMUserProfileManager sharedInstance] clearParse];
+    [[AgoraUserProfileManager sharedInstance] clearParse];
 }
 
 @end
