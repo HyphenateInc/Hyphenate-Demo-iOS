@@ -411,7 +411,9 @@
     return sectionHeader;
 }
 
-#pragma mark - UISearchBarDelegate
+#pragma mark
+
+
 
 - (BOOL)searchBarShouldBeginEditing:(UISearchBar *)searchBar {
     [searchBar setShowsCancelButton:YES animated:YES];

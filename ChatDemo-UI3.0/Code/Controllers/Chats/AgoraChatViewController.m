@@ -29,11 +29,15 @@
 #import "AgoraChatroomInfoViewController.h"
 #import "UIViewController+HUD.h"
 #import "NSObject+AgoraAlertView.h"
-#import <Masonry/Masonry.h>
+#import "AgoraChatToolBar.h"
 
-@interface AgoraChatViewController () <AgoraChatToolBarDelegate,UINavigationControllerDelegate,UIImagePickerControllerDelegate,AgoraLocationViewDelegate,AgoraChatManagerDelegate, AgoraChatroomManagerDelegate,AgoraChatBaseCellDelegate,UIActionSheetDelegate, UITableViewDelegate, UITableViewDataSource>
 
+@interface AgoraChatViewController () <UINavigationControllerDelegate,UIImagePickerControllerDelegate,AgoraLocationViewDelegate,AgoraChatManagerDelegate, AgoraChatroomManagerDelegate,AgoraChatBaseCellDelegate,UIActionSheetDelegate, UITableViewDelegate, UITableViewDataSource,AgoraChatToolBarNewDelegate>
+
+
+//@property (strong, nonatomic) AgoraChatToolBar *chatToolBar;
 @property (strong, nonatomic) AgoraChatToolBar *chatToolBar;
+
 @property (strong, nonatomic) UITableView *tableView;
 
 @property (strong, nonatomic) UIImagePickerController *imagePickerController;
@@ -49,6 +53,7 @@
 @property (strong, nonatomic) AgoraConversation *conversation;
 @property (strong, nonatomic) AgoraMessageModel *prevAudioModel;
 
+
 @end
 
 @implementation AgoraChatViewController
@@ -57,10 +62,6 @@
 {
     self = [super init];
     if (self) {
-        if ([UIDevice currentDevice].systemVersion.floatValue >= 7) {
-            self.edgesForExtendedLayout = UIRectEdgeNone;
-        }
-        
         _conversation = [[AgoraChatClient sharedClient].chatManager getConversation:conversationId type:type createIfNotExist:YES];
         [_conversation markAllMessagesAsRead:nil];
     }
@@ -70,7 +71,8 @@
 - (void)viewDidLoad
 {
     [super viewDidLoad];
-    // Do any additional setup after loading the view from its nib.
+    
+    self.view.backgroundColor = UIColor.whiteColor;
     
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(endChatWithConversationId:) name:KAgora_END_CHAT object:nil];
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(deleteAllMessages:) name:KNOTIFICATIONNAME_DELETEALLMESSAGE object:nil];
@@ -81,11 +83,11 @@
     [self setupSubviews];
     
     [self tableViewDidTriggerHeaderRefresh];
-    
+    [self _setupNavigationBar];
+
     [[AgoraChatClient sharedClient].chatManager addDelegate:self delegateQueue:nil];
     [[AgoraChatClient sharedClient].roomManager addDelegate:self delegateQueue:nil];
     
-    [self _setupNavigationBar];
     
     if (_conversation.type == AgoraConversationTypeChatRoom) {
         [self _joinChatroom:_conversation.conversationId];
@@ -101,14 +103,15 @@
         make.top.equalTo(self.view);
         make.left.equalTo(self.view);
         make.right.equalTo(self.view);
+        make.bottom.equalTo(self.chatToolBar.mas_top);
+
     }];
     
     [self.chatToolBar mas_makeConstraints:^(MASConstraintMaker *make) {
-        make.top.equalTo(self.tableView.mas_bottom).offset(0);
         make.left.equalTo(self.view);
         make.right.equalTo(self.view);
         make.height.mas_equalTo(91);
-        make.bottom.equalTo(self.view.mas_bottom).offset(0);
+        make.bottom.equalTo(self.view);
     }];
 }
 
@@ -165,11 +168,19 @@
 
 #pragma mark - getter
 
-- (AgoraChatToolBar *)chatToolBar {
-    if (!_chatToolBar) {
-        _chatToolBar = [[NSBundle mainBundle] loadNibNamed:@"AgoraChatToolBar" owner:self options:nil].lastObject;
-        _chatToolBar.delegate = self;
+//- (AgoraChatToolBar *)chatToolBar {
+//    if (!_chatToolBar) {
+//        _chatToolBar = [[NSBundle mainBundle] loadNibNamed:@"AgoraChatToolBar" owner:self options:nil].lastObject;
+//        _chatToolBar.delegate = self;
 //        _chatToolBar.backgroundColor = UIColor.redColor;
+//    }
+//    return _chatToolBar;
+//}
+
+- (AgoraChatToolBar *)chatToolBar {
+    if (_chatToolBar == nil) {
+        _chatToolBar = [[AgoraChatToolBar alloc] initWithFrame:CGRectMake(0, 0, KScreenWidth, 180.0)];
+        _chatToolBar.delegate = self;
     }
     return _chatToolBar;
 }

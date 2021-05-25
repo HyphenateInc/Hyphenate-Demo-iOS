@@ -29,9 +29,7 @@
     self = [super initWithFrame:frame];
     if (self) {
         _facialView = [[AgoraFacialView alloc] initWithFrame: CGRectMake(0, 0, frame.size.width, 150)];
-//        [_facialView loadFacialView:1 size:CGSizeMake(30, 30)];
         _facialView.delegate = self;
-
         [self addSubview:_facialView];
         [self _setupButtom];
     }

@@ -23,13 +23,11 @@
 @class EaseEmojiManager;
 
 @interface AgoraFacialView : UIView
-{
-	NSMutableArray *_faces;
-}
+
 
 @property(nonatomic) id<AgoraFacialViewDelegate> delegate;
 
-@property(strong, nonatomic, readonly) NSArray *faces;
+@property(strong, nonatomic, readonly) NSMutableArray *faces;
 
 - (void)loadFacialView;
 

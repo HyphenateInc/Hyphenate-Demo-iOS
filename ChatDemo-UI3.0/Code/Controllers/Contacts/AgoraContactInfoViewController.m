@@ -50,16 +50,12 @@
     self.automaticallyAdjustsScrollViewInsets = NO;
     self.tableView.tableHeaderView = _headerView;
     self.tableView.tableFooterView = [UIView new];
-    _nicknameLabel.text = _model.nickname;
-    _avatarImage.image = _model.defaultAvatarImage;
-    if (_model.avatarURLPath.length > 0) {
-        NSURL *avatarUrl = [NSURL URLWithString:_model.avatarURLPath];
-        [_avatarImage sd_setImageWithURL:avatarUrl placeholderImage:_model.defaultAvatarImage];
-    }
-    
+  
     [self loadContactInfo];
     
+
 }
+
 
 - (void)viewWillAppear:(BOOL)animated {
     [super viewWillAppear:animated];
@@ -71,6 +67,17 @@
 }
 
 - (void)loadContactInfo {
+    _nicknameLabel.text = _model.nickname;
+    _avatarImage.image = _model.defaultAvatarImage;
+    if (_model.avatarURLPath.length > 0) {
+        NSURL *avatarUrl = [NSURL URLWithString:_model.avatarURLPath];
+        [_avatarImage sd_setImageWithURL:avatarUrl placeholderImage:_model.defaultAvatarImage];
+    }
+    
+    [self buildTableViewData];
+}
+
+- (void)buildTableViewData {
     NSMutableArray *info = [NSMutableArray array];
     [info addObjectsFromArray:@[@{NAME:_model.nickname}, @{HYPHENATE_ID:_model.hyphenateId}]];
     if ([_model.hyphenateId isEqualToString:[AgoraChatClient sharedClient].currentUsername]) {

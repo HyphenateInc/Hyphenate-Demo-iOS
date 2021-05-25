@@ -1,3 +1,11 @@
+//
+//  AgroaChatToolNew.h
+//  ChatDemo-UI3.0
+//
+//  Created by liujinliang on 2021/5/24.
+//  Copyright © 2021 easemob. All rights reserved.
+//
+
 /************************************************************
  *  * Hyphenate
  * __________________
@@ -9,7 +17,7 @@
 
 #import <UIKit/UIKit.h>
 
-@protocol AgoraChatToolBarDelegate <NSObject>
+@protocol AgoraChatToolBarNewDelegate <NSObject>
 
 @optional
 
@@ -31,6 +39,6 @@
 
 @interface AgoraChatToolBar : UIView
 
-@property (weak, nonatomic) id<AgoraChatToolBarDelegate> delegate;
+@property (weak, nonatomic) id<AgoraChatToolBarNewDelegate> delegate;
 
-@end
+    @end

@@ -14,94 +14,253 @@
 #import "AgoraConvertToCommonEmoticonsHelper.h"
 #import "AgoraFaceView.h"
 
+typedef enum : NSUInteger {
+    AgoraChatToolStateNone,
+    AgoraChatToolStateTextInput,
+    AgoraChatToolStateFaceView,
+    AgoraChatToolStateRecordView,
+} AgoraChatToolState;
+
 #define kDefaultToolBarHeight 91
 #define kDefaultTextViewWidth KScreenWidth - 30.f
+#define kChatBoolContentViewHeight 187.0
+#define kSendButtonWidth 50.0
 
 @interface AgoraChatToolBar () <UITextViewDelegate,AgoraChatRecordViewDelegate,AgoraFaceDelegate>
 
-@property (strong, nonatomic) UIView *activityButtomView;
-@property (nonatomic) BOOL isShowButtomView;
+@property (nonatomic,strong) UIView *activityButtomView;
+@property (nonatomic,strong)  AgoraMessageTextView *inputTextView;
 
-@property (weak, nonatomic) IBOutlet AgoraMessageTextView *inputTextView;
+@property (nonatomic,strong)  UIButton *cameraButton;
+@property (nonatomic,strong)  UIButton *photoButton;
+@property (nonatomic,strong)  UIButton *emojiButton;
+@property (nonatomic,strong)  UIButton *recordButton;
+@property (nonatomic,strong)  UIButton *locationButton;
+@property (nonatomic,strong)  UIButton *fileButton;
+@property (nonatomic,strong)  UIButton *sendButton;
+@property (nonatomic,strong)  UIView *line;
 
-@property (weak, nonatomic) IBOutlet UIButton *cameraButton;
-@property (weak, nonatomic) IBOutlet UIButton *photoButton;
-@property (weak, nonatomic) IBOutlet UIButton *emojiButton;
-@property (weak, nonatomic) IBOutlet UIButton *recordButton;
-@property (weak, nonatomic) IBOutlet UIButton *locationButton;
-@property (weak, nonatomic) IBOutlet UIButton *fileButton;
-@property (weak, nonatomic) IBOutlet UIButton *sendButton;
-@property (weak, nonatomic) IBOutlet UIView *line;
+@property (nonatomic,strong) AgoraChatRecordView *recordView;
+@property (nonatomic,strong) AgoraFaceView *faceView;
 
-@property (strong, nonatomic) AgoraChatRecordView *recordView;
-@property (strong, nonatomic) AgoraFaceView *faceView;
+@property (nonatomic,strong) NSMutableArray *moreItems;
+@property (nonatomic,assign) AgoraChatToolState toolState;
 
-@property (strong, nonatomic) NSMutableArray *moreItems;
-
-- (IBAction)cameraAction:(id)sender;
-- (IBAction)photoAction:(id)sender;
-- (IBAction)locationAction:(id)sender;
-- (IBAction)recordAction:(id)sender;
-- (IBAction)emojiAction:(id)sender;
-- (IBAction)sendAction:(id)sender;
+- (void)cameraAction:(id)sender;
+- (void)photoAction:(id)sender;
+- (void)locationAction:(id)sender;
+- (void)recordAction:(id)sender;
+- (void)emojiAction:(id)sender;
+- (void)sendAction:(id)sender;
 
 @end
 
 @implementation AgoraChatToolBar
-
-- (id)initWithCoder:(NSCoder *)aDecoder
-{
-    self = [super initWithCoder:aDecoder];
+#pragma mark life cycle
+- (instancetype)initWithFrame:(CGRect)frame {
+    self = [super initWithFrame:frame];
     if (self) {
+        self.backgroundColor = UIColor.clearColor;
+        
         [[NSNotificationCenter defaultCenter] addObserver:self
                                                  selector:@selector(keyboardWillChange:)
                                                      name:UIKeyboardWillChangeFrameNotification
                                                    object:nil];
+        
+        self.toolState = AgoraChatToolStateNone;
+        [self placeAndLayoutSubviews];
+
     }
     return self;
 }
+
 
 - (void)dealloc {
     [[NSNotificationCenter defaultCenter] removeObserver:self name:UIKeyboardWillChangeFrameNotification object:nil];
 }
 
-- (void)layoutSubviews
-{
-    [super layoutSubviews];
+
+- (void)placeAndLayoutSubviews {
+
+    [self addSubview:self.line];
+    [self addSubview:self.inputTextView];
+    [self addSubview:self.sendButton];
+    [self addSubview:self.cameraButton];
+    [self addSubview:self.photoButton];
+    [self addSubview:self.emojiButton];
+    [self addSubview:self.recordButton];
+    [self addSubview:self.locationButton];
+    [self addSubview:self.faceView];
+    [self addSubview:self.recordView];
     
-    _inputTextView.layer.borderColor = TextViewBorderColor.CGColor;
-    _inputTextView.layer.borderWidth = 0.5;
     
-    _cameraButton.left = (KScreenWidth/5 - _cameraButton.width)/2;
-    _photoButton.left = (KScreenWidth/5 - _photoButton.width)/2 + KScreenWidth/5 * 1;
-    _emojiButton.left = (KScreenWidth/5 - _emojiButton.width)/2 + KScreenWidth/5 * 2;
-    _recordButton.left = (KScreenWidth/5 - _recordButton.width)/2 + KScreenWidth/5 * 3;
-    _locationButton.left = (KScreenWidth/5 - _locationButton.width)/2 + KScreenWidth/5 * 4;
+    [self.line mas_makeConstraints:^(MASConstraintMaker *make) {
+        make.top.equalTo(self);
+        make.left.right.equalTo(self);
+        make.height.mas_equalTo(1.0/[UIScreen mainScreen].scale);
+    }];
     
-    _inputTextView.placeHolder = NSLocalizedString(@"chat.placeHolder", @"Send Message");
-    _inputTextView.placeHolderTextColor = CoolGrayColor;
-    _line.width = KScreenWidth;
+    [self.inputTextView mas_makeConstraints:^(MASConstraintMaker *make) {
+        make.top.equalTo(self.line.mas_bottom).offset(kAgroaPadding);
+        make.left.equalTo(self).offset(kAgroaPadding * 1.5);
+        make.right.equalTo(self.sendButton.mas_left).offset(-kAgroaPadding * 1.5);
+        make.height.mas_equalTo(34.0);
+    }];
     
-    _sendButton.left = KScreenWidth - _sendButton.width - 15.f;
+    [self.sendButton mas_makeConstraints:^(MASConstraintMaker *make) {
+        make.centerY.equalTo(self.inputTextView);
+        make.left.equalTo(self.mas_right);
+        make.width.mas_equalTo(kSendButtonWidth);
+        make.height.equalTo(self.inputTextView);
+    }];
+    
+    
+    CGFloat buttonWidth = (KScreenWidth - kAgroaPadding * 2)/5.0;
+    [self.cameraButton mas_makeConstraints:^(MASConstraintMaker *make) {
+        make.top.equalTo(self.inputTextView.mas_bottom).offset(kAgroaPadding);
+        make.left.mas_equalTo(self).offset(kAgroaPadding);
+        make.width.mas_equalTo(buttonWidth);
+        make.height.mas_equalTo(22.0);
+    }];
+    
+    [self.photoButton mas_makeConstraints:^(MASConstraintMaker *make) {
+        make.top.equalTo(self.cameraButton);
+        make.left.equalTo(self.cameraButton.mas_right);
+        make.size.equalTo(self.cameraButton);
+    }];
+    
+    [self.emojiButton mas_makeConstraints:^(MASConstraintMaker *make) {
+        make.top.equalTo(self.cameraButton);
+        make.left.equalTo(self.photoButton.mas_right);
+        make.size.equalTo(self.cameraButton);
+    }];
+    
+    [self.recordButton mas_makeConstraints:^(MASConstraintMaker *make) {
+        make.top.equalTo(self.cameraButton);
+        make.left.equalTo(self.emojiButton.mas_right);
+        make.size.equalTo(self.cameraButton);
+    }];
+    
+    [self.locationButton mas_makeConstraints:^(MASConstraintMaker *make) {
+        make.top.equalTo(self.cameraButton);
+        make.left.equalTo(self.recordButton.mas_right);
+        make.size.equalTo(self.cameraButton);
+    }];
+        
+    [self.faceView mas_makeConstraints:^(MASConstraintMaker *make) {
+        make.left.equalTo(self);
+        make.right.equalTo(self);
+        make.height.mas_equalTo(0);
+        make.bottom.equalTo(self);
+    }];
+    
+    [self.recordView mas_makeConstraints:^(MASConstraintMaker *make) {
+        make.left.equalTo(self);
+        make.right.equalTo(self);
+        make.height.mas_equalTo(0);
+        make.bottom.equalTo(self);
+    }];
+    
+    self.faceView.hidden = YES;
+    self.recordView.hidden = YES;
+
 }
 
-- (void)drawRect:(CGRect)rect
-{
-    CGContextRef context = UIGraphicsGetCurrentContext();
-    CGContextSetFillColorWithColor(context, [UIColor clearColor].CGColor);
-    CGContextFillRect(context, rect);
-
-    _inputTextView.width = kDefaultTextViewWidth;
+#pragma mark - getter and setter
+- (UIView *)line {
+    if (_line == nil) {
+        _line = UIView.new;
+        _line.backgroundColor = CoolGrayColor;
+    }
+    return _line;
 }
-#pragma mark - getter
+
+- (AgoraMessageTextView *)inputTextView {
+    if (_inputTextView == nil) {
+        _inputTextView = [[AgoraMessageTextView alloc] initWithFrame:CGRectZero];
+        _inputTextView.layer.borderColor = TextViewBorderColor.CGColor;
+        _inputTextView.layer.borderWidth = 0.5;
+        _inputTextView.placeHolder = NSLocalizedString(@"chat.placeHolder", @"Send Message");
+        _inputTextView.placeHolderTextColor = CoolGrayColor;
+        _inputTextView.delegate = self;
+    }
+    return _inputTextView;
+}
+
+- (UIButton *)sendButton {
+    if (_sendButton == nil) {
+        _sendButton = [[UIButton alloc] initWithFrame:CGRectZero];
+        [_sendButton setTitle:@"send" forState:UIControlStateNormal];
+        [_sendButton setTitleColor:KermitGreenTwoColor forState:UIControlStateNormal];
+        _sendButton.layer.cornerRadius = 5.0;
+        [_sendButton addTarget:self action:@selector(sendAction:) forControlEvents:UIControlEventTouchUpInside];
+        _sendButton.hidden = YES;
+    }
+    return _sendButton;
+}
+
+- (UIButton *)photoButton {
+    if (_photoButton == nil) {
+        _photoButton = [[UIButton alloc] initWithFrame:CGRectZero];
+        _photoButton.layer.cornerRadius = 5.0;
+        [_photoButton setImage:[UIImage imageNamed:@"Icon_Image"] forState:UIControlStateNormal];
+        [_photoButton setImage:[UIImage imageNamed:@"Icon_Image active"] forState:UIControlStateSelected];
+        [_photoButton addTarget:self action:@selector(photoAction:) forControlEvents:UIControlEventTouchUpInside];
+    }
+    return _photoButton;
+}
+
+- (UIButton *)cameraButton {
+    if (_cameraButton == nil) {
+        _cameraButton = [[UIButton alloc] initWithFrame:CGRectZero];
+        _cameraButton.layer.cornerRadius = 5.0;
+        [_cameraButton setImage:[UIImage imageNamed:@"Icon_Camera"] forState:UIControlStateNormal];
+        [_cameraButton setImage:[UIImage imageNamed:@"Icon_Camera active"] forState:UIControlStateSelected];
+        [_cameraButton addTarget:self action:@selector(cameraAction:) forControlEvents:UIControlEventTouchUpInside];
+    }
+    return _cameraButton;
+}
+
+- (UIButton *)emojiButton {
+    if (_emojiButton == nil) {
+        _emojiButton = UIButton.new;
+        _emojiButton = [[UIButton alloc] initWithFrame:CGRectZero];
+        _emojiButton.layer.cornerRadius = 5.0;
+        [_emojiButton setImage:[UIImage imageNamed:@"icon_emoji_disable"] forState:UIControlStateNormal];
+        [_emojiButton setImage:[UIImage imageNamed:@"Icon_Emoji"] forState:UIControlStateSelected];
+        [_emojiButton addTarget:self action:@selector(emojiAction:) forControlEvents:UIControlEventTouchUpInside];
+    }
+    return _emojiButton;
+}
+
+- (UIButton *)recordButton {
+    if (_recordButton == nil) {
+        _recordButton = [[UIButton alloc] initWithFrame:CGRectZero];
+        _recordButton.layer.cornerRadius = 5.0;
+        [_recordButton setImage:[UIImage imageNamed:@"Icon_Audio_disable"] forState:UIControlStateNormal];
+        [_recordButton setImage:[UIImage imageNamed:@"Icon_Audio"] forState:UIControlStateSelected];
+        [_recordButton addTarget:self action:@selector(recordAction:) forControlEvents:UIControlEventTouchUpInside];
+    }
+    return _recordButton;
+}
+
+- (UIButton *)locationButton {
+    if (_locationButton == nil) {
+        _locationButton = [[UIButton alloc] initWithFrame:CGRectZero];
+        _locationButton.layer.cornerRadius = 5.0;
+        [_locationButton setImage:[UIImage imageNamed:@"Icon_Location_disable"] forState:UIControlStateNormal];
+        [_locationButton setImage:[UIImage imageNamed:@"Icon_Location"] forState:UIControlStateSelected];
+        [_locationButton addTarget:self action:@selector(locationAction:) forControlEvents:UIControlEventTouchUpInside];
+    }
+    return _locationButton;
+}
+
 
 - (AgoraChatRecordView*)recordView
 {
     if (_recordView == nil) {
         _recordView = (AgoraChatRecordView*)[[[NSBundle mainBundle]loadNibNamed:@"AgoraChatRecordView" owner:nil options:nil] firstObject];
         _recordView.delegate = self;
-//        _recordView.backgroundColor = UIColor.blueColor;
-//        _recordView.alpha = 0.5;
     }
     return _recordView;
 }
@@ -111,10 +270,7 @@
     if (_faceView == nil) {
         _faceView = [[AgoraFaceView alloc] initWithFrame:CGRectMake(0, 0, self.frame.size.width, 180)];
         [_faceView setDelegate:self];
-        _faceView.backgroundColor = [UIColor colorWithRed:240 / 255.0 green:242 / 255.0 blue:247 / 255.0 alpha:1.0];
-        _faceView.autoresizingMask = UIViewAutoresizingFlexibleTopMargin;
-//        _faceView.backgroundColor = UIColor.yellowColor;
-//        _faceView.alpha = 0.8;
+        _faceView.backgroundColor = [UIColor colorWithRed:240 / 255.0 green:242 / 255.0 blue:247 / 255.0 alpha:1.0];        
     }
     return _faceView;
 }
@@ -122,10 +278,12 @@
 - (NSMutableArray*)moreItems
 {
     if (_moreItems == nil) {
-        _moreItems = [NSMutableArray arrayWithArray:@[self.cameraButton,self.photoButton,self.emojiButton,self.recordButton,self.locationButton,self.fileButton]];
+        _moreItems = [NSMutableArray arrayWithArray:@[self.cameraButton,self.photoButton,self.emojiButton,self.recordButton,self.locationButton]];
     }
     return _moreItems;
 }
+
+
 
 #pragma mark - UITextViewDelegate
 
@@ -144,20 +302,29 @@
 
 - (void)textViewDidBeginEditing:(UITextView *)textView
 {
-    _sendButton.hidden = NO;
+
+    self.emojiButton.selected = self.recordButton.selected = NO;
+    self.toolState = AgoraChatToolStateTextInput;
+
     [UIView animateWithDuration:0.25 animations:^{
-        [_inputTextView setNeedsDisplay];
-        _inputTextView.width = kDefaultTextViewWidth - _sendButton.width - 15.f;
+        self.sendButton.hidden = NO;
+        [self.sendButton mas_updateConstraints:^(MASConstraintMaker *make) {
+            make.left.equalTo(self.mas_right).offset(-kAgroaPadding * 1.5 - kSendButtonWidth);
+        }];
     }];
+    
 }
+    
 
 - (void)textViewDidEndEditing:(UITextView *)textView
 {
-    _sendButton.hidden = YES;
     [UIView animateWithDuration:0.25 animations:^{
-        [_inputTextView setNeedsDisplay];
-        _inputTextView.width = kDefaultTextViewWidth;
+        self.sendButton.hidden = YES;
+        [self.sendButton mas_updateConstraints:^(MASConstraintMaker *make) {
+            make.left.equalTo(self.mas_right);
+        }];
     }];
+    
 }
 
 - (void)textViewDidChange:(UITextView *)textView
@@ -243,47 +410,23 @@
 
 #pragma mark - action
 
-- (IBAction)cameraAction:(id)sender
+- (void)cameraAction:(id)sender
 {
     if (self.delegate && [self.delegate respondsToSelector:@selector(didTakePhotos)]) {
         [self.delegate didTakePhotos];
     }
 }
 
-- (IBAction)photoAction:(id)sender
+- (void)photoAction:(id)sender
 {
     if (self.delegate && [self.delegate respondsToSelector:@selector(didSelectPhotos)]) {
         [self.delegate didSelectPhotos];
     }
 }
 
-- (IBAction)emojiAction:(id)sender
+- (void)emojiAction:(id)sender
 {
-    UIButton *button = (UIButton*)sender;
-    button.selected = !button.selected;
-    for (UIButton *btn in self.moreItems) {
-        if (button != btn) {
-            btn.selected = NO;
-        }
-    }
-    if (button.selected) {
-        [self.faceView setHeight:187.f];
-        [self.inputTextView resignFirstResponder];
-        [self _willShowBottomView:self.faceView];
-    } else {
-        [self _willShowBottomView:nil];
-    }
-}
 
-- (IBAction)locationAction:(id)sender
-{
-    if (self.delegate && [self.delegate respondsToSelector:@selector(didSelectLocation)]) {
-        [self.delegate didSelectLocation];
-    }
-}
-
-- (IBAction)recordAction:(id)sender
-{
     UIButton *button = (UIButton*)sender;
     button.selected = !button.selected;
     for (UIButton *btn in self.moreItems) {
@@ -293,15 +436,46 @@
     }
     
     if (button.selected) {
-        [self.recordView setHeight:187.f];
+        self.toolState = AgoraChatToolStateFaceView;
         [self.inputTextView resignFirstResponder];
-        [self _willShowBottomView:self.recordView];
     } else {
-        [self _willShowBottomView:nil];
+        self.toolState = AgoraChatToolStateNone;
+    }
+
+    [self _willShowBottomView:self.faceView];
+}
+
+- (void)locationAction:(id)sender
+{
+    if (self.delegate && [self.delegate respondsToSelector:@selector(didSelectLocation)]) {
+        [self.delegate didSelectLocation];
     }
 }
 
-- (IBAction)sendAction:(id)sender
+- (void)recordAction:(id)sender
+{
+    self.toolState = AgoraChatToolStateRecordView;
+    
+    UIButton *button = (UIButton*)sender;
+    button.selected = !button.selected;
+    for (UIButton *btn in self.moreItems) {
+        if (button != btn) {
+            btn.selected = NO;
+        }
+    }
+    
+    if (button.selected) {
+        [self.inputTextView resignFirstResponder];
+        self.toolState = AgoraChatToolStateRecordView;
+    } else {
+        self.toolState = AgoraChatToolStateNone;
+    }
+
+    [self _willShowBottomView:self.recordView];
+
+}
+
+- (void)sendAction:(id)sender
 {
     if (_inputTextView.text.length > 0) {
         if (self.delegate && [self.delegate respondsToSelector:@selector(didSendText:)]) {
@@ -311,39 +485,80 @@
     }
 }
 
-#pragma mark - private
-
+#pragma mark - private method
 - (void)_willShowKeyboardFromFrame:(CGRect)beginFrame toFrame:(CGRect)toFrame
 {
     NSLog(@"begin %@ -- end %@", NSStringFromCGRect(beginFrame), NSStringFromCGRect(toFrame));
     if (beginFrame.origin.y == KScreenHeight) {
         [self _willShowBottomHeight:toFrame.size.height];
-        if (self.activityButtomView) {
-            [self.activityButtomView removeFromSuperview];
-        }
-        self.activityButtomView = nil;
+
     } else if (toFrame.origin.y == KScreenHeight) {
+        [self.faceView mas_updateConstraints:^(MASConstraintMaker *make) {
+            make.height.mas_equalTo(0);
+        }];
+        
+        [self.recordView mas_updateConstraints:^(MASConstraintMaker *make) {
+            make.height.mas_equalTo(0);
+        }];
+        
         [self _willShowBottomHeight:0];
+        
     } else{
         [self _willShowBottomHeight:toFrame.size.height];
     }
+
 }
 
 - (void)_willShowBottomView:(UIView *)bottomView
 {
-    if (![self.activityButtomView isEqual:bottomView]) {
-        CGFloat bottomHeight = bottomView ? bottomView.height : 0;
-        [self _willShowBottomHeight:bottomHeight];
 
-        if (bottomView) {
-            bottomView.top = kDefaultToolBarHeight;
-            [self addSubview:bottomView];
-        }
-        if (self.activityButtomView) {
-            [self.activityButtomView removeFromSuperview];
-        }
-        self.activityButtomView = bottomView;
+    if (self.toolState == AgoraChatToolStateFaceView) {
+        [self.faceView mas_updateConstraints:^(MASConstraintMaker *make) {
+            make.height.mas_equalTo(kChatBoolContentViewHeight);
+        }];
+        
+        [self.recordView mas_updateConstraints:^(MASConstraintMaker *make) {
+            make.height.mas_equalTo(0);
+        }];
+        
+        self.faceView.hidden = NO;
+        self.recordView.hidden = YES;
+
+        [self _willShowBottomHeight:kChatBoolContentViewHeight];
+
     }
+    
+    if (self.toolState == AgoraChatToolStateRecordView) {
+        [self.faceView mas_updateConstraints:^(MASConstraintMaker *make) {
+            make.height.mas_equalTo(0);
+        }];
+        
+        [self.recordView mas_updateConstraints:^(MASConstraintMaker *make) {
+            make.height.mas_equalTo(kChatBoolContentViewHeight);
+        }];
+        
+        self.faceView.hidden = YES;
+        self.recordView.hidden = NO;
+
+        [self _willShowBottomHeight:kChatBoolContentViewHeight];
+
+    }
+    
+    
+    if (self.toolState == AgoraChatToolStateNone) {
+        [self.faceView mas_updateConstraints:^(MASConstraintMaker *make) {
+            make.height.mas_equalTo(0);
+        }];
+        
+        [self.recordView mas_updateConstraints:^(MASConstraintMaker *make) {
+            make.height.mas_equalTo(0);
+        }];
+        
+        self.faceView.hidden = self.recordView.hidden = YES;
+        
+        [self _willShowBottomHeight:0];
+    }
+    
 }
 
 - (void)_willShowBottomHeight:(CGFloat)bottomHeight
@@ -358,4 +573,58 @@
     }
 }
 
+
+
+//- (void)_willShowKeyboardFromFrame:(CGRect)beginFrame toFrame:(CGRect)toFrame
+//{
+//    NSLog(@"begin %@ -- end %@", NSStringFromCGRect(beginFrame), NSStringFromCGRect(toFrame));
+//    if (beginFrame.origin.y == KScreenHeight) {
+//        [self _willShowBottomHeight:toFrame.size.height];
+//        if (self.activityButtomView) {
+//            [self.activityButtomView removeFromSuperview];
+//        }
+//        self.activityButtomView = nil;
+//    } else if (toFrame.origin.y == KScreenHeight) {
+//        [self _willShowBottomHeight:0];
+//    } else{
+//        [self _willShowBottomHeight:toFrame.size.height];
+//    }
+//}
+//
+//- (void)_willShowBottomView:(UIView *)bottomView
+//{
+//    if (![self.activityButtomView isEqual:bottomView]) {
+//        CGFloat bottomHeight = bottomView ? bottomView.height : 0;
+//        [self _willShowBottomHeight:bottomHeight];
+//
+//        if (bottomView) {
+//            bottomView.top = kDefaultToolBarHeight;
+//            [self addSubview:bottomView];
+//        }
+//        if (self.activityButtomView) {
+//            [self.activityButtomView removeFromSuperview];
+//        }
+//        self.activityButtomView = bottomView;
+//    }
+//}
+//
+//- (void)_willShowBottomHeight:(CGFloat)bottomHeight
+//{
+//    [self _willShowViewFromHeight:bottomHeight];
+//}
+//
+//- (void)_willShowViewFromHeight:(CGFloat)toHeight
+//{
+//    if (self.delegate && [self.delegate respondsToSelector:@selector(chatToolBarDidChangeFrameToHeight:)]) {
+//        [self.delegate chatToolBarDidChangeFrameToHeight:toHeight];
+//    }
+//}
+
+
+
 @end
+
+#undef kDefaultToolBarHeight
+#undef kDefaultTextViewWidth
+#undef kChatBoolContentViewHeight
+#undef kSendButtonWidth

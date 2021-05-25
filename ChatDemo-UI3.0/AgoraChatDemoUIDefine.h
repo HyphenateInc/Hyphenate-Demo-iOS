@@ -22,4 +22,7 @@
 #define KNOTIFICATIONNAME_DELETEALLMESSAGE @"RemoveAllMessages"
 #define KNOTIFICATION_CALL @"callOutWithChatter"
 
+#define kAgroaPadding 10.0f
+
+
 #endif /* EMChatDemoUIDefine_h */

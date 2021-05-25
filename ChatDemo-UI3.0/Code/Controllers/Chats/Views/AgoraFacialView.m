@@ -15,6 +15,7 @@
 
 @property (nonatomic, strong) UIScrollView *scrollview;
 @property (nonatomic, strong) UIPageControl *pageControl;
+@property (nonatomic, strong) NSMutableArray *faces;;
 
 @end
 
@@ -24,17 +25,11 @@
 {
     self = [super initWithFrame:frame];
     if (self) {
-        _faces = [NSMutableArray arrayWithArray:[AgoraEmoji allEmoji]];
-        _scrollview = [[UIScrollView alloc] initWithFrame:frame];
-        _scrollview.pagingEnabled = YES;
-        _scrollview.showsHorizontalScrollIndicator = NO;
-        _scrollview.showsVerticalScrollIndicator = NO;
-        _scrollview.alwaysBounceHorizontal = YES;
-        _scrollview.delegate = self;
-        _pageControl = [[UIPageControl alloc] init];
-        [self addSubview:_scrollview];
-        [self addSubview:_pageControl];
+        self.scrollview.frame = frame;
+        [self addSubview:self.scrollview];
+        [self addSubview:self.pageControl];
         [self loadFacialView];
+        
     }
     return self;
 }
@@ -56,7 +51,7 @@
     frame.size.height -= itemHeight;
     _scrollview.frame = frame;
     
-    NSInteger totalPage = [_faces count]%pageSize == 0 ? [_faces count]/pageSize : [_faces count]/pageSize + 1;
+    NSInteger totalPage = [self.faces count]%pageSize == 0 ? [self.faces count]/pageSize : [self.faces count]/pageSize + 1;
     [_scrollview setContentSize:CGSizeMake(totalPage * CGRectGetWidth(self.frame), itemHeight * (maxRow - 1))];
     
     _pageControl.currentPage = 0;
@@ -68,15 +63,15 @@
             for (int col = 0; col < maxCol; col++) {
                 NSInteger index = i * pageSize + row * maxCol + col;
                 if (index != 0 && (index - (pageSize-1))%pageSize == 0) {
-                    [_faces insertObject:@"" atIndex:index];
+                    [self.faces insertObject:@"" atIndex:index];
                     break;
                 }
-                if (index < [_faces count]) {
+                if (index < [self.faces count]) {
                     UIButton *button = [UIButton buttonWithType:UIButtonTypeCustom];
                     [button setBackgroundColor:[UIColor clearColor]];
                     [button setFrame:CGRectMake(i * CGRectGetWidth(self.frame) + col * itemWidth, row * itemHeight, itemWidth, itemHeight)];
                     [button.titleLabel setFont:[UIFont fontWithName:@"AppleColorEmoji" size:29.0]];
-                    [button setTitle: [_faces objectAtIndex:index] forState:UIControlStateNormal];
+                    [button setTitle: [self.faces objectAtIndex:index] forState:UIControlStateNormal];
                     [button addTarget:self action:@selector(selected:) forControlEvents:UIControlEventTouchUpInside];
                     button.tag = index;
                     [_scrollview addSubview:button];
@@ -95,6 +90,8 @@
         [deleteButton addTarget:self action:@selector(selected:) forControlEvents:UIControlEventTouchUpInside];
         [_scrollview addSubview:deleteButton];
     }
+    
+
 }
 
 
@@ -103,7 +100,7 @@
     if (bt.tag == 10000 && _delegate) {
         [_delegate deleteSelected:nil];
     } else{
-        NSString *str = [_faces objectAtIndex:bt.tag];
+        NSString *str = [self.faces objectAtIndex:bt.tag];
         if (_delegate) {
             [_delegate selectedFacialView:str];
         }
@@ -122,7 +119,7 @@
     if (bt.tag == 10000 && _delegate) {
         [_delegate deleteSelected:nil];
     }else{
-        NSString *str = [_faces objectAtIndex:bt.tag];
+        NSString *str = [self.faces objectAtIndex:bt.tag];
         if (_delegate) {
             str = [NSString stringWithFormat:@"\\::%@]",str];
             [_delegate selectedFacialView:str];
@@ -132,7 +129,7 @@
 
 - (void)sendGifAction:(UIButton*)bt
 {
-    NSString *str = [_faces objectAtIndex:bt.tag];
+    NSString *str = [self.faces objectAtIndex:bt.tag];
     if (_delegate) {
         [_delegate sendFace:str];
     }
@@ -148,6 +145,36 @@
         int page = offset.x / CGRectGetWidth(scrollView.frame);
         _pageControl.currentPage = page;
     }
+}
+
+#pragma mark getter and setter
+
+- (UIScrollView *)scrollview {
+    if (_scrollview == nil) {
+        _scrollview = [[UIScrollView alloc] init];
+        _scrollview.pagingEnabled = YES;
+        _scrollview.showsHorizontalScrollIndicator = NO;
+        _scrollview.showsVerticalScrollIndicator = NO;
+        _scrollview.alwaysBounceHorizontal = YES;
+        _scrollview.delegate = self;
+    }
+    return  _scrollview;
+}
+
+
+- (NSMutableArray *)faces {
+    if (_faces == nil) {
+        _faces = [NSMutableArray arrayWithArray:[AgoraEmoji allEmoji]];
+    }
+    return _faces;
+}
+
+
+- (UIPageControl *)pageControl {
+    if (_pageControl == nil) {
+        _pageControl = [[UIPageControl alloc] init];
+    }
+    return _pageControl;
 }
 
 @end
