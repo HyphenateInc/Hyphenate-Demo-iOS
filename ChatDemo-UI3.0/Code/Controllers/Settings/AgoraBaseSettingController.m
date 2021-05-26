@@ -18,13 +18,18 @@
 - (void)viewDidLoad
 {
     [super viewDidLoad];
+    [self setupTableView];
+    [self setupNavigationBar];
+}
+
+
+- (void)setupTableView {
     self.tableView.backgroundColor = PaleGrayColor;
     self.tableView.tableFooterView = [[UIView alloc] init];
     self.tableView.separatorStyle = UITableViewCellSeparatorStyleSingleLine;
     self.tableView.separatorColor = CoolGrayColor50;
     self.tableView.scrollEnabled = NO;
 }
-
 
 - (void)tableView:(UITableView *)tableView willDisplayCell:(UITableViewCell *)cell forRowAtIndexPath:(NSIndexPath *)indexPath
 {
@@ -44,7 +49,7 @@
     return 45;
 }
 
-- (void)configBackButton
+- (void)setupNavigationBar
 {
     UIButton *backButton = [[UIButton alloc] initWithFrame:CGRectMake(0, 0, 8, 15)];
     [backButton setImage:[UIImage imageNamed:@"Icon_Back"] forState:UIControlStateNormal];
@@ -56,5 +61,6 @@
 {
     [self.navigationController popViewControllerAnimated:YES];
 }
+
 
 @end

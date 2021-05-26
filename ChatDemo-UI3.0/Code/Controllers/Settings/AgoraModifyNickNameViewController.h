@@ -10,11 +10,10 @@
 #import "AgoraBaseSettingController.h"
 
 typedef void(^UpdatedMyName)(NSString *newName);
-@interface AgoraNameViewController : AgoraBaseSettingController
+@interface AgoraModifyNickNameViewController : AgoraBaseSettingController
 
-@property (nonatomic, copy) NSString *myName;
+@property (nonatomic, copy) NSString *myNickName;
 
 @property (nonatomic, copy)UpdatedMyName callBack;
 
-- (void)getUpdatedMyName:(UpdatedMyName)callBack;
 @end

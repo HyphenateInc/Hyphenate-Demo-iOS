@@ -27,7 +27,7 @@
 
 - (void)viewDidLoad {
     [super viewDidLoad];
-    [self configBackButton];
+    [self setupNavigationBar];
     [self loadOptions];
     
 }

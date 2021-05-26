@@ -11,6 +11,8 @@
 
 @interface AgoraBaseSettingController : UITableViewController
 
-- (void)configBackButton;
+- (void)setupNavigationBar;
+
+- (void)setupTableView;
 
 @end

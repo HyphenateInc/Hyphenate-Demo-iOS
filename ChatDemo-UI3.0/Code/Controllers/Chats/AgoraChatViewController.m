@@ -156,7 +156,8 @@
     self.navigationItem.leftBarButtonItem = [[UIBarButtonItem alloc] initWithCustomView:self.backButton];
     
     if (_conversation.type == AgoraConversationTypeChat) {
-        self.navigationItem.rightBarButtonItems = @[[[UIBarButtonItem alloc] initWithCustomView:self.photoButton],[[UIBarButtonItem alloc] initWithCustomView:self.camButton]];
+//        self.navigationItem.rightBarButtonItems = @[[[UIBarButtonItem alloc] initWithCustomView:self.photoButton],[[UIBarButtonItem alloc] initWithCustomView:self.camButton]];
+        self.navigationItem.rightBarButtonItem = nil;
         self.title = [[AgoraUserProfileManager sharedInstance] getNickNameWithUsername:_conversation.conversationId];
     } else if (_conversation.type == AgoraConversationTypeGroupChat) {
         self.navigationItem.rightBarButtonItem = [[UIBarButtonItem alloc] initWithCustomView:self.detailButton];

@@ -134,7 +134,7 @@
 		7F6CC8EB26568C8600BA60BB /* AgoraSettingsViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 7F6CC8DC26568C8600BA60BB /* AgoraSettingsViewController.m */; };
 		7F6CC8EC26568C8600BA60BB /* AgoraChatsSettingViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 7F6CC8DD26568C8600BA60BB /* AgoraChatsSettingViewController.m */; };
 		7F6CC8ED26568C8600BA60BB /* AgoraAboutViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 7F6CC8E026568C8600BA60BB /* AgoraAboutViewController.xib */; };
-		7F6CC8EE26568C8600BA60BB /* AgoraNameViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 7F6CC8E126568C8600BA60BB /* AgoraNameViewController.m */; };
+		7F6CC8EE26568C8600BA60BB /* AgoraModifyNickNameViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 7F6CC8E126568C8600BA60BB /* AgoraModifyNickNameViewController.m */; };
 		7F6CC8EF26568C8600BA60BB /* AgoraPushDisplaynameViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 7F6CC8E326568C8600BA60BB /* AgoraPushDisplaynameViewController.m */; };
 		7F6CC8F026568C8600BA60BB /* AgoraAccountViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 7F6CC8E426568C8600BA60BB /* AgoraAccountViewController.m */; };
 		7F6CC8F126568C8600BA60BB /* AgoraSettingsViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 7F6CC8E726568C8600BA60BB /* AgoraSettingsViewController.xib */; };
@@ -661,13 +661,13 @@
 		7F6CC8D826568C8600BA60BB /* AgoraBaseSettingController.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = AgoraBaseSettingController.xib; sourceTree = "<group>"; };
 		7F6CC8D926568C8600BA60BB /* AgoraChatsSettingViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = AgoraChatsSettingViewController.h; sourceTree = "<group>"; };
 		7F6CC8DA26568C8600BA60BB /* AgoraAboutViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = AgoraAboutViewController.m; sourceTree = "<group>"; };
-		7F6CC8DB26568C8600BA60BB /* AgoraNameViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = AgoraNameViewController.h; sourceTree = "<group>"; };
+		7F6CC8DB26568C8600BA60BB /* AgoraModifyNickNameViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = AgoraModifyNickNameViewController.h; sourceTree = "<group>"; };
 		7F6CC8DC26568C8600BA60BB /* AgoraSettingsViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = AgoraSettingsViewController.m; sourceTree = "<group>"; };
 		7F6CC8DD26568C8600BA60BB /* AgoraChatsSettingViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = AgoraChatsSettingViewController.m; sourceTree = "<group>"; };
 		7F6CC8DE26568C8600BA60BB /* AgoraSettingsViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = AgoraSettingsViewController.h; sourceTree = "<group>"; };
 		7F6CC8DF26568C8600BA60BB /* AgoraPushDisplaynameViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = AgoraPushDisplaynameViewController.h; sourceTree = "<group>"; };
 		7F6CC8E026568C8600BA60BB /* AgoraAboutViewController.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = AgoraAboutViewController.xib; sourceTree = "<group>"; };
-		7F6CC8E126568C8600BA60BB /* AgoraNameViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = AgoraNameViewController.m; sourceTree = "<group>"; };
+		7F6CC8E126568C8600BA60BB /* AgoraModifyNickNameViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = AgoraModifyNickNameViewController.m; sourceTree = "<group>"; };
 		7F6CC8E226568C8600BA60BB /* AgoraAccountViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = AgoraAccountViewController.h; sourceTree = "<group>"; };
 		7F6CC8E326568C8600BA60BB /* AgoraPushDisplaynameViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = AgoraPushDisplaynameViewController.m; sourceTree = "<group>"; };
 		7F6CC8E426568C8600BA60BB /* AgoraAccountViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = AgoraAccountViewController.m; sourceTree = "<group>"; };
@@ -1599,8 +1599,8 @@
 				7F6CC8D826568C8600BA60BB /* AgoraBaseSettingController.xib */,
 				7F6CC8D926568C8600BA60BB /* AgoraChatsSettingViewController.h */,
 				7F6CC8DD26568C8600BA60BB /* AgoraChatsSettingViewController.m */,
-				7F6CC8DB26568C8600BA60BB /* AgoraNameViewController.h */,
-				7F6CC8E126568C8600BA60BB /* AgoraNameViewController.m */,
+				7F6CC8DB26568C8600BA60BB /* AgoraModifyNickNameViewController.h */,
+				7F6CC8E126568C8600BA60BB /* AgoraModifyNickNameViewController.m */,
 				7F6CC8DF26568C8600BA60BB /* AgoraPushDisplaynameViewController.h */,
 				7F6CC8E326568C8600BA60BB /* AgoraPushDisplaynameViewController.m */,
 				7F6CC8E626568C8600BA60BB /* AgoraPushNotificationViewController.h */,
@@ -2580,7 +2580,7 @@
 				7166345C1DB0EE9F00C92E27 /* AgoraGroupMemberListViewController.m in Sources */,
 				7F6CC8EF26568C8600BA60BB /* AgoraPushDisplaynameViewController.m in Sources */,
 				7F6CC8EB26568C8600BA60BB /* AgoraSettingsViewController.m in Sources */,
-				7F6CC8EE26568C8600BA60BB /* AgoraNameViewController.m in Sources */,
+				7F6CC8EE26568C8600BA60BB /* AgoraModifyNickNameViewController.m in Sources */,
 				3A4BB1CC1ED43D7700B07FCA /* AgoraChatroomMutesViewController.m in Sources */,
 				7F6CC86926568B8B00BA60BB /* AgoraRefreshFootViewCell.m in Sources */,
 				7F6CC91126568D8E00BA60BB /* AgoraRealtimeSearchUtil.m in Sources */,

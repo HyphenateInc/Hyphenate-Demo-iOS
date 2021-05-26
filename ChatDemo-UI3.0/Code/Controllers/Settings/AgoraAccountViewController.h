@@ -9,6 +9,6 @@
 
 #import "AgoraBaseSettingController.h"
 
-@interface AgoraAccountViewController : AgoraBaseSettingController
+@interface AgoraAccountViewController : UIViewController
 
 @end

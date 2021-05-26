@@ -89,7 +89,7 @@
 {
     [super viewDidLoad];
 
-    [self configBackButton];
+    [self setupNavigationBar];
     
     [self loadPushOptions];
 

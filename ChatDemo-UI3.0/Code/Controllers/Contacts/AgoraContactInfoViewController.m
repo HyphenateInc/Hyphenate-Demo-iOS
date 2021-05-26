@@ -25,7 +25,7 @@
 
 @property (strong, nonatomic) IBOutlet UIView *headerView;
 @property (strong, nonatomic) IBOutlet UIImageView *avatarImage;
-@property (strong, nonatomic) IBOutlet UILabel *nicknameLabel;
+@property (strong, nonatomic) IBOutlet UILabel *nickNameLabel;
 
 @property (strong, nonatomic) AgoraUserModel *model;
 
@@ -67,7 +67,7 @@
 }
 
 - (void)loadContactInfo {
-    _nicknameLabel.text = _model.nickname;
+    _nickNameLabel.text = _model.nickname;
     _avatarImage.image = _model.defaultAvatarImage;
     if (_model.avatarURLPath.length > 0) {
         NSURL *avatarUrl = [NSURL URLWithString:_model.avatarURLPath];
@@ -81,7 +81,7 @@
     NSMutableArray *info = [NSMutableArray array];
     [info addObjectsFromArray:@[@{NAME:_model.nickname}, @{HYPHENATE_ID:_model.hyphenateId}]];
     if ([_model.hyphenateId isEqualToString:[AgoraChatClient sharedClient].currentUsername]) {
-        NSString *displayName = [AgoraChatClient sharedClient].pushOptions.displayName;
+        NSString *displayName = [AgoraChatClient sharedClient].currentUsername;
         if (displayName.length > 0) {
             [info addObject:@{APNS_NICKNAME:displayName}];
         }
