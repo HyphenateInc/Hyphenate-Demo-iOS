@@ -34,10 +34,10 @@
         }
         
         if (_conversation.type == AgoraConversationTypeChat) {
-            dispatch_async(dispatch_get_global_queue(0, 0), ^{
-                [[AgoraChatClient sharedClient].userInfoManager fetchUserInfoById:@[_conversation.conversationId] completion:^(NSDictionary *aUserDatas, AgoraError *aError) {
+            dispatch_async(dispatch_get_global_queue(0, 0), ^{            
+                [AgoraUserInfoManagerHelper fetchUserInfoWithUserIds:@[_conversation.conversationId] completion:^(NSDictionary * _Nonnull userInfoDic) {
                     dispatch_async(dispatch_get_main_queue(), ^{
-                        AgoraUserInfo *userInfo = aUserDatas[_conversation.conversationId];
+                        AgoraUserInfo *userInfo = userInfoDic[_conversation.conversationId];
                         _title = userInfo.nickName;
                     });
                 }];

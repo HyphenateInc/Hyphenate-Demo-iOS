@@ -7,6 +7,7 @@
 //
 
 #import <Foundation/Foundation.h>
+#import "AgoraUserInfo+expireTime.h"
 
 NS_ASSUME_NONNULL_BEGIN
 

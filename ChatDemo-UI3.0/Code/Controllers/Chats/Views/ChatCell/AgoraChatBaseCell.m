@@ -271,7 +271,6 @@
     
     [_headImageView imageWithUsername:model.message.from placeholderImage:[UIImage imageNamed:@"default_avatar"]];
     _timeLabel.text = [self _getMessageTime:model.message];
-//    _nickLable.text = [[AgoraUserProfileManager sharedInstance] getNickNameWithUsername:model.message.from];
     _nickLabel.text = _model.userInfo.nickName ?:_model.userInfo.userId;
     
 }

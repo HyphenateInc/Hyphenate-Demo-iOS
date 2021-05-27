@@ -829,10 +829,12 @@
     AgoraMessageModel *model = [[AgoraMessageModel alloc] initWithMessage:message];
     __block AgoraUserInfo *userInfo = nil;
     dispatch_semaphore_t sem = dispatch_semaphore_create(0);
-    [[AgoraChatClient sharedClient].userInfoManager fetchUserInfoById:@[message.from] completion:^(NSDictionary *aUserDatas, AgoraError *aError) {
-        userInfo = aUserDatas[message.from];
+
+    [AgoraUserInfoManagerHelper fetchUserInfoWithUserIds:@[message.from] completion:^(NSDictionary * _Nonnull userInfoDic) {
+        userInfo = userInfoDic[message.from];
         dispatch_semaphore_signal(sem);
     }];
+    
     dispatch_semaphore_wait(sem, DISPATCH_TIME_FOREVER);
     model.userInfo = userInfo;
     [self.dataSource addObject:model];

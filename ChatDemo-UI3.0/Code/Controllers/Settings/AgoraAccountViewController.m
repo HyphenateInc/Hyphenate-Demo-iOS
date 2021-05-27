@@ -83,26 +83,22 @@
 
 - (void)loadData {
     NSString *currentUser = [[AgoraChatClient sharedClient] currentUsername];
-    dispatch_async(dispatch_get_global_queue(0, 0), ^{
-        [[AgoraChatClient sharedClient].userInfoManager fetchUserInfoById:@[currentUser] completion:^(NSDictionary *aUserDatas, AgoraError *aError) {
-            NSLog(@"aUserDatas:%@ aError:%@",aUserDatas,aError);
-            if (aUserDatas) {
-                self.userInfo = aUserDatas[currentUser];
-                self.myName = self.userInfo.nickName ?:self.userInfo.userId;
-                
-                if (self.userInfo.avatarUrl) {
-                    [self.avatarView sd_setImageWithURL:[NSURL URLWithString:self.userInfo.avatarUrl] placeholderImage:[UIImage imageNamed:@"default_avatar"]];
-                }else {
-                    [self.avatarView sd_setImageWithURL:nil placeholderImage:ImageWithName(@"default_avatar")];
-                }
-                
-                dispatch_async(dispatch_get_main_queue(), ^{
-                    [self.table reloadData];
-                });
+    [AgoraUserInfoManagerHelper fetchUserInfoWithUserIds:@[currentUser] completion:^(NSDictionary * _Nonnull userInfoDic) {
+        if (userInfoDic) {
+            self.userInfo = userInfoDic[currentUser];
+            self.myName = self.userInfo.nickName ?:self.userInfo.userId;
+            
+            if (self.userInfo.avatarUrl) {
+                [self.avatarView sd_setImageWithURL:[NSURL URLWithString:self.userInfo.avatarUrl] placeholderImage:[UIImage imageNamed:@"default_avatar"]];
+            }else {
+                [self.avatarView sd_setImageWithURL:nil placeholderImage:ImageWithName(@"default_avatar")];
             }
-           
-        }];
-    });
+            
+            dispatch_async(dispatch_get_main_queue(), ^{
+                [self.table reloadData];
+            });
+        }
+    }];
 }
 
 

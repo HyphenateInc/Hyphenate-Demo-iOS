@@ -27,22 +27,16 @@
     if (newName.length > 0 && ![_myNickName isEqualToString:newName])
     {
         _myNickName = newName;
-        dispatch_async(dispatch_get_global_queue(0, 0), ^{
-            [[AgoraChatClient sharedClient].userInfoManager updateOwnUserInfo:newName withType:AgoraUserInfoTypeNickName completion:^(AgoraUserInfo *aUserInfo, AgoraError *aError) {
-                NSLog(@"%s updateOwnUserInfo aDisplayName:%@ aError:%@",__func__,aUserInfo.nickName,aError);
-                
-                if (aError) {
-
-                }else {
-                    dispatch_async(dispatch_get_main_queue(), ^{
-                        if (self.callBack) {
-                            self.callBack(newName);
-                        }
-                        [self.navigationController popViewControllerAnimated:YES];
-                    });
+        
+        [AgoraUserInfoManagerHelper updateUserInfoWithUserId:newName withType:AgoraUserInfoTypeNickName completion:^(AgoraUserInfo * _Nonnull aUserInfo) {
+            dispatch_async(dispatch_get_main_queue(), ^{
+                if (self.callBack) {
+                    self.callBack(newName);
                 }
-            }];
-        });
+                [self.navigationController popViewControllerAnimated:YES];
+            });
+            
+        }];
     }
 }
 

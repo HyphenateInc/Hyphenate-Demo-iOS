@@ -319,8 +319,10 @@ static NSString *kGroupName = @"GroupName";
         NSString *messageStr = [self getMessageStrWithMessageBody:messageBody];
         
 
-        [[AgoraChatClient sharedClient].userInfoManager fetchUserInfoById:@[message.from] completion:^(NSDictionary *aUserDatas, AgoraError *aError) {
-            AgoraUserInfo *userInfo = aUserDatas[message.from];
+     
+        
+        [AgoraUserInfoManagerHelper fetchUserInfoWithUserIds:@[message.from] completion:^(NSDictionary * _Nonnull userInfoDic) {
+            AgoraUserInfo *userInfo = userInfoDic[message.from];
             title = userInfo.nickName;
             
             if (message.chatType == AgoraChatTypeGroupChat) {
@@ -359,6 +361,7 @@ static NSString *kGroupName = @"GroupName";
             alertBody = [NSString stringWithFormat:@"%@:%@", title, messageStr];
             [self setNotifactionWithMessage:message alertBody:alertBody];
         }];
+        
     }
     else {
         alertBody = NSLocalizedString(@"message.receiveMessage", @"you have a new message");

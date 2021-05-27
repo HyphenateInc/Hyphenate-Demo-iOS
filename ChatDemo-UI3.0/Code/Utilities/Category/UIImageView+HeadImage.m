@@ -19,16 +19,15 @@
 
     
     dispatch_async(dispatch_get_global_queue(0, 0), ^{
-        [[AgoraChatClient sharedClient].userInfoManager fetchUserInfoById:@[username] completion:^(NSDictionary *aUserDatas, AgoraError *aError) {
-            AgoraUserInfo *userInfo = aUserDatas[username];
+        [AgoraUserInfoManagerHelper fetchUserInfoWithUserIds:@[username] completion:^(NSDictionary * _Nonnull userInfoDic) {
+            AgoraUserInfo *userInfo = userInfoDic[username];
             if (userInfo.avatarUrl) {
                 [self sd_setImageWithURL:[NSURL URLWithString:userInfo.avatarUrl] placeholderImage:placeholderImage];
             }else {
                 [self sd_setImageWithURL:nil placeholderImage:placeholderImage];
             }
         }];
-        
     });
-
 }
+
 @end

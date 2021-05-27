@@ -136,20 +136,6 @@
         [contacts removeObject:blockId];
     }
     [self sortContacts:contacts];
-    WEAK_SELF
-//    [[AgoraUserProfileManager sharedInstance] loadUserProfileInBackgroundWithBuddy:contacts
-//                                                                   saveToLoacal:YES
-//                                                                     completion:^(BOOL success, NSError *error) {
-//                                                                         if (success) {
-//                                                                             dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), ^{
-//                                                                                 [weakSelf sortContacts:contacts];
-//                                                                                 dispatch_async(dispatch_get_main_queue(), ^(){
-//                                                                                     [weakSelf.tableView reloadData];
-//                                                                                 });
-//                                                                             });
-//                                                                         }
-//                                                                     }
-//     ];
     
 }
 
