@@ -82,22 +82,19 @@
 #pragma mark - Actions
 
 - (void)loadData {
-    NSString *currentUser = [[AgoraChatClient sharedClient] currentUsername];
-    [AgoraUserInfoManagerHelper fetchUserInfoWithUserIds:@[currentUser] completion:^(NSDictionary * _Nonnull userInfoDic) {
-        if (userInfoDic) {
-            self.userInfo = userInfoDic[currentUser];
+    [AgoraUserInfoManagerHelper fetchOwnUserInfoCompletion:^(AgoraUserInfo * _Nonnull ownUserInfo) {
+            self.userInfo = ownUserInfo;
             self.myName = self.userInfo.nickName ?:self.userInfo.userId;
-            
+
             if (self.userInfo.avatarUrl) {
                 [self.avatarView sd_setImageWithURL:[NSURL URLWithString:self.userInfo.avatarUrl] placeholderImage:[UIImage imageNamed:@"default_avatar"]];
             }else {
                 [self.avatarView sd_setImageWithURL:nil placeholderImage:ImageWithName(@"default_avatar")];
             }
-            
+
             dispatch_async(dispatch_get_main_queue(), ^{
                 [self.table reloadData];
             });
-        }
     }];
 }
 

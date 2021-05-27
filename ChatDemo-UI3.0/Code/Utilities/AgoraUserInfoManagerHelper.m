@@ -45,6 +45,9 @@ static dispatch_once_t oneToken;
     [[self sharedAgoraUserInfoManagerHelper] updateUserInfoWithUserId:userId withType:type completion:completion];
 }
 
++ (void)fetchOwnUserInfoCompletion:(void(^)(AgoraUserInfo *ownUserInfo))completion {
+    [[self sharedAgoraUserInfoManagerHelper] fetchOwnUserInfoCompletion:completion];
+}
 
 #pragma mark instance method
 - (void)fetchUserInfoWithUserIds:(NSArray<NSString *> *)userIds
@@ -159,6 +162,16 @@ static dispatch_once_t oneToken;
     }
 }
 
+
+- (void)fetchOwnUserInfoCompletion:(void(^)(AgoraUserInfo *ownUserInfo))completion {
+    NSString *userId = [AgoraChatClient sharedClient].currentUsername;
+    [[AgoraChatClient sharedClient].userInfoManager fetchUserInfoById:@[userId] completion:^(NSDictionary *aUserDatas, AgoraError *aError) {
+        AgoraUserInfo *user = aUserDatas[userId];
+        if (completion) {
+            completion(user);
+        }
+    }];
+}
 
 #pragma mark getter and setter
 - (NSMutableDictionary *)userInfoCacheDic {

@@ -27,6 +27,9 @@ NS_ASSUME_NONNULL_BEGIN
 + (void)updateUserInfoWithUserId:(NSString *)userId
                         withType:(AgoraUserInfoType)type
                       completion:(void(^)(AgoraUserInfo *aUserInfo))completion;
+
++ (void)fetchOwnUserInfoCompletion:(void(^)(AgoraUserInfo *ownUserInfo))completion;
+
 @end
 
 NS_ASSUME_NONNULL_END
