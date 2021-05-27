@@ -8,7 +8,11 @@
  */
 
 #import "AgoraUserModel.h"
-#import "AgoraUserProfileManager.h"
+
+@interface AgoraUserModel ()
+@property(nonatomic, strong)AgoraUserInfo *userInfo;
+
+@end
 
 @implementation AgoraUserModel
 
@@ -18,31 +22,30 @@
         _hyphenateId = hyphenateId;
         _nickname = @"";
         _defaultAvatarImage = [UIImage imageNamed:@"default_avatar.png"];
+        
+        [self fetchUserInfoData];
     }
     return self;
 }
 
-- (NSString *)nickname {
-    UserProfileEntity *profileEntity = [[AgoraUserProfileManager sharedInstance] getUserProfileByUsername:self.hyphenateId];
-    if (profileEntity) {
-        _nickname = profileEntity.nickname;
-    }
-    return _nickname.length > 0 ? _nickname : _hyphenateId;
+- (void)fetchUserInfoData {
+    dispatch_semaphore_t sema = dispatch_semaphore_create(0);
+    [AgoraUserInfoManagerHelper fetchUserInfoWithUserIds:@[_hyphenateId] completion:^(NSDictionary * _Nonnull userInfoDic) {
+        self.userInfo = userInfoDic[_hyphenateId];
+        dispatch_semaphore_signal(sema);
+    }];
+    dispatch_semaphore_wait(sema, DISPATCH_TIME_FOREVER);
+    self.nickname = self.userInfo.nickName ? : _hyphenateId;
+    self.avatarURLPath = self.userInfo.avatarUrl ? : @"";
+    
 }
+
 
 - (NSString *)searchKey {
     if (_nickname.length > 0) {
         return _nickname;
     }
     return _hyphenateId;
-}
-
-- (NSString *)avatarURLPath {
-    UserProfileEntity *profileEntity = [[AgoraUserProfileManager sharedInstance] getUserProfileByUsername:self.hyphenateId];
-    if (profileEntity) {
-        _avatarURLPath = profileEntity.imageUrl;
-    }
-    return _avatarURLPath.length > 0 ? _avatarURLPath : nil;
 }
 
 @end

@@ -17,7 +17,6 @@
 #import "AgoraChatLocationBubbleView.h"
 #import "AgoraMessageModel.h"
 #import "UIImageView+HeadImage.h"
-#import "AgoraUserProfileManager.h"
 
 #define HEAD_PADDING 15.f
 #define TIME_PADDING 45.f
@@ -30,7 +29,7 @@
 @property (weak, nonatomic) IBOutlet UIImageView *headImageView;
 @property (weak, nonatomic) IBOutlet UILabel *timeLabel;
 @property (weak, nonatomic) IBOutlet UILabel *readLabel;
-@property (weak, nonatomic) IBOutlet UILabel *nickLable;
+@property (weak, nonatomic) IBOutlet UILabel *nickLabel;
 @property (weak, nonatomic) IBOutlet UILabel *notDeliveredLabel;
 @property (weak, nonatomic) IBOutlet UIImageView *checkView;
 @property (weak, nonatomic) IBOutlet UIButton *resendButton;
@@ -88,7 +87,7 @@
     _timeLabel.top = self.height - BOTTOM_PADDING;
     _timeLabel.textAlignment = _model.message.direction == MessageDirectionSend ? NSTextAlignmentRight : NSTextAlignmentLeft;
     
-    _nickLable.left = _model.message.direction == MessageDirectionSend ? (self.width - _nickLable.width - NICK_LEFT_PADDING) : NICK_LEFT_PADDING;
+    _nickLabel.left = _model.message.direction == MessageDirectionSend ? (self.width - _nickLabel.width - NICK_LEFT_PADDING) : NICK_LEFT_PADDING;
     
     _bubbleView.left = _model.message.direction == MessageDirectionSend ? (self.width - _bubbleView.width - TIME_PADDING) : TIME_PADDING;
     _bubbleView.top = _model.message.direction == MessageDirectionSend ? 5.f : NICK_PADDING + 5;
@@ -245,14 +244,14 @@
             _activityView.hidden = NO;
             [_activityView startAnimating];
         }
-        _nickLable.hidden = YES;
+        _nickLabel.hidden = YES;
     } else {
         _activityView.hidden = YES;
         _readLabel.hidden = YES;
         _checkView.hidden = YES;
         _resendButton.hidden = YES;
         _notDeliveredLabel.hidden = YES;
-        _nickLable.hidden = NO;
+        _nickLabel.hidden = NO;
     }
     
     if (_model.message.chatType != AgoraChatTypeChat) {
@@ -272,7 +271,9 @@
     
     [_headImageView imageWithUsername:model.message.from placeholderImage:[UIImage imageNamed:@"default_avatar"]];
     _timeLabel.text = [self _getMessageTime:model.message];
-    _nickLable.text = [[AgoraUserProfileManager sharedInstance] getNickNameWithUsername:model.message.from];
+//    _nickLable.text = [[AgoraUserProfileManager sharedInstance] getNickNameWithUsername:model.message.from];
+    _nickLabel.text = _model.userInfo.nickName ?:_model.userInfo.userId;
+    
 }
 
 + (CGFloat)heightForMessageModel:(AgoraMessageModel *)model

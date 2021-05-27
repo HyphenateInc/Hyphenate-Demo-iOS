@@ -1,11 +1,7 @@
-<?xml version="1.0" encoding="UTF-8" standalone="no"?>
-<document type="com.apple.InterfaceBuilder3.CocoaTouch.XIB" version="3.0" toolsVersion="11542" systemVersion="15F34" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" colorMatched="YES">
-    <device id="retina4_7" orientation="portrait">
-        <adaptation id="fullscreen"/>
-    </device>
+<?xml version="1.0" encoding="UTF-8"?>
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.XIB" version="3.0" toolsVersion="17701" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" colorMatched="YES">
     <dependencies>
-        <deployment identifier="iOS"/>
-        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="11524"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="17703"/>
         <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
     </dependencies>
     <objects>
@@ -15,7 +11,7 @@
             <rect key="frame" x="0.0" y="0.0" width="375" height="100"/>
             <autoresizingMask key="autoresizingMask"/>
             <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" tableViewCell="oc7-hK-4jx" id="oXg-Pc-nIn">
-                <rect key="frame" x="0.0" y="0.0" width="375" height="99"/>
+                <rect key="frame" x="0.0" y="0.0" width="375" height="100"/>
                 <autoresizingMask key="autoresizingMask"/>
                 <subviews>
                     <imageView userInteractionEnabled="NO" contentMode="scaleAspectFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="we8-BR-lby">
@@ -76,7 +72,7 @@
                 <outlet property="activityView" destination="qgi-xv-AP8" id="kcm-LZ-uno"/>
                 <outlet property="checkView" destination="sdA-21-IKV" id="rh1-26-OlO"/>
                 <outlet property="headImageView" destination="we8-BR-lby" id="HFZ-7F-qCx"/>
-                <outlet property="nickLable" destination="RlL-Ja-5mE" id="CyT-i8-Xlx"/>
+                <outlet property="nickLabel" destination="RlL-Ja-5mE" id="CyT-i8-Xlx"/>
                 <outlet property="notDeliveredLabel" destination="uH5-nY-IFD" id="hFT-w6-YMz"/>
                 <outlet property="readLabel" destination="UtS-Uw-VAu" id="NDN-yQ-brh"/>
                 <outlet property="resendButton" destination="juK-3D-jOk" id="tBb-jO-5bo"/>

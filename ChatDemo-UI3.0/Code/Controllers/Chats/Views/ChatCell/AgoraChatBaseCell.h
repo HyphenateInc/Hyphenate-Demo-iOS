@@ -39,7 +39,7 @@
 
 - (instancetype)initWithMessageModel:(AgoraMessageModel*)model;
 
-- (void)setMessageModel:(AgoraMessageModel*)model;
+- (void)setMessageModel:(AgoraMessageModel *)model;
 
 + (CGFloat)heightForMessageModel:(AgoraMessageModel*)model;
 

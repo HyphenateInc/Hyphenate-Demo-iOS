@@ -9,7 +9,6 @@
 
 #import "AgoraAccountViewController.h"
 #import "AgoraModifyNickNameViewController.h"
-#import "AgoraUserProfileManager.h"
 #import <MobileCoreServices/MobileCoreServices.h>
 #import "UIImageView+HeadImage.h"
 #import "UIViewController+HUD.h"
@@ -90,6 +89,13 @@
             if (aUserDatas) {
                 self.userInfo = aUserDatas[currentUser];
                 self.myName = self.userInfo.nickName ?:self.userInfo.userId;
+                
+                if (self.userInfo.avatarUrl) {
+                    [self.avatarView sd_setImageWithURL:[NSURL URLWithString:self.userInfo.avatarUrl] placeholderImage:[UIImage imageNamed:@"default_avatar"]];
+                }else {
+                    [self.avatarView sd_setImageWithURL:nil placeholderImage:ImageWithName(@"default_avatar")];
+                }
+                
                 dispatch_async(dispatch_get_main_queue(), ^{
                     [self.table reloadData];
                 });
@@ -194,17 +200,17 @@
     UIImage *orgImage = info[UIImagePickerControllerOriginalImage];
     [picker dismissViewControllerAnimated:YES completion:nil];
     if (orgImage) {
-        [[AgoraUserProfileManager sharedInstance] uploadUserHeadImageProfileInBackground:orgImage completion:^(BOOL success, NSError *error) {
-            [weakSelf hideHud];
-            if (success) {
-
-                [weakSelf showHint:NSLocalizedString(@"setting.uploadSuccess", @"uploaded successfully")];
-                UserProfileEntity *user = [[AgoraUserProfileManager sharedInstance] getCurUserProfile];
-                [weakSelf.avatarView imageWithUsername:user.username placeholderImage:orgImage];
-            } else {
-                [weakSelf showHint:NSLocalizedString(@"setting.uploadFailed", @"Upload Failed")];
-            }
-        }];
+//        [[AgoraUserProfileManager sharedInstance] uploadUserHeadImageProfileInBackground:orgImage completion:^(BOOL success, NSError *error) {
+//            [weakSelf hideHud];
+//            if (success) {
+//
+//                [weakSelf showHint:NSLocalizedString(@"setting.uploadSuccess", @"uploaded successfully")];
+//                UserProfileEntity *user = [[AgoraUserProfileManager sharedInstance] getCurUserProfile];
+//                [weakSelf.avatarView imageWithUsername:user.username placeholderImage:orgImage];
+//            } else {
+//                [weakSelf showHint:NSLocalizedString(@"setting.uploadFailed", @"Upload Failed")];
+//            }
+//        }];
         
         [self.avatarView imageWithUsername:nil placeholderImage:orgImage];
     } else {
@@ -229,8 +235,7 @@
         _avatarView.frame = CGRectMake(15, 13, 45, 45);
         _avatarView.contentMode = UIViewContentModeScaleAspectFill;
     }
-    UserProfileEntity *user = [[AgoraUserProfileManager sharedInstance] getCurUserProfile];
-    [_avatarView imageWithUsername:user.username placeholderImage:nil];
+
     return _avatarView;
 }
 

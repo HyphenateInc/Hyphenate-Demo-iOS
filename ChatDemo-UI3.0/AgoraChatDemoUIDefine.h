@@ -22,6 +22,8 @@
 #define KNOTIFICATIONNAME_DELETEALLMESSAGE @"RemoveAllMessages"
 #define KNOTIFICATION_CALL @"callOutWithChatter"
 
+#define ImageWithName(imageName) [UIImage imageNamed:imageName]
+
 #define kAgroaPadding 10.0f
 
 

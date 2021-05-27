@@ -16,8 +16,5 @@
 
 - (void)parseApplication:(UIApplication *)application didFinishLaunchingWithOptions:(NSDictionary *)launchOptions;
 
-- (void)initParse;
-
-- (void)clearParse;
 
 @end

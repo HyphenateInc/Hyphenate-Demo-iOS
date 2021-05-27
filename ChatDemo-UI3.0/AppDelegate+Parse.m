@@ -12,7 +12,6 @@
 
 #import "AppDelegate+Parse.h"
 #import <Parse/Parse.h>
-#import "AgoraUserProfileManager.h"
 
 @implementation AppDelegate (Parse)
 
@@ -45,14 +44,6 @@
     [PFACL setDefaultACL:defaultACL withAccessForCurrentUser:YES];
 }
 
-- (void)initParse
-{
-    [[AgoraUserProfileManager sharedInstance] initParse];
-}
 
-- (void)clearParse
-{
-    [[AgoraUserProfileManager sharedInstance] clearParse];
-}
 
 @end

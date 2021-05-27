@@ -24,7 +24,6 @@
 #import "AgoraConversationModel.h"
 #import "AgoraMessageModel.h"
 #import "AgoraNotificationNames.h"
-#import "AgoraUserProfileManager.h"
 
 #import "AgoraChatroomInfoViewController.h"
 #import "UIViewController+HUD.h"
@@ -35,7 +34,6 @@
 @interface AgoraChatViewController () <UINavigationControllerDelegate,UIImagePickerControllerDelegate,AgoraLocationViewDelegate,AgoraChatManagerDelegate, AgoraChatroomManagerDelegate,AgoraChatBaseCellDelegate,UIActionSheetDelegate, UITableViewDelegate, UITableViewDataSource,AgoraChatToolBarNewDelegate>
 
 
-//@property (strong, nonatomic) AgoraChatToolBar *chatToolBar;
 @property (strong, nonatomic) AgoraChatToolBar *chatToolBar;
 
 @property (strong, nonatomic) UITableView *tableView;
@@ -158,7 +156,13 @@
     if (_conversation.type == AgoraConversationTypeChat) {
 //        self.navigationItem.rightBarButtonItems = @[[[UIBarButtonItem alloc] initWithCustomView:self.photoButton],[[UIBarButtonItem alloc] initWithCustomView:self.camButton]];
         self.navigationItem.rightBarButtonItem = nil;
-        self.title = [[AgoraUserProfileManager sharedInstance] getNickNameWithUsername:_conversation.conversationId];
+        [AgoraUserInfoManagerHelper fetchUserInfoWithUserIds:@[_conversation.conversationId] completion:^(NSDictionary * _Nonnull userInfoDic) {
+            AgoraUserInfo *userInfo = userInfoDic[_conversation.conversationId];
+            dispatch_async(dispatch_get_main_queue(), ^{
+                self.title = userInfo.nickName ?:userInfo.userId;
+            });
+        }];
+        
     } else if (_conversation.type == AgoraConversationTypeGroupChat) {
         self.navigationItem.rightBarButtonItem = [[UIBarButtonItem alloc] initWithCustomView:self.detailButton];
         self.title = [[AgoraConversationModel alloc] initWithConversation:self.conversation].title;
@@ -167,17 +171,7 @@
     }
 }
 
-#pragma mark - getter
-
-//- (AgoraChatToolBar *)chatToolBar {
-//    if (!_chatToolBar) {
-//        _chatToolBar = [[NSBundle mainBundle] loadNibNamed:@"AgoraChatToolBar" owner:self options:nil].lastObject;
-//        _chatToolBar.delegate = self;
-//        _chatToolBar.backgroundColor = UIColor.redColor;
-//    }
-//    return _chatToolBar;
-//}
-
+#pragma mark - getter and setter
 - (AgoraChatToolBar *)chatToolBar {
     if (_chatToolBar == nil) {
         _chatToolBar = [[AgoraChatToolBar alloc] initWithFrame:CGRectMake(0, 0, KScreenWidth, 180.0)];
@@ -301,6 +295,7 @@
         cell = [[AgoraChatBaseCell alloc] initWithMessageModel:model];
         cell.delegate = self;
     }
+    
     [cell setMessageModel:model];
     return cell;
 }
@@ -324,7 +319,6 @@
     [UIView animateWithDuration:0.25 animations:^{
         [self.chatToolBar mas_updateConstraints:^(MASConstraintMaker *make) {
             make.height.mas_equalTo(91+toHeight);
-//            make.bottom.equalTo(self.view).offset(-toHeight);
       }];
     }];
     [self _scrollViewToBottom:NO];
@@ -833,6 +827,14 @@
 - (void)_addMessageToDataSource:(Message*)message
 {
     AgoraMessageModel *model = [[AgoraMessageModel alloc] initWithMessage:message];
+    __block AgoraUserInfo *userInfo = nil;
+    dispatch_semaphore_t sem = dispatch_semaphore_create(0);
+    [[AgoraChatClient sharedClient].userInfoManager fetchUserInfoById:@[message.from] completion:^(NSDictionary *aUserDatas, AgoraError *aError) {
+        userInfo = aUserDatas[message.from];
+        dispatch_semaphore_signal(sem);
+    }];
+    dispatch_semaphore_wait(sem, DISPATCH_TIME_FOREVER);
+    model.userInfo = userInfo;
     [self.dataSource addObject:model];
 }
 

@@ -9,6 +9,11 @@
 
 #import "AgoraMessageModel.h"
 
+@interface AgoraMessageModel ()
+@property (strong, nonatomic) Message *message;
+
+@end
+
 @implementation AgoraMessageModel
 
 - (instancetype)initWithMessage:(Message*)message
@@ -19,5 +24,6 @@
     }
     return self;
 }
+
 
 @end

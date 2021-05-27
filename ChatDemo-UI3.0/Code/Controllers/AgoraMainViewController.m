@@ -14,7 +14,6 @@
 #import "AgoraSettingsViewController.h"
 #import "AgoraChatDemoHelper.h"
 #import "AgoraCDDeviceManager.h"
-#import "AgoraUserProfileManager.h"
 #import "AgoraChatViewController.h"
 #import <UserNotifications/UserNotifications.h>
 
@@ -312,33 +311,17 @@ static NSString *kGroupName = @"GroupName";
 - (void)showBackgroundNotificationWithMessage:(Message *)message
 {
     AgoraPushOptions *options = [[AgoraChatClient sharedClient] pushOptions];
-    NSString *alertBody = nil;
+    __block NSString *alertBody = @"";
+    __block NSString *title = @"";
+
     if (options.displayStyle == AgoraPushDisplayStyleMessageSummary) {
         MessageBody *messageBody = message.body;
-        NSString *messageStr = nil;
+        NSString *messageStr = [self getMessageStrWithMessageBody:messageBody];
         
-        switch (messageBody.type) {
-            case MessageBodyTypeText:
-                messageStr = ((TextMessageBody *)messageBody).text;
-                break;
-            case MessageBodyTypeImage:
-                messageStr = NSLocalizedString(@"chat.image1", @"[image]");
-                break;
-            case MessageBodyTypeLocation:
-                messageStr = NSLocalizedString(@"chat.location1", @"[location]");
-                break;
-            case MessageBodyTypeVoice:
-                messageStr = NSLocalizedString(@"chat.voice1", @"[voice]");
-                break;
-            case MessageBodyTypeVideo:
-                messageStr = NSLocalizedString(@"chat.video1", @"[video]");
-                break;
-            default:
-                break;
-        }
-        
-        do {
-            NSString *title = [[AgoraUserProfileManager sharedInstance] getNickNameWithUsername:message.from];
+
+        [[AgoraChatClient sharedClient].userInfoManager fetchUserInfoById:@[message.from] completion:^(NSDictionary *aUserDatas, AgoraError *aError) {
+            AgoraUserInfo *userInfo = aUserDatas[message.from];
+            title = userInfo.nickName;
             
             if (message.chatType == AgoraChatTypeGroupChat) {
                 NSDictionary *ext = message.ext;
@@ -347,14 +330,12 @@ static NSString *kGroupName = @"GroupName";
                     if ([target isKindOfClass:[NSString class]]) {
                         if ([kGroupMessageAtAll compare:target options:NSCaseInsensitiveSearch] == NSOrderedSame) {
                             alertBody = [NSString stringWithFormat:@"%@%@", title, NSLocalizedString(@"group.atPushTitle", @" @ me in the group")];
-                            break;
                         }
                     }
                     else if ([target isKindOfClass:[NSArray class]]) {
                         NSArray *atTargets = (NSArray*)target;
                         if ([atTargets containsObject:[AgoraChatClient sharedClient].currentUsername]) {
                             alertBody = [NSString stringWithFormat:@"%@%@", title, NSLocalizedString(@"group.atPushTitle", @" @ me in the group")];
-                            break;
                         }
                     }
                 }
@@ -362,7 +343,6 @@ static NSString *kGroupName = @"GroupName";
                 for (AgoraGroup *group in groupArray) {
                     if ([group.groupId isEqualToString:message.conversationId]) {
                         title = [NSString stringWithFormat:@"%@(%@)", message.from, group.subject];
-                        break;
                     }
                 }
             }
@@ -377,12 +357,44 @@ static NSString *kGroupName = @"GroupName";
             }
             
             alertBody = [NSString stringWithFormat:@"%@:%@", title, messageStr];
-        } while (0);
+            [self setNotifactionWithMessage:message alertBody:alertBody];
+        }];
     }
     else {
         alertBody = NSLocalizedString(@"message.receiveMessage", @"you have a new message");
+        [self setNotifactionWithMessage:message alertBody:alertBody];
     }
-    
+}
+
+
+- (NSString *)getMessageStrWithMessageBody:(MessageBody*)messageBody {
+    NSString *resultString = @"";
+    switch (messageBody.type) {
+        case MessageBodyTypeText:
+            resultString = ((TextMessageBody *)messageBody).text;
+            break;
+        case MessageBodyTypeImage:
+            resultString = NSLocalizedString(@"chat.image1", @"[image]");
+            break;
+        case MessageBodyTypeLocation:
+            resultString = NSLocalizedString(@"chat.location1", @"[location]");
+            break;
+        case MessageBodyTypeVoice:
+            resultString = NSLocalizedString(@"chat.voice1", @"[voice]");
+            break;
+        case MessageBodyTypeVideo:
+            resultString = NSLocalizedString(@"chat.video1", @"[video]");
+            break;
+        default:
+            break;
+    }
+    return resultString;
+}
+
+
+
+- (void)setNotifactionWithMessage:(Message *)message
+                        alertBody:(NSString *)alertBody {
     NSTimeInterval timeInterval = [[NSDate date] timeIntervalSinceDate:self.lastPlaySoundDate];
     BOOL playSound = NO;
     if (!self.lastPlaySoundDate || timeInterval >= kDefaultPlaySoundInterval) {

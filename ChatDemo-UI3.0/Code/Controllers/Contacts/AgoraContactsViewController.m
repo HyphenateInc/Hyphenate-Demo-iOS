@@ -20,9 +20,7 @@
 #import "AgoraApplyRequestCell.h"
 #import "AgoraChatDemoHelper.h"
 #import "AgoraRealtimeSearchUtils.h"
-
 #import "NSArray+AgoraSortContacts.h"
-#import "AgoraUserProfileManager.h"
 
 #define KAgora_CONTACT_BASICSECTION_NUM  3
 
@@ -38,7 +36,7 @@
 
 @implementation AgoraContactsViewController
 {
-    NSMutableArray *_sectionTitls;
+    NSMutableArray *_sectionTitles;
     NSMutableArray *_searchSource;
     NSMutableArray *_searchResults;
     BOOL _isSearchState;
@@ -80,13 +78,14 @@
     WEAK_SELF
     [[AgoraChatClient sharedClient].contactManager getContactsFromServerWithCompletion:^(NSArray *aList, AgoraError *aError) {
         if (!aError) {
-            dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), ^(){
-                [weakSelf updateContacts:aList];
-                
-                [weakSelf tableViewDidFinishTriggerHeader:YES];
-                dispatch_async(dispatch_get_main_queue(), ^(){
-                    [weakSelf.tableView reloadData];
-                });
+//            dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), ^(){
+//
+//            });
+            [weakSelf updateContacts:aList];
+            
+            [weakSelf tableViewDidFinishTriggerHeader:YES];
+            dispatch_async(dispatch_get_main_queue(), ^(){
+                [weakSelf.tableView reloadData];
             });
         }
         else {
@@ -138,19 +137,20 @@
     }
     [self sortContacts:contacts];
     WEAK_SELF
-    [[AgoraUserProfileManager sharedInstance] loadUserProfileInBackgroundWithBuddy:contacts
-                                                                   saveToLoacal:YES
-                                                                     completion:^(BOOL success, NSError *error) {
-                                                                         if (success) {
-                                                                             dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), ^{
-                                                                                 [weakSelf sortContacts:contacts];
-                                                                                 dispatch_async(dispatch_get_main_queue(), ^(){
-                                                                                     [weakSelf.tableView reloadData];
-                                                                                 });
-                                                                             });
-                                                                         }
-                                                                     }
-     ];
+//    [[AgoraUserProfileManager sharedInstance] loadUserProfileInBackgroundWithBuddy:contacts
+//                                                                   saveToLoacal:YES
+//                                                                     completion:^(BOOL success, NSError *error) {
+//                                                                         if (success) {
+//                                                                             dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), ^{
+//                                                                                 [weakSelf sortContacts:contacts];
+//                                                                                 dispatch_async(dispatch_get_main_queue(), ^(){
+//                                                                                     [weakSelf.tableView reloadData];
+//                                                                                 });
+//                                                                             });
+//                                                                         }
+//                                                                     }
+//     ];
+    
 }
 
 - (void)sortContacts:(NSArray *)contacts {
@@ -161,7 +161,7 @@
                                   searchSource:&searchSource];
     [self.contacts removeAllObjects];
     [self.contacts addObjectsFromArray:sortArray];
-    _sectionTitls = [NSMutableArray arrayWithArray:sectionTitles];
+    _sectionTitles = [NSMutableArray arrayWithArray:sectionTitles];
     _searchSource = [NSMutableArray arrayWithArray:searchSource];
 }
 
@@ -221,11 +221,11 @@
     if (_isSearchState) {
         return 1;
     }
-    return KAgora_CONTACT_BASICSECTION_NUM + _sectionTitls.count;
+    return KAgora_CONTACT_BASICSECTION_NUM + _sectionTitles.count;
 }
 
 - (NSArray<NSString *> *)sectionIndexTitlesForTableView:(UITableView *)tableView {
-    return _sectionTitls;
+    return _sectionTitles;
 }
 
 - (NSInteger)tableView:(UITableView *)tableView sectionForSectionIndexTitle:(NSString *)title atIndex:(NSInteger)index {

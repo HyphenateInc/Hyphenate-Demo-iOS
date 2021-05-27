@@ -8,7 +8,6 @@
  */
 
 #import "AgoraModifyNickNameViewController.h"
-#import "AgoraUserProfileManager.h"
 
 @interface AgoraModifyNickNameViewController ()<UITextFieldDelegate>
 

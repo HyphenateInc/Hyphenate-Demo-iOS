@@ -11,10 +11,15 @@
 
 @interface AgoraMessageModel : NSObject
 
-@property (strong, nonatomic) Message *message;
+@property (strong, nonatomic,readonly) Message *message;
+
+@property (strong, nonatomic) AgoraUserInfo *userInfo;
 
 @property (assign, nonatomic) BOOL isPlaying;
 
+@property (assign, nonatomic) void(^fetchUserInfoBlcok)();
+
 - (instancetype)initWithMessage:(Message*)message;
+
 
 @end

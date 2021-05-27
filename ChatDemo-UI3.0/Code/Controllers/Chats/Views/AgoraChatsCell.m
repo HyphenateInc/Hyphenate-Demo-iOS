@@ -11,7 +11,6 @@
 
 #import "AgoraConvertToCommonEmoticonsHelper.h"
 #import "AgoraConversationModel.h"
-#import "AgoraUserProfileManager.h"
 #import "UIImageView+HeadImage.h"
 
 @interface AgoraChatsCell ()
