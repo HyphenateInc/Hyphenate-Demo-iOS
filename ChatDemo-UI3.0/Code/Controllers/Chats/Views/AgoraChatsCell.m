@@ -13,6 +13,9 @@
 #import "AgoraConversationModel.h"
 #import "UIImageView+HeadImage.h"
 
+#define kLabelHeight 20.0
+#define kTimeLabelWidth 80.0
+
 @interface AgoraChatsCell ()
 
 @property (weak, nonatomic) IBOutlet UIImageView *headImageView;
@@ -20,6 +23,12 @@
 @property (weak, nonatomic) IBOutlet UILabel *contentLabel;
 @property (weak, nonatomic) IBOutlet UILabel *timeLabel;
 @property (weak, nonatomic) IBOutlet UILabel *unreadLabel;
+
+//@property (weak, nonatomic)  UIImageView *headImageView;
+//@property (weak, nonatomic)  UILabel *nameLabel;
+//@property (weak, nonatomic)  UILabel *contentLabel;
+//@property (weak, nonatomic)  UILabel *timeLabel;
+//@property (weak, nonatomic)  UILabel *unreadLabel;
 
 @property (strong, nonatomic) AgoraConversationModel *model;
 
@@ -42,6 +51,49 @@
     }
 }
 
+//- (instancetype)initWithFrame:(CGRect)frame {
+//    self = [super initWithFrame:frame];
+//    if (self) {
+//        [self placeAndLayoutSubViews];
+//    }
+//    return self;
+//}
+
+- (void)placeAndLayoutSubViews {
+    [self.headImageView mas_makeConstraints:^(MASConstraintMaker *make) {
+        make.centerY.equalTo(self);
+        make.left.mas_equalTo(kAgroaPadding);
+        make.size.mas_equalTo(50.0);
+    }];
+    
+    [self.nameLabel mas_makeConstraints:^(MASConstraintMaker *make) {
+        make.centerY.equalTo(self);
+        make.left.mas_equalTo(kAgroaPadding);
+        make.size.mas_equalTo(50.0);
+    }];
+    
+    [self.contentLabel mas_makeConstraints:^(MASConstraintMaker *make) {
+        make.centerY.equalTo(self);
+        make.left.mas_equalTo(kAgroaPadding);
+        make.size.mas_equalTo(50.0);
+    }];
+    
+    [self.timeLabel mas_makeConstraints:^(MASConstraintMaker *make) {
+        make.centerY.equalTo(self);
+        make.left.mas_equalTo(kAgroaPadding);
+        make.size.mas_equalTo(50.0);
+    }];
+    
+    [self.unreadLabel mas_makeConstraints:^(MASConstraintMaker *make) {
+        make.centerY.equalTo(self);
+        make.left.mas_equalTo(kAgroaPadding);
+        make.size.mas_equalTo(50.0);
+    }];
+    
+    
+    
+}
+
 - (void)setConversationModel:(AgoraConversationModel *)model
 {
     _model = model;
@@ -53,6 +105,18 @@
     _nameLabel.text = model.title;
     _contentLabel.text = [self _latestMessageTitleWithConversation:model.conversation];
     _timeLabel.text = [self _latestMessageTimeWithConversation:model.conversation];
+    
+    if (_model.conversation.unreadMessagesCount == 0) {
+        _unreadLabel.hidden = YES;
+//        _nameLabel.left = 75.f;
+//        _nameLabel.width = 170.f;
+    } else {
+        _unreadLabel.hidden = NO;
+//        _nameLabel.left = 95.f;
+//        _nameLabel.width = 150.f;
+        _unreadLabel.text = [NSString stringWithFormat:@"%d",_model.conversation.unreadMessagesCount];
+    }
+    
 }
 
 #pragma mark - private
@@ -115,5 +179,56 @@
 
     // Configure the view for the selected state
 }
+
+//#pragma mark getter and setter
+//- (UIImageView *)headImageView {
+//    if (_headImageView == nil) {
+//        _headImageView = UIImageView.new;
+//        _headImageView.contentMode = UIViewContentModeCenter;
+//    }
+//    return  _headImageView;
+//}
+//
+//- (UILabel *)nameLabel {
+//    if (_nameLabel == nil) {
+//        _nameLabel = UILabel.new;
+//        _nameLabel.textColor = UIColor.blackColor;
+//        _nameLabel.font = [UIFont systemFontOfSize:13.0];
+//        _nameLabel.textAlignment = NSTextAlignmentLeft;
+//    }
+//    return  _nameLabel;
+//}
+//
+//- (UILabel *)contentLabel {
+//    if (_contentLabel == nil) {
+//        _contentLabel = UILabel.new;
+//        _contentLabel.textColor = UIColor.blackColor;
+//        _contentLabel.font = [UIFont systemFontOfSize:13.0];
+//        _contentLabel.textAlignment = NSTextAlignmentLeft;
+//    }
+//    return  _contentLabel;
+//}
+//
+//
+//- (UILabel *)timeLabel {
+//    if (_timeLabel == nil) {
+//        _timeLabel = UILabel.new;
+//        _timeLabel.textColor = UIColor.blackColor;
+//        _timeLabel.font = [UIFont systemFontOfSize:11.0];
+//        _timeLabel.textAlignment = NSTextAlignmentRight;
+//    }
+//    return  _timeLabel;
+//}
+//
+//
+//- (UILabel *)unreadLabel {
+//    if (_unreadLabel == nil) {
+//        _unreadLabel = UILabel.new;
+//        _unreadLabel.textColor = UIColor.blackColor;
+//        _unreadLabel.font = [UIFont systemFontOfSize:10.0];
+//        _unreadLabel.textAlignment = NSTextAlignmentCenter;
+//    }
+//    return  _unreadLabel;
+//}
 
 @end

@@ -93,7 +93,7 @@
         [_occupants addObject:model];
     }
     [self reloadPermissions];
-    [self updateMemberCountDescription];
+    [self updateMemberCountLabel];
 }
 
 - (void)reloadPermissions {
@@ -131,7 +131,7 @@
     [self.tableView reloadData];
 }
 
-- (void)updateMemberCountDescription {
+- (void)updateMemberCountLabel {
     _memberCountLabel.text = [NSString stringWithFormat:@"%@: %ld/%d",NSLocalizedString(@"group.participants", @"Participants"),(unsigned long)_occupants.count,KAgora_GROUP_MAgoraBERSCOUNT];
 }
 
@@ -369,6 +369,8 @@
     for (AgoraUserModel *model in modelArray) {
         [_invitees addObject:model.hyphenateId];
     }
+    [self updateMemberCountLabel];
 }
+
 
 @end

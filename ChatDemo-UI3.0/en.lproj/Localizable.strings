@@ -160,8 +160,8 @@
 "contact.name" = "Name";
 "contact.hyphenateId" = "Hyphenate ID";
 "contact.apnsnickname" = "iOS APNS";
-"contact.block" = "Block Contact";
-"contact.blockFailure" = "Block failure";
+"contact.black" = "Black Contact";
+"contact.blackFailure" = "Block failure";
 "contact.unblockFailure" = "Unblock failure";
 "contact.delete" = "Delete Contact";
 "contact.deleteFailure" = "Delete contacts failed";

@@ -13,7 +13,6 @@
 
 @property (strong, nonatomic) IBOutlet UILabel *titleLabel;
 @property (strong, nonatomic) IBOutlet UILabel *infoLabel;
-
 @property (strong, nonatomic) IBOutlet UISwitch *blockSwitch;
 
 
@@ -44,6 +43,10 @@
         }
     }
 }
+
+
+
+
 - (IBAction)blockContactAction:(id)sender {
     if (_hyphenateId.length == 0) {
         return;
@@ -60,7 +63,7 @@
                                                                 }
                                                             }
                                                             else {
-                                                                [weakSelf showAlertWithMessage:NSLocalizedString(@"contact.blockFailure", @"Block failure")];
+                                                                [weakSelf showAlertWithMessage:NSLocalizedString(@"contact.blackFailure", @"Block failure")];
                                                             }
                                                         }];
     } else {

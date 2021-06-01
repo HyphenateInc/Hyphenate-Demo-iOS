@@ -41,7 +41,7 @@
         [[UINavigationBar appearance] setTranslucent:NO];
     }
     
-    [self parseApplication:application didFinishLaunchingWithOptions:launchOptions];
+//    [self parseApplication:application didFinishLaunchingWithOptions:launchOptions];
     
     // init HyphenateSDK
     AgoraOptions *options = [AgoraOptions optionsWithAppkey:@"easemob-demo#chatdemoui"];

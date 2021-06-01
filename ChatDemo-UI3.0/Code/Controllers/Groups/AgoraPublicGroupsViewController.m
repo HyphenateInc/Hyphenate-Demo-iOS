@@ -113,17 +113,21 @@ typedef NS_ENUM(NSUInteger, AgoraFetchPublicGroupState) {
 
 - (void)reloadRequestedApplyDataSource {
     __weak typeof(self) weakSelf = self;
-    dispatch_async(dispatch_get_main_queue(), ^{
+
+    dispatch_async(dispatch_get_global_queue(0, 0), ^{
         if(_requestGroupModel) {
             [weakSelf.applyedDataSource addObject:_requestGroupModel.group.groupId];
             NSUInteger index = [weakSelf.publicGroups indexOfObject:_requestGroupModel];
             NSIndexPath *indexPath = [NSIndexPath indexPathForRow:index inSection:0];
-            [weakSelf.tableView beginUpdates];
-            [weakSelf.tableView reloadRowsAtIndexPaths:@[indexPath] withRowAnimation:UITableViewRowAnimationNone];
-            [weakSelf.tableView endUpdates];
-            _requestGroupModel = nil;
+            dispatch_async(dispatch_get_main_queue(), ^{
+                [weakSelf.tableView beginUpdates];
+                [weakSelf.tableView reloadRowsAtIndexPaths:@[indexPath] withRowAnimation:UITableViewRowAnimationNone];
+                [weakSelf.tableView endUpdates];
+                _requestGroupModel = nil;
+            });
         }
     });
+    
 }
 
 #pragma mark - Join Public Group

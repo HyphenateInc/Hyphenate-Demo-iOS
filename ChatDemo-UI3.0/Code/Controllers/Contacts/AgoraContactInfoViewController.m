@@ -26,7 +26,6 @@
 @property (strong, nonatomic) IBOutlet UIView *headerView;
 @property (strong, nonatomic) IBOutlet UIImageView *avatarImage;
 @property (strong, nonatomic) IBOutlet UILabel *nickNameLabel;
-
 @property (strong, nonatomic) AgoraUserModel *model;
 
 @end
@@ -165,9 +164,16 @@
         if (!cell) {
             cell = [[[NSBundle mainBundle] loadNibNamed:@"AgoraContactInfo_funcCell" owner:self options:nil] lastObject];
         }
-        cell.hyphenateId = _model.hyphenateId;
-        cell.infoDic = _contactFunc[indexPath.row];
-        cell.delegate = self;
+        
+        if (indexPath.row == 0) {
+            cell.hyphenateId = _model.hyphenateId;
+            cell.infoDic = _contactFunc[indexPath.row];
+            cell.delegate = self;
+        }else {
+            cell.hyphenateId = _model.hyphenateId;
+            cell.infoDic = _contactFunc[indexPath.row];
+            cell.delegate = self;
+        }
     }
     return cell;
 }
@@ -212,18 +218,21 @@
         WEAK_SELF
         [MBProgressHUD showHUDAddedTo:self.view animated:YES];
         
-        [[AgoraChatClient sharedClient].contactManager deleteContact:_model.hyphenateId isDeleteConversation:YES completion:^(NSString *aUsername, AgoraError *aError) {
+        dispatch_async(dispatch_get_global_queue(0, 0), ^{
+            [[AgoraChatClient sharedClient].contactManager deleteContact:_model.hyphenateId isDeleteConversation:YES completion:^(NSString *aUsername, AgoraError *aError) {
+                
+                [MBProgressHUD hideAllHUDsForView:weakSelf.view animated:YES];
+                
+                if (!aError) {
+                    [[AgoraChatDemoHelper shareHelper].contactsVC reloadContacts];
+                    [weakSelf.navigationController popViewControllerAnimated:YES];
+                }
+                else {
+                    [weakSelf showAlertWithMessage:NSLocalizedString(@"contact.deleteFailure", @"Delete contacts failed")];
+                }
+            }];
             
-            [MBProgressHUD hideAllHUDsForView:weakSelf.view animated:YES];
-            
-            if (!aError) {
-                [[AgoraChatDemoHelper shareHelper].contactsVC reloadContacts];
-                [weakSelf.navigationController popViewControllerAnimated:YES];
-            }
-            else {
-                [weakSelf showAlertWithMessage:NSLocalizedString(@"contact.deleteFailure", @"Delete contacts failed")];
-            }
-        }];
+        });
     }
 }
 

@@ -162,8 +162,8 @@
 "contact.name" = "姓名";
 "contact.hyphenateId" = "Hyphenate ID";
 "contact.apnsnickname" = "iOS推送昵称";
-"contact.block" = "联系人加入黑名单";
-"contact.blockFailure" = "加入黑名单失败";
+"contact.black" = "联系人加入黑名单";
+"contact.blackFailure" = "加入黑名单失败";
 "contact.unblockFailure" = "移除黑名单失败";
 "contact.delete" = "删除联系人";
 "contact.deleteFailure" = "删除联系人失败";

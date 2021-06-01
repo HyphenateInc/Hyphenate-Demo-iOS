@@ -647,7 +647,7 @@
         }
     } else if (actionSheet.tag == 1001) {
         if (buttonIndex == 0){
-            if (_longPressIndexPath && _longPressIndexPath.row > 0) {
+            if (_longPressIndexPath) {
                 AgoraMessageModel *model = [self.dataSource objectAtIndex:_longPressIndexPath.row];
                 NSMutableIndexSet *indexs = [NSMutableIndexSet indexSetWithIndex:_longPressIndexPath.row];
                 [self.conversation deleteMessageWithId:model.message.messageId error:nil];
