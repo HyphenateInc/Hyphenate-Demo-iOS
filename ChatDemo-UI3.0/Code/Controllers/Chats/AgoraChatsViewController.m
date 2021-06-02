@@ -23,7 +23,7 @@
 
 @property (strong, nonatomic) UISearchBar *searchBar;
 @property (strong, nonatomic) NSMutableArray *dataSource;
-@property (strong, nonatomic) NSMutableArray *resultsSource;
+@property (strong, nonatomic) NSMutableArray *searchSource;
 @property (strong, nonatomic) UIView *networkStateView;
 
 @end
@@ -122,12 +122,12 @@
     return _dataSource;
 }
 
-- (NSMutableArray*)resultsSource
+- (NSMutableArray*)searchSource
 {
-    if (_resultsSource == nil) {
-        _resultsSource = [NSMutableArray array];
+    if (_searchSource == nil) {
+        _searchSource = [NSMutableArray array];
     }
-    return _resultsSource;
+    return _searchSource;
 }
 
 #pragma mark - Table view data source
@@ -138,7 +138,7 @@
 
 - (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section {
     if (_isSearchState) {
-        return [self.resultsSource count];
+        return [self.searchSource count];
     }
     return [self.dataSource count];
 }
@@ -150,7 +150,7 @@
         if (cell == nil) {
             cell = (AgoraChatsCell*)[[[NSBundle mainBundle]loadNibNamed:@"AgoraChatsCell" owner:nil options:nil] firstObject];
         }
-        AgoraConversationModel *model = [self.resultsSource objectAtIndex:indexPath.row];
+        AgoraConversationModel *model = [self.searchSource objectAtIndex:indexPath.row];
         [(AgoraChatsCell*)cell setConversationModel:model];
         
         return cell;
@@ -191,7 +191,7 @@
     
     AgoraConversationModel *model = nil;
     if (_isSearchState) {
-        model = [self.resultsSource objectAtIndex:indexPath.row];
+        model = [self.searchSource objectAtIndex:indexPath.row];
     } else {
         model = [self.dataSource objectAtIndex:indexPath.row];
     }
@@ -220,7 +220,7 @@
 {
     self.tableView.userInteractionEnabled = YES;
     if (searchBar.text.length == 0) {
-        [self.resultsSource removeAllObjects];
+        [self.searchSource removeAllObjects];
         [self.tableView reloadData];
         return;
     }
@@ -228,8 +228,8 @@
     [[AgoraRealtimeSearchUtil currentUtil] realtimeSearchWithSource:self.dataSource searchText:(NSString *)searchText collationStringSelector:@selector(title) resultBlock:^(NSArray *results) {
         if (results) {
             dispatch_async(dispatch_get_main_queue(), ^{
-                [weakSelf.resultsSource removeAllObjects];
-                [weakSelf.resultsSource addObjectsFromArray:results];
+                [weakSelf.searchSource removeAllObjects];
+                [weakSelf.searchSource addObjectsFromArray:results];
                 [weakSelf.tableView reloadData];
             });
         }

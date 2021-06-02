@@ -9,14 +9,16 @@
 
 #import "AgoraContactInfoCell.h"
 
-@interface AgoraContactInfoCell()
+#define KContactInfoKey     @"contactInfoKey"
+#define KContactInfoValue   @"contactInfoValue"
+#define KContactInfoTitle   @"contactInfoTitle"
 
+
+
+@interface AgoraContactInfoCell()
 @property (strong, nonatomic) IBOutlet UILabel *titleLabel;
 @property (strong, nonatomic) IBOutlet UILabel *infoLabel;
 @property (strong, nonatomic) IBOutlet UISwitch *blockSwitch;
-
-
-
 @end
 
 @implementation AgoraContactInfoCell
@@ -35,12 +37,18 @@
         _infoLabel.text = [_infoDic.allValues lastObject];
     }
     else {
-        _blockSwitch.hidden = NO;
-        _titleLabel.text = [_infoDic.allKeys lastObject];
-        _titleLabel.textColor = (UIColor *)[_infoDic.allValues lastObject];
-        if ([_titleLabel.text isEqualToString:NSLocalizedString(@"contact.delete", @"Delete Contact")]) {
-            _blockSwitch.hidden = YES;
-        }
+//        _blockSwitch.hidden = NO;
+//        _titleLabel.text = [_infoDic.allKeys lastObject];
+//        _titleLabel.textColor = (UIColor *)[_infoDic.allValues lastObject];
+//        if ([_titleLabel.text isEqualToString:NSLocalizedString(@"contact.delete", @"Delete Contact")]) {
+//            _blockSwitch.hidden = YES;
+//        }
+        
+        _blockSwitch.hidden = YES;
+        _titleLabel.text = _infoDic[KContactInfoTitle];
+//        _titleLabel.textColor = (UIColor *)[_infoDic.allValues lastObject];
+        
+
     }
 }
 
@@ -63,7 +71,7 @@
                                                                 }
                                                             }
                                                             else {
-                                                                [weakSelf showAlertWithMessage:NSLocalizedString(@"contact.blackFailure", @"Block failure")];
+                                                                [weakSelf showAlertWithMessage:NSLocalizedString(@"contact.blockFailure", @"Block failure")];
                                                             }
                                                         }];
     } else {
@@ -90,3 +98,10 @@
 }
 
 @end
+
+#undef KContactInfoKey
+#undef KContactInfoValue
+#undef KContactInfoTitle
+
+
+

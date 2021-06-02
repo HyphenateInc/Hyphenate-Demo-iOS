@@ -14,7 +14,7 @@
 #define KPUBLICGROUP_PAGE_COUNT    50
 
 typedef NS_ENUM(NSUInteger, AgoraFetchPublicGroupState) {
-    AgoraFetchPublicGroupState_Normal            =           0,
+    AgoraFetchPublicGroupState_Normal    = 0,
     AgoraFetchPublicGroupState_Loading,
     AgoraFetchPublicGroupState_Nomore
 };
@@ -51,37 +51,6 @@ typedef NS_ENUM(NSUInteger, AgoraFetchPublicGroupState) {
     [self fetchPublicGroups];
 }
 
-- (void)setSearchState:(BOOL)isSearching {
-    _isSearching = isSearching;
-    if (!_isSearching) {
-        [_searchResults removeAllObjects];
-    }
-}
-
-- (NSMutableArray<AgoraGroupModel *> *)publicGroups {
-    if (!_publicGroups) {
-        _publicGroups = [NSMutableArray array];
-    }
-    return _publicGroups;
-}
-
-- (NSMutableArray<NSString *> *)applyedDataSource {
-    if (!_applyedDataSource) {
-        _applyedDataSource = [NSMutableArray array];
-        NSArray *joinedGroups = [[AgoraChatClient sharedClient].groupManager getJoinedGroups];
-        for (AgoraGroup *group in joinedGroups) {
-            [_applyedDataSource addObject:group.groupId];
-        }
-    }
-    return _applyedDataSource;
-}
-
-- (NSMutableArray<AgoraGroupModel *> *)searchResults {
-    if (!_searchResults) {
-        _searchResults = [NSMutableArray array];
-    }
-    return _searchResults;
-}
 
 #pragma mark - Load Data
 
@@ -94,6 +63,8 @@ typedef NS_ENUM(NSUInteger, AgoraFetchPublicGroupState) {
     [MBProgressHUD showHUDAddedTo:[UIApplication sharedApplication].keyWindow animated:YES];
     [[AgoraChatClient sharedClient].groupManager getPublicGroupsFromServerWithCursor:_cursor pageSize:KPUBLICGROUP_PAGE_COUNT completion:^(AgoraCursorResult *aResult, AgoraError *aError) {
         [MBProgressHUD hideHUDForView:[UIApplication sharedApplication].keyWindow animated:YES];
+        [self tableViewDidFinishTriggerHeader:YES];
+        
         if (!aError) {
             weakSelf.cursor = aResult.cursor;
             for (AgoraGroup *group in aResult.list) {
@@ -120,9 +91,10 @@ typedef NS_ENUM(NSUInteger, AgoraFetchPublicGroupState) {
             NSUInteger index = [weakSelf.publicGroups indexOfObject:_requestGroupModel];
             NSIndexPath *indexPath = [NSIndexPath indexPathForRow:index inSection:0];
             dispatch_async(dispatch_get_main_queue(), ^{
-                [weakSelf.tableView beginUpdates];
+//                [weakSelf.tableView beginUpdates];
+//                [weakSelf.tableView endUpdates];
                 [weakSelf.tableView reloadRowsAtIndexPaths:@[indexPath] withRowAnimation:UITableViewRowAnimationNone];
-                [weakSelf.tableView endUpdates];
+
                 _requestGroupModel = nil;
             });
         }
@@ -156,11 +128,12 @@ typedef NS_ENUM(NSUInteger, AgoraFetchPublicGroupState) {
     [[AgoraChatClient sharedClient].groupManager requestToJoinPublicGroup:groupId
                                                            message:message
                                                         completion:^(AgoraGroup *aGroup, AgoraError *aError) {
-                                                            [MBProgressHUD hideAllHUDsForView:[UIApplication sharedApplication].keyWindow animated:YES];
                                                             if (!aError) {
                                                                 [weakSelf reloadRequestedApplyDataSource];
                                                             }
                                                             else {
+                                                                [MBProgressHUD hideAllHUDsForView:[UIApplication sharedApplication].keyWindow animated:YES];
+
                                                                 NSString *msg = NSLocalizedString(@"group.requestFailure", @"Failed to apply to the group");
                                                                 [weakSelf showAlertWithMessage:msg];
                                                             }
@@ -181,6 +154,11 @@ typedef NS_ENUM(NSUInteger, AgoraFetchPublicGroupState) {
     [super didReceiveMemoryWarning];
     // Dispose of any resources that can be recreated.
 }
+
+- (void)tableViewDidTriggerHeaderRefresh {
+    [self fetchPublicGroups];
+}
+
 
 #pragma mark - UITableViewDataSource
 
@@ -287,6 +265,40 @@ typedef NS_ENUM(NSUInteger, AgoraFetchPublicGroupState) {
         }
         [self requestToJoinPublicGroup:_requestGroupModel.group.groupId message:messageStr];
     }
+}
+
+
+#pragma mark getter and setter
+- (void)setSearchState:(BOOL)isSearching {
+    _isSearching = isSearching;
+    if (!_isSearching) {
+        [_searchResults removeAllObjects];
+    }
+}
+
+- (NSMutableArray<AgoraGroupModel *> *)publicGroups {
+    if (!_publicGroups) {
+        _publicGroups = [NSMutableArray array];
+    }
+    return _publicGroups;
+}
+
+- (NSMutableArray<NSString *> *)applyedDataSource {
+    if (!_applyedDataSource) {
+        _applyedDataSource = [NSMutableArray array];
+        NSArray *joinedGroups = [[AgoraChatClient sharedClient].groupManager getJoinedGroups];
+        for (AgoraGroup *group in joinedGroups) {
+            [_applyedDataSource addObject:group.groupId];
+        }
+    }
+    return _applyedDataSource;
+}
+
+- (NSMutableArray<AgoraGroupModel *> *)searchResults {
+    if (!_searchResults) {
+        _searchResults = [NSMutableArray array];
+    }
+    return _searchResults;
 }
 
 

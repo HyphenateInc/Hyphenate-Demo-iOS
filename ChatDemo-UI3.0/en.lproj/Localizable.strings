@@ -10,7 +10,7 @@
 //button
 "button.save" = "Save";
 "button.remove" = "Remove";
-"button.black" = "Block";
+"button.block" = "Block";
 "button.mute" = "Mute";
 "button.demote" = "Demote";
 "button.upgrade" = "Up";
@@ -41,7 +41,7 @@
 "title.updateGroupName" = "Update Group Name";
 "title.occupantList" = "Occupant List";
 "title.adminList" = "Admin List";
-"title.blacklist" = "Blacklist";
+"title.blacklist" = "Blocklist";
 "title.muteList" = "Mute List";
 "title.inviteContacts" = "Invite Contacts";
 "title.addAdmin" = "Add Admin";
@@ -141,6 +141,7 @@
 
 //setting.chats
 "setting.chats.acceptInvitation" = "Accept group invites automatically";
+"setting.chats.blockedUsers" = "Blocked Users";
 
 //logout
 "logout.failed" = "Logout failed";
@@ -160,8 +161,9 @@
 "contact.name" = "Name";
 "contact.hyphenateId" = "Hyphenate ID";
 "contact.apnsnickname" = "iOS APNS";
-"contact.black" = "Black Contact";
-"contact.blackFailure" = "Block failure";
+"contact.block" = "Block Contact";
+"contact.blockFailure" = "Block failure";
+"contact.unblock" = "Unblock";
 "contact.unblockFailure" = "Unblock failure";
 "contact.delete" = "Delete Contact";
 "contact.deleteFailure" = "Delete contacts failed";
@@ -260,6 +262,7 @@
 "common.search" = "Search";
 "common.open" = "Open";
 "common.searchFailure" = "Search failure.";
+"common.addblackList" = "Add BlockList";
 
 //message
 "message.friendapply.agree" = "%@ agreed to add friends to apply";
@@ -282,7 +285,7 @@
 "chatroom.owner" = "Owner";
 "chatroom.admins" = "Admin List";
 "chatroom.onlineMembers" = "Online member List";
-"chatroom.blacklist" = "Blacklist";
+"chatroom.blacklist" = "Blocklist";
 "chatroom.mutes" = "Mute List";
 "chatroom.occupantCount" = "members count";
 "chatroom.subject" = "Subject";

@@ -11,6 +11,13 @@
 #import "AgoraContactsUIProtocol.h"
 
 
+typedef enum : NSUInteger {
+    AgoraContactInfoTypeUser,
+    AgoraContactInfoTypeDelete,
+    AgoraContactInfoTypeAddBlacklist,
+} AgoraContactInfoType;
+
+
 @interface AgoraContactInfoCell : UITableViewCell
 
 @property (nonatomic, strong) NSDictionary *infoDic;
@@ -20,3 +27,4 @@
 @property (nonatomic, assign) id<AgoraContactsUIProtocol> delegate;
 
 @end
+

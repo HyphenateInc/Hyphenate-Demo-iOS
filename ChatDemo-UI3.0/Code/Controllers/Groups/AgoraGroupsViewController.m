@@ -90,6 +90,7 @@
 
     AgoraCreateViewController *publicVc = [[AgoraCreateViewController alloc] initWithNibName:@"AgoraCreateViewController" bundle:nil];
     UINavigationController *nav = [[UINavigationController alloc] initWithRootViewController:publicVc];
+    nav.modalPresentationStyle = UIModalPresentationFullScreen;
     [self presentViewController:nav animated:YES completion:nil];
 }
 

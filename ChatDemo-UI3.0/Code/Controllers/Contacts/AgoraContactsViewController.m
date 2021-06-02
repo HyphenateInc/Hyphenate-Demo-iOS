@@ -77,15 +77,15 @@
     
     WEAK_SELF
     [[AgoraChatClient sharedClient].contactManager getContactsFromServerWithCompletion:^(NSArray *aList, AgoraError *aError) {
-        if (!aError) {
+        if (aError == nil) {
+            [weakSelf tableViewDidFinishTriggerHeader:YES];
             dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), ^(){
                 [weakSelf updateContacts:aList];
-                [weakSelf tableViewDidFinishTriggerHeader:YES];
                 dispatch_async(dispatch_get_main_queue(), ^(){
                     [weakSelf.tableView reloadData];
                 });
             });
-          
+        
         }
         else {
             [weakSelf tableViewDidFinishTriggerHeader:YES];
@@ -139,6 +139,13 @@
 }
 
 - (void)sortContacts:(NSArray *)contacts {
+    if (contacts.count == 0) {
+        self.contacts = [@[] mutableCopy];
+        _sectionTitles = [@[] mutableCopy];
+        _searchSource = [@[] mutableCopy];
+        return;
+    }
+    
     NSMutableArray *sectionTitles = nil;
     NSMutableArray *searchSource = nil;
     NSArray *sortArray = [NSArray sortContacts:contacts
@@ -337,6 +344,12 @@
     }
     if (model) {
         AgoraContactInfoViewController *contactInfoVc = [[AgoraContactInfoViewController alloc] initWithUserModel:model];
+        contactInfoVc.addBlackListBlock = ^{
+            [self reloadContacts];
+        };
+        contactInfoVc.deleteContactBlock = ^{
+            [self reloadContacts];
+        };
         [self.navigationController pushViewController:contactInfoVc animated:YES];
     }
 }

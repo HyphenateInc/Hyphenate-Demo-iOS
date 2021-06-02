@@ -12,6 +12,9 @@
 
 @interface AgoraContactInfoViewController : UITableViewController
 
+@property (nonatomic,copy) void (^addBlackListBlock)(void);
+@property (nonatomic,copy) void (^deleteContactBlock)(void);
+
 - (instancetype)initWithUserModel:(AgoraUserModel *)model;
 
 @end

@@ -18,8 +18,17 @@
 #define HYPHENATE_ID        NSLocalizedString(@"contact.hyphenateId", @"Hyphenate ID")
 #define APNS_NICKNAME       NSLocalizedString(@"contact.apnsnickname", @"iOS APNS")
 #define DELETE_CONTACT      NSLocalizedString(@"contact.delete", @"Delete Contact")
+#define ADD_BLACKLIST       NSLocalizedString(@"contact.block", @"Black Contact")
 
+#define KContactInfoKey     @"contactInfoKey"
+#define KContactInfoValue   @"contactInfoValue"
+#define KContactInfoTitle   @"contactInfoTitle"
 
+typedef enum : NSUInteger {
+    AgoraContactInfoActionNone,
+    AgoraContactInfoActionDelete,
+    AgoraContactInfoActionBlackList,
+} AgoraContactInfoAction;
 
 @interface AgoraContactInfoViewController ()<UIActionSheetDelegate, AgoraContactsUIProtocol>
 
@@ -27,19 +36,21 @@
 @property (strong, nonatomic) IBOutlet UIImageView *avatarImage;
 @property (strong, nonatomic) IBOutlet UILabel *nickNameLabel;
 @property (strong, nonatomic) AgoraUserModel *model;
+@property (nonatomic,assign) AgoraContactInfoAction currentAction;
 
 @end
 
 @implementation AgoraContactInfoViewController
 {
     NSArray *_contactInfo;
-    NSArray *_contactFunc;
+    NSArray *_contactActions;
 }
 
 - (instancetype)initWithUserModel:(AgoraUserModel *)model {
     self = [super initWithNibName:@"AgoraContactInfoViewController" bundle:nil];
     if (self) {
         _model = model;
+        self.currentAction = AgoraContactInfoActionNone;
     }
     return self;
 }
@@ -51,8 +62,6 @@
     self.tableView.tableFooterView = [UIView new];
   
     [self loadContactInfo];
-    
-
 }
 
 
@@ -73,10 +82,10 @@
         [_avatarImage sd_setImageWithURL:avatarUrl placeholderImage:_model.defaultAvatarImage];
     }
     
-    [self buildTableViewData];
+    [self buildData];
 }
 
-- (void)buildTableViewData {
+- (void)buildData {
     NSMutableArray *info = [NSMutableArray array];
     [info addObjectsFromArray:@[@{NAME:_model.nickname}, @{HYPHENATE_ID:_model.hyphenateId}]];
     if ([_model.hyphenateId isEqualToString:[AgoraChatClient sharedClient].currentUsername]) {
@@ -86,7 +95,8 @@
         }
     }
     _contactInfo = [NSArray arrayWithArray:info];
-    _contactFunc = @[@{DELETE_CONTACT:RGBACOLOR(255.0, 59.0, 48.0, 1.0)}];
+//    _contactFunc = @[@{DELETE_CONTACT:RGBACOLOR(255.0, 59.0, 48.0, 1.0)}];
+    _contactActions = @[@{_contactInfo:@(AgoraContactInfoTypeDelete),KContactInfoTitle:DELETE_CONTACT},@{KContactInfoKey:@(AgoraContactInfoTypeAddBlacklist),KContactInfoTitle:ADD_BLACKLIST}];
 }
 
 //- (void)makeCallWithContact:(NSString *)contact callTyfpe:(AgoraCallType)callType {
@@ -144,7 +154,7 @@
     if (section == 0) {
         return _contactInfo.count;
     }
-    return _contactFunc.count;
+    return _contactActions.count;
 }
 
 
@@ -165,15 +175,9 @@
             cell = [[[NSBundle mainBundle] loadNibNamed:@"AgoraContactInfo_funcCell" owner:self options:nil] lastObject];
         }
         
-        if (indexPath.row == 0) {
-            cell.hyphenateId = _model.hyphenateId;
-            cell.infoDic = _contactFunc[indexPath.row];
-            cell.delegate = self;
-        }else {
-            cell.hyphenateId = _model.hyphenateId;
-            cell.infoDic = _contactFunc[indexPath.row];
-            cell.delegate = self;
-        }
+        cell.hyphenateId = _model.hyphenateId;
+        cell.infoDic = _contactActions[indexPath.row];
+        cell.delegate = self;
     }
     return cell;
 }
@@ -184,8 +188,19 @@
 - (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath {
     [tableView deselectRowAtIndexPath:indexPath animated:YES];
     if (indexPath.section == 1) {
-        UIActionSheet *actionSheet = [[UIActionSheet alloc] initWithTitle:nil delegate:self cancelButtonTitle:NSLocalizedString(@"common.cancel", @"Cancel") destructiveButtonTitle:NSLocalizedString(@"common.delete", @"Delete") otherButtonTitles:nil, nil];
-        [actionSheet showInView:[[UIApplication sharedApplication] keyWindow]];
+        if (indexPath.row == 0) {
+            self.currentAction = AgoraContactInfoTypeDelete;
+            UIActionSheet *actionSheet = [[UIActionSheet alloc] initWithTitle:nil delegate:self cancelButtonTitle:NSLocalizedString(@"common.cancel", @"Cancel") destructiveButtonTitle:NSLocalizedString(@"common.delete", @"Delete") otherButtonTitles:nil, nil];
+            [actionSheet showInView:[[UIApplication sharedApplication] keyWindow]];
+        }
+        
+        if (indexPath.row == 1) {
+            self.currentAction = AgoraContactInfoTypeAddBlacklist;
+            
+            UIActionSheet *actionSheet = [[UIActionSheet alloc] initWithTitle:nil delegate:self cancelButtonTitle:NSLocalizedString(@"common.cancel", @"Cancel") destructiveButtonTitle:NSLocalizedString(@"common.addblackList", @"Add BlackList") otherButtonTitles:nil, nil];
+            [actionSheet showInView:[[UIApplication sharedApplication] keyWindow]];
+        }
+        
     }
 }
 
@@ -214,26 +229,48 @@
 - (void)actionSheet:(UIActionSheet *)actionSheet clickedButtonAtIndex:(NSInteger)buttonIndex
 {
     if (buttonIndex != actionSheet.cancelButtonIndex) {
+        if (self.currentAction == AgoraContactInfoTypeDelete) {
+            [self deleteContact];
+        }
         
-        WEAK_SELF
-        [MBProgressHUD showHUDAddedTo:self.view animated:YES];
-        
-        dispatch_async(dispatch_get_global_queue(0, 0), ^{
-            [[AgoraChatClient sharedClient].contactManager deleteContact:_model.hyphenateId isDeleteConversation:YES completion:^(NSString *aUsername, AgoraError *aError) {
-                
-                [MBProgressHUD hideAllHUDsForView:weakSelf.view animated:YES];
-                
-                if (!aError) {
-                    [[AgoraChatDemoHelper shareHelper].contactsVC reloadContacts];
-                    [weakSelf.navigationController popViewControllerAnimated:YES];
-                }
-                else {
-                    [weakSelf showAlertWithMessage:NSLocalizedString(@"contact.deleteFailure", @"Delete contacts failed")];
-                }
-            }];
-            
-        });
+        if (self.currentAction == AgoraContactInfoActionBlackList) {
+            [self addBlackList];
+        }
     }
+}
+
+- (void)deleteContact {
+    
+    [MBProgressHUD showHUDAddedTo:self.view animated:YES];
+    [[AgoraChatClient sharedClient].contactManager deleteContact:_model.hyphenateId isDeleteConversation:YES completion:^(NSString *aUsername, AgoraError *aError) {
+        
+        [MBProgressHUD hideAllHUDsForView:self.view animated:YES];
+        
+        if (!aError) {
+            if (self.deleteContactBlock) {
+                self.deleteContactBlock();
+            }
+            [self.navigationController popViewControllerAnimated:YES];
+        }
+        else {
+            [self showAlertWithMessage:NSLocalizedString(@"contact.deleteFailure", @"Delete contacts failed")];
+        }
+    }];
+}
+
+- (void)addBlackList {
+    [[AgoraChatClient sharedClient].contactManager addUserToBlackList:_model.hyphenateId completion:^(NSString *aUsername, AgoraError *aError) {
+        if ((!aError)) {
+            if (self.addBlackListBlock) {
+                self.addBlackListBlock();
+            }
+            [self.navigationController popViewControllerAnimated:YES];
+        }
+        else {
+            [self showAlertWithMessage:NSLocalizedString(@"contact.blockFailure", @"Black failure")];
+        }
+    }];
+    
 }
 
 #pragma mark - AgoraContactsUIProtocol
@@ -247,5 +284,16 @@
 }
 
 @end
+
+
+#undef NAME
+#undef HYPHENATE_ID
+#undef DELETE_CONTACT
+#undef ADD_BLACKLIST
+#undef KContactInfoKey
+#undef KContactInfoValue
+#undef KContactInfoTitle
+
+
 
 

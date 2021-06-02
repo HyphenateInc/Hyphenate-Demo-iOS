@@ -10,7 +10,7 @@
 //button
 "button.save" = "保存";
 "button.remove" = "移除";
-"button.black" = "拉黑";
+"button.block" = "拉黑";
 "button.mute" = "禁言";
 "button.demote" = "降级";
 "button.upgrade" = "升级";
@@ -142,6 +142,7 @@
 
 //setting.chats
 "setting.chats.acceptInvitation" = "自动接受群组邀请";
+"setting.chats.blockedUsers" = "黑名单列表";
 
 //logout
 "logout.failed" = "退出登录失败";
@@ -162,8 +163,9 @@
 "contact.name" = "姓名";
 "contact.hyphenateId" = "Hyphenate ID";
 "contact.apnsnickname" = "iOS推送昵称";
-"contact.black" = "联系人加入黑名单";
-"contact.blackFailure" = "加入黑名单失败";
+"contact.block" = "联系人加入黑名单";
+"contact.blockFailure" = "加入黑名单失败";
+"contact.unblock" = "移除黑名单";
 "contact.unblockFailure" = "移除黑名单失败";
 "contact.delete" = "删除联系人";
 "contact.deleteFailure" = "删除联系人失败";
@@ -263,6 +265,7 @@
 "common.search" = "搜索";
 "common.open" = "打开";
 "common.searchFailure" = "搜索失败。";
+"common.addblackList" = "加入黑名单";
 
 //message
 "message.friendapply.agree" = "%@同意了加好友申请";

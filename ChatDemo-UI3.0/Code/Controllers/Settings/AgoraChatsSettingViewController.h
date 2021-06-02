@@ -8,7 +8,6 @@
  */
 
 #import "AgoraBaseSettingController.h"
-
 @interface AgoraChatsSettingViewController : AgoraBaseSettingController
 
 @end
