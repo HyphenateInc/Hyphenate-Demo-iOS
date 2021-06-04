@@ -41,4 +41,4 @@
 
 @property (weak, nonatomic) id<AgoraChatToolBarNewDelegate> delegate;
 
-    @end
+@end

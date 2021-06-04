@@ -1,14 +1,17 @@
-/************************************************************
- *  * Hyphenate
- * __________________
- * Copyright (C) 2016 Hyphenate Inc. All rights reserved.
- *
- * NOTICE: All information contained herein is, and remains
- * the property of Hyphenate Inc.
- */
+//
+//  AgoraCreateViewNewController.h
+//  ChatDemo-UI3.0
+//
+//  Created by liujinliang on 2021/6/4.
+//  Copyright © 2021 easemob. All rights reserved.
+//
 
-#import <UIKit/UIKit.h>
+#import "AgoraBaseRefreshTableController.h"
+
+NS_ASSUME_NONNULL_BEGIN
 
 @interface AgoraCreateViewController : UIViewController
 
 @end
+
+NS_ASSUME_NONNULL_END

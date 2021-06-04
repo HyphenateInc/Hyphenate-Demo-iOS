@@ -12,8 +12,8 @@
 #import "AgoraGroupModel.h"
 #import "AgoraNotificationNames.h"
 #import "AgoraGroupInfoViewController.h"
-#import "AgoraCreateViewController.h"
 #import "AgoraChatViewController.h"
+#import "AgoraCreateViewController.h"
 
 @interface AgoraGroupsViewController ()
 
@@ -87,11 +87,17 @@
 }
 
 - (void)addGroupAction {
-
-    AgoraCreateViewController *publicVc = [[AgoraCreateViewController alloc] initWithNibName:@"AgoraCreateViewController" bundle:nil];
+    
+//    AgoraCreateViewController *publicVc = [[AgoraCreateViewController alloc] initWithNibName:@"AgoraCreateViewController" bundle:nil];
+//    UINavigationController *nav = [[UINavigationController alloc] initWithRootViewController:publicVc];
+//    nav.modalPresentationStyle = UIModalPresentationFullScreen;
+//    [self presentViewController:nav animated:YES completion:nil];
+  
+    AgoraCreateViewController *publicVc = [[AgoraCreateViewController alloc] init];
     UINavigationController *nav = [[UINavigationController alloc] initWithRootViewController:publicVc];
     nav.modalPresentationStyle = UIModalPresentationFullScreen;
     [self presentViewController:nav animated:YES completion:nil];
+
 }
 
 #pragma mark - Notification Method

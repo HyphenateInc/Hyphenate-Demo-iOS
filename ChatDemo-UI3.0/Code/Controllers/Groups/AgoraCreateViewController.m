@@ -1,73 +1,80 @@
-/************************************************************
- *  * Hyphenate
- * __________________
- * Copyright (C) 2016 Hyphenate Inc. All rights reserved.
- *
- * NOTICE: All information contained herein is, and remains
- * the property of Hyphenate Inc.
- */
+//
+//  AgoraCreateViewNewController.m
+//  ChatDemo-UI3.0
+//
+//  Created by liujinliang on 2021/6/4.
+//  Copyright © 2021 easemob. All rights reserved.
+//
 
 #import "AgoraCreateViewController.h"
 #import "AgoraCreateNewGroupViewController.h"
-#import "AgoraPublicGroupsViewController.h"
 #import "AgoraRealtimeSearchUtils.h"
+#import "AgoraPublicGroupsViewController.h"
 
-@interface AgoraCreateViewController ()
+#define kLabelTextColor [UIColor colorWithRed:56.0/255.0 green:82.0/255.0 blue:109.0/255.0 alpha:1.0]
 
-@property (strong, nonatomic) IBOutlet UILabel *promptLabel;
-@property (strong, nonatomic) IBOutlet UISearchBar *searchBar;
+@interface AgoraCreateViewController ()<UISearchBarDelegate>
 
-@property (strong, nonatomic) AgoraPublicGroupsViewController *publicGroupsVc;
+@property (strong, nonatomic) UIButton *newGroupButton;
+@property (strong, nonatomic) UILabel *promptLabel;
+@property (strong, nonatomic) UISearchBar *searchBar;
+@property (strong, nonatomic) AgoraPublicGroupsViewController *publicGroupsVC;
 
 @end
 
 @implementation AgoraCreateViewController
-
+#pragma mark life cycle
 - (void)viewDidLoad {
     [super viewDidLoad];
-    // Do any additional setup after loading the view from its nib.
-    if ([self respondsToSelector:@selector(edgesForExtendedLayout)]) {
-        self.edgesForExtendedLayout = UIRectEdgeNone;
-    }
-    [self setupNavBar];
-    
-    _publicGroupsVc = [[AgoraPublicGroupsViewController alloc] initWithNibName:@"AgoraPublicGroupsViewController" bundle:nil];
-    [self addChildViewController:_publicGroupsVc];
-    [self.view addSubview:_publicGroupsVc.tableView];
-    _publicGroupsVc.tableView.frame = CGRectMake(0,
-                                                 2*50,
-                                                 self.view.bounds.size.width,
-                                                 self.view.bounds.size.height - 2*50);
-    [self setupSearchBar];
-}
-
-- (void)viewDidAppear:(BOOL)animated {
-    [super viewDidAppear:animated];
-    NSLog(@"%@",NSStringFromCGRect(_searchBar.frame));
-}
-
-- (void)setupSearchBar {
-    NSString *promptText = _promptLabel.text;
-    CGSize promptSize = [promptText sizeWithAttributes:@{NSFontAttributeName:_promptLabel.font}];
-    CGRect frame = _promptLabel.frame;
-    frame.size.width = promptSize.width;
-    _promptLabel.frame = frame;
-    
-    frame = _searchBar.frame;
-    frame.size.height = 30;
-    frame.origin.x = _promptLabel.frame.origin.x + _promptLabel.frame.size.width;
-    frame.size.width = KScreenWidth - frame.origin.x;
-    _searchBar.frame = frame;
-    _searchBar.placeholder = NSLocalizedString(@"common.search", @"Search");
-    _searchBar.showsCancelButton = NO;
-    _searchBar.backgroundImage = [UIImage imageWithColor:[UIColor whiteColor] size:_searchBar.bounds.size];
-    [_searchBar setSearchFieldBackgroundPositionAdjustment:UIOffsetMake(0, 0)];
-    [_searchBar setSearchFieldBackgroundImage:[UIImage imageWithColor:PaleGrayColor size:_searchBar.bounds.size] forState:UIControlStateNormal];
-    _searchBar.tintColor = AlmostBlackColor;
-}
-    
-- (void)setupNavBar {
+    self.view.backgroundColor = UIColor.whiteColor;
     self.title = NSLocalizedString(@"title.create", @"Create");
+    [self setupNavBar];
+    [self placeAndLayoutSubviews];
+}
+
+- (void)placeAndLayoutSubviews {
+    [self.view addSubview:self.newGroupButton];
+    [self.view addSubview:self.promptLabel];
+    [self.view addSubview:self.searchBar];
+    
+    [self.newGroupButton mas_makeConstraints:^(MASConstraintMaker *make) {
+        make.top.equalTo(self.view);
+        make.left.equalTo(self.view);
+        make.right.equalTo(self.view);
+        make.height.mas_equalTo(50.0);
+    }];
+    
+    [self.promptLabel mas_makeConstraints:^(MASConstraintMaker *make) {
+        make.top.equalTo(self.newGroupButton.mas_bottom);
+        make.left.equalTo(self.view).offset(kAgroaPadding * 2);
+        make.width.mas_equalTo(85);
+        make.height.mas_equalTo(16.0);
+    }];
+    
+    [self.searchBar mas_makeConstraints:^(MASConstraintMaker *make) {
+        make.centerY.equalTo(self.promptLabel);
+        make.left.equalTo(self.promptLabel.mas_right).offset(kAgroaPadding);
+        make.right.equalTo(self.view).offset(-kAgroaPadding);
+        make.height.mas_equalTo(30.0);
+    }];
+    
+    
+    [self addChildViewController:self.publicGroupsVC];
+    [self.view addSubview:self.publicGroupsVC.tableView];
+    [self.publicGroupsVC.view mas_makeConstraints:^(MASConstraintMaker *make) {
+        make.top.equalTo(self.searchBar.mas_bottom);
+        make.left.and.right.equalTo(self.view);
+        make.bottom.equalTo(self.view);
+    }];
+    
+}
+
+- (void)didReceiveMemoryWarning {
+    [super didReceiveMemoryWarning];
+}
+
+
+- (void)setupNavBar {
     UIButton *cancelBtn = [UIButton buttonWithType:UIButtonTypeCustom];
     cancelBtn.frame = CGRectMake(0, 0, 44, 44);
     [cancelBtn setTitleColor:KermitGreenTwoColor forState:UIControlStateNormal];
@@ -81,33 +88,29 @@
 }
 
 - (void)updateSearchBarFrame:(BOOL)isPromptHiden {
-    CGRect searchBarFrame = _searchBar.frame;
-    CGFloat interval = _promptLabel.frame.size.width + 15;
-    _promptLabel.hidden = isPromptHiden;
+
     if (isPromptHiden) {
-        searchBarFrame.origin.x -= interval;
-        searchBarFrame.size.width += interval;
+        [self.promptLabel mas_updateConstraints:^(MASConstraintMaker *make) {
+            make.left.equalTo(self.view).offset(-kAgroaPadding);
+            make.width.mas_equalTo(0);
+        }];
+    }else {
+        [self.promptLabel mas_updateConstraints:^(MASConstraintMaker *make) {
+            make.left.equalTo(self.view).offset(kAgroaPadding * 2);
+            make.width.mas_equalTo(85);
+        }];
     }
-    else {
-        searchBarFrame.origin.x += interval;
-        searchBarFrame.size.width -= interval;
-    }
-    _searchBar.frame = searchBarFrame;
+    
 }
 
-- (void)didReceiveMemoryWarning {
-    [super didReceiveMemoryWarning];
-    // Dispose of any resources that can be recreated.
-}
 
 #pragma mark - Action Method
-
 - (void)cancelAction {
     [_searchBar resignFirstResponder];
     [self dismissViewControllerAnimated:YES completion:nil];
 }
 
-- (IBAction)createNewGroupAction:(id)sender {
+- (void)createNewGroup {
     if (_searchBar.isFirstResponder) {
         [self searchBarCancelButtonClicked:_searchBar];
     }
@@ -117,66 +120,53 @@
 }
 
 #pragma mark - UISearchBarDelegate
-
 - (BOOL)searchBarShouldBeginEditing:(UISearchBar *)searchBar {
     [self updateSearchBarFrame:YES];
     [searchBar setShowsCancelButton:YES animated:YES];
-    [_publicGroupsVc setSearchState:YES];
-    _publicGroupsVc.tableView.scrollEnabled = NO;
+    [self.publicGroupsVC setSearchState:YES];
     return YES;
-}
-
-- (void)searchBarTextDidEndEditing:(UISearchBar *)searchBar {
-    _publicGroupsVc.tableView.scrollEnabled = YES;
 }
 
 - (void)searchBar:(UISearchBar *)searchBar textDidChange:(NSString *)searchText {
     if (searchBar.text.length == 0) {
-        [_publicGroupsVc setSearchState:NO];
-        _publicGroupsVc.tableView.scrollEnabled = NO;
-        [_publicGroupsVc.searchResults removeAllObjects];
-        [_publicGroupsVc.tableView reloadData];
+        [self.publicGroupsVC setSearchResultArray:@[] isEmptySearchKey:YES];
         return;
     }
-    [_publicGroupsVc setSearchState:YES];
-    __weak typeof(_publicGroupsVc) weakVc = _publicGroupsVc;
-    [[AgoraRealtimeSearchUtils defaultUtil] realtimeSearchWithSource:_publicGroupsVc.publicGroups searchString:searchText resultBlock:^(NSArray *results) {
-        if (results) {
-            dispatch_async(dispatch_get_main_queue(), ^{
-                weakVc.searchResults = [NSMutableArray arrayWithArray:results];
-                [weakVc.tableView reloadData];
-            });
-        }
-    }];
-}
-
-- (void)searchBarSearchButtonClicked:(UISearchBar *)searchBar {
-    [self updateSearchBarFrame:NO];
-    [searchBar setShowsCancelButton:NO animated:NO];
-    [searchBar resignFirstResponder];
-    _publicGroupsVc.tableView.scrollEnabled = YES;
     
-    if (_publicGroupsVc.searchResults.count > 0) {
-        
-        return;
-    }
-    __weak typeof(_publicGroupsVc) weakVc = _publicGroupsVc;
-    WEAK_SELF
-    [[AgoraChatClient sharedClient].groupManager searchPublicGroupWithId:searchBar.text completion:^(AgoraGroup *aGroup, AgoraError *aError) {
-        
-        AgoraPublicGroupsViewController *strongVc = weakVc;
-        dispatch_async(dispatch_get_main_queue(), ^(){
-            if (aGroup) {
-                [strongVc.searchResults removeAllObjects];
-                AgoraGroupModel *model = [[AgoraGroupModel alloc] initWithObject:aGroup];
-                [strongVc.searchResults addObject:model];
-                [strongVc.tableView reloadData];
-            } else {
-                [weakSelf showAlertWithMessage:NSLocalizedString(@"common.searchFailure", @"Search failure.")];
-            }
+    [[AgoraRealtimeSearchUtils defaultUtil] realtimeSearchWithSource:self.publicGroupsVC.publicGroups searchString:searchText resultBlock:^(NSArray *results) {
+        dispatch_async(dispatch_get_main_queue(), ^{
+            [self.publicGroupsVC setSearchResultArray:results isEmptySearchKey:NO];
         });
     }];
 }
+
+//- (void)searchBarSearchButtonClicked:(UISearchBar *)searchBar {
+//    [self updateSearchBarFrame:NO];
+//    [searchBar setShowsCancelButton:NO animated:NO];
+//    [searchBar resignFirstResponder];
+//    self.publicGroupsVc.tableView.scrollEnabled = YES;
+//
+//    if (self.publicGroupsVc.searchResults.count > 0) {
+//
+//        return;
+//    }
+//    __weak typeof(self.publicGroupsVc) weakVc = self.publicGroupsVc;
+//    WEAK_SELF
+//    [[AgoraChatClient sharedClient].groupManager searchPublicGroupWithId:searchBar.text completion:^(AgoraGroup *aGroup, AgoraError *aError) {
+//
+//        AgoraPublicGroupsViewController *strongVc = weakVc;
+//        dispatch_async(dispatch_get_main_queue(), ^(){
+//            if (aGroup) {
+//                [strongVc.searchResults removeAllObjects];
+//                AgoraGroupModel *model = [[AgoraGroupModel alloc] initWithObject:aGroup];
+//                [strongVc.searchResults addObject:model];
+//                [strongVc.tableView reloadData];
+//            } else {
+//                [weakSelf showAlertWithMessage:NSLocalizedString(@"common.searchFailure", @"Search failure.")];
+//            }
+//        });
+//    }];
+//}
 
 - (void)searchBarCancelButtonClicked:(UISearchBar *)searchBar {
     searchBar.text = @"";
@@ -184,9 +174,67 @@
     [searchBar setShowsCancelButton:NO animated:NO];
     [searchBar resignFirstResponder];
     [[AgoraRealtimeSearchUtils defaultUtil] realtimeSearchDidFinish];
-    [_publicGroupsVc setSearchState:NO];
-    _publicGroupsVc.tableView.scrollEnabled = YES;
-    [_publicGroupsVc.tableView reloadData];
+    [self.publicGroupsVC setSearchState:NO];
+    [self.publicGroupsVC.tableView reloadData];
+}
+
+#pragma mark getter and setter
+- (AgoraPublicGroupsViewController *)publicGroupsVC {
+    if (_publicGroupsVC == nil) {
+        _publicGroupsVC = [[AgoraPublicGroupsViewController alloc] init];
+    }
+    return _publicGroupsVC;
+}
+
+
+- (UIButton *)newGroupButton {
+    if (_newGroupButton == nil) {
+        _newGroupButton = [[UIButton alloc] initWithFrame:CGRectZero];
+        _newGroupButton.layer.cornerRadius = 5.0;
+        [_newGroupButton setImage:ImageWithName(@"feedback") forState:UIControlStateNormal];
+        [_newGroupButton setImage:ImageWithName(@"feedback") forState:UIControlStateSelected];
+        [_newGroupButton setTitle:NSLocalizedString(@"group.new.NewGroup", @"New Group") forState:UIControlStateNormal];
+        [_newGroupButton setTitle:NSLocalizedString(@"group.new.NewGroup", @"New Group") forState:UIControlStateSelected];
+        [_newGroupButton setTitleColor:kLabelTextColor forState:UIControlStateNormal];
+        [_newGroupButton setTitleColor:kLabelTextColor forState:UIControlStateSelected];
+
+        [_newGroupButton addTarget:self action:@selector(createNewGroup) forControlEvents:UIControlEventTouchUpInside];
+        [_newGroupButton setImageEdgeInsets:UIEdgeInsetsMake(0, -220.0, 0, 0)];
+        [_newGroupButton setTitleEdgeInsets:UIEdgeInsetsMake(0, -210.0, 0, 0)];
+
+    }
+    return _newGroupButton;
+}
+
+
+- (UILabel *)promptLabel {
+    if (_promptLabel == nil) {
+        _promptLabel = UILabel.new;
+        _promptLabel.textAlignment = NSTextAlignmentLeft;
+        _promptLabel.font = [UIFont systemFontOfSize:13.0f];
+        _promptLabel.textColor = kLabelTextColor;
+        _promptLabel.text = NSLocalizedString(@"group.new.publicGroups", @"Public Groups");
+    }
+    return _promptLabel;
+}
+
+- (UISearchBar *)searchBar {
+    if (_searchBar == nil) {
+        _searchBar = [[UISearchBar alloc] initWithFrame:CGRectMake(0, 0, KScreenWidth, 30)];
+        _searchBar.placeholder = NSLocalizedString(@"common.search", @"Search");
+        _searchBar.delegate = self;
+        _searchBar.showsCancelButton = NO;
+        _searchBar.backgroundImage = [UIImage imageWithColor:[UIColor whiteColor] size:_searchBar.bounds.size];
+        [_searchBar setSearchFieldBackgroundPositionAdjustment:UIOffsetMake(0, 0)];
+        [_searchBar setSearchFieldBackgroundImage:[UIImage imageWithColor:PaleGrayColor size:_searchBar.bounds.size] forState:UIControlStateNormal];
+        _searchBar.tintColor = AlmostBlackColor;
+        
+    }
+    return  _searchBar;
 }
 
 @end
+
+#undef kLabelTextColor
+
+

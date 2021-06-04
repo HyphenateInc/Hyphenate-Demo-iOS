@@ -240,6 +240,9 @@
 "group.announcementUpdate" = "Group Announcement Update";
 "group.clearAnnouncement" = "Group:%@ Announcement is clear";
 "group.updateAnnouncement" = "Group:%@ Announcement: %@";
+"group.new.publicGroups" = "Public Groups";
+"group.new.NewGroup" = "New Group";
+
 
 //Group Bans
 "group.ban.removing" = "members are removing from the blacklist...";

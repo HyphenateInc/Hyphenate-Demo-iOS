@@ -1,17 +1,20 @@
-/************************************************************
- *  * Hyphenate
- * __________________
- * Copyright (C) 2016 Hyphenate Inc. All rights reserved.
- *
- * NOTICE: All information contained herein is, and remains
- * the property of Hyphenate Inc.
- */
+//
+//  AgoraPublicGroupsNewViewController.m
+//  ChatDemo-UI3.0
+//
+//  Created by liujinliang on 2021/6/2.
+//  Copyright © 2021 easemob. All rights reserved.
+//
 
 #import "AgoraPublicGroupsViewController.h"
 #import "AgoraGroupCell.h"
 #import "AgoraRefreshFootViewCell.h"
 
 #define KPUBLICGROUP_PAGE_COUNT    50
+
+static NSString *footerCellIdentifier = @"AgoraRefreshFootViewCell";
+static NSString *publicCellIdentifier = @"AgoraGroup_Public_Cell";
+
 
 typedef NS_ENUM(NSUInteger, AgoraFetchPublicGroupState) {
     AgoraFetchPublicGroupState_Normal    = 0,
@@ -21,44 +24,44 @@ typedef NS_ENUM(NSUInteger, AgoraFetchPublicGroupState) {
 
 
 @interface AgoraPublicGroupsViewController ()<AgoraGroupUIProtocol>
-
-@property (nonatomic, strong) NSString *cursor;
-
-@property (nonatomic, copy) AgoraGroupModel *requestGroupModel;
-
-@property (nonatomic, strong) NSMutableArray<NSString *> *applyedDataSource;
-
-@property (nonatomic, assign) AgoraFetchPublicGroupState loadState;
-
-@end
-
-@implementation AgoraPublicGroupsViewController
 {
     BOOL _isSearching;
 }
 
-- (instancetype)initWithNibName:(NSString *)nibNameOrNil bundle:(NSBundle *)nibBundleOrNil {
-    self = [super initWithNibName:nibNameOrNil bundle:nibBundleOrNil];
-    if (self) {
-        
-    }
-    return self;
-}
+@property (nonatomic, strong) NSMutableArray<AgoraGroupModel *> *publicGroups;
+@property (nonatomic, strong) NSMutableArray<AgoraGroupModel *> *searchResults;
+@property (nonatomic, strong) NSMutableArray<NSString *> *applyedGroups;
+@property (nonatomic, strong) AgoraGroupModel *requestGroupModel;
+@property (nonatomic, strong) NSString *cursor;
+@property (nonatomic, assign) BOOL isEmptySearchKey;
+@property (nonatomic, assign) BOOL isShowSearchResult;
+@property (nonatomic, strong) NSIndexPath *selectIndexPath;;
+
+
+@end
+
+@implementation AgoraPublicGroupsViewController
 
 - (void)viewDidLoad {
     [super viewDidLoad];
-    [self applyedDataSource];
+    
+    [self.tableView registerNib:[UINib nibWithNibName:publicCellIdentifier bundle:nil] forCellReuseIdentifier:publicCellIdentifier];
+    self.isEmptySearchKey = YES;
+    [self fetchApplyedGroups];
     [self fetchPublicGroups];
 }
 
 
 #pragma mark - Load Data
+- (void)fetchApplyedGroups {
+    NSArray *joinedGroups = [[AgoraChatClient sharedClient].groupManager getJoinedGroups];
+    for (AgoraGroup *group in joinedGroups) {
+        [self.applyedGroups addObject:group.groupId];
+    }
+}
 
 - (void)fetchPublicGroups {
-    _loadState = AgoraFetchPublicGroupState_Loading;
-    [self.tableView reloadSections:[NSIndexSet indexSetWithIndex:1]
-                  withRowAnimation:UITableViewRowAnimationNone];
-    
+
     __weak typeof(self) weakSelf = self;
     [MBProgressHUD showHUDAddedTo:[UIApplication sharedApplication].keyWindow animated:YES];
     [[AgoraChatClient sharedClient].groupManager getPublicGroupsFromServerWithCursor:_cursor pageSize:KPUBLICGROUP_PAGE_COUNT completion:^(AgoraCursorResult *aResult, AgoraError *aError) {
@@ -66,40 +69,44 @@ typedef NS_ENUM(NSUInteger, AgoraFetchPublicGroupState) {
         [self tableViewDidFinishTriggerHeader:YES];
         
         if (!aError) {
+            NSArray *groups = [self getGroupsWithResultList:aResult.list];
+            if ([_cursor isEqualToString:@""]) {
+                self.showRefreshFooter = NO;
+                self.publicGroups = [groups mutableCopy];
+            }else {
+                [self.publicGroups addObjectsFromArray:groups];
+            }
             weakSelf.cursor = aResult.cursor;
-            for (AgoraGroup *group in aResult.list) {
-                AgoraGroupModel *model = [[AgoraGroupModel alloc] initWithObject:group];
-                if (model) {
-                    [weakSelf.publicGroups addObject:model];
-                }
-            }
-            weakSelf.loadState = AgoraFetchPublicGroupState_Normal;
-            if (weakSelf.cursor.length == 0) {
-                weakSelf.loadState = AgoraFetchPublicGroupState_Nomore;
-            }
             [weakSelf.tableView reloadData];
         }
     }];
 }
 
-- (void)reloadRequestedApplyDataSource {
+- (NSArray *)getGroupsWithResultList:(NSArray *)list {
+    NSMutableArray *tGroups = NSMutableArray.new;
+    for (AgoraGroup *group in list) {
+        AgoraGroupModel *model = [[AgoraGroupModel alloc] initWithObject:group];
+        if (model) {
+            [tGroups addObject:model];
+        }
+    }
+    return [tGroups copy];
+}
+
+
+- (void)updateUI {
     __weak typeof(self) weakSelf = self;
 
     dispatch_async(dispatch_get_global_queue(0, 0), ^{
         if(_requestGroupModel) {
-            [weakSelf.applyedDataSource addObject:_requestGroupModel.group.groupId];
-            NSUInteger index = [weakSelf.publicGroups indexOfObject:_requestGroupModel];
-            NSIndexPath *indexPath = [NSIndexPath indexPathForRow:index inSection:0];
+            [weakSelf.applyedGroups addObject:_requestGroupModel.group.groupId];
             dispatch_async(dispatch_get_main_queue(), ^{
-//                [weakSelf.tableView beginUpdates];
-//                [weakSelf.tableView endUpdates];
-                [weakSelf.tableView reloadRowsAtIndexPaths:@[indexPath] withRowAnimation:UITableViewRowAnimationNone];
-
+                [self.tableView reloadRowsAtIndexPaths:@[self.selectIndexPath] withRowAnimation:UITableViewRowAnimationNone];
                 _requestGroupModel = nil;
             });
         }
     });
-    
+
 }
 
 #pragma mark - Join Public Group
@@ -111,7 +118,7 @@ typedef NS_ENUM(NSUInteger, AgoraFetchPublicGroupState) {
                                                completion:^(AgoraGroup *aGroup, AgoraError *aError) {
                                                    [MBProgressHUD hideAllHUDsForView:[UIApplication sharedApplication].keyWindow animated:YES];
                                                    if (!aError) {
-                                                       [weakSelf reloadRequestedApplyDataSource];
+                                                       [weakSelf updateUI];
                                                    }
                                                    else {
                                                        NSString *msg = NSLocalizedString(@"group.requestFailure", @"Failed to apply to the group");
@@ -129,7 +136,9 @@ typedef NS_ENUM(NSUInteger, AgoraFetchPublicGroupState) {
                                                            message:message
                                                         completion:^(AgoraGroup *aGroup, AgoraError *aError) {
                                                             if (!aError) {
-                                                                [weakSelf reloadRequestedApplyDataSource];
+                                                                [MBProgressHUD hideAllHUDsForView:[UIApplication sharedApplication].keyWindow animated:YES];
+
+                                                                [weakSelf updateUI];
                                                             }
                                                             else {
                                                                 [MBProgressHUD hideAllHUDsForView:[UIApplication sharedApplication].keyWindow animated:YES];
@@ -140,142 +149,117 @@ typedef NS_ENUM(NSUInteger, AgoraFetchPublicGroupState) {
                                                         }];
 }
 
-- (void)popAlertView {
-    UIAlertView *alertView = [[UIAlertView alloc] initWithTitle:NSLocalizedString(@"group.joinPublicGroupMessage", "Requesting message")
-                                                        message:@""
-                                                       delegate:self
-                                              cancelButtonTitle:NSLocalizedString(@"common.cancel", @"Cancel")
-                                              otherButtonTitles:NSLocalizedString(@"common.ok", @"OK"), nil];
-    [alertView setAlertViewStyle:UIAlertViewStylePlainTextInput];
-    [alertView show];
+- (void)showAlertView {
+    UIAlertController *alertController = [UIAlertController alertControllerWithTitle:NSLocalizedString(@"group.joinPublicGroupMessage", "Requesting message") message:@"" preferredStyle:UIAlertControllerStyleAlert];
+    [alertController addTextFieldWithConfigurationHandler:^(UITextField * _Nonnull textField) {
+
+    }];
+    UIAlertAction *cancelAction = [UIAlertAction actionWithTitle:NSLocalizedString(@"common.cancel", @"Cancel") style:UIAlertActionStyleCancel handler:^(UIAlertAction * _Nonnull action) {
+       
+    }];
+    UIAlertAction *okAction = [UIAlertAction actionWithTitle:NSLocalizedString(@"common.ok", @"OK") style:UIAlertActionStyleDefault handler:^(UIAlertAction * _Nonnull action) {
+        UITextField *messageTextField = alertController.textFields.firstObject;
+        [self requestToJoinPublicGroup:_requestGroupModel.group.groupId message:messageTextField.text];
+
+    }];
+    [alertController addAction:cancelAction];
+    [alertController addAction:okAction];
+    [self presentViewController:alertController animated:YES completion:nil];
 }
+
 
 - (void)didReceiveMemoryWarning {
     [super didReceiveMemoryWarning];
-    // Dispose of any resources that can be recreated.
-}
-
-- (void)tableViewDidTriggerHeaderRefresh {
-    [self fetchPublicGroups];
+    
 }
 
 
 #pragma mark - UITableViewDataSource
+- (CGFloat)tableView:(UITableView *)tableView heightForRowAtIndexPath:(NSIndexPath *)indexPath {
+    return 70;
+}
+
 
 - (NSInteger)numberOfSectionsInTableView:(UITableView *)tableView {
-    if (_loadState != AgoraFetchPublicGroupState_Nomore && !_isSearching) {
-        return 2;
-    }
     return 1;
 }
 
 - (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section {
-    if (_isSearching) {
+    NSLog(@"%s self.isShowSearchResult:%@ _searchResults.count:%@",__func__,@(self.isShowSearchResult),@(_searchResults.count));
+    if (self.isShowSearchResult) {
         return _searchResults.count;
-    }
-    if (_loadState != AgoraFetchPublicGroupState_Nomore && section == 1) {
-        return 1;
     }
     return _publicGroups.count;
 }
 
 
 - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath {
-    if (indexPath.section == 1) {
-        static NSString *cellIdentifier = @"AgoraRefreshFootViewCell";
-        AgoraRefreshFootViewCell *cell = [tableView dequeueReusableCellWithIdentifier:cellIdentifier];
-        if (!cell) {
-            cell = [[[NSBundle mainBundle] loadNibNamed:cellIdentifier owner:self options:nil] lastObject];
-        }
-        switch (_loadState) {
-            case AgoraFetchPublicGroupState_Normal:
-                cell.loadMoreLabel.hidden = NO;
-                cell.activity.hidden = YES;
-                [cell.activity stopAnimating];
-                break;
-            case AgoraFetchPublicGroupState_Loading:
-                cell.loadMoreLabel.hidden = YES;
-                cell.activity.hidden = NO;
-                [cell.activity startAnimating];
-                break;
-            default:
-                break;
-        }
-        return cell;
-    }
     
-    static NSString *cellIdentifier = @"AgoraGroup_Public_Cell";
-    AgoraGroupCell *cell = [tableView dequeueReusableCellWithIdentifier:cellIdentifier];
-    if (!cell) {
-        cell = [[[NSBundle mainBundle] loadNibNamed:cellIdentifier owner:self options:nil] lastObject];
-    }
+    AgoraGroupCell *cell = [tableView dequeueReusableCellWithIdentifier:publicCellIdentifier];
     AgoraGroupModel *model = nil;
-    if (_isSearching) {
+    if (self.isShowSearchResult) {
         model = _searchResults[indexPath.row];
-    }
-    else {
+    }else {
         model = _publicGroups[indexPath.row];
     }
-    cell.isRequestedToJoinPublicGroup = [_applyedDataSource containsObject:model.group.groupId];
+    cell.isRequestedToJoinPublicGroup = [_applyedGroups containsObject:model.group.groupId];
     cell.model = model;
     cell.delegate = self;
     return cell;
 }
 
-#pragma mark - UITableViewDelegate
-
-- (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath {
-    [tableView deselectRowAtIndexPath:indexPath animated:YES];
-    
-}
-
-- (CGFloat)tableView:(UITableView *)tableView heightForRowAtIndexPath:(NSIndexPath *)indexPath {
-    return 70;
-}
 
 #pragma mark - AgoraGroupUIProtocol
-
 - (void)joinPublicGroup:(AgoraGroupModel *)groupModel {
     _requestGroupModel = groupModel;
+    if (self.isShowSearchResult) {
+        NSUInteger index = [self.searchResults indexOfObject:groupModel];
+        self.selectIndexPath = [NSIndexPath indexPathForRow:index inSection:0];
+    }else {
+        NSUInteger index = [self.publicGroups indexOfObject:groupModel];
+        self.selectIndexPath = [NSIndexPath indexPathForRow:index inSection:0];
+    }
     if (groupModel.group.setting.style == AgoraGroupStylePublicOpenJoin) {
         [self joinToPublicGroup:groupModel.group.groupId];
     }
     else {
-        [self popAlertView];
+        [self showAlertView];
     }
 }
 
 #pragma mark - UIScrollViewDelegate
 - (void)scrollViewDidEndDragging:(UIScrollView *)scrollView willDecelerate:(BOOL)decelerate {
     if (scrollView.contentOffset.y >= MAX(0, scrollView.contentSize.height - scrollView.frame.size.height) + 50) {
-        if (_loadState == AgoraFetchPublicGroupState_Normal) {
-            [self fetchPublicGroups];
+        if (_isSearching) {
+            return;
         }
+        [self fetchPublicGroups];
     }
 }
 
-#pragma mark - UIAlertViewDelegate
 
-- (void)alertView:(UIAlertView *)alertView clickedButtonAtIndex:(NSInteger)buttonIndex {
-    if ([alertView cancelButtonIndex] != buttonIndex) {
-        UITextField *messageTextField = [alertView textFieldAtIndex:0];
-        NSString *messageStr = @"";
-        if (messageTextField.text.length > 0) {
-            messageStr = messageTextField.text;
-        }
-        [self requestToJoinPublicGroup:_requestGroupModel.group.groupId message:messageStr];
+#pragma mark - public refresh
+- (void)tableViewDidTriggerHeaderRefresh
+{
+    if (_isSearching) {
+        [self tableViewDidFinishTriggerHeader:YES];
+        [self.tableView reloadData];
+        return;
     }
+    _cursor = @"";
+    [self fetchPublicGroups];
+}
+
+- (void)tableViewDidTriggerFooterRefresh
+{
+    if (_isSearching) {
+        return;
+    }
+    [self fetchPublicGroups];
 }
 
 
 #pragma mark getter and setter
-- (void)setSearchState:(BOOL)isSearching {
-    _isSearching = isSearching;
-    if (!_isSearching) {
-        [_searchResults removeAllObjects];
-    }
-}
-
 - (NSMutableArray<AgoraGroupModel *> *)publicGroups {
     if (!_publicGroups) {
         _publicGroups = [NSMutableArray array];
@@ -283,15 +267,11 @@ typedef NS_ENUM(NSUInteger, AgoraFetchPublicGroupState) {
     return _publicGroups;
 }
 
-- (NSMutableArray<NSString *> *)applyedDataSource {
-    if (!_applyedDataSource) {
-        _applyedDataSource = [NSMutableArray array];
-        NSArray *joinedGroups = [[AgoraChatClient sharedClient].groupManager getJoinedGroups];
-        for (AgoraGroup *group in joinedGroups) {
-            [_applyedDataSource addObject:group.groupId];
-        }
+- (NSMutableArray<NSString *> *)applyedGroups {
+    if (!_applyedGroups) {
+        _applyedGroups = [NSMutableArray array];
     }
-    return _applyedDataSource;
+    return _applyedGroups;
 }
 
 - (NSMutableArray<AgoraGroupModel *> *)searchResults {
@@ -302,4 +282,23 @@ typedef NS_ENUM(NSUInteger, AgoraFetchPublicGroupState) {
 }
 
 
+- (void)setSearchResultArray:(NSArray *)resultArray isEmptySearchKey:(BOOL)isEmptySearchKey{
+    _searchResults = [resultArray mutableCopy];
+    _isEmptySearchKey = isEmptySearchKey;
+    
+    [self.tableView reloadData];
+}
+
+- (void)setSearchState:(BOOL)isSearching {
+    _isSearching = isSearching;
+    if (!_isSearching) {
+        [_searchResults removeAllObjects];
+    }
+}
+
+- (BOOL)isShowSearchResult {
+    return  _isSearching && !self.isEmptySearchKey;
+}
+
 @end
+

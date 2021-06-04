@@ -1,20 +1,22 @@
-/************************************************************
- *  * Hyphenate
- * __________________
- * Copyright (C) 2016 Hyphenate Inc. All rights reserved.
- *
- * NOTICE: All information contained herein is, and remains
- * the property of Hyphenate Inc.
- */
+//
+//  AgoraPublicGroupsNewViewController.h
+//  ChatDemo-UI3.0
+//
+//  Created by liujinliang on 2021/6/2.
+//  Copyright © 2021 easemob. All rights reserved.
+//
 
-#import <UIKit/UIKit.h>
 #import "AgoraBaseRefreshTableController.h"
 #import "AgoraGroupModel.h"
+#import <UIKit/UIKit.h>
+
+NS_ASSUME_NONNULL_BEGIN
 
 @interface AgoraPublicGroupsViewController : AgoraBaseRefreshTableController
-
-@property (nonatomic, strong) NSMutableArray<AgoraGroupModel *> *publicGroups;
-@property (nonatomic, strong) NSMutableArray<AgoraGroupModel *> *searchResults;
+@property (nonatomic, strong,readonly) NSMutableArray<AgoraGroupModel *> *publicGroups;
+- (void)setSearchResultArray:(NSArray *)resultArray isEmptySearchKey:(BOOL)isEmptySearchKey;
 - (void)setSearchState:(BOOL)isSearching;
 
 @end
+
+NS_ASSUME_NONNULL_END

@@ -12,7 +12,6 @@
 #import "AgoraGroupModel.h"
 #import "AgoraNotificationNames.h"
 #import "AgoraGroupInfoViewController.h"
-#import "AgoraCreateViewController.h"
 #import "AgoraChatViewController.h"
 
 #import "AgoraChatroomCell.h"

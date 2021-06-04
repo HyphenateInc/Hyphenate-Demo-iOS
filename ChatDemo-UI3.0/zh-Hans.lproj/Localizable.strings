@@ -243,6 +243,9 @@
 "group.announcementUpdate" = "群公告更新";
 "group.clearAnnouncement" = "群组:%@ 公告被删除";
 "group.updateAnnouncement" = "群组:%@ 公告内容: %@";
+"group.new.publicGroups" = "公开群";
+"group.new.NewGroup" = "新建群组";
+
 
 //Group Bans
 "group.ban.removing" = "正在将成员移出黑名单...";
