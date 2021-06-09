@@ -11,6 +11,8 @@
 
 #import "UIViewController+DismissKeyboard.h"
 
+#define kMaxLimitLength 64
+
 @interface AgoraLoginViewController () <UITextFieldDelegate>
 
 @property (weak, nonatomic) IBOutlet UITextField *usernameTextField;
@@ -22,6 +24,7 @@
 
 @property (weak, nonatomic) IBOutlet UIView *loginView;
 @property (weak, nonatomic) IBOutlet NSLayoutConstraint *upConstraint;
+@property (nonatomic, assign) BOOL isRigisterState;
 
 - (IBAction)doLogin:(id)sender;
 - (IBAction)doSignUp:(id)sender;
@@ -122,6 +125,8 @@
     if ([self _isEmpty]) {
         return;
     }
+    
+
     [self.view endEditing:YES];
     WEAK_SELF
     [MBProgressHUD showHUDAddedTo:self.view animated:YES];
@@ -166,13 +171,16 @@
         _signupButton.hidden = NO;
         [_changeButton setTitle:NSLocalizedString(@"login.changebutton.login", @"Log in") forState:UIControlStateNormal];
         _tipLabel.text = NSLocalizedString(@"login.signup.tips", @"Have an account?");
+        self.isRigisterState = YES;
     } else {
         _loginButton.hidden = NO;
         _signupButton.hidden = YES;
         [_changeButton setTitle:NSLocalizedString(@"login.changebutton.signup", @"Sign up") forState:UIControlStateNormal];
         _tipLabel.text = NSLocalizedString(@"login.tips", @"Yay! New to Hyphenate?");
+        self.isRigisterState = NO;
     }
 }
+
 
 #pragma mark - UITextFieldDelegate
 
@@ -198,6 +206,21 @@
     return YES;
 }
 
+- (BOOL)textField:(UITextField *)textField shouldChangeCharactersInRange:(NSRange)range replacementString:(NSString *)string {
+    if (self.isRigisterState) {
+        if (_usernameTextField.isFirstResponder &&_usernameTextField.text.length >= kMaxLimitLength) {
+            [WHToast showErrorWithMessage:NSLocalizedString(@"register.userName.outOfLimit", @"Username length out of limit, maximum 64 bytes") duration:1.0 finishHandler:nil];
+
+        }
+        
+        if (_passwordTextField.isFirstResponder && _passwordTextField.text.length >= kMaxLimitLength) {
+            [WHToast showErrorWithMessage:NSLocalizedString(@"register.password.outOfLimit", @"Password length out of limit, maximum 64 bytes") duration:1.0 finishHandler:nil];
+        }
+    }
+    return YES;
+}
+
+
 #pragma mark - private
 
 - (BOOL)_isEmpty
@@ -214,6 +237,8 @@
     
     return ret;
 }
+
+
 
 #pragma mark - notification
 
@@ -251,3 +276,5 @@
 }
 
 @end
+#undef kMaxLimitLength
+

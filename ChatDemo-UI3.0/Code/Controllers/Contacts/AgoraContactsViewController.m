@@ -42,6 +42,14 @@
     BOOL _isSearchState;
 }
 
+- (instancetype)init {
+    self = [super init];
+    if (self) {
+        [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(settingBlackListDidChange) name:@"AgoraSettingBlackListDidChange" object:nil];
+    }
+    return  self;
+}
+
 - (void)viewDidLoad {
     [super viewDidLoad];
     if ([self respondsToSelector:@selector(edgesForExtendedLayout)]) {
@@ -157,6 +165,10 @@
     _searchSource = [NSMutableArray arrayWithArray:searchSource];
 }
 
+#pragma mark NSNotification
+- (void)settingBlackListDidChange {
+    [self reloadContacts];
+}
 
 #pragma mark - Lazy Method
 - (NSMutableArray *)contacts {

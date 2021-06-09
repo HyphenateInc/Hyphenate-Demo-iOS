@@ -31,6 +31,6 @@
 #import <Foundation/Foundation.h>
 #import <Masonry/Masonry.h>
 #import "AgoraUserInfoManagerHelper.h"
-
+#import <WHToast/WHToast.h>
 
 #endif

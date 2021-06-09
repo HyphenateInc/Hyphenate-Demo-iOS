@@ -62,8 +62,7 @@
     
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(updateUI:) name:KAgora_REFRESH_GROUP_INFO object:nil];
     
-    [self _setupNavigationBar];
-    [self _setupSubviews];
+    [self setupNavigationBar];
     
     self.tableView.backgroundColor = [UIColor colorWithRed: 226 / 255.0 green: 231 / 255.0 blue: 235 / 255.0 alpha:1.0];
     self.tableView.rowHeight = 50;
@@ -86,7 +85,7 @@
 
 #pragma mark - Navigation Bar
 
-- (void)_setupNavigationBar
+- (void)setupNavigationBar
 {
     self.title = NSLocalizedString(@"title.groupInfo", @"Group Info");
     
@@ -102,44 +101,8 @@
     self.addMemberItem = [[UIBarButtonItem alloc] initWithCustomView:addButton];
 }
 
-#pragma mark - Subviews
-
-- (void)_setupSubviews
-{
-    //footer view
-    _footerView = [[UIView alloc] initWithFrame:CGRectMake(0, 0, self.tableView.frame.size.width, 70)];
-    _footerView.backgroundColor = [UIColor clearColor];
-    
-    _leaveButton = [[UIButton alloc] initWithFrame:CGRectMake(0, 20, _footerView.frame.size.width, 50)];
-    _leaveButton.accessibilityIdentifier = @"leave";
-    [_leaveButton setTitle:NSLocalizedString(@"group.leave", @"Leave Group") forState:UIControlStateNormal];
-    [_leaveButton setTitleColor:[UIColor whiteColor] forState:UIControlStateNormal];
-    [_leaveButton addTarget:self action:@selector(leaveAction) forControlEvents:UIControlEventTouchUpInside];
-    [_leaveButton setBackgroundColor:[UIColor colorWithRed:251 / 255.0 green:60 / 255.0 blue:48 / 255.0 alpha:1.0]];
-    [_footerView addSubview:_leaveButton];
-    
-    //more cell
-    _moreCell = [[UITableViewCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:@"ButtonCell"];
-    _moreCell.contentView.backgroundColor = [UIColor colorWithRed: 249 / 255.0 green: 250 / 255.0 blue: 251 / 255.0 alpha:1.0];
-    
-    UIButton *moreButton = [[UIButton alloc] initWithFrame:CGRectMake(0, 0, self.tableView.frame.size.width, 50)];
-    moreButton.backgroundColor = [UIColor colorWithRed:249 / 255.0 green:250 / 255.0 blue:251 / 255.0 alpha:1.0];
-    [moreButton setTitle:NSLocalizedString(@"button.more", @"Load More") forState:UIControlStateNormal];
-    [moreButton setTitleColor:[UIColor blackColor] forState:UIControlStateNormal];
-    [moreButton addTarget:self action:@selector(moreMemberAction) forControlEvents:UIControlEventTouchUpInside];
-    [_moreCell.contentView addSubview:moreButton];
-    
-    //block message switch
-    _blockMsgSwitch = [[UISwitch alloc] initWithFrame:CGRectMake(self.tableView.frame.size.width - 80, 5, 70, 50)];
-    [_blockMsgSwitch addTarget:self action:@selector(blockMessageChangeValue) forControlEvents:UIControlEventValueChanged];
-    
-    //push switch
-    _pushSwitch = [[UISwitch alloc] initWithFrame:CGRectMake(self.tableView.frame.size.width - 80, 5, 70, 50)];
-    [_pushSwitch addTarget:self action:@selector(pushChangeValue) forControlEvents:UIControlEventValueChanged];
-}
 
 #pragma mark - Table view data source
-
 - (NSInteger)numberOfSectionsInTableView:(UITableView *)tableView {
     return 3;
 }
@@ -325,6 +288,9 @@
         {
             if (self.group.permissionType == AgoraGroupPermissionTypeOwner) {
                 AgoraGroupTransferOwnerViewController *transferController = [[AgoraGroupTransferOwnerViewController alloc] initWithGroup:self.group];
+                transferController.transferOwnerBlock = ^{
+                    [self fetchGroupInfo];
+                };
                 [self.navigationController pushViewController:transferController animated:YES];
             } else {
                 [self showHint:NSLocalizedString(@"group.owner.permission", @"Only owner can perform this operation")];
@@ -479,42 +445,71 @@
                   otherButtonTitles:NSLocalizedString(@"button.ok", @"OK"), nil];
 }
 
-- (void)leaveAction
+- (void)leaveGroup
 {
-    __weak typeof(self) weakSelf = self;
     if (self.group.permissionType == AgoraGroupPermissionTypeOwner) {
-        [self showHudInView:self.view hint:NSLocalizedString(@"group.destroy", @"dissolution of the group")];
-        dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), ^(){
-            AgoraError *error = [[AgoraChatClient sharedClient].groupManager destroyGroup:weakSelf.group.groupId];
-            dispatch_async(dispatch_get_main_queue(), ^{
-                [weakSelf hideHud];
-                if (error) {
-                    [weakSelf showHint:NSLocalizedString(@"group.destroyFailure", @"dissolution of group failure")];
-                }
-                else{
-                    [[NSNotificationCenter defaultCenter] postNotificationName:KAgora_END_CHAT object:weakSelf.groupId];
-                    [[NSNotificationCenter defaultCenter] postNotificationName:KAgora_REFRESH_GROUPLIST_NOTIFICATION object:nil];
-                }
-            });
-        });
         
+        UIAlertController *alertController = [UIAlertController alertControllerWithTitle:NSLocalizedString(@"group.destroy", @"dissolution of the group") message:@"" preferredStyle:UIAlertControllerStyleAlert];
+        
+        UIAlertAction *cancelAction = [UIAlertAction actionWithTitle:NSLocalizedString(@"common.cancel", @"Cancel") style:UIAlertActionStyleCancel handler:^(UIAlertAction * _Nonnull action) {
+           
+        }];
+        UIAlertAction *okAction = [UIAlertAction actionWithTitle:NSLocalizedString(@"common.ok", @"OK") style:UIAlertActionStyleDefault handler:^(UIAlertAction * _Nonnull action) {
+            [self dismissGroupWithGroupId:self.groupId];
+        }];
+        [alertController addAction:cancelAction];
+        [alertController addAction:okAction];
+        [self presentViewController:alertController animated:YES completion:nil];
+    
     } else {
-        [self showHudInView:self.view hint:NSLocalizedString(@"group.leave", @"Leave group")];
-        dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), ^(){
-            AgoraError *error = nil;
-            [[AgoraChatClient sharedClient].groupManager leaveGroup:weakSelf.group.groupId error:&error];
-            dispatch_async(dispatch_get_main_queue(), ^{
-                [weakSelf hideHud];
-                if (error) {
-                    [weakSelf showHint:NSLocalizedString(@"group.leaveFailure", @"exit the group failure")];
-                }
-                else{
-                    [[NSNotificationCenter defaultCenter] postNotificationName:KAgora_END_CHAT object:weakSelf.groupId];
-                    [[NSNotificationCenter defaultCenter] postNotificationName:KAgora_REFRESH_GROUPLIST_NOTIFICATION object:nil];
-                }
-            });
-        });
+        UIAlertController *alertController = [UIAlertController alertControllerWithTitle:NSLocalizedString(@"group.leave", @"Leave group") message:@"" preferredStyle:UIAlertControllerStyleAlert];
+        
+        UIAlertAction *cancelAction = [UIAlertAction actionWithTitle:NSLocalizedString(@"common.cancel", @"Cancel") style:UIAlertActionStyleCancel handler:^(UIAlertAction * _Nonnull action) {
+           
+        }];
+        UIAlertAction *okAction = [UIAlertAction actionWithTitle:NSLocalizedString(@"common.ok", @"OK") style:UIAlertActionStyleDefault handler:^(UIAlertAction * _Nonnull action) {
+            [self leaveGroupWithGroupId:self.groupId];
+        }];
+        [alertController addAction:cancelAction];
+        [alertController addAction:okAction];
+        [self presentViewController:alertController animated:YES completion:nil];
     }
+}
+
+- (void)dismissGroupWithGroupId:(NSString *)groupId {
+    [self showHudInView:self.view hint:NSLocalizedString(@"group.destroy", @"dissolution of the group")];
+    dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), ^(){
+        AgoraError *error = [[AgoraChatClient sharedClient].groupManager destroyGroup:groupId];
+        dispatch_async(dispatch_get_main_queue(), ^{
+            [self hideHud];
+            if (error) {
+                [self showHint:NSLocalizedString(@"group.destroyFailure", @"dissolution of group failure")];
+            }
+            else{
+                [[NSNotificationCenter defaultCenter] postNotificationName:KAgora_END_CHAT object:groupId];
+                [[NSNotificationCenter defaultCenter] postNotificationName:KAgora_REFRESH_GROUPLIST_NOTIFICATION object:nil];
+            }
+        });
+    });
+}
+
+
+- (void)leaveGroupWithGroupId:(NSString *)groupId {
+    [self showHudInView:self.view hint:NSLocalizedString(@"group.leave", @"Leave group")];
+    dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), ^(){
+        AgoraError *error = nil;
+        [[AgoraChatClient sharedClient].groupManager leaveGroup:groupId error:&error];
+        dispatch_async(dispatch_get_main_queue(), ^{
+            [self hideHud];
+            if (error) {
+                [self showHint:NSLocalizedString(@"group.leaveFailure", @"exit the group failure")];
+            }
+            else{
+                [[NSNotificationCenter defaultCenter] postNotificationName:KAgora_END_CHAT object:groupId];
+                [[NSNotificationCenter defaultCenter] postNotificationName:KAgora_REFRESH_GROUPLIST_NOTIFICATION object:nil];
+            }
+        });
+    });
 }
 
 - (void)blockMessageChangeValue
@@ -651,5 +646,61 @@
     }];
 }
 
+
+#pragma mark getter and setter
+- (UIButton *)leaveButton {
+    if (_leaveButton == nil) {
+        _leaveButton = [[UIButton alloc] initWithFrame:CGRectMake(0, 20, KScreenWidth, 50)];
+        _leaveButton.accessibilityIdentifier = @"leave";
+        [_leaveButton setTitle:NSLocalizedString(@"group.leave", @"Leave Group") forState:UIControlStateNormal];
+        [_leaveButton setTitleColor:[UIColor whiteColor] forState:UIControlStateNormal];
+        [_leaveButton addTarget:self action:@selector(leaveGroup) forControlEvents:UIControlEventTouchUpInside];
+        [_leaveButton setBackgroundColor:[UIColor colorWithRed:251 / 255.0 green:60 / 255.0 blue:48 / 255.0 alpha:1.0]];
+    }
+    return _leaveButton;
+}
+
+- (UIView *)footerView {
+    if (_footerView == nil) {
+        _footerView = [[UIView alloc] initWithFrame:CGRectMake(0, 0, KScreenWidth, 70)];
+        [_footerView addSubview:self.leaveButton];
+        [self.leaveButton mas_makeConstraints:^(MASConstraintMaker *make) {
+            make.edges.equalTo(_footerView).insets(UIEdgeInsetsMake(20.0, 0, 0, 0));
+        }];
+    }
+    return _footerView;
+}
+
+- (UITableViewCell *)moreCell {
+    if (_moreCell == nil) {
+        _moreCell = [[UITableViewCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:@"ButtonCell"];
+        _moreCell.contentView.backgroundColor = [UIColor colorWithRed: 249 / 255.0 green: 250 / 255.0 blue: 251 / 255.0 alpha:1.0];
+        
+        UIButton *moreButton = [[UIButton alloc] initWithFrame:CGRectMake(0, 0, self.tableView.frame.size.width, 50)];
+        moreButton.backgroundColor = [UIColor colorWithRed:249 / 255.0 green:250 / 255.0 blue:251 / 255.0 alpha:1.0];
+        [moreButton setTitle:NSLocalizedString(@"button.more", @"Load More") forState:UIControlStateNormal];
+        [moreButton setTitleColor:[UIColor blackColor] forState:UIControlStateNormal];
+        [moreButton addTarget:self action:@selector(moreMemberAction) forControlEvents:UIControlEventTouchUpInside];
+        [_moreCell.contentView addSubview:moreButton];
+    }
+    return _moreCell;
+}
+
+- (UISwitch *)blockMsgSwitch {
+    if (_blockMsgSwitch == nil) {
+        _blockMsgSwitch = [[UISwitch alloc] initWithFrame:CGRectMake(self.tableView.frame.size.width - 80, 5, 70, 50)];
+        [_blockMsgSwitch addTarget:self action:@selector(blockMessageChangeValue) forControlEvents:UIControlEventValueChanged];
+    }
+    return _blockMsgSwitch;
+}
+
+- (UISwitch *)pushSwitch {
+    if (_pushSwitch == nil) {
+        //push switch
+        _pushSwitch = [[UISwitch alloc] initWithFrame:CGRectMake(self.tableView.frame.size.width - 80, 5, 70, 50)];
+        [_pushSwitch addTarget:self action:@selector(pushChangeValue) forControlEvents:UIControlEventValueChanged];
+    }
+    return _pushSwitch;
+}
 
 @end

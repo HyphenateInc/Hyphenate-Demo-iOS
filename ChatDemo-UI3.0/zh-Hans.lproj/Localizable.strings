@@ -68,6 +68,10 @@
 "login.endAutoLogin.failure" = "自动登录失败";
 "login.endAutoLogin.succeed" = "自动登录成功";
 
+//register
+"register.userName.outOfLimit" = "用户名长度不能超过64字节";
+"register.password.outOfLimit" = "密码长度不能超过64字节";
+
 //chat
 "chat.not.delivered" = "未送达";
 "chat.read" = "已读";

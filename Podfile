@@ -15,6 +15,7 @@ target 'ChatDemo-UI3.0' do
     pod 'MWPhotoBrowser', '~> 2.1.2'
     pod 'MJRefresh'
     pod 'Masonry'
+    pod 'WHToast'
 
     pod 'Parse'
 

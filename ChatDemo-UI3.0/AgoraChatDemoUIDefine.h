@@ -22,6 +22,11 @@
 #define KNOTIFICATIONNAME_DELETEALLMESSAGE @"RemoveAllMessages"
 #define KNOTIFICATION_CALL @"callOutWithChatter"
 
+#define  AGORACHATDEMO_POSTNOTIFY(name,object)  [[NSNotificationCenter defaultCenter] postNotificationName:name object:object];
+
+#define  AGORACHATDEMO_LISTENNOTIFY(name,SEL)  [[NSNotificationCenter defaultCenter] addObserver:self selector:SEL name:name object:nil];
+  
+
 #define ImageWithName(imageName) [UIImage imageNamed:imageName]
 
 #define kAgroaPadding 10.0f

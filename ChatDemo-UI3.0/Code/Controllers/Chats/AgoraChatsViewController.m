@@ -10,11 +10,14 @@
 #import "AgoraChatsViewController.h"
 
 #import "UIViewController+DismissKeyboard.h"
-#import "AgoraChatsCell.h"
 #import "AgoraRealtimeSearchUtil.h"
 #import "AgoraChatViewController.h"
 #import "AgoraConversationModel.h"
 #import "AgoraNotificationNames.h"
+#import "AgoraChatsCell.h"
+
+
+NSString *CellIdentifier = @"AgoraChatsCellIdentifier";
 
 @interface AgoraChatsViewController () <AgoraChatManagerDelegate, AgoraGroupManagerDelegate, UISearchBarDelegate, UITableViewDelegate, UITableViewDataSource, UISearchDisplayDelegate>
 {
@@ -29,6 +32,14 @@
 @end
 
 @implementation AgoraChatsViewController
+- (instancetype)init {
+    self  = [super init];
+    if (self) {
+        [[NSNotificationCenter defaultCenter] addObserver:self.tableView selector:@selector(reloadData) name:KAgora_UPDATE_CONVERSATIONS object:nil];
+//        [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(endChatWithConversationId) name:KAgora_END_CHAT object:nil];
+    }
+    return self;
+}
 
 - (void)viewDidLoad {
     [super viewDidLoad];
@@ -41,8 +52,6 @@
     
     self.tableView.autoresizingMask = UIViewAutoresizingFlexibleTopMargin |UIViewAutoresizingFlexibleHeight;
     _isSearchState = NO;
-    
-    [[NSNotificationCenter defaultCenter] addObserver:self.tableView selector:@selector(reloadData) name:KAgora_UPDATE_CONVERSATIONS object:nil];
     
     [self tableViewDidTriggerHeaderRefresh];
 }
@@ -76,59 +85,11 @@
     [[AgoraChatClient sharedClient].groupManager removeDelegate:self];
 }
 
-#pragma mark - getter
-
-- (UIView *)networkStateView
-{
-    if (_networkStateView == nil) {
-        _networkStateView = [[UIView alloc] initWithFrame:CGRectMake(0, 0, self.tableView.frame.size.width, 44)];
-
-        _networkStateView.backgroundColor = KermitGreenTwoColor;
-        
-        UIImageView *imageView = [[UIImageView alloc] initWithFrame:CGRectMake(10, (_networkStateView.frame.size.height - 20) / 2, 20, 20)];
-        imageView.image = [UIImage imageNamed:@"Icon_error_white"];
-        [_networkStateView addSubview:imageView];
-        
-        UILabel *label = [[UILabel alloc] initWithFrame:CGRectMake(CGRectGetMaxX(imageView.frame) + 5, 0, _networkStateView.frame.size.width - (CGRectGetMaxX(imageView.frame) + 15), _networkStateView.frame.size.height)];
-        label.font = [UIFont systemFontOfSize:15.0];
-        label.textColor = [UIColor grayColor];
-        label.backgroundColor = [UIColor clearColor];
-        label.text = NSLocalizedString(@"network.disconnection", @"Network disconnection");
-        [_networkStateView addSubview:label];
-    }
-    return _networkStateView;
+#pragma mark NSNotification
+- (void)reloadData {
+  
 }
 
-- (UISearchBar*)searchBar
-{
-    if (_searchBar == nil) {
-        _searchBar = [[UISearchBar alloc] initWithFrame:CGRectMake(0, 0, KScreenWidth, 30)];
-        _searchBar.placeholder = NSLocalizedString(@"common.search", @"Search");
-        _searchBar.delegate = self;
-        _searchBar.showsCancelButton = NO;
-        _searchBar.backgroundImage = [UIImage imageWithColor:[UIColor whiteColor] size:_searchBar.bounds.size];
-        [_searchBar setSearchFieldBackgroundPositionAdjustment:UIOffsetMake(0, 0)];
-        [_searchBar setSearchFieldBackgroundImage:[UIImage imageWithColor:PaleGrayColor size:_searchBar.bounds.size] forState:UIControlStateNormal];
-        _searchBar.tintColor = AlmostBlackColor;
-    }
-    return _searchBar;
-}
-
-- (NSMutableArray*)dataSource
-{
-    if (_dataSource == nil) {
-        _dataSource = [NSMutableArray array];
-    }
-    return _dataSource;
-}
-
-- (NSMutableArray*)searchSource
-{
-    if (_searchSource == nil) {
-        _searchSource = [NSMutableArray array];
-    }
-    return _searchSource;
-}
 
 #pragma mark - Table view data source
 
@@ -145,10 +106,9 @@
 
 - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath {
     if (_isSearchState) {
-        NSString *CellIdentifier = @"AgoraChatsSearchCell";
         AgoraChatsCell *cell = [tableView dequeueReusableCellWithIdentifier:CellIdentifier];
         if (cell == nil) {
-            cell = (AgoraChatsCell*)[[[NSBundle mainBundle]loadNibNamed:@"AgoraChatsCell" owner:nil options:nil] firstObject];
+            cell = (AgoraChatsCell*)[[[NSBundle mainBundle]loadNibNamed:CellIdentifier owner:nil options:nil] firstObject];
         }
         AgoraConversationModel *model = [self.searchSource objectAtIndex:indexPath.row];
         [(AgoraChatsCell*)cell setConversationModel:model];
@@ -156,10 +116,9 @@
         return cell;
     }
     
-    NSString *CellIdentifier = @"AgoraChatsCell";
     AgoraChatsCell *cell = [tableView dequeueReusableCellWithIdentifier:CellIdentifier];
     if (cell == nil) {
-        cell = (AgoraChatsCell*)[[[NSBundle mainBundle]loadNibNamed:@"AgoraChatsCell" owner:nil options:nil] firstObject];
+        cell = [[AgoraChatsCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:CellIdentifier];
     }
     AgoraConversationModel *model = [self.dataSource objectAtIndex:indexPath.row];
     [(AgoraChatsCell*)cell setConversationModel:model];
@@ -196,9 +155,22 @@
         model = [self.dataSource objectAtIndex:indexPath.row];
     }
     
-    AgoraChatViewController *chatViewController = [[AgoraChatViewController alloc] initWithConversationId:model.conversation.conversationId conversationType:model.conversation.type];
     [[NSNotificationCenter defaultCenter] postNotificationName:KNOTIFICATION_UPDATEUNREADCOUNT object:nil];
+
+    AgoraChatViewController *chatViewController = [[AgoraChatViewController alloc] initWithConversationId:model.conversation.conversationId conversationType:model.conversation.type];
+    chatViewController.leaveGroupBlock = ^{
+        [self updateUIAfterLeaveGroupWithConversationId:model.conversation.conversationId];
+    };
     [self.navigationController pushViewController:chatViewController animated:YES];
+}
+
+- (void)updateUIAfterLeaveGroupWithConversationId:(NSString *)conversationId {
+    [[AgoraChatClient sharedClient].chatManager deleteConversation:conversationId isDeleteMessages:YES completion:^(NSString *aConversationId, AgoraError *aError) {
+        if (aError == nil) {
+            [self tableViewDidTriggerHeaderRefresh];
+        }
+    }];
+    
 }
 
 - (CGFloat)tableView:(UITableView *)tableView heightForRowAtIndexPath:(NSIndexPath *)indexPath
@@ -341,5 +313,59 @@
                        }];
     return  sorted;
 }
+
+#pragma mark - getter and setter
+- (UIView *)networkStateView
+{
+    if (_networkStateView == nil) {
+        _networkStateView = [[UIView alloc] initWithFrame:CGRectMake(0, 0, self.tableView.frame.size.width, 44)];
+
+        _networkStateView.backgroundColor = KermitGreenTwoColor;
+        
+        UIImageView *imageView = [[UIImageView alloc] initWithFrame:CGRectMake(10, (_networkStateView.frame.size.height - 20) / 2, 20, 20)];
+        imageView.image = [UIImage imageNamed:@"Icon_error_white"];
+        [_networkStateView addSubview:imageView];
+        
+        UILabel *label = [[UILabel alloc] initWithFrame:CGRectMake(CGRectGetMaxX(imageView.frame) + 5, 0, _networkStateView.frame.size.width - (CGRectGetMaxX(imageView.frame) + 15), _networkStateView.frame.size.height)];
+        label.font = [UIFont systemFontOfSize:15.0];
+        label.textColor = [UIColor grayColor];
+        label.backgroundColor = [UIColor clearColor];
+        label.text = NSLocalizedString(@"network.disconnection", @"Network disconnection");
+        [_networkStateView addSubview:label];
+    }
+    return _networkStateView;
+}
+
+- (UISearchBar*)searchBar
+{
+    if (_searchBar == nil) {
+        _searchBar = [[UISearchBar alloc] initWithFrame:CGRectMake(0, 0, KScreenWidth, 30)];
+        _searchBar.placeholder = NSLocalizedString(@"common.search", @"Search");
+        _searchBar.delegate = self;
+        _searchBar.showsCancelButton = NO;
+        _searchBar.backgroundImage = [UIImage imageWithColor:[UIColor whiteColor] size:_searchBar.bounds.size];
+        [_searchBar setSearchFieldBackgroundPositionAdjustment:UIOffsetMake(0, 0)];
+        [_searchBar setSearchFieldBackgroundImage:[UIImage imageWithColor:PaleGrayColor size:_searchBar.bounds.size] forState:UIControlStateNormal];
+        _searchBar.tintColor = AlmostBlackColor;
+    }
+    return _searchBar;
+}
+
+- (NSMutableArray*)dataSource
+{
+    if (_dataSource == nil) {
+        _dataSource = [NSMutableArray array];
+    }
+    return _dataSource;
+}
+
+- (NSMutableArray*)searchSource
+{
+    if (_searchSource == nil) {
+        _searchSource = [NSMutableArray array];
+    }
+    return _searchSource;
+}
+
 
 @end

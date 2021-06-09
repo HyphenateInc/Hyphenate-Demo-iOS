@@ -32,6 +32,9 @@ static NSString *cellIndentifier = @"AgoraBlackListCellIndentifier";
             dispatch_async(dispatch_get_main_queue(), ^{
                 [self tableViewDidFinishTriggerHeader:YES];
                 self.blockList = aList;
+                
+                [[NSNotificationCenter defaultCenter] postNotificationName:@"AgoraSettingBlackListDidChange" object:nil];
+                
                 [self.tableView reloadData];
             });
         }else {

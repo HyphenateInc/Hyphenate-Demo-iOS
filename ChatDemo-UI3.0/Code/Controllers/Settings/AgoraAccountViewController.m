@@ -125,7 +125,7 @@
 #pragma mark UITableViewDelegate
 - (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section
 {
-    return 3;
+    return 2;
 }
 
 - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath
@@ -136,17 +136,26 @@
         cell = [[UITableViewCell alloc] initWithStyle:UITableViewCellStyleValue1 reuseIdentifier:cellIdentifier];
     }
     
+//    if (indexPath.row == 0) {
+//        cell.selectionStyle = UITableViewCellSelectionStyleNone;
+//        [cell.contentView addSubview:self.avatarView];
+////        [cell.contentView addSubview:self.editButton];
+//    } else if (indexPath.row == 1) {
+//
+//        cell.textLabel.text = NSLocalizedString(@"setting.account.name", @"Name");
+//        cell.detailTextLabel.text = _myName ?: [[AgoraChatClient sharedClient] currentUsername];
+//        cell.accessoryType = UITableViewCellAccessoryDisclosureIndicator;
+//    } else {
+//
+//        cell.textLabel.text = NSLocalizedString(@"setting.account.id", @"Hyphenate ID");
+//        cell.detailTextLabel.text = [[AgoraChatClient sharedClient] currentUsername];
+//    }
+    
     if (indexPath.row == 0) {
         cell.selectionStyle = UITableViewCellSelectionStyleNone;
         [cell.contentView addSubview:self.avatarView];
 //        [cell.contentView addSubview:self.editButton];
     } else if (indexPath.row == 1) {
-        
-        cell.textLabel.text = NSLocalizedString(@"setting.account.name", @"Name");
-        cell.detailTextLabel.text = _myName ?: [[AgoraChatClient sharedClient] currentUsername];
-        cell.accessoryType = UITableViewCellAccessoryDisclosureIndicator;
-    } else {
-        
         cell.textLabel.text = NSLocalizedString(@"setting.account.id", @"Hyphenate ID");
         cell.detailTextLabel.text = [[AgoraChatClient sharedClient] currentUsername];
     }
@@ -169,16 +178,16 @@
     if (indexPath.row == 0) {
 //        [self editAvatar];
     } else if (indexPath.row == 1) {
-        AgoraModifyNickNameViewController *vc = [[AgoraModifyNickNameViewController alloc] init];
-        vc.title = NSLocalizedString(@"setting.account.name", @"Name");
-        vc.myNickName = _myName;
-        vc.callBack = ^(NSString *newName) {
-            _myName = newName;
-            dispatch_async(dispatch_get_main_queue(), ^{
-                [tableView reloadRowsAtIndexPaths:@[indexPath] withRowAnimation:UITableViewRowAnimationNone];
-            });
-        };
-        [self.navigationController pushViewController:vc animated:YES];
+//        AgoraModifyNickNameViewController *vc = [[AgoraModifyNickNameViewController alloc] init];
+//        vc.title = NSLocalizedString(@"setting.account.name", @"Name");
+//        vc.myNickName = _myName;
+//        vc.callBack = ^(NSString *newName) {
+//            _myName = newName;
+//            dispatch_async(dispatch_get_main_queue(), ^{
+//                [tableView reloadRowsAtIndexPaths:@[indexPath] withRowAnimation:UITableViewRowAnimationNone];
+//            });
+//        };
+//        [self.navigationController pushViewController:vc animated:YES];
     }
 }
 

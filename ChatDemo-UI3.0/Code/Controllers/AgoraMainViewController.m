@@ -148,11 +148,16 @@ static NSString *kGroupName = @"GroupName";
     }
     if (_chatsVC) {
         if (unreadCount > 0) {
-            _chatsVC.tabBarItem.badgeValue = [NSString stringWithFormat:@"%i", (int)unreadCount];
+            if (unreadCount >= 99) {
+                _chatsVC.tabBarItem.badgeValue = @"99+";
+            }else {
+                _chatsVC.tabBarItem.badgeValue = [NSString stringWithFormat:@"%@", @(unreadCount)];
+            }
         }else{
             _chatsVC.tabBarItem.badgeValue = nil;
         }
     }
+    
     UIApplication *application = [UIApplication sharedApplication];
     [application setApplicationIconBadgeNumber:unreadCount];
 }

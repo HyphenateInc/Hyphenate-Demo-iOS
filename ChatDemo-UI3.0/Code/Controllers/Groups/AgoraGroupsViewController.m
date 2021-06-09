@@ -28,11 +28,15 @@
     [self addNotifications];
     
     self.tableView.tableFooterView = [[UIView alloc] init];
-    [self tableViewDidTriggerHeaderRefresh];
 }
 
 - (void)dealloc {
     [self removeNotifications];
+}
+
+- (void)viewWillAppear:(BOOL)animated {
+    [super viewWillAppear:animated];
+    [self loadGroupsFromServer];
 }
 
 - (void)setupNavBar {
@@ -88,11 +92,6 @@
 
 - (void)addGroupAction {
     
-//    AgoraCreateViewController *publicVc = [[AgoraCreateViewController alloc] initWithNibName:@"AgoraCreateViewController" bundle:nil];
-//    UINavigationController *nav = [[UINavigationController alloc] initWithRootViewController:publicVc];
-//    nav.modalPresentationStyle = UIModalPresentationFullScreen;
-//    [self presentViewController:nav animated:YES completion:nil];
-  
     AgoraCreateViewController *publicVc = [[AgoraCreateViewController alloc] init];
     UINavigationController *nav = [[UINavigationController alloc] initWithRootViewController:publicVc];
     nav.modalPresentationStyle = UIModalPresentationFullScreen;
@@ -180,6 +179,7 @@
                         isHeader:(BOOL)aIsHeader
 {
     __weak typeof(self) weakSelf = self;
+    
     [MBProgressHUD showHUDAddedTo:[UIApplication sharedApplication].keyWindow animated:YES];
     [[AgoraChatClient sharedClient].groupManager getJoinedGroupsFromServerWithPage:self.page pageSize:50 completion:^(NSArray *aList, AgoraError *aError) {
         [MBProgressHUD hideHUDForView:[UIApplication sharedApplication].keyWindow animated:YES];

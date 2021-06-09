@@ -133,6 +133,7 @@
     [self.navigationController popViewControllerAnimated:YES];
 }
 
+
 - (void)doneAction
 {
     if (self.selectedIndexPath) {
@@ -146,7 +147,9 @@
             if (aError) {
                 [weakSelf showHint:NSLocalizedString(@"group.changeOwnerFail", @"Failed to change owner")];
             } else {
-                [[NSNotificationCenter defaultCenter] postNotificationName:KAgora_REFRESH_GROUP_INFO object:weakSelf.group];
+                if (self.transferOwnerBlock) {
+                    self.transferOwnerBlock();
+                }
                 [weakSelf backAction];
             }
         }];

@@ -1,96 +1,82 @@
-/************************************************************
- *  * Hyphenate
- * __________________
- * Copyright (C) 2016 Hyphenate Inc. All rights reserved.
- *
- * NOTICE: All information contained herein is, and remains
- * the property of Hyphenate Inc.
- */
+//
+//  AgoraChatsCellNew.m
+//  ChatDemo-UI3.0
+//
+//  Created by liujinliang on 2021/6/8.
+//  Copyright © 2021 easemob. All rights reserved.
+//
 
 #import "AgoraChatsCell.h"
-
 #import "AgoraConvertToCommonEmoticonsHelper.h"
 #import "AgoraConversationModel.h"
 #import "UIImageView+HeadImage.h"
 
 #define kLabelHeight 20.0
 #define kTimeLabelWidth 80.0
+#define kUnReadLabelHeight 20.0
 
 @interface AgoraChatsCell ()
 
-@property (weak, nonatomic) IBOutlet UIImageView *headImageView;
-@property (weak, nonatomic) IBOutlet UILabel *nameLabel;
-@property (weak, nonatomic) IBOutlet UILabel *contentLabel;
-@property (weak, nonatomic) IBOutlet UILabel *timeLabel;
-@property (weak, nonatomic) IBOutlet UILabel *unreadLabel;
-
-//@property (weak, nonatomic)  UIImageView *headImageView;
-//@property (weak, nonatomic)  UILabel *nameLabel;
-//@property (weak, nonatomic)  UILabel *contentLabel;
-//@property (weak, nonatomic)  UILabel *timeLabel;
-//@property (weak, nonatomic)  UILabel *unreadLabel;
-
+@property (strong, nonatomic)  UIImageView *headImageView;
+@property (strong, nonatomic)  UILabel *nameLabel;
+@property (strong, nonatomic)  UILabel *contentLabel;
+@property (strong, nonatomic)  UILabel *timeLabel;
+@property (strong, nonatomic)  UILabel *unreadLabel;
 @property (strong, nonatomic) AgoraConversationModel *model;
 
 @end
 
 @implementation AgoraChatsCell
 
-- (void)layoutSubviews
-{
-    [super layoutSubviews];
-    if (_model.conversation.unreadMessagesCount == 0) {
-        _unreadLabel.hidden = YES;
-        _nameLabel.left = 75.f;
-        _nameLabel.width = 170.f;
-    } else {
-        _unreadLabel.hidden = NO;
-        _nameLabel.left = 95.f;
-        _nameLabel.width = 150.f;
-        _unreadLabel.text = [NSString stringWithFormat:@"%d",_model.conversation.unreadMessagesCount];
+- (instancetype)initWithStyle:(UITableViewCellStyle)style reuseIdentifier:(NSString *)reuseIdentifier {
+    self = [super initWithStyle:style reuseIdentifier:reuseIdentifier];
+    if (self) {
+        [self placeAndLayoutSubViews];
     }
+    return  self;
 }
 
-//- (instancetype)initWithFrame:(CGRect)frame {
-//    self = [super initWithFrame:frame];
-//    if (self) {
-//        [self placeAndLayoutSubViews];
-//    }
-//    return self;
-//}
 
 - (void)placeAndLayoutSubViews {
+    [self.contentView addSubview:self.headImageView];
+    [self.contentView addSubview:self.nameLabel];
+    [self.contentView addSubview:self.timeLabel];
+    [self.contentView addSubview:self.contentLabel];
+    [self.contentView addSubview:self.unreadLabel];
+
     [self.headImageView mas_makeConstraints:^(MASConstraintMaker *make) {
-        make.centerY.equalTo(self);
-        make.left.mas_equalTo(kAgroaPadding);
+        make.centerY.equalTo(self.contentView);
+        make.left.mas_equalTo(kAgroaPadding * 2);
         make.size.mas_equalTo(50.0);
     }];
     
     [self.nameLabel mas_makeConstraints:^(MASConstraintMaker *make) {
-        make.centerY.equalTo(self);
-        make.left.mas_equalTo(kAgroaPadding);
-        make.size.mas_equalTo(50.0);
+        make.centerY.equalTo(self.contentView).offset(-kAgroaPadding);
+        make.left.mas_equalTo(self.headImageView.mas_right).offset(kAgroaPadding);
+        make.right.equalTo(self.timeLabel.mas_left).offset(-kAgroaPadding * 0.5);
+        make.height.mas_equalTo(20.0);
     }];
     
     [self.contentLabel mas_makeConstraints:^(MASConstraintMaker *make) {
-        make.centerY.equalTo(self);
-        make.left.mas_equalTo(kAgroaPadding);
-        make.size.mas_equalTo(50.0);
+        make.top.equalTo(self.nameLabel.mas_bottom);
+        make.left.equalTo(self.nameLabel);
+        make.right.equalTo(self.unreadLabel.mas_left).offset(-kAgroaPadding * 0.5);
+        make.height.equalTo(self.nameLabel);
     }];
     
     [self.timeLabel mas_makeConstraints:^(MASConstraintMaker *make) {
-        make.centerY.equalTo(self);
-        make.left.mas_equalTo(kAgroaPadding);
-        make.size.mas_equalTo(50.0);
+        make.centerY.equalTo(self.nameLabel);
+        make.right.equalTo(self.contentView).offset(-kAgroaPadding *2);
+        make.width.mas_equalTo(80.0f);
+        make.height.equalTo(self.nameLabel);
     }];
     
     [self.unreadLabel mas_makeConstraints:^(MASConstraintMaker *make) {
-        make.centerY.equalTo(self);
-        make.left.mas_equalTo(kAgroaPadding);
-        make.size.mas_equalTo(50.0);
+        make.centerY.equalTo(self.contentLabel);
+        make.right.equalTo(self.timeLabel);
+        make.width.mas_lessThanOrEqualTo(kUnReadLabelHeight);
+        make.height.mas_equalTo(kUnReadLabelHeight);
     }];
-    
-    
     
 }
 
@@ -108,13 +94,13 @@
     
     if (_model.conversation.unreadMessagesCount == 0) {
         _unreadLabel.hidden = YES;
-//        _nameLabel.left = 75.f;
-//        _nameLabel.width = 170.f;
     } else {
         _unreadLabel.hidden = NO;
-//        _nameLabel.left = 95.f;
-//        _nameLabel.width = 150.f;
-        _unreadLabel.text = [NSString stringWithFormat:@"%d",_model.conversation.unreadMessagesCount];
+        if (_model.conversation.unreadMessagesCount >= 99) {
+            _unreadLabel.text = @"99+";
+        }else {
+            _unreadLabel.text = [NSString stringWithFormat:@"%d",_model.conversation.unreadMessagesCount];
+        }
     }
     
 }
@@ -171,64 +157,65 @@
 
 - (void)awakeFromNib {
     [super awakeFromNib];
-    // Initialization code
 }
 
-- (void)setSelected:(BOOL)selected animated:(BOOL)animated {
-    [super setSelected:selected animated:animated];
-
-    // Configure the view for the selected state
+#pragma mark getter and setter
+- (UIImageView *)headImageView {
+    if (_headImageView == nil) {
+        _headImageView = UIImageView.new;
+        _headImageView.contentMode = UIViewContentModeCenter;
+    }
+    return  _headImageView;
 }
 
-//#pragma mark getter and setter
-//- (UIImageView *)headImageView {
-//    if (_headImageView == nil) {
-//        _headImageView = UIImageView.new;
-//        _headImageView.contentMode = UIViewContentModeCenter;
-//    }
-//    return  _headImageView;
-//}
-//
-//- (UILabel *)nameLabel {
-//    if (_nameLabel == nil) {
-//        _nameLabel = UILabel.new;
-//        _nameLabel.textColor = UIColor.blackColor;
-//        _nameLabel.font = [UIFont systemFontOfSize:13.0];
-//        _nameLabel.textAlignment = NSTextAlignmentLeft;
-//    }
-//    return  _nameLabel;
-//}
-//
-//- (UILabel *)contentLabel {
-//    if (_contentLabel == nil) {
-//        _contentLabel = UILabel.new;
-//        _contentLabel.textColor = UIColor.blackColor;
-//        _contentLabel.font = [UIFont systemFontOfSize:13.0];
-//        _contentLabel.textAlignment = NSTextAlignmentLeft;
-//    }
-//    return  _contentLabel;
-//}
-//
-//
-//- (UILabel *)timeLabel {
-//    if (_timeLabel == nil) {
-//        _timeLabel = UILabel.new;
-//        _timeLabel.textColor = UIColor.blackColor;
-//        _timeLabel.font = [UIFont systemFontOfSize:11.0];
-//        _timeLabel.textAlignment = NSTextAlignmentRight;
-//    }
-//    return  _timeLabel;
-//}
-//
-//
-//- (UILabel *)unreadLabel {
-//    if (_unreadLabel == nil) {
-//        _unreadLabel = UILabel.new;
-//        _unreadLabel.textColor = UIColor.blackColor;
-//        _unreadLabel.font = [UIFont systemFontOfSize:10.0];
-//        _unreadLabel.textAlignment = NSTextAlignmentCenter;
-//    }
-//    return  _unreadLabel;
-//}
+- (UILabel *)nameLabel {
+    if (_nameLabel == nil) {
+        _nameLabel = UILabel.new;
+        _nameLabel.textColor = UIColor.blackColor;
+        _nameLabel.font = [UIFont systemFontOfSize:13.0];
+        _nameLabel.textAlignment = NSTextAlignmentLeft;
+    }
+    return  _nameLabel;
+}
+
+- (UILabel *)contentLabel {
+    if (_contentLabel == nil) {
+        _contentLabel = UILabel.new;
+        _contentLabel.textColor = BlueyGreyColor;
+        _contentLabel.font = [UIFont systemFontOfSize:13.0];
+        _contentLabel.textAlignment = NSTextAlignmentLeft;
+    }
+    return  _contentLabel;
+}
+
+
+- (UILabel *)timeLabel {
+    if (_timeLabel == nil) {
+        _timeLabel = UILabel.new;
+        _timeLabel.textColor = BlueyGreyColor;
+        _timeLabel.font = [UIFont systemFontOfSize:11.0];
+        _timeLabel.textAlignment = NSTextAlignmentRight;
+    }performWithMethod
+    return  _timeLabel;
+}
+
+
+- (UILabel *)unreadLabel {
+    if (_unreadLabel == nil) {
+        _unreadLabel = UILabel.new;
+        _unreadLabel.textColor = UIColor.whiteColor;
+        _unreadLabel.font = [UIFont systemFontOfSize:10.0];
+        _unreadLabel.textAlignment = NSTextAlignmentCenter;
+        _unreadLabel.layer.cornerRadius = kUnReadLabelHeight * 0.5;
+        _unreadLabel.clipsToBounds = YES;
+        _unreadLabel.backgroundColor = KermitGreenTwoColor;
+    }
+    return  _unreadLabel;
+}
 
 @end
+
+#undef kLabelHeight
+#undef kTimeLabelWidth
+#undef kUnReadLabelHeight
+

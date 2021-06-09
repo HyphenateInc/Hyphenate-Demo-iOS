@@ -68,6 +68,13 @@
 "login.endAutoLogin.failure" = "Automatic login failed";
 "login.endAutoLogin.succeed" = "Automatic login succeed";
 
+//register
+"register.userName.outOfLimit" = "Username length out of limit, maximum 64 bytes";
+"register.password.outOfLimit" = "Password length out of limit, maximum 64 bytes";
+
+
+
+
 //chat
 "chat.not.delivered" = "Not Delivered";
 "chat.read" = "Read";

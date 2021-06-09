@@ -50,6 +50,8 @@
 
 @property (strong, nonatomic) AgoraConversation *conversation;
 @property (strong, nonatomic) AgoraMessageModel *prevAudioModel;
+//need delete Conversation
+@property (assign, nonatomic) BOOL isDeleteConversation;
 
 
 @end
@@ -738,6 +740,10 @@
             [weakSelf.navigationController popViewControllerAnimated:YES];
         }];
     } else {
+        if (self.leaveGroupBlock && self.isDeleteConversation) {
+            self.leaveGroupBlock();
+        }
+        
         [self.navigationController popToViewController:self animated:YES];
         [self.navigationController popViewControllerAnimated:YES];
     }
@@ -767,6 +773,7 @@
     if ([obj isKindOfClass:[NSString class]]) {
         NSString *conversationId = (NSString *)obj;
         if ([conversationId length] > 0 && [conversationId isEqualToString:self.conversationId]) {
+            self.isDeleteConversation = YES;
             [self backAction];
         }
     } else if ([obj isKindOfClass:[AgoraChatroom class]] && self.conversation.type == AgoraConversationTypeChatRoom) {
