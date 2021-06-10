@@ -89,7 +89,7 @@
         _headImageView.image = [UIImage imageNamed:@"default_group_avatar"];
     }
     _nameLabel.text = model.title;
-    _contentLabel.text = [self _latestMessageTitleWithConversation:model.conversation];
+    _contentLabel.text = [self _latestMessageContentWithConversation:model.conversation];
     _timeLabel.text = [self _latestMessageTimeWithConversation:model.conversation];
     
     if (_model.conversation.unreadMessagesCount == 0) {
@@ -107,7 +107,7 @@
 
 #pragma mark - private
 
-- (NSString *)_latestMessageTitleWithConversation:(AgoraConversation *)conversation
+- (NSString *)_latestMessageContentWithConversation:(AgoraConversation *)conversation
 {
     NSString *latestMessageTitle = @"";
     Message *lastMessage = [conversation latestMessage];
@@ -195,7 +195,7 @@
         _timeLabel.textColor = BlueyGreyColor;
         _timeLabel.font = [UIFont systemFontOfSize:11.0];
         _timeLabel.textAlignment = NSTextAlignmentRight;
-    }performWithMethod
+    }
     return  _timeLabel;
 }
 

@@ -14,7 +14,8 @@
 
 #import <AgoraChat/AgoraGroup.h>
 
-@interface AgoraGroupUpdateSubjectViewController : UIViewController
+@interface AgoraUpdateGroupNameViewController : UIViewController
+@property (nonatomic,copy) void (^updateGroupNameBlock)(NSString *groupName);
 
 - (instancetype)initWithGroupId:(NSString *)aGroupId
                         subject:(NSString *)aSubject;

@@ -26,7 +26,7 @@
 		3A79D1171E77AB080085AB6E /* AgoraGroupOccupantsViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 3A79D1101E77AB080085AB6E /* AgoraGroupOccupantsViewController.m */; };
 		3A79D1181E77AB080085AB6E /* AgoraGroupMutesViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 3A79D1121E77AB080085AB6E /* AgoraGroupMutesViewController.m */; };
 		3A79D1191E77AB080085AB6E /* AgoraGroupTransferOwnerViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 3A79D1141E77AB080085AB6E /* AgoraGroupTransferOwnerViewController.m */; };
-		3A79D1211E77E4F80085AB6E /* AgoraGroupUpdateSubjectViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 3A79D1201E77E4F80085AB6E /* AgoraGroupUpdateSubjectViewController.m */; };
+		3A79D1211E77E4F80085AB6E /* AgoraUpdateGroupNameViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 3A79D1201E77E4F80085AB6E /* AgoraUpdateGroupNameViewController.m */; };
 		3AA9B4411E7AA2FB0093AD25 /* oval@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 3AA9B43D1E7AA2FB0093AD25 /* oval@2x.png */; };
 		3AA9B4421E7AA2FB0093AD25 /* oval@3x.png in Resources */ = {isa = PBXBuildFile; fileRef = 3AA9B43E1E7AA2FB0093AD25 /* oval@3x.png */; };
 		3AA9B4431E7AA2FB0093AD25 /* Group3@3x.png in Resources */ = {isa = PBXBuildFile; fileRef = 3AA9B43F1E7AA2FB0093AD25 /* Group3@3x.png */; };
@@ -497,8 +497,8 @@
 		3A79D1121E77AB080085AB6E /* AgoraGroupMutesViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = AgoraGroupMutesViewController.m; sourceTree = "<group>"; };
 		3A79D1131E77AB080085AB6E /* AgoraGroupTransferOwnerViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = AgoraGroupTransferOwnerViewController.h; sourceTree = "<group>"; };
 		3A79D1141E77AB080085AB6E /* AgoraGroupTransferOwnerViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = AgoraGroupTransferOwnerViewController.m; sourceTree = "<group>"; };
-		3A79D11F1E77E4F80085AB6E /* AgoraGroupUpdateSubjectViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = AgoraGroupUpdateSubjectViewController.h; sourceTree = "<group>"; };
-		3A79D1201E77E4F80085AB6E /* AgoraGroupUpdateSubjectViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = AgoraGroupUpdateSubjectViewController.m; sourceTree = "<group>"; };
+		3A79D11F1E77E4F80085AB6E /* AgoraUpdateGroupNameViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = AgoraUpdateGroupNameViewController.h; sourceTree = "<group>"; };
+		3A79D1201E77E4F80085AB6E /* AgoraUpdateGroupNameViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = AgoraUpdateGroupNameViewController.m; sourceTree = "<group>"; };
 		3AA9B43D1E7AA2FB0093AD25 /* oval@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "oval@2x.png"; sourceTree = "<group>"; };
 		3AA9B43E1E7AA2FB0093AD25 /* oval@3x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "oval@3x.png"; sourceTree = "<group>"; };
 		3AA9B43F1E7AA2FB0093AD25 /* Group3@3x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "Group3@3x.png"; sourceTree = "<group>"; };
@@ -1118,8 +1118,8 @@
 		3A79D1071E77AAF40085AB6E /* Info */ = {
 			isa = PBXGroup;
 			children = (
-				3A79D11F1E77E4F80085AB6E /* AgoraGroupUpdateSubjectViewController.h */,
-				3A79D1201E77E4F80085AB6E /* AgoraGroupUpdateSubjectViewController.m */,
+				3A79D11F1E77E4F80085AB6E /* AgoraUpdateGroupNameViewController.h */,
+				3A79D1201E77E4F80085AB6E /* AgoraUpdateGroupNameViewController.m */,
 				3A79D10B1E77AB080085AB6E /* AgoraGroupAdminsViewController.h */,
 				3A79D10C1E77AB080085AB6E /* AgoraGroupAdminsViewController.m */,
 				3A79D10D1E77AB080085AB6E /* AgoraGroupBansViewController.h */,
@@ -2532,7 +2532,7 @@
 				D24327E71DAA395F00EDCDAB /* wav.mm in Sources */,
 				7F6CC87026568B9900BA60BB /* AgoraBaseRefreshTableController.m in Sources */,
 				3A4BB1CB1ED43D7700B07FCA /* AgoraChatroomBansViewController.m in Sources */,
-				3A79D1211E77E4F80085AB6E /* AgoraGroupUpdateSubjectViewController.m in Sources */,
+				3A79D1211E77E4F80085AB6E /* AgoraUpdateGroupNameViewController.m in Sources */,
 				7F6CC8C126568C4B00BA60BB /* AgoraContactsViewController.m in Sources */,
 				7F6CC8EA26568C8600BA60BB /* AgoraAboutViewController.m in Sources */,
 				71D4A1D11D9C9229006FACB7 /* UIImage+ImageEffect.m in Sources */,

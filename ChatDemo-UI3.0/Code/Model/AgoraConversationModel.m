@@ -18,11 +18,18 @@
     if (self) {
         _conversation = conversation;
         
-        NSString *subject = [conversation.ext objectForKey:@"subject"];
-        if ([subject length] > 0) {
-            _title = subject;
+        if (_conversation.type == AgoraConversationTypeChatRoom) {
+            NSString *subject = [conversation.ext objectForKey:@"subject"];
+
+            if ([subject length] > 0) {
+                _title = subject;
+//                [[AgoraChatClient sharedClient].roomManager getChatroomSpecificationFromServerWithId:conversation.conversationId completion:^(AgoraChatroom *aChatroom, AgoraError *aError) {
+//                     NSLog(@"%s aChatroom.chatroomId:%@ aChatroom.subject:%@",__func__,aChatroom.chatroomId,aChatroom.subject);
+//                }];
+            }
         }
         
+    
         if (_conversation.type == AgoraConversationTypeGroupChat) {
             NSArray *groups = [[AgoraChatClient sharedClient].groupManager getJoinedGroups];
             for (AgoraGroup *group in groups) {
@@ -38,7 +45,7 @@
                 [AgoraUserInfoManagerHelper fetchUserInfoWithUserIds:@[_conversation.conversationId] completion:^(NSDictionary * _Nonnull userInfoDic) {
                     dispatch_async(dispatch_get_main_queue(), ^{
                         AgoraUserInfo *userInfo = userInfoDic[_conversation.conversationId];
-                        _title = userInfo.nickName;
+                        _title = userInfo.nickName ?: userInfo.userId;
                     });
                 }];
             });

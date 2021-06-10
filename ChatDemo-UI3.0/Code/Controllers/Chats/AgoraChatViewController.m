@@ -170,6 +170,7 @@
         self.title = [[AgoraConversationModel alloc] initWithConversation:self.conversation].title;
     } else if (_conversation.type == AgoraConversationTypeChatRoom) {
         self.navigationItem.rightBarButtonItem = [[UIBarButtonItem alloc] initWithCustomView:self.detailButton];
+        self.title = [[AgoraConversationModel alloc] initWithConversation:self.conversation].title;
     }
 }
 
@@ -717,6 +718,9 @@
 {
     if (_conversation.type == AgoraConversationTypeGroupChat) {
         AgoraGroupInfoViewController *groupInfoViewController = [[AgoraGroupInfoViewController alloc] initWithGroupId:_conversation.conversationId];
+        groupInfoViewController.updateGroupNameBlock = ^(NSString *groupName) {
+            self.title = groupName;
+        };
         [self.navigationController pushViewController:groupInfoViewController animated:YES];
     } else if (_conversation.type == AgoraConversationTypeChatRoom) {
         AgoraChatroomInfoViewController *infoController = [[AgoraChatroomInfoViewController alloc] initWithChatroomId:self.conversation.conversationId];
@@ -813,7 +817,6 @@
             NSMutableDictionary *ext = [NSMutableDictionary dictionaryWithDictionary:weakSelf.conversation.ext];
             [ext setObject:aChatroom.subject forKey:@"subject"];
             weakSelf.conversation.ext = ext;
-            weakSelf.title = aChatroom.subject;
             
             [[NSNotificationCenter defaultCenter] postNotificationName:KAgora_UPDATE_CONVERSATIONS object:nil];
         }

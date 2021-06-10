@@ -21,7 +21,7 @@
 #import "AgoraGroupBansViewController.h"
 #import "AgoraGroupTransferOwnerViewController.h"
 #import "AgoraMemberSelectViewController.h"
-#import "AgoraGroupUpdateSubjectViewController.h"
+#import "AgoraUpdateGroupNameViewController.h"
 #import "AgoraNotificationNames.h"
 
 #define ALERTVIEW_CHANGE_ANNOUNCAgoraENT 100
@@ -300,7 +300,9 @@
         case 7:
         {
             if (self.group.permissionType == AgoraGroupPermissionTypeOwner) {
-                AgoraGroupUpdateSubjectViewController *updateController = [[AgoraGroupUpdateSubjectViewController alloc] initWithGroupId:self.groupId subject:self.group.subject];
+                AgoraUpdateGroupNameViewController *updateController = [[AgoraUpdateGroupNameViewController alloc] initWithGroupId:self.groupId subject:self.group.subject];
+                updateController.updateGroupNameBlock = self.updateGroupNameBlock;
+                
                 [self.navigationController pushViewController:updateController animated:YES];
             } else {
                 [self showHint:NSLocalizedString(@"group.owner.permission", @"Only owner can perform this operation")];

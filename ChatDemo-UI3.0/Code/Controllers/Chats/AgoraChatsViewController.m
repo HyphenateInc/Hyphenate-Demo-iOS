@@ -71,9 +71,9 @@ NSString *CellIdentifier = @"AgoraChatsCellIdentifier";
 
 - (void)didReceiveMemoryWarning {
     [super didReceiveMemoryWarning];
-    // Dispose of any resources that can be recreated.
 }
 
+#pragma mark private method
 - (void)registerNotifications{
     [self unregisterNotifications];
     [[AgoraChatClient sharedClient].chatManager addDelegate:self delegateQueue:nil];
@@ -85,10 +85,21 @@ NSString *CellIdentifier = @"AgoraChatsCellIdentifier";
     [[AgoraChatClient sharedClient].groupManager removeDelegate:self];
 }
 
+
+- (void)updateUIAfterLeaveGroupWithConversationId:(NSString *)conversationId {
+    [[AgoraChatClient sharedClient].chatManager deleteConversation:conversationId isDeleteMessages:YES completion:^(NSString *aConversationId, AgoraError *aError) {
+        if (aError == nil) {
+            [self tableViewDidTriggerHeaderRefresh];
+        }
+    }];
+}
+
+
 #pragma mark NSNotification
 - (void)reloadData {
   
 }
+
 
 
 #pragma mark - Table view data source
@@ -162,15 +173,6 @@ NSString *CellIdentifier = @"AgoraChatsCellIdentifier";
         [self updateUIAfterLeaveGroupWithConversationId:model.conversation.conversationId];
     };
     [self.navigationController pushViewController:chatViewController animated:YES];
-}
-
-- (void)updateUIAfterLeaveGroupWithConversationId:(NSString *)conversationId {
-    [[AgoraChatClient sharedClient].chatManager deleteConversation:conversationId isDeleteMessages:YES completion:^(NSString *aConversationId, AgoraError *aError) {
-        if (aError == nil) {
-            [self tableViewDidTriggerHeaderRefresh];
-        }
-    }];
-    
 }
 
 - (CGFloat)tableView:(UITableView *)tableView heightForRowAtIndexPath:(NSIndexPath *)indexPath
@@ -248,6 +250,26 @@ NSString *CellIdentifier = @"AgoraChatsCellIdentifier";
             [weakSelf.tableView reloadData];
         });
     });
+    
+    
+    
+//    dispatch_async(dispatch_get_global_queue(0, 0), ^{
+//        [[AgoraChatClient sharedClient].chatManager getConversationsFromServer:^(NSArray *aCoversations, AgoraError *aError) {
+//            NSMutableArray *tCoversations = [NSMutableArray new];
+//            NSArray* sorted = [self _sortConversationList:aCoversations];
+//            for (AgoraConversation *conversation in sorted) {
+//                AgoraConversationModel *model = [[AgoraConversationModel alloc] initWithConversation:conversation];
+//                [tCoversations addObject:model];
+//            }
+//            self.dataSource = tCoversations;
+//
+//            dispatch_async(dispatch_get_main_queue(), ^{
+//                [self tableViewDidFinishTriggerHeader:YES];
+//                [self.tableView reloadData];
+//            });
+//        }];
+//    });
+    
 }
 
 #pragma mark - AgoraChatManagerDelegate

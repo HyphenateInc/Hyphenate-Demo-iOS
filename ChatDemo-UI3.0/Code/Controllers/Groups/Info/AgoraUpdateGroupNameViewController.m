@@ -10,9 +10,9 @@
  * from Hyphenate Inc.
  */
 
-#import "AgoraGroupUpdateSubjectViewController.h"
+#import "AgoraUpdateGroupNameViewController.h"
 
-@interface AgoraGroupUpdateSubjectViewController () <UITextFieldDelegate>
+@interface AgoraUpdateGroupNameViewController () <UITextFieldDelegate>
 
 @property (nonatomic, strong) NSString *groupId;
 @property (nonatomic, strong) NSString *groupSubject;
@@ -21,7 +21,7 @@
 
 @end
 
-@implementation AgoraGroupUpdateSubjectViewController
+@implementation AgoraUpdateGroupNameViewController
 
 - (instancetype)initWithGroupId:(NSString *)aGroupId
                         subject:(NSString *)aSubject
@@ -122,6 +122,10 @@
                 [ext setObject:aGroup.subject forKey:@"subject"];
                 [ext setObject:[NSNumber numberWithBool:aGroup.isPublic] forKey:@"isPublic"];
                 conversation.ext = ext;
+                if (self.updateGroupNameBlock) {
+                    self.updateGroupNameBlock(aGroup.groupName);
+                }
+                
             }
         }
         [weakSelf back];
