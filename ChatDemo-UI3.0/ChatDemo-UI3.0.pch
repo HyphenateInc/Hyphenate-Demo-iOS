@@ -32,5 +32,8 @@
 #import <Masonry/Masonry.h>
 #import "AgoraUserInfoManagerHelper.h"
 #import <WHToast/WHToast.h>
+#import "AgoraChatDemoEnum.h"
+#import "UIColor+Util.h"
+#import "AgoraNotificationNames.h"
 
 #endif

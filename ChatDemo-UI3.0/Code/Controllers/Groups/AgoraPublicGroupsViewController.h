@@ -14,8 +14,10 @@ NS_ASSUME_NONNULL_BEGIN
 
 @interface AgoraPublicGroupsViewController : AgoraBaseRefreshTableController
 @property (nonatomic, strong,readonly) NSMutableArray<AgoraGroupModel *> *publicGroups;
+
 - (void)setSearchResultArray:(NSArray *)resultArray isEmptySearchKey:(BOOL)isEmptySearchKey;
 - (void)setSearchState:(BOOL)isSearching;
+@property (nonatomic,copy)void (^addGroupBlock)(void);
 
 @end
 

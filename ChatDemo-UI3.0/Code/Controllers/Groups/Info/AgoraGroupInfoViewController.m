@@ -25,6 +25,8 @@
 #import "AgoraNotificationNames.h"
 
 #define ALERTVIEW_CHANGE_ANNOUNCAgoraENT 100
+#define kHeaderLabelBGColor [UIColor colorWithRed: 157 / 255.0 green: 170 / 255.0 blue: 179 / 255.0 alpha:1.0]
+
 
 @interface AgoraGroupInfoViewController ()<AgoraGroupUIProtocol, UIAlertViewDelegate>
 
@@ -240,10 +242,10 @@
     headerLabel.textColor = [UIColor whiteColor];
     headerLabel.font = [UIFont boldSystemFontOfSize:13];
     if (section == 0) {
-        headerLabel.backgroundColor = [UIColor colorWithRed: 157 / 255.0 green: 170 / 255.0 blue: 179 / 255.0 alpha:1.0];
+        headerLabel.backgroundColor = kHeaderLabelBGColor;
         headerLabel.text = NSLocalizedString(@"group.sectionHeaderOwnerAndAdmin", @"  Owner and Admin List");
     } else if (section == 1) {
-        headerLabel.backgroundColor = [UIColor colorWithRed: 157 / 255.0 green: 170 / 255.0 blue: 179 / 255.0 alpha:1.0];
+        headerLabel.backgroundColor = kHeaderLabelBGColor;
         headerLabel.text = NSLocalizedString(@"group.sectionHeaderMembers", @"  Member List");
     } else {
         headerLabel.backgroundColor = [UIColor colorWithRed: 226 / 255.0 green: 231 / 255.0 blue: 235 / 255.0 alpha:1.0];
@@ -706,3 +708,5 @@
 }
 
 @end
+#undef kHeaderLabelBGColor
+

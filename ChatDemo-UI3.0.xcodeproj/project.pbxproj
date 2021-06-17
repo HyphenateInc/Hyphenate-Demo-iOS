@@ -75,6 +75,9 @@
 		7F2A1FBA2667417000800ACC /* AgoraBlackListCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 7F2A1FB92667417000800ACC /* AgoraBlackListCell.m */; };
 		7F2A1FBD2667B4FC00800ACC /* AgoraPublicGroupsViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 7F2A1FBC2667B4FC00800ACC /* AgoraPublicGroupsViewController.m */; };
 		7F2A1FC02669D70E00800ACC /* AgoraCreateViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 7F2A1FBF2669D70E00800ACC /* AgoraCreateViewController.m */; };
+		7F3E7F86267A2E7F009CEAB6 /* AgoraChatRecallCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 7F3E7F85267A2E7F009CEAB6 /* AgoraChatRecallCell.m */; };
+		7F3E7FA0267B2314009CEAB6 /* UIColor+Util.m in Sources */ = {isa = PBXBuildFile; fileRef = 7F3E7F9F267B2314009CEAB6 /* UIColor+Util.m */; };
+		7F3E7FA3267B4024009CEAB6 /* AgoraGroupOwnerAdminListController.m in Sources */ = {isa = PBXBuildFile; fileRef = 7F3E7FA2267B4024009CEAB6 /* AgoraGroupOwnerAdminListController.m */; };
 		7F663CA1265B9FDA003F74B8 /* AgoraChatToolBar.m in Sources */ = {isa = PBXBuildFile; fileRef = 7F663CA0265B9FDA003F74B8 /* AgoraChatToolBar.m */; };
 		7F663CEA265E5DF7003F74B8 /* AgoraUserInfoManagerHelper.m in Sources */ = {isa = PBXBuildFile; fileRef = 7F663CE9265E5DF7003F74B8 /* AgoraUserInfoManagerHelper.m */; };
 		7F663CF3265F7F86003F74B8 /* AgoraUserInfo+expireTime.m in Sources */ = {isa = PBXBuildFile; fileRef = 7F663CF2265F7F86003F74B8 /* AgoraUserInfo+expireTime.m */; };
@@ -569,6 +572,13 @@
 		7F2A1FBC2667B4FC00800ACC /* AgoraPublicGroupsViewController.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = AgoraPublicGroupsViewController.m; sourceTree = "<group>"; };
 		7F2A1FBE2669D70E00800ACC /* AgoraCreateViewController.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = AgoraCreateViewController.h; sourceTree = "<group>"; };
 		7F2A1FBF2669D70E00800ACC /* AgoraCreateViewController.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = AgoraCreateViewController.m; sourceTree = "<group>"; };
+		7F3E7F84267A2E7F009CEAB6 /* AgoraChatRecallCell.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = AgoraChatRecallCell.h; sourceTree = "<group>"; };
+		7F3E7F85267A2E7F009CEAB6 /* AgoraChatRecallCell.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = AgoraChatRecallCell.m; sourceTree = "<group>"; };
+		7F3E7F87267A3053009CEAB6 /* AgoraChatDemoEnum.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = AgoraChatDemoEnum.h; sourceTree = "<group>"; };
+		7F3E7F9E267B2314009CEAB6 /* UIColor+Util.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "UIColor+Util.h"; sourceTree = "<group>"; };
+		7F3E7F9F267B2314009CEAB6 /* UIColor+Util.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = "UIColor+Util.m"; sourceTree = "<group>"; };
+		7F3E7FA1267B4024009CEAB6 /* AgoraGroupOwnerAdminListController.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = AgoraGroupOwnerAdminListController.h; sourceTree = "<group>"; };
+		7F3E7FA2267B4024009CEAB6 /* AgoraGroupOwnerAdminListController.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = AgoraGroupOwnerAdminListController.m; sourceTree = "<group>"; };
 		7F663C9E265B9308003F74B8 /* AgoraChatDemoUIDefine.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = AgoraChatDemoUIDefine.h; sourceTree = "<group>"; };
 		7F663C9F265B9FDA003F74B8 /* AgoraChatToolBar.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = AgoraChatToolBar.h; sourceTree = "<group>"; };
 		7F663CA0265B9FDA003F74B8 /* AgoraChatToolBar.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = AgoraChatToolBar.m; sourceTree = "<group>"; };
@@ -1132,6 +1142,8 @@
 				3A79D1141E77AB080085AB6E /* AgoraGroupTransferOwnerViewController.m */,
 				3A79D1081E77AAF40085AB6E /* AgoraGroupInfoViewController.h */,
 				3A79D1091E77AAF40085AB6E /* AgoraGroupInfoViewController.m */,
+				7F3E7FA1267B4024009CEAB6 /* AgoraGroupOwnerAdminListController.h */,
+				7F3E7FA2267B4024009CEAB6 /* AgoraGroupOwnerAdminListController.m */,
 				7F6CC85526568B5700BA60BB /* AgoraAddAdminViewController.h */,
 				7F6CC85326568B5700BA60BB /* AgoraAddAdminViewController.m */,
 				7F6CC85426568B5700BA60BB /* AgoraAddAdminViewController.xib */,
@@ -1486,6 +1498,7 @@
 			isa = PBXGroup;
 			children = (
 				7F663C9E265B9308003F74B8 /* AgoraChatDemoUIDefine.h */,
+				7F3E7F87267A3053009CEAB6 /* AgoraChatDemoEnum.h */,
 				D28345031D8FD1D400FD48A9 /* main.m */,
 				D283451F1D8FDC8200FD48A9 /* Localizable.strings */,
 				D28345721D900E1600FD48A9 /* ChatDemo-UI3.0.pch */,
@@ -1649,6 +1662,8 @@
 				711159001DB7278B005158BB /* NSArray+AgoraSortContacts.m */,
 				7F663CF1265F7F86003F74B8 /* AgoraUserInfo+expireTime.h */,
 				7F663CF2265F7F86003F74B8 /* AgoraUserInfo+expireTime.m */,
+				7F3E7F9E267B2314009CEAB6 /* UIColor+Util.h */,
+				7F3E7F9F267B2314009CEAB6 /* UIColor+Util.m */,
 				D243280A1DAE19F900EDCDAB /* Emoji */,
 				D24327EB1DAA444C00EDCDAB /* Category */,
 				D24327BA1DAA395F00EDCDAB /* DeviceHelper */,
@@ -2024,6 +2039,8 @@
 				7F6CC89E26568C3600BA60BB /* AgoraChatBaseCell.h */,
 				7F6CC8A326568C3600BA60BB /* AgoraChatBaseCell.m */,
 				7F6CC89D26568C3600BA60BB /* AgoraChatBaseCell.xib */,
+				7F3E7F84267A2E7F009CEAB6 /* AgoraChatRecallCell.h */,
+				7F3E7F85267A2E7F009CEAB6 /* AgoraChatRecallCell.m */,
 				7F6CC8A626568C3600BA60BB /* AgoraChatImageBubbleView.h */,
 				7F6CC8A526568C3600BA60BB /* AgoraChatImageBubbleView.m */,
 				7F6CC8A826568C3600BA60BB /* AgoraChatLocationBubbleView.h */,
@@ -2551,6 +2568,7 @@
 				7F6CC92E26568DC300BA60BB /* AgoraCDDeviceManager+Microphone.m in Sources */,
 				7F6CC93826568DDF00BA60BB /* AgoraVoiceConverter.mm in Sources */,
 				D28345041D8FD1D400FD48A9 /* main.m in Sources */,
+				7F3E7F86267A2E7F009CEAB6 /* AgoraChatRecallCell.m in Sources */,
 				3A4BB1CA1ED43D7700B07FCA /* AgoraChatroomAdminsViewController.m in Sources */,
 				7F6CC8D326568C6F00BA60BB /* AgoraApplyRequestCell.m in Sources */,
 				3A4BB1B01ED3DD6F00B07FCA /* AgoraChatroomCell.m in Sources */,
@@ -2594,8 +2612,10 @@
 				7F6CC86926568B8B00BA60BB /* AgoraRefreshFootViewCell.m in Sources */,
 				7F6CC91126568D8E00BA60BB /* AgoraRealtimeSearchUtil.m in Sources */,
 				7F2A1FC02669D70E00800ACC /* AgoraCreateViewController.m in Sources */,
+				7F3E7FA3267B4024009CEAB6 /* AgoraGroupOwnerAdminListController.m in Sources */,
 				7F6CC93126568DC300BA60BB /* AgoraCDDeviceManager+Remind.m in Sources */,
 				7F6CC8AF26568C3600BA60BB /* AgoraChatAudioBubbleView.m in Sources */,
+				7F3E7FA0267B2314009CEAB6 /* UIColor+Util.m in Sources */,
 				7166340F1DB0E17C00C92E27 /* AgoraGroupModel.m in Sources */,
 				7F6CC91A26568D9B00BA60BB /* AgoraEmoji.m in Sources */,
 				7F6CC89A26568C2400BA60BB /* AgoraFacialView.m in Sources */,

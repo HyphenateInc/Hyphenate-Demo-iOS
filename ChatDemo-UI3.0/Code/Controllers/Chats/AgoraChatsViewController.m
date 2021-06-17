@@ -35,7 +35,7 @@ NSString *CellIdentifier = @"AgoraChatsCellIdentifier";
 - (instancetype)init {
     self  = [super init];
     if (self) {
-        [[NSNotificationCenter defaultCenter] addObserver:self.tableView selector:@selector(reloadData) name:KAgora_UPDATE_CONVERSATIONS object:nil];
+        [[NSNotificationCenter defaultCenter] addObserver:self.tableView selector:@selector(updateConversationNotify) name:KAgora_UPDATE_CONVERSATIONS object:nil];
 //        [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(endChatWithConversationId) name:KAgora_END_CHAT object:nil];
     }
     return self;
@@ -44,12 +44,11 @@ NSString *CellIdentifier = @"AgoraChatsCellIdentifier";
 - (void)viewDidLoad {
     [super viewDidLoad];
     
-    self.tableView.tableFooterView = [[UIView alloc] init];
-    
     if ([UIDevice currentDevice].systemVersion.floatValue >= 7) {
         self.edgesForExtendedLayout = UIRectEdgeNone;
     }
     
+    self.tableView.tableFooterView = [[UIView alloc] init];
     self.tableView.autoresizingMask = UIViewAutoresizingFlexibleTopMargin |UIViewAutoresizingFlexibleHeight;
     _isSearchState = NO;
     
@@ -96,7 +95,7 @@ NSString *CellIdentifier = @"AgoraChatsCellIdentifier";
 
 
 #pragma mark NSNotification
-- (void)reloadData {
+- (void)updateConversationNotify {
   
 }
 
@@ -244,32 +243,14 @@ NSString *CellIdentifier = @"AgoraChatsCellIdentifier";
             [weakSelf.dataSource removeAllObjects];
             for (AgoraConversation *conversation in sorted) {
                 AgoraConversationModel *model = [[AgoraConversationModel alloc] initWithConversation:conversation];
+                NSLog(@"%s conversation.conversationId:%@",__func__,conversation.conversationId);
+
                 [weakSelf.dataSource addObject:model];
             }
             [self tableViewDidFinishTriggerHeader:YES];
             [weakSelf.tableView reloadData];
         });
     });
-    
-    
-    
-//    dispatch_async(dispatch_get_global_queue(0, 0), ^{
-//        [[AgoraChatClient sharedClient].chatManager getConversationsFromServer:^(NSArray *aCoversations, AgoraError *aError) {
-//            NSMutableArray *tCoversations = [NSMutableArray new];
-//            NSArray* sorted = [self _sortConversationList:aCoversations];
-//            for (AgoraConversation *conversation in sorted) {
-//                AgoraConversationModel *model = [[AgoraConversationModel alloc] initWithConversation:conversation];
-//                [tCoversations addObject:model];
-//            }
-//            self.dataSource = tCoversations;
-//
-//            dispatch_async(dispatch_get_main_queue(), ^{
-//                [self tableViewDidFinishTriggerHeader:YES];
-//                [self.tableView reloadData];
-//            });
-//        }];
-//    });
-    
 }
 
 #pragma mark - AgoraChatManagerDelegate
@@ -296,11 +277,30 @@ NSString *CellIdentifier = @"AgoraChatsCellIdentifier";
     });
 }
 
+- (void)messagesDidRecall:(NSArray *)aMessages {
+    NSLog(@"%s aMessages:%@",__func__,aMessages);
+    [self tableViewDidTriggerHeaderRefresh];
+}
+
 #pragma mark - AgoraGroupManagerDelegate
 
 - (void)groupListDidUpdate:(NSArray *)aGroupList
 {
     [self tableViewDidTriggerHeaderRefresh];
+}
+
+
+- (void)didLeaveGroup:(AgoraGroup *)aGroup reason:(AgoraGroupLeaveReason)aReason {
+    if (aReason == AgoraGroupLeaveReasonDestroyed) {
+        NSArray *conversations = [[AgoraChatClient sharedClient].chatManager getAllConversations];
+        for (AgoraConversation *con in conversations) {
+            if ([con.conversationId isEqualToString:aGroup.groupId]) {
+                [[AgoraChatClient sharedClient].chatManager deleteConversation:con.conversationId isDeleteMessages:YES completion:^(NSString *aConversationId, AgoraError *aError) {
+                    [self tableViewDidTriggerHeaderRefresh];
+                }];
+            }
+        }
+    }
 }
 
 #pragma mark - public 

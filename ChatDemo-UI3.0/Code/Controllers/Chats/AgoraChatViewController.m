@@ -8,7 +8,6 @@
  */
 
 #import "AgoraChatViewController.h"
-
 #import <MobileCoreServices/MobileCoreServices.h>
 #import <Photos/Photos.h>
 #import <AssetsLibrary/AssetsLibrary.h>
@@ -29,7 +28,10 @@
 #import "UIViewController+HUD.h"
 #import "NSObject+AgoraAlertView.h"
 #import "AgoraChatToolBar.h"
+#import "AgoraChatRecallCell.h"
 
+
+static NSString *recallCellIndentifier = @"recallCellIndentifier";
 
 @interface AgoraChatViewController () <UINavigationControllerDelegate,UIImagePickerControllerDelegate,AgoraLocationViewDelegate,AgoraChatManagerDelegate, AgoraChatroomManagerDelegate,AgoraChatBaseCellDelegate,UIActionSheetDelegate, UITableViewDelegate, UITableViewDataSource,AgoraChatToolBarNewDelegate>
 
@@ -40,7 +42,7 @@
 
 @property (strong, nonatomic) UIImagePickerController *imagePickerController;
 
-@property (strong, nonatomic) NSMutableArray *dataSource;
+@property (strong, nonatomic) NSMutableArray *messages;
 @property (strong, nonatomic) UIRefreshControl *refresh;
 @property (strong, nonatomic) UIButton *backButton;
 @property (strong, nonatomic) UIButton *camButton;
@@ -48,7 +50,7 @@
 @property (strong, nonatomic) UIButton *detailButton;
 @property (strong, nonatomic) NSIndexPath *longPressIndexPath;
 
-@property (strong, nonatomic) AgoraConversation *conversation;
+@property (strong, nonatomic) AgoraConversation *currentConversation;
 @property (strong, nonatomic) AgoraMessageModel *prevAudioModel;
 //need delete Conversation
 @property (assign, nonatomic) BOOL isDeleteConversation;
@@ -62,8 +64,8 @@
 {
     self = [super init];
     if (self) {
-        _conversation = [[AgoraChatClient sharedClient].chatManager getConversation:conversationId type:type createIfNotExist:YES];
-        [_conversation markAllMessagesAsRead:nil];
+        _currentConversation = [[AgoraChatClient sharedClient].chatManager getConversation:conversationId type:type createIfNotExist:YES];
+        [_currentConversation markAllMessagesAsRead:nil];
     }
     return self;
 }
@@ -89,8 +91,8 @@
     [[AgoraChatClient sharedClient].roomManager addDelegate:self delegateQueue:nil];
     
     
-    if (_conversation.type == AgoraConversationTypeChatRoom) {
-        [self _joinChatroom:_conversation.conversationId];
+    if (_currentConversation.type == AgoraConversationTypeChatRoom) {
+        [self _joinChatroom:_currentConversation.conversationId];
     }
 }
 
@@ -120,7 +122,7 @@
     [super viewDidAppear:animated];
     
     NSMutableArray *unreadMessages = [NSMutableArray array];
-    for (AgoraMessageModel *model in self.dataSource) {
+    for (AgoraMessageModel *model in self.messages) {
         if ([self _shouldSendHasReadAckForMessage:model.message read:NO]) {
             [unreadMessages addObject:model.message];
         }
@@ -128,7 +130,7 @@
     if ([unreadMessages count]) {
         [self _sendHasReadResponseForMessages:unreadMessages isRead:YES];
     }
-    [_conversation markAllMessagesAsRead:nil];
+    [_currentConversation markAllMessagesAsRead:nil];
     [[NSNotificationCenter defaultCenter] addObserver:self
                                              selector:@selector(removeGroupsNotification:)
                                                  name:KAgora_RAgoraOVEGROUP_NOTIFICATION
@@ -138,8 +140,8 @@
 - (void)dealloc
 {
     // delete the conversation if no message found
-    if (_conversation.latestMessage == nil) {
-        [[AgoraChatClient sharedClient].chatManager deleteConversation:_conversation.conversationId isDeleteMessages:YES completion:nil];
+    if (_currentConversation.latestMessage == nil) {
+        [[AgoraChatClient sharedClient].chatManager deleteConversation:_currentConversation.conversationId isDeleteMessages:YES completion:nil];
     }
     
     [[AgoraChatClient sharedClient].chatManager removeDelegate:self];
@@ -155,22 +157,22 @@
 {
     self.navigationItem.leftBarButtonItem = [[UIBarButtonItem alloc] initWithCustomView:self.backButton];
     
-    if (_conversation.type == AgoraConversationTypeChat) {
+    if (_currentConversation.type == AgoraConversationTypeChat) {
 //        self.navigationItem.rightBarButtonItems = @[[[UIBarButtonItem alloc] initWithCustomView:self.photoButton],[[UIBarButtonItem alloc] initWithCustomView:self.camButton]];
         self.navigationItem.rightBarButtonItem = nil;
-        [AgoraUserInfoManagerHelper fetchUserInfoWithUserIds:@[_conversation.conversationId] completion:^(NSDictionary * _Nonnull userInfoDic) {
-            AgoraUserInfo *userInfo = userInfoDic[_conversation.conversationId];
+        [AgoraUserInfoManagerHelper fetchUserInfoWithUserIds:@[_currentConversation.conversationId] completion:^(NSDictionary * _Nonnull userInfoDic) {
+            AgoraUserInfo *userInfo = userInfoDic[_currentConversation.conversationId];
             dispatch_async(dispatch_get_main_queue(), ^{
                 self.title = userInfo.nickName ?:userInfo.userId;
             });
         }];
         
-    } else if (_conversation.type == AgoraConversationTypeGroupChat) {
+    } else if (_currentConversation.type == AgoraConversationTypeGroupChat) {
         self.navigationItem.rightBarButtonItem = [[UIBarButtonItem alloc] initWithCustomView:self.detailButton];
-        self.title = [[AgoraConversationModel alloc] initWithConversation:self.conversation].title;
-    } else if (_conversation.type == AgoraConversationTypeChatRoom) {
+        self.title = [[AgoraConversationModel alloc] initWithConversation:self.currentConversation].title;
+    } else if (_currentConversation.type == AgoraConversationTypeChatRoom) {
         self.navigationItem.rightBarButtonItem = [[UIBarButtonItem alloc] initWithCustomView:self.detailButton];
-        self.title = [[AgoraConversationModel alloc] initWithConversation:self.conversation].title;
+        self.title = [[AgoraConversationModel alloc] initWithConversation:self.currentConversation].title;
     }
 }
 
@@ -190,13 +192,14 @@
         _tableView.delegate = self;
         _tableView.separatorStyle = UITableViewCellSeparatorStyleNone;
         _tableView.dataSource = self;
+        [_tableView registerClass:[AgoraChatRecallCell class] forCellReuseIdentifier:recallCellIndentifier];
     }
     return _tableView;
 }
 
 - (NSString*)conversationId
 {
-    return _conversation.conversationId;
+    return _currentConversation.conversationId;
 }
 
 - (UIButton*)backButton
@@ -255,12 +258,12 @@
     return _imagePickerController;
 }
 
-- (NSMutableArray*)dataSource
+- (NSMutableArray*)messages
 {
-    if (_dataSource == nil) {
-        _dataSource = [NSMutableArray array];
+    if (_messages == nil) {
+        _messages = [NSMutableArray array];
     }
-    return _dataSource;
+    return _messages;
 }
 
 - (UIRefreshControl*)refresh
@@ -287,19 +290,39 @@
 }
 
 - (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section {
-    return [self.dataSource count];
+    return [self.messages count];
 }
 
 - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath {
-    AgoraMessageModel *model = [self.dataSource objectAtIndex:indexPath.row];
-    NSString *CellIdentifier = [AgoraChatBaseCell cellIdentifierForMessageModel:model];
-    AgoraChatBaseCell *cell = [tableView dequeueReusableCellWithIdentifier:CellIdentifier];
+    AgoraMessageModel *model = [self.messages objectAtIndex:indexPath.row];
+    AgoraChatDemoWeakRemind type = AgoraChatDemoWeakRemindMsgTime;
+
+    NSString *cellIdentifier = [AgoraChatBaseCell cellIdentifierForMessageModel:model];
+    AgoraChatBaseCell *cell = [tableView dequeueReusableCellWithIdentifier:cellIdentifier];
     if (cell == nil) {
         cell = [[AgoraChatBaseCell alloc] initWithMessageModel:model];
         cell.delegate = self;
     }
     
-    [cell setMessageModel:model];
+    AgoraChatRecallCell *recallCell = (AgoraChatRecallCell *)[tableView dequeueReusableCellWithIdentifier:recallCellIndentifier];
+        
+    NSString *cellString = nil;
+    BOOL isRecallMsg = [model.message.ext[MSG_EXT_RECALL] boolValue];
+    
+    if (isRecallMsg) {
+        if ([model.message.from isEqualToString:AgoraChatClient.sharedClient.currentUsername]) {
+            cellString = @"您撤回一条消息";
+        } else {
+            cellString = @"对方撤回一条消息";
+        }
+        type = AgoraChatDemoWeakRemindSystemHint;
+        [recallCell updateCellWithType:type withContent:cellString];
+        return recallCell;
+        
+    }else {
+        [cell setMessageModel:model];
+    }
+    
     return cell;
 }
 
@@ -311,7 +334,7 @@
 
 - (CGFloat)tableView:(UITableView *)tableView heightForRowAtIndexPath:(NSIndexPath *)indexPath
 {
-    AgoraMessageModel *model = [self.dataSource objectAtIndex:indexPath.row];
+    AgoraMessageModel *model = [self.messages objectAtIndex:indexPath.row];
     return [AgoraChatBaseCell heightForMessageModel:model];
 }
 
@@ -330,7 +353,7 @@
 - (void)didSendText:(NSString *)text
 {
     Message *message = [AgoraSDKHelper initTextMessage:text
-                                                   to:_conversation.conversationId
+                                                   to:_currentConversation.conversationId
                                              chatType:[self _messageType]
                                            messageExt:nil];
     [self _sendMessage:message];
@@ -341,7 +364,7 @@
     Message *message = [AgoraSDKHelper initVoiceMessageWithLocalPath:recordPath
                                                         displayName:@"audio"
                                                            duration:duration
-                                                                 to:_conversation.conversationId
+                                                                 to:_currentConversation.conversationId
                                                         chatType:[self _messageType]
                                                          messageExt:nil];
     [self _sendMessage:message];
@@ -394,7 +417,7 @@
         Message *message = [AgoraSDKHelper initVideoMessageWithLocalURL:mp4
                                                            displayName:@"video.mp4"
                                                               duration:0
-                                                                    to:_conversation.conversationId
+                                                                    to:_currentConversation.conversationId
                                                               chatType:[self _messageType]
                                                             messageExt:nil];
         [self _sendMessage:message];
@@ -406,7 +429,7 @@
             NSData *data = UIImageJPEGRepresentation(orgImage, 1);
             Message *message = [AgoraSDKHelper initImageData:data
                                                 displayName:@"image.png"
-                                                         to:_conversation.conversationId
+                                                         to:_currentConversation.conversationId
                                                    chatType:[self _messageType]
                                                  messageExt:nil];
             [self _sendMessage:message];
@@ -422,7 +445,7 @@
                             if (data != nil) {
                                 Message *message = [AgoraSDKHelper initImageData:data
                                                                     displayName:@"image.png"
-                                                                             to:_conversation.conversationId
+                                                                             to:_currentConversation.conversationId
                                                                     chatType:[self _messageType]
                                                                      messageExt:nil];
                                 [self _sendMessage:message];
@@ -445,7 +468,7 @@
                         }
                         Message *message = [AgoraSDKHelper initImageData:fileData
                                                             displayName:@"image.png"
-                                                                     to:_conversation.conversationId
+                                                                     to:_currentConversation.conversationId
                                                                chatType:[self _messageType]
                                                              messageExt:nil];
                         [self _sendMessage:message];
@@ -471,7 +494,7 @@
     Message *message = [AgoraSDKHelper initLocationMessageWithLatitude:latitude
                                                             longitude:longitude
                                                               address:address
-                                                                   to:_conversation.conversationId
+                                                                   to:_currentConversation.conversationId
                                                           chatType:[self _messageType]
                                                            messageExt:nil];
     [self _sendMessage:message];
@@ -575,7 +598,7 @@
 - (void)didCellLongPressed:(AgoraChatBaseCell *)cell
 {
     NSIndexPath *indexPath = [self.tableView indexPathForCell:cell];
-    AgoraMessageModel *model = [self.dataSource objectAtIndex:indexPath.row];
+    AgoraMessageModel *model = [self.messages objectAtIndex:indexPath.row];
     if (model.message.body.type == MessageBodyTypeText) {
         UIActionSheet *sheet = [[UIActionSheet alloc] initWithTitle:nil
                                                            delegate:self
@@ -616,7 +639,7 @@
             if (_longPressIndexPath && _longPressIndexPath.row > 0) {
                 UIPasteboard *pasteboard = [UIPasteboard generalPasteboard];
                 if (_longPressIndexPath.row > 0) {
-                    AgoraMessageModel *model = [self.dataSource objectAtIndex:_longPressIndexPath.row];
+                    AgoraMessageModel *model = [self.messages objectAtIndex:_longPressIndexPath.row];
                     if (model.message.body.type == MessageBodyTypeText) {
                         TextMessageBody *body = (TextMessageBody*)model.message.body;
                         pasteboard.string = body.text;
@@ -626,22 +649,22 @@
             }
         } else if (buttonIndex == 1){
             if (_longPressIndexPath && _longPressIndexPath.row >= 0) {
-                AgoraMessageModel *model = [self.dataSource objectAtIndex:_longPressIndexPath.row];
+                AgoraMessageModel *model = [self.messages objectAtIndex:_longPressIndexPath.row];
                 NSMutableIndexSet *indexs = [NSMutableIndexSet indexSetWithIndex:_longPressIndexPath.row];
-                [self.conversation deleteMessageWithId:model.message.messageId error:nil];
+                [self.currentConversation deleteMessageWithId:model.message.messageId error:nil];
                 NSMutableArray *indexPaths = [NSMutableArray arrayWithObjects:_longPressIndexPath, nil];;
                 if (_longPressIndexPath.row - 1 >= 0) {
                     id nextMessage = nil;
-                    id prevMessage = [self.dataSource objectAtIndex:(_longPressIndexPath.row - 1)];
-                    if (_longPressIndexPath.row + 1 < [self.dataSource count]) {
-                        nextMessage = [self.dataSource objectAtIndex:(_longPressIndexPath.row + 1)];
+                    id prevMessage = [self.messages objectAtIndex:(_longPressIndexPath.row - 1)];
+                    if (_longPressIndexPath.row + 1 < [self.messages count]) {
+                        nextMessage = [self.messages objectAtIndex:(_longPressIndexPath.row + 1)];
                     }
                     if ((!nextMessage || [nextMessage isKindOfClass:[NSString class]]) && [prevMessage isKindOfClass:[NSString class]]) {
                         [indexs addIndex:_longPressIndexPath.row - 1];
                         [indexPaths addObject:[NSIndexPath indexPathForRow:(_longPressIndexPath.row - 1) inSection:0]];
                     }
                 }
-                [self.dataSource removeObjectsAtIndexes:indexs];
+                [self.messages removeObjectsAtIndexes:indexs];
                 [self.tableView beginUpdates];
                 [self.tableView deleteRowsAtIndexPaths:indexPaths withRowAnimation:UITableViewRowAnimationFade];
                 [self.tableView endUpdates];
@@ -651,22 +674,22 @@
     } else if (actionSheet.tag == 1001) {
         if (buttonIndex == 0){
             if (_longPressIndexPath) {
-                AgoraMessageModel *model = [self.dataSource objectAtIndex:_longPressIndexPath.row];
+                AgoraMessageModel *model = [self.messages objectAtIndex:_longPressIndexPath.row];
                 NSMutableIndexSet *indexs = [NSMutableIndexSet indexSetWithIndex:_longPressIndexPath.row];
-                [self.conversation deleteMessageWithId:model.message.messageId error:nil];
+                [self.currentConversation deleteMessageWithId:model.message.messageId error:nil];
                 NSMutableArray *indexPaths = [NSMutableArray arrayWithObjects:_longPressIndexPath, nil];;
                 if (_longPressIndexPath.row - 1 >= 0) {
                     id nextMessage = nil;
-                    id prevMessage = [self.dataSource objectAtIndex:(_longPressIndexPath.row - 1)];
-                    if (_longPressIndexPath.row + 1 < [self.dataSource count]) {
-                        nextMessage = [self.dataSource objectAtIndex:(_longPressIndexPath.row + 1)];
+                    id prevMessage = [self.messages objectAtIndex:(_longPressIndexPath.row - 1)];
+                    if (_longPressIndexPath.row + 1 < [self.messages count]) {
+                        nextMessage = [self.messages objectAtIndex:(_longPressIndexPath.row + 1)];
                     }
                     if ((!nextMessage || [nextMessage isKindOfClass:[NSString class]]) && [prevMessage isKindOfClass:[NSString class]]) {
                         [indexs addIndex:_longPressIndexPath.row - 1];
                         [indexPaths addObject:[NSIndexPath indexPathForRow:(_longPressIndexPath.row - 1) inSection:0]];
                     }
                 }
-                [self.dataSource removeObjectsAtIndexes:indexs];
+                [self.messages removeObjectsAtIndexes:indexs];
                 [self.tableView beginUpdates];
                 [self.tableView deleteRowsAtIndexPaths:indexPaths withRowAnimation:UITableViewRowAnimationFade];
                 [self.tableView endUpdates];
@@ -687,12 +710,12 @@
 {
     WEAK_SELF
     dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), ^{
-        [_conversation loadMessagesStartFromId:nil
+        [_currentConversation loadMessagesStartFromId:nil
                                          count:20
                                searchDirection:MessageSearchDirectionUp
                                     completion:^(NSArray *aMessages, AgoraError *aError) {
                                         if (!aError) {
-                                            [weakSelf.dataSource removeAllObjects];
+                                            [weakSelf.messages removeAllObjects];
                                             for (Message * message in aMessages) {
                                                 [weakSelf _addMessageToDataSource:message];
                                             }
@@ -706,24 +729,24 @@
 
 - (void)makeVideoCall
 {
-    [[NSNotificationCenter defaultCenter] postNotificationName:KNOTIFICATION_CALL object:@{@"chatter":self.conversation.conversationId, @"type":[NSNumber numberWithInt:1]}];
+    [[NSNotificationCenter defaultCenter] postNotificationName:KNOTIFICATION_CALL object:@{@"chatter":self.currentConversation.conversationId, @"type":[NSNumber numberWithInt:1]}];
 }
 
 - (void)makeAudioCall
 {
-    [[NSNotificationCenter defaultCenter] postNotificationName:KNOTIFICATION_CALL object:@{@"chatter":self.conversation.conversationId, @"type":[NSNumber numberWithInt:0]}];
+    [[NSNotificationCenter defaultCenter] postNotificationName:KNOTIFICATION_CALL object:@{@"chatter":self.currentConversation.conversationId, @"type":[NSNumber numberWithInt:0]}];
 }
 
 - (void)enterDetailView
 {
-    if (_conversation.type == AgoraConversationTypeGroupChat) {
-        AgoraGroupInfoViewController *groupInfoViewController = [[AgoraGroupInfoViewController alloc] initWithGroupId:_conversation.conversationId];
+    if (_currentConversation.type == AgoraConversationTypeGroupChat) {
+        AgoraGroupInfoViewController *groupInfoViewController = [[AgoraGroupInfoViewController alloc] initWithGroupId:_currentConversation.conversationId];
         groupInfoViewController.updateGroupNameBlock = ^(NSString *groupName) {
             self.title = groupName;
         };
         [self.navigationController pushViewController:groupInfoViewController animated:YES];
-    } else if (_conversation.type == AgoraConversationTypeChatRoom) {
-        AgoraChatroomInfoViewController *infoController = [[AgoraChatroomInfoViewController alloc] initWithChatroomId:self.conversation.conversationId];
+    } else if (_currentConversation.type == AgoraConversationTypeChatRoom) {
+        AgoraChatroomInfoViewController *infoController = [[AgoraChatroomInfoViewController alloc] initWithChatroomId:self.currentConversation.conversationId];
         [self.navigationController pushViewController:infoController animated:YES];
     }
 }
@@ -732,13 +755,13 @@
 {
     
     [[NSNotificationCenter defaultCenter] postNotificationName:KNOTIFICATION_UPDATEUNREADCOUNT object:nil];
-    if (_conversation.type == AgoraConversationTypeChatRoom) {
+    if (_currentConversation.type == AgoraConversationTypeChatRoom) {
         [self showHudInView:[UIApplication sharedApplication].keyWindow hint:NSLocalizedString(@"chatroom.leaving", @"Leaving the chatroom...")];
         WEAK_SELF
-        [[AgoraChatClient sharedClient].roomManager leaveChatroom:_conversation.conversationId completion:^(AgoraError *aError) {
+        [[AgoraChatClient sharedClient].roomManager leaveChatroom:_currentConversation.conversationId completion:^(AgoraError *aError) {
             [weakSelf hideHud];
             if (aError) {
-                [self showAlertWithMessage:[NSString stringWithFormat:@"Leave chatroom '%@' failed [%@]", weakSelf.conversation.conversationId, aError.errorDescription] ];
+                [self showAlertWithMessage:[NSString stringWithFormat:@"Leave chatroom '%@' failed [%@]", weakSelf.currentConversation.conversationId, aError.errorDescription] ];
             }
             [weakSelf.navigationController popToViewController:self animated:YES];
             [weakSelf.navigationController popViewControllerAnimated:YES];
@@ -755,16 +778,16 @@
 
 - (void)deleteAllMessages:(id)sender
 {
-    if (self.dataSource.count == 0) {
+    if (self.messages.count == 0) {
         return;
     }
     
     if ([sender isKindOfClass:[NSNotification class]]) {
         NSString *groupId = (NSString *)[(NSNotification *)sender object];
-        BOOL isDelete = [groupId isEqualToString:self.conversation.conversationId];
-        if (self.conversation.type != AgoraConversationTypeChat && isDelete) {
-            [self.conversation deleteAllMessages:nil];
-            [self.dataSource removeAllObjects];
+        BOOL isDelete = [groupId isEqualToString:self.currentConversation.conversationId];
+        if (self.currentConversation.type != AgoraConversationTypeChat && isDelete) {
+            [self.currentConversation deleteAllMessages:nil];
+            [self.messages removeAllObjects];
             
             [self.tableView reloadData];
         }
@@ -780,7 +803,7 @@
             self.isDeleteConversation = YES;
             [self backAction];
         }
-    } else if ([obj isKindOfClass:[AgoraChatroom class]] && self.conversation.type == AgoraConversationTypeChatRoom) {
+    } else if ([obj isKindOfClass:[AgoraChatroom class]] && self.currentConversation.type == AgoraConversationTypeChatRoom) {
         AgoraChatroom *chatroom = (AgoraChatroom *)obj;
         if ([chatroom.chatroomId isEqualToString:self.conversationId]) {
             [self.navigationController popToViewController:self animated:YES];
@@ -814,9 +837,9 @@
             [weakSelf showAlertWithMessage:[NSString stringWithFormat:NSLocalizedString(@"chatroom.joinFailed",@"join chatroom \'%@\' failed"), aChatroomId]];
             [weakSelf backAction];
         } else {
-            NSMutableDictionary *ext = [NSMutableDictionary dictionaryWithDictionary:weakSelf.conversation.ext];
+            NSMutableDictionary *ext = [NSMutableDictionary dictionaryWithDictionary:weakSelf.currentConversation.ext];
             [ext setObject:aChatroom.subject forKey:@"subject"];
-            weakSelf.conversation.ext = ext;
+            weakSelf.currentConversation.ext = ext;
             
             [[NSNotificationCenter defaultCenter] postNotificationName:KAgora_UPDATE_CONVERSATIONS object:nil];
         }
@@ -847,14 +870,14 @@
     
     dispatch_semaphore_wait(sem, DISPATCH_TIME_FOREVER);
     model.userInfo = userInfo;
-    [self.dataSource addObject:model];
+    [self.messages addObject:model];
 }
 
 - (void)_scrollViewToBottom:(BOOL)animated
 {
-    if(_dataSource.count > 0){
+    if(_messages.count > 0){
         dispatch_after(dispatch_time(DISPATCH_TIME_NOW, NSEC_PER_MSEC * 100), dispatch_get_main_queue(), ^{
-            NSIndexPath *indexpath = [NSIndexPath indexPathForRow:_dataSource.count-1 inSection:0];
+            NSIndexPath *indexpath = [NSIndexPath indexPathForRow:_messages.count-1 inSection:0];
             [_tableView scrollToRowAtIndexPath:indexpath atScrollPosition:UITableViewScrollPositionBottom animated:animated];
         });
     }
@@ -865,18 +888,18 @@
     WEAK_SELF
     dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), ^{
         NSString *messageId = nil;
-        if ([weakSelf.dataSource count] > 0) {
-            AgoraMessageModel *model = [weakSelf.dataSource objectAtIndex:0];
+        if ([weakSelf.messages count] > 0) {
+            AgoraMessageModel *model = [weakSelf.messages objectAtIndex:0];
             messageId = model.message.messageId;
         }
-        [_conversation loadMessagesStartFromId:messageId
+        [_currentConversation loadMessagesStartFromId:messageId
                                          count:20
                                searchDirection:MessageSearchDirectionUp
                                     completion:^(NSArray *aMessages, AgoraError *aError) {
                                         if (!aError) {
                                             [aMessages enumerateObjectsWithOptions:NSEnumerationReverse usingBlock:^(id  _Nonnull obj, NSUInteger idx, BOOL * _Nonnull stop) {
                                                 AgoraMessageModel *model = [[AgoraMessageModel alloc] initWithMessage:(Message*)obj];
-                                                [weakSelf.dataSource insertObject:model atIndex:0];
+                                                [weakSelf.messages insertObject:model atIndex:0];
                                             }];
                                             [weakSelf.refresh endRefreshing];
                                             [weakSelf.tableView reloadData];
@@ -988,7 +1011,7 @@
 - (AgoraChatType)_messageType
 {
     AgoraChatType type = AgoraChatTypeChat;
-    switch (_conversation.type) {
+    switch (_currentConversation.type) {
         case AgoraConversationTypeChat:
             type = AgoraChatTypeChat;
             break;
@@ -1009,12 +1032,12 @@
 - (void)messagesDidReceive:(NSArray *)aMessages
 {
     for (Message *message in aMessages) {
-        if ([self.conversation.conversationId isEqualToString:message.conversationId]) {
+        if ([self.currentConversation.conversationId isEqualToString:message.conversationId]) {
             [self _addMessageToDataSource:message];
             [self _sendHasReadResponseForMessages:@[message]
                                            isRead:NO];
             if ([self _shouldMarkMessageAsRead]) {
-                [self.conversation markMessageAsReadWithId:message.messageId error:nil];
+                [self.currentConversation markMessageAsReadWithId:message.messageId error:nil];
             }
         }
     }
@@ -1025,7 +1048,7 @@
 - (void)messageAttachmentStatusDidChange:(Message *)aMessage
                                    error:(AgoraError *)aError
 {
-    if ([self.conversation.conversationId isEqualToString:aMessage.conversationId]) {
+    if ([self.currentConversation.conversationId isEqualToString:aMessage.conversationId]) {
         [self.tableView reloadData];
     }
 }
@@ -1033,12 +1056,43 @@
 - (void)messagesDidRead:(NSArray *)aMessages
 {
     for (Message *message in aMessages) {
-        if ([self.conversation.conversationId isEqualToString:message.conversationId]) {
+        if ([self.currentConversation.conversationId isEqualToString:message.conversationId]) {
             [self.tableView reloadData];
             break;
         }
     }
 }
+
+- (void)messagesDidRecall:(NSArray *)aMessages {
+    NSLog(@"%s aMessages:%@",__func__,aMessages);
+
+    [aMessages enumerateObjectsUsingBlock:^(id  _Nonnull obj, NSUInteger idx, BOOL * _Nonnull stop) {
+        Message *msg = (Message *)obj;
+        NSLog(@"%s msg.ext:%@",__func__,msg.ext);
+
+        [self.messages enumerateObjectsUsingBlock:^(id  _Nonnull obj, NSUInteger idx, BOOL * _Nonnull stop) {
+            if ([obj isKindOfClass:[AgoraMessageModel class]]) {
+                AgoraMessageModel *model = (AgoraMessageModel *)obj;
+                if ([model.message.messageId isEqualToString:msg.messageId]) {
+                    Message *message = [[Message alloc] initWithConversationID:msg.conversationId from:msg.from to:msg.to body:msg.body ext:@{MSG_EXT_RECALL:@(YES)}];
+                    message.chatType = (AgoraChatType)self.currentConversation.type;
+                    message.isRead = YES;
+                    message.messageId = msg.messageId;
+                    message.localTime = msg.localTime;
+                    message.timestamp = msg.timestamp;
+                    [self.currentConversation insertMessage:message error:nil];
+                    AgoraMessageModel *replaceModel = [[AgoraMessageModel alloc] initWithMessage:message];
+                    replaceModel.isRecall = YES;
+                    NSLog(@"%s message.messageId:%@ :%@",__func__,replaceModel.message.messageId,@(replaceModel.isRecall));
+                    [self.messages replaceObjectAtIndex:idx withObject:replaceModel];
+            }
+           }
+        }];
+    }];
+
+    [self.tableView reloadData];
+}
+
 
 #pragma mark - AgoraChatManagerChatroomDelegate
 
@@ -1057,7 +1111,7 @@
 - (void)didDismissFromChatroom:(AgoraChatroom *)aChatroom
                         reason:(AgoraChatroomBeKickedReason)aReason
 {
-    if ([_conversation.conversationId isEqualToString:aChatroom.chatroomId])
+    if ([_currentConversation.conversationId isEqualToString:aChatroom.chatroomId])
     {
         [self showHint:[NSString stringWithFormat:NSLocalizedString(@"chatroom.remove", @"be removed from chatroom\'%@\'"), aChatroom.chatroomId]];
         [self.navigationController popToViewController:self animated:NO];

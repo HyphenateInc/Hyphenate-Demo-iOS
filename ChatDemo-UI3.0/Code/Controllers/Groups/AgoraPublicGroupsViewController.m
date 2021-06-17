@@ -138,6 +138,8 @@ typedef NS_ENUM(NSUInteger, AgoraFetchPublicGroupState) {
                                                             if (!aError) {
                                                                 [MBProgressHUD hideAllHUDsForView:[UIApplication sharedApplication].keyWindow animated:YES];
 
+                                                                [[NSNotificationCenter defaultCenter] postNotificationName:KAgora_REFRESH_GROUPLIST_NOTIFICATION object:nil];
+
                                                                 [weakSelf updateUI];
                                                             }
                                                             else {

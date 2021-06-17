@@ -74,7 +74,7 @@
     [self.unreadLabel mas_makeConstraints:^(MASConstraintMaker *make) {
         make.centerY.equalTo(self.contentLabel);
         make.right.equalTo(self.timeLabel);
-        make.width.mas_lessThanOrEqualTo(kUnReadLabelHeight);
+        make.width.mas_equalTo(kUnReadLabelHeight);
         make.height.mas_equalTo(kUnReadLabelHeight);
     }];
     

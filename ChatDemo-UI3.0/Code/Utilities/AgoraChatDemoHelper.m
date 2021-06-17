@@ -91,6 +91,16 @@ static AgoraChatDemoHelper *helper = nil;
     }
 }
 
+- (void)messagesDidRecall:(NSArray *)aMessages {
+    if (_mainVC) {
+        [_mainVC setupUnreadMessageCount];
+    }
+    if (_chatsVC) {
+        [_chatsVC tableViewDidTriggerHeaderRefresh];
+    }
+}
+
+
 #pragma mark - AgoraContactManagerDelegate
 
 - (void)friendRequestDidApproveByUser:(NSString *)aUsername {

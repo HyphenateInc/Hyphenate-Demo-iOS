@@ -31,5 +31,8 @@
 
 #define kAgroaPadding 10.0f
 
+//消息撤回
+#define MSG_EXT_RECALL @"agora_recall"
+
 
 #endif /* EMChatDemoUIDefine_h */

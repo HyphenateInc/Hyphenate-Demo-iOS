@@ -19,6 +19,8 @@
 
 @property (assign, nonatomic) void(^fetchUserInfoBlcok)();
 
+@property (nonatomic ,assign) BOOL isRecall;
+
 - (instancetype)initWithMessage:(Message*)message;
 
 

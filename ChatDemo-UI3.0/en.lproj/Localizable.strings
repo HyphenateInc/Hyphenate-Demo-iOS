@@ -280,6 +280,8 @@
 "message.inputGroupSubject" = "Please input a group theme";
 "message.receiveMessage" = "you have a new message";
 "message.clear" = "Clear All Messages";
+"message.recall" = "You recall a message";
+"message.recallByFriend" = "%@ recall a message";
 
 //apns
 "apns.failToRegisterApns" = "Fail to register apns";

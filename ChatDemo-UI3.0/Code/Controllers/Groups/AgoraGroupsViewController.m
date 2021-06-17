@@ -26,7 +26,8 @@
     
     [self setupNavBar];
     [self addNotifications];
-    
+    [self loadGroupsFromServer];
+
     self.tableView.tableFooterView = [[UIView alloc] init];
 }
 
@@ -36,7 +37,6 @@
 
 - (void)viewWillAppear:(BOOL)animated {
     [super viewWillAppear:animated];
-    [self loadGroupsFromServer];
 }
 
 - (void)setupNavBar {
@@ -100,7 +100,6 @@
 }
 
 #pragma mark - Notification Method
-
 - (void)refreshGroupList:(NSNotification *)notification {
     NSArray *groupList = [[AgoraChatClient sharedClient].groupManager getJoinedGroups];
     [self.dataArray removeAllObjects];
@@ -179,8 +178,10 @@
                         isHeader:(BOOL)aIsHeader
 {
     __weak typeof(self) weakSelf = self;
+    if (!aIsHeader) {
+        [MBProgressHUD showHUDAddedTo:[UIApplication sharedApplication].keyWindow animated:YES];
+    }
     
-    [MBProgressHUD showHUDAddedTo:[UIApplication sharedApplication].keyWindow animated:YES];
     [[AgoraChatClient sharedClient].groupManager getJoinedGroupsFromServerWithPage:self.page pageSize:50 completion:^(NSArray *aList, AgoraError *aError) {
         [MBProgressHUD hideHUDForView:[UIApplication sharedApplication].keyWindow animated:YES];
         [weakSelf tableViewDidFinishTriggerHeader:aIsHeader];

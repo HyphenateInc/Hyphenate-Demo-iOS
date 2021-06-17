@@ -11,6 +11,7 @@
 NS_ASSUME_NONNULL_BEGIN
 
 @interface AgoraCreateViewController : UIViewController
+@property (nonatomic,copy)void (^addGroupBlock)(void);
 
 @end
 

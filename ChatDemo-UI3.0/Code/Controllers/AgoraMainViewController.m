@@ -220,7 +220,7 @@ static NSString *kGroupName = @"GroupName";
     }
 }
 
-#pragma mark - AgoraC hatManagerDelegate
+#pragma mark - AgoraChatManagerDelegate
 
 - (void)messagesDidReceive:(NSArray *)aMessages
 {
@@ -249,6 +249,10 @@ static NSString *kGroupName = @"GroupName";
 
 - (void)conversationListDidUpdate:(NSArray *)aConversationList
 {
+    [self setupUnreadMessageCount];
+}
+
+- (void)messagesDidRecall:(NSArray *)aMessages {
     [self setupUnreadMessageCount];
 }
 

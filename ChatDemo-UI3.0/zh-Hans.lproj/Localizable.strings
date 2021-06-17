@@ -280,6 +280,8 @@
 "message.inputGroupSubject" = "请输入群组主题";
 "message.receiveMessage" = "您有一条新消息";
 "message.clear" = "清空所有消息";
+"message.recall" = "您撤回了一条消息";
+"message.recallByFriend" = "对方撤回了一条消息";
 
 //apns
 "apns.failToRegisterApns" = "注册推送失败";
