@@ -35,7 +35,7 @@ NSString *CellIdentifier = @"AgoraChatsCellIdentifier";
 - (instancetype)init {
     self  = [super init];
     if (self) {
-        [[NSNotificationCenter defaultCenter] addObserver:self.tableView selector:@selector(updateConversationNotify) name:KAgora_UPDATE_CONVERSATIONS object:nil];
+        [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(updateConversationNotify) name:KAgora_UPDATE_CONVERSATIONS object:nil];
 //        [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(endChatWithConversationId) name:KAgora_END_CHAT object:nil];
     }
     return self;
@@ -96,7 +96,7 @@ NSString *CellIdentifier = @"AgoraChatsCellIdentifier";
 
 #pragma mark NSNotification
 - (void)updateConversationNotify {
-  
+    [self.tableView reloadData];
 }
 
 

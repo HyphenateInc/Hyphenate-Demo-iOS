@@ -136,9 +136,9 @@
     }
 }
 
-#pragma mark - RAgoraote Notification Registration
+#pragma mark - Remote Notification Registration
 
-- (void)application:(UIApplication *)application didRegisterForRAgoraoteNotificationsWithDeviceToken:(NSData *)deviceToken
+- (void)application:(UIApplication *)application didRegisterForRemoteNotificationsWithDeviceToken:(NSData *)deviceToken
 {
     [[AgoraChatClient sharedClient] registerForRemoteNotificationsWithDeviceToken:deviceToken
                                                                 completion:^(AgoraError *aError) {
@@ -146,7 +146,7 @@
     }];
 }
 
-- (void)application:(UIApplication *)application didFailToRegisterForRAgoraoteNotificationsWithError:(NSError *)error
+- (void)application:(UIApplication *)application didFailToRegisterForRemoteNotificationsWithError:(NSError *)error
 {
     UIAlertView *alert = [[UIAlertView alloc] initWithTitle:NSLocalizedString(@"apns.failToRegisterApns", @"Fail to register apns")
                                                     message:error.description
@@ -182,7 +182,7 @@
     }
     
 #if !TARGET_IPHONE_SIMULATOR
-    if ([application respondsToSelector:@selector(registerForRAgoraoteNotifications)]) {
+    if ([application respondsToSelector:@selector(registerForRemoteNotifications)]) {
         [application registerForRemoteNotifications];
     }
 #endif
