@@ -18,7 +18,6 @@
 #import "AgoraMessageReadManager.h"
 #import "AgoraCDDeviceManager.h"
 #import "AgoraSDKHelper.h"
-//#import "EaseCallManager.h"
 #import "AgoraGroupInfoViewController.h"
 #import "AgoraConversationModel.h"
 #import "AgoraMessageModel.h"

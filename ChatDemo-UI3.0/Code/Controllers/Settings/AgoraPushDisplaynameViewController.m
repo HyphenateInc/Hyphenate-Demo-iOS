@@ -43,7 +43,7 @@
 
 }
 
-- (void)getUpdatedDisplayName:(UpdatedDisplayName)callBack
+- (void)getUpdatedDisplayName:(UpdatedDisplayNameBlock)callBack
 {
     self.callBack = callBack;
 }

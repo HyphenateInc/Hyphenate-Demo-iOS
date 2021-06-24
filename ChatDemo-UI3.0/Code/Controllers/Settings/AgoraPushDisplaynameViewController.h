@@ -9,13 +9,13 @@
 
 #import "AgoraBaseSettingController.h"
 
-typedef void(^UpdatedDisplayName)(NSString *newDisplayName);
+typedef void(^UpdatedDisplayNameBlock)(NSString *newDisplayName);
 
 @interface AgoraPushDisplaynameViewController : AgoraBaseSettingController
 
 @property (nonatomic, copy) NSString *currentDisplayName;
 
-@property (nonatomic, copy)UpdatedDisplayName callBack;
+@property (nonatomic, copy)UpdatedDisplayNameBlock callBack;
 
-- (void)getUpdatedDisplayName:(UpdatedDisplayName)callBack;
+- (void)getUpdatedDisplayName:(UpdatedDisplayNameBlock)callBack;
 @end

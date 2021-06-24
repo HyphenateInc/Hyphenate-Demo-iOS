@@ -17,11 +17,10 @@
 
 //#import <Fabric/Fabric.h>
 //#import <Crashlytics/Crashlytics.h>
-#import "AppDelegate+Parse.h"
 
 //@import Firebase;
 
-@interface AppDelegate () <AgoraChatClientDelegate>
+@interface AppDelegate () <AgoraChatClientDelegate,UNUserNotificationCenterDelegate>
 
 @end
 
@@ -44,19 +43,17 @@
 //    [self parseApplication:application didFinishLaunchingWithOptions:launchOptions];
     
     // init HyphenateSDK
-    AgoraOptions *options = [AgoraOptions optionsWithAppkey:@"easemob-demo#chatdemoui"];
-//    AgoraOptions *options = [AgoraOptions optionsWithAppkey:@"1118210518231124#demo"];
+    AgoraOptions *options = [AgoraOptions optionsWithAppkey:@"easemob-demo#easeim"];
+//    AgoraOptions *options = [AgoraOptions optionsWithAppkey:@"easemob-demo#chatdemoui"];
 
-   
-    
 
     // Hyphenate cert keys
     NSString *apnsCertName = nil;
-    #if DEBUG
-        apnsCertName = @"DevelopmentCertificate";
-    #else
-        apnsCertName = @"ProductionCertificate";
-    #endif
+#if ChatDemo_DEBUG
+    apnsCertName = @"ChatDemoDevPush";
+#else
+    apnsCertName = @"ChatDemoProPush";
+#endif
     
     [options setApnsCertName:apnsCertName];
     [options setEnableConsoleLog:YES];
@@ -71,7 +68,6 @@
                                                  name:KNOTIFICATION_LOGINCHANGE
                                                object:nil];
     
-//    [EaseCallManager sharedManager];
     
     self.window = [[UIWindow alloc] initWithFrame:[UIScreen mainScreen].bounds];
     self.window.backgroundColor = [UIColor whiteColor];
@@ -82,12 +78,7 @@
     [self _registerAPNS];
     [self registerNotifications];
     
-    // Fabric
-//    [Fabric with:@[[Crashlytics class]]];
-    
-    // Use Firebase library to configure APIs
-//    [FIRApp configure];
-    
+
     return YES;
 }
 
@@ -129,21 +120,15 @@
     }
 }
 
-- (void)application:(UIApplication *)application didReceiveLocalNotification:(UILocalNotification *)notification
-{
-    if ([AgoraChatDemoHelper shareHelper].mainVC) {
-        [[AgoraChatDemoHelper shareHelper].mainVC didReceiveLocalNotification:notification];
-    }
-}
-
 #pragma mark - Remote Notification Registration
 
 - (void)application:(UIApplication *)application didRegisterForRemoteNotificationsWithDeviceToken:(NSData *)deviceToken
 {
-    [[AgoraChatClient sharedClient] registerForRemoteNotificationsWithDeviceToken:deviceToken
-                                                                completion:^(AgoraError *aError) {
-        
-    }];
+
+    dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), ^{
+        [[AgoraChatClient sharedClient] bindDeviceToken:deviceToken];
+        NSLog(@"%s deviceToken:%@",__func__,deviceToken);
+    });
 }
 
 - (void)application:(UIApplication *)application didFailToRegisterForRemoteNotificationsWithError:(NSError *)error
@@ -155,6 +140,51 @@
                                           otherButtonTitles:nil];
     [alert show];
 }
+
+- (void)application:(UIApplication *)application didReceiveRemoteNotification:(NSDictionary *)userInfo
+{
+    NSLog(@"%s ",__func__);
+
+    [[AgoraChatClient sharedClient] application:application didReceiveRemoteNotification:userInfo];
+}
+
+- (void)application:(UIApplication *)application didReceiveLocalNotification:(UILocalNotification *)notification
+{
+    NSLog(@"%s ",__func__);
+    
+    if ([AgoraChatDemoHelper shareHelper].mainVC) {
+        [[AgoraChatDemoHelper shareHelper].mainVC didReceiveLocalNotification:notification];
+    }
+}
+
+- (void)userNotificationCenter:(UNUserNotificationCenter *)center willPresentNotification:(UNNotification *)notification withCompletionHandler:(void (^)(UNNotificationPresentationOptions))completionHandler
+{
+    NSDictionary *userInfo = notification.request.content.userInfo;
+    [[AgoraChatClient sharedClient] application:[UIApplication sharedApplication] didReceiveRemoteNotification:userInfo];
+}
+
+- (void)userNotificationCenter:(UNUserNotificationCenter *)center didReceiveNotificationResponse:(UNNotificationResponse *)response withCompletionHandler:(void (^)(void))completionHandler
+{
+//    if (gMainController) {
+//        [gMainController didReceiveUserNotification:response.notification];
+//    }
+    completionHandler();
+}
+
+#pragma mark - EMPushManagerDelegateDevice
+
+// 打印收到的apns信息
+-(void)didReceiveRemoteNotification:(NSDictionary *)userInfo
+{
+    NSError *parseError = nil;
+    NSData *jsonData = [NSJSONSerialization dataWithJSONObject:userInfo options:NSJSONWritingPrettyPrinted error:&parseError];
+    NSString *str = [[NSString alloc] initWithData:jsonData encoding:NSUTF8StringEncoding];
+    
+//    EMAlertView *alertView = [[EMAlertView alloc]initWithTitle:@"推送内容" message:str];
+//    [alertView show];
+    NSLog(@"%s push content:%@",__func__,str);
+}
+
 
 - (void)_registerAPNS
 {
@@ -206,7 +236,7 @@
 
 - (void)autoLoginDidCompleteWithError:(AgoraError *)aError
 {
-#if DEBUG
+#if ChatDemo_DEBUG
     NSString *alertMsg = aError == nil ? NSLocalizedString(@"login.endAutoLogin.succeed", @"Automatic login succeed") : NSLocalizedString(@"login.endAutoLogin.failure", @"Automatic login failed");
     UIAlertView *alert = [[UIAlertView alloc] initWithTitle:nil message:alertMsg delegate:nil cancelButtonTitle:NSLocalizedString(@"login.ok", @"Ok") otherButtonTitles:nil, nil];
     [alert show];

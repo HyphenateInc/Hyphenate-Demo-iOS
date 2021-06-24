@@ -10,6 +10,8 @@
 #ifndef EMChatDemoUIDefine_h
 #define EMChatDemoUIDefine_h
 
+#define ChatDemo_DEBUG 0
+
 #define RGBACOLOR(r,g,b,a) [UIColor colorWithRed:(r)/255.0 green:(g)/255.0 blue:(b)/255.0 alpha:(a)]
 
 #define WEAK_SELF typeof(self) __weak weakSelf = self;

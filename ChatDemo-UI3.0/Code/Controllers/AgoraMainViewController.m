@@ -51,7 +51,6 @@ static NSString *kGroupName = @"GroupName";
     
     [self registerNotifications];
     
-//    [EaseCallManager sharedManager].mainVC = self;
 }
 
 - (void)viewWillAppear:(BOOL)animated
