@@ -39,12 +39,11 @@
         [[UINavigationBar appearance] setTintColor:AlmostBlackColor];
         [[UINavigationBar appearance] setTranslucent:NO];
     }
-    
-//    [self parseApplication:application didFinishLaunchingWithOptions:launchOptions];
-    
+        
     // init HyphenateSDK
-    AgoraOptions *options = [AgoraOptions optionsWithAppkey:@"easemob-demo#easeim"];
-//    AgoraOptions *options = [AgoraOptions optionsWithAppkey:@"easemob-demo#chatdemoui"];
+//    AgoraOptions *options = [AgoraOptions optionsWithAppkey:@"easemob-demo#easeim"];
+    //    AgoraOptions *options = [AgoraOptions optionsWithAppkey:@"easemob-demo#chatdemoui"];
+    AgoraOptions *options = [AgoraOptions optionsWithAppkey:@"1193210624041558#chatdemo"];
 
 
     // Hyphenate cert keys
@@ -180,8 +179,6 @@
     NSData *jsonData = [NSJSONSerialization dataWithJSONObject:userInfo options:NSJSONWritingPrettyPrinted error:&parseError];
     NSString *str = [[NSString alloc] initWithData:jsonData encoding:NSUTF8StringEncoding];
     
-//    EMAlertView *alertView = [[EMAlertView alloc]initWithTitle:@"推送内容" message:str];
-//    [alertView show];
     NSLog(@"%s push content:%@",__func__,str);
 }
 
