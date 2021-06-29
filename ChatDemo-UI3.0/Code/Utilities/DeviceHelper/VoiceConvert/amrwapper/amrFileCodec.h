@@ -26,7 +26,7 @@ typedef struct
 {
 	char chChunkID[4];
 	int nChunkSize;
-}EM_XCHUNKHEADER;
+}Agora_XCHUNKHEADER;
 
 typedef struct
 {
@@ -36,7 +36,7 @@ typedef struct
 	int nAvgBytesPerSec;
 	short nBlockAlign;
 	short nBitsPerSample;
-}EM_WAVEFORMAT;
+}Agora_WAVEFORMAT;
 
 typedef struct
 {
@@ -47,25 +47,25 @@ typedef struct
 	short nBlockAlign;
 	short nBitsPerSample;
 	short nExSize;
-}EM_WAVEFORMATX;
+}Agora_WAVEFORMATX;
 
 typedef struct
 {
 	char chRiffID[4];
 	int nRiffSize;
 	char chRiffFormat[4];
-}EM_RIFFHEADER;
+}Agora_RIFFHEADER;
 
 typedef struct
 {
 	char chFmtID[4];
 	int nFmtSize;
-	EM_WAVEFORMAT wf;
-}EM_FMTBLOCK;
+	Agora_WAVEFORMAT wf;
+}Agora_FMTBLOCK;
 
-int EM_EncodeWAVEFileToAMRFile(const char* pchWAVEFilename, const char* pchAMRFileName, int nChannels, int nBitsPerSample);
+int Agora_EncodeWAVEFileToAMRFile(const char* pchWAVEFilename, const char* pchAMRFileName, int nChannels, int nBitsPerSample);
 
-int EM_DecodeAMRFileToWAVEFile(const char* pchAMRFileName, const char* pchWAVEFilename);
+int Agora_DecodeAMRFileToWAVEFile(const char* pchAMRFileName, const char* pchWAVEFilename);
 
 int isMP3File(const char *filePath);
 

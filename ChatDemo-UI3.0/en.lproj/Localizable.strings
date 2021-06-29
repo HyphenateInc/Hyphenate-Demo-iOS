@@ -10,7 +10,7 @@
 //button
 "button.save" = "Save";
 "button.remove" = "Remove";
-"button.black" = "Block";
+"button.block" = "Block";
 "button.mute" = "Mute";
 "button.demote" = "Demote";
 "button.upgrade" = "Up";
@@ -41,7 +41,7 @@
 "title.updateGroupName" = "Update Group Name";
 "title.occupantList" = "Occupant List";
 "title.adminList" = "Admin List";
-"title.blacklist" = "Blacklist";
+"title.blacklist" = "Blocklist";
 "title.muteList" = "Mute List";
 "title.inviteContacts" = "Invite Contacts";
 "title.addAdmin" = "Add Admin";
@@ -67,6 +67,13 @@
 "login.inputNameAndPswd" = "Please enter username and password";
 "login.endAutoLogin.failure" = "Automatic login failed";
 "login.endAutoLogin.succeed" = "Automatic login succeed";
+
+//register
+"register.userName.outOfLimit" = "Username length out of limit, maximum 64 bytes";
+"register.password.outOfLimit" = "Password length out of limit, maximum 64 bytes";
+
+
+
 
 //chat
 "chat.not.delivered" = "Not Delivered";
@@ -141,6 +148,7 @@
 
 //setting.chats
 "setting.chats.acceptInvitation" = "Accept group invites automatically";
+"setting.chats.blockedUsers" = "Blocked Users";
 
 //logout
 "logout.failed" = "Logout failed";
@@ -162,6 +170,7 @@
 "contact.apnsnickname" = "iOS APNS";
 "contact.block" = "Block Contact";
 "contact.blockFailure" = "Block failure";
+"contact.unblock" = "Unblock";
 "contact.unblockFailure" = "Unblock failure";
 "contact.delete" = "Delete Contact";
 "contact.deleteFailure" = "Delete contacts failed";
@@ -238,6 +247,9 @@
 "group.announcementUpdate" = "Group Announcement Update";
 "group.clearAnnouncement" = "Group:%@ Announcement is clear";
 "group.updateAnnouncement" = "Group:%@ Announcement: %@";
+"group.new.publicGroups" = "Public Groups";
+"group.new.NewGroup" = "New Group";
+
 
 //Group Bans
 "group.ban.removing" = "members are removing from the blacklist...";
@@ -260,6 +272,7 @@
 "common.search" = "Search";
 "common.open" = "Open";
 "common.searchFailure" = "Search failure.";
+"common.addblackList" = "Add BlockList";
 
 //message
 "message.friendapply.agree" = "%@ agreed to add friends to apply";
@@ -267,6 +280,8 @@
 "message.inputGroupSubject" = "Please input a group theme";
 "message.receiveMessage" = "you have a new message";
 "message.clear" = "Clear All Messages";
+"message.recall" = "You recall a message";
+"message.recallByFriend" = "%@ recall a message";
 
 //apns
 "apns.failToRegisterApns" = "Fail to register apns";
@@ -282,7 +297,7 @@
 "chatroom.owner" = "Owner";
 "chatroom.admins" = "Admin List";
 "chatroom.onlineMembers" = "Online member List";
-"chatroom.blacklist" = "Blacklist";
+"chatroom.blacklist" = "Blocklist";
 "chatroom.mutes" = "Mute List";
 "chatroom.occupantCount" = "members count";
 "chatroom.subject" = "Subject";

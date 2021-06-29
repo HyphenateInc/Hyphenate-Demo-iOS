@@ -9,13 +9,24 @@ inhibit_all_warnings!
 source 'https://github.com/CocoaPods/Specs.git'
 
 target 'ChatDemo-UI3.0' do
-    
-    pod 'Hyphenate'
+  
+#    pod 'Hyphenate'
+
+post_install do |installer|
+  installer.pods_project.build_configurations.each do |config|
+    config.build_settings["EXCLUDED_ARCHS[sdk=iphonesimulator*]"] = "arm64"
+  end
+end
 
     pod 'MWPhotoBrowser', '~> 2.1.2'
     pod 'MJRefresh'
     pod 'Masonry'
-
-    pod 'Parse'
+    pod 'WHToast'
+    pod 'AgoraChat'
 
 end
+
+
+
+
+
