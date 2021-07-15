@@ -11,7 +11,7 @@
 NS_ASSUME_NONNULL_BEGIN
 
 @class AgoraConversationModel;
-@interface AgoraChatsCell : UITableViewCell
+@interface AgoraChatsCell : AgoraChatCustomBaseCell
 - (void)setConversationModel:(AgoraConversationModel*)model;
 
 @end

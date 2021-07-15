@@ -18,10 +18,12 @@
 
 @implementation AgoraContactCell
 
+
 - (void)awakeFromNib {
     [super awakeFromNib];
     // Initialization code
     self.accessoryType = UITableViewCellAccessoryNone;
+    self.contentView.backgroundColor = UIColor.whiteColor;
 }
 
 - (void)setModel:(AgoraUserModel *)model {

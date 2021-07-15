@@ -9,7 +9,7 @@
 
 #import <UIKit/UIKit.h>
 
-@interface AgoraGroupTitleCell : UITableViewCell
+@interface AgoraGroupTitleCell : AgoraChatCustomBaseCell
 @property (strong, nonatomic) IBOutlet UILabel *titleLabel;
 
 @end

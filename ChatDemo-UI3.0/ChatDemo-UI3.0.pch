@@ -17,9 +17,7 @@
 
 #ifdef __OBJC__
 
-//#import <Hyphenate/Hyphenate.h>
 #import <AgoraChat/AgoraChat.h>
-
 #import "AgoraChatDemoUIDefine.h"
 #import "AgoraColorUtils.h"
 #import "UIView+HyphenateView.h"
@@ -35,5 +33,7 @@
 #import "AgoraChatDemoEnum.h"
 #import "UIColor+Util.h"
 #import "AgoraNotificationNames.h"
+#import "AgoraCategory.h"
+#import "AgoraCustomBase.h"
 
 #endif

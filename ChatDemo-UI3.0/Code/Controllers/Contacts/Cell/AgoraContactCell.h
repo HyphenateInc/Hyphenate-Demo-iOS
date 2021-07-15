@@ -10,7 +10,7 @@
 #import <UIKit/UIKit.h>
 @class AgoraUserModel;
 
-@interface AgoraContactCell : UITableViewCell
+@interface AgoraContactCell : AgoraChatCustomBaseCell
 
 @property (nonatomic, strong) AgoraUserModel *model;
 

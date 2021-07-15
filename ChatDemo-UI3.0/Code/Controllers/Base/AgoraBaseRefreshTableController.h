@@ -9,7 +9,7 @@
 
 #import <UIKit/UIKit.h>
 
-@interface AgoraBaseRefreshTableController : UITableViewController
+@interface AgoraBaseRefreshTableController : AgoraChatCustomTableViewController
 
 /** @brief default tableFooterView */
 @property (strong, nonatomic) UIView *defaultFooterView;
