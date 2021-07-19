@@ -13,6 +13,7 @@
 #import "AgoraChatBaseTableview.h"
 #import "AgoraChatCustomBaseCell.h"
 #import "AgoraChatCustomTableViewController.h"
+#import "AgoraChatBaseTextField.h"
 
 
 #endif /* AgoraCustomBase_h */

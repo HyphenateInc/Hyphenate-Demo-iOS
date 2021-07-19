@@ -13,20 +13,30 @@
 - (instancetype)initWithFrame:(CGRect)frame {
     self = [super initWithFrame:frame];
     if (self) {
-        if (@available(iOS 13.0, *)) {
-            self.backgroundColor = [UIColor colorWithDynamicProvider:^UIColor * _Nonnull(UITraitCollection * _Nonnull traitCollection) {
-                if (traitCollection.userInterfaceStyle == UIUserInterfaceStyleDark) {
-                    return UIColor.whiteColor;
-                } else {
-                    return UIColor.whiteColor;
-                }
-            }];
-        } else {
-            // Fallback on earlier versions
-        }
+        [self backGroudColorForDarkMode];
     }
     return self;
 }
 
+
+- (void)awakeFromNib {
+    [super awakeFromNib];
+    [self backGroudColorForDarkMode];
+}
+
+
+- (void)backGroudColorForDarkMode {
+    if (@available(iOS 13.0, *)) {
+        self.backgroundColor = [UIColor colorWithDynamicProvider:^UIColor * _Nonnull(UITraitCollection * _Nonnull traitCollection) {
+            if (traitCollection.userInterfaceStyle == UIUserInterfaceStyleDark) {
+                return UIColor.whiteColor;
+            } else {
+                return UIColor.whiteColor;
+            }
+        }];
+    } else {
+        // Fallback on earlier versions
+    }
+}
 
 @end

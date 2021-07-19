@@ -84,11 +84,9 @@
     _textField.leftView = leftView;
     _textField.leftViewMode = UITextFieldViewModeAlways;
     
-    _textField.placeholder = NSLocalizedString(@"contact.enterHyphenateID", @"Enter Hyphenate ID");
-    //Access to UITextField's _placeholderLabel ivar is prohibited
-//    [_textField setValue:CoolGrayColor  forKeyPath:@"_placeholderLabel.textColor"];
-//    [_textField setValue:[UIFont systemFontOfSize:15]  forKeyPath:@"_placeholderLabel.font"];
-    
+    _textField.backgroundColor = UIColor.whiteColor;
+
+   _textField.placeholder =  NSLocalizedString(@"contact.enterHyphenateID", @"Enter Hyphenate ID");
     _textField.clipsToBounds = YES;
     _textField.layer.borderColor = CoolGrayColor.CGColor;
     

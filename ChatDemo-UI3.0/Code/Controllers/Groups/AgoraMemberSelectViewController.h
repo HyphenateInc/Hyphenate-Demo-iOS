@@ -17,7 +17,7 @@ typedef NS_ENUM(NSUInteger, AgoraContactSelectStyle) {
     AgoraContactSelectStyle_Invite
 };
 
-@interface AgoraMemberSelectViewController : UIViewController
+@interface AgoraMemberSelectViewController : AgoraChatBaseViewController
 
 @property (nonatomic, assign) AgoraContactSelectStyle style;
 

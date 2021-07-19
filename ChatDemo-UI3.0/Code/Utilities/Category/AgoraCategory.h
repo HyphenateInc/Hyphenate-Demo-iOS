@@ -15,6 +15,7 @@
 #import "UIViewController+DismissKeyboard.h"
 #import "UIImageView+HeadImage.h"
 #import "UIViewController+HUD.h"
+#import "UITextField+DarkMode.h"
 
 #endif /* AgoraCategory_h */
 
