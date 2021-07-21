@@ -21,6 +21,7 @@
     [super awakeFromNib];
     // Initialization code
     self.accessoryType = UITableViewCellAccessoryNone;
+    _permissionTitleLabel.textColor = UIColor.blackColor;
     _permissionSwitch.hidden = YES;
 }
 

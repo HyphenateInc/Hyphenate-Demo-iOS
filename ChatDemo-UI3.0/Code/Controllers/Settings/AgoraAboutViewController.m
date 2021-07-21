@@ -33,10 +33,10 @@
 
 - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath {
     static NSString *cellIndetifier = @"aboutCell";
-    UITableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:cellIndetifier];
+    AgoraChatCustomBaseCell *cell = [tableView dequeueReusableCellWithIdentifier:cellIndetifier];
     if (!cell) {
 
-        cell = [[UITableViewCell alloc] initWithStyle:UITableViewCellStyleValue1 reuseIdentifier:cellIndetifier];
+        cell = [[AgoraChatCustomBaseCell alloc] initWithStyle:UITableViewCellStyleValue1 reuseIdentifier:cellIndetifier];
     }
     if (indexPath.row == 0) {
         

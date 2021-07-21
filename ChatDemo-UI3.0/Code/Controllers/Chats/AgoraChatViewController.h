@@ -9,7 +9,7 @@
 
 #import <UIKit/UIKit.h>
 
-@interface AgoraChatViewController : UIViewController
+@interface AgoraChatViewController : AgoraChatBaseViewController
 
 @property (nonatomic, strong, readonly) NSString *conversationId;
 @property (nonatomic, strong) void(^leaveGroupBlock)(void);

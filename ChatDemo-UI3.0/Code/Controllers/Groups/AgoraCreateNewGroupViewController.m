@@ -22,7 +22,7 @@
 
 @property (strong, nonatomic) IBOutlet UIView *headerView;
 @property (strong, nonatomic) IBOutlet UIButton *groupAvatarSelectButton;
-@property (strong, nonatomic) IBOutlet UITextField *groupSubjectTextField;
+@property (strong, nonatomic) IBOutlet AgoraChatBaseTextField *groupSubjectTextField;
 @property (strong, nonatomic) IBOutlet UILabel *memberCountLabel;
 @property (strong, nonatomic) IBOutlet UICollectionView *membersCollection;
 @property (strong, nonatomic) UIImagePickerController *imagePicker;
@@ -47,6 +47,7 @@
     self.tableView.tableHeaderView = _headerView;
     self.tableView.tableFooterView = [UIView new];
     self.groupSubjectTextField.placeholder = NSLocalizedString(@"group.groupSubject", @"Group Subject");
+    
     [self.membersCollection registerNib:[UINib nibWithNibName:@"AgoraMemberCollectionCell" bundle:nil] forCellWithReuseIdentifier:@"AgoraMemberCollectionCell"];
     [self initBasicData];
     

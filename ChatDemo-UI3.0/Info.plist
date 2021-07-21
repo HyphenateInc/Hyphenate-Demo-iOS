@@ -5,7 +5,7 @@
 	<key>CFBundleDevelopmentRegion</key>
 	<string>en</string>
 	<key>CFBundleDisplayName</key>
-	<string>Hyphenate</string>
+	<string>AgoraChat Demo</string>
 	<key>CFBundleExecutable</key>
 	<string>$(EXECUTABLE_NAME)</string>
 	<key>CFBundleIdentifier</key>
@@ -20,20 +20,20 @@
 	<string>2.1.4</string>
 	<key>CFBundleVersion</key>
 	<string>2104</string>
-    <key>Fabric</key>
-    <dict>
-        <key>APIKey</key>
-        <string>33bb2bc04d2ed7f91da02025c362279e3406ed81</string>
-        <key>Kits</key>
-        <array>
-            <dict>
-                <key>KitInfo</key>
-                <dict/>
-                <key>KitName</key>
-                <string>Crashlytics</string>
-            </dict>
-        </array>
-    </dict>
+	<key>Fabric</key>
+	<dict>
+		<key>APIKey</key>
+		<string>33bb2bc04d2ed7f91da02025c362279e3406ed81</string>
+		<key>Kits</key>
+		<array>
+			<dict>
+				<key>KitInfo</key>
+				<dict/>
+				<key>KitName</key>
+				<string>Crashlytics</string>
+			</dict>
+		</array>
+	</dict>
 	<key>LSApplicationCategoryType</key>
 	<string></string>
 	<key>LSRequiresIPhoneOS</key>

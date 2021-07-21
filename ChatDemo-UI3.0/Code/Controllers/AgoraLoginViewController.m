@@ -15,7 +15,7 @@
 
 @interface AgoraLoginViewController () <UITextFieldDelegate>
 
-@property (weak, nonatomic) IBOutlet UITextField *usernameTextField;
+@property (weak, nonatomic) IBOutlet AgoraChatBaseTextField *usernameTextField;
 @property (weak, nonatomic) IBOutlet UITextField *passwordTextField;
 @property (weak, nonatomic) IBOutlet UIButton *loginButton;
 @property (weak, nonatomic) IBOutlet UIButton *signupButton;
@@ -40,7 +40,7 @@
 
     [self setBackgroundColor];
     [self setupForDismissKeyboard];
-    
+        
     _usernameTextField.delegate = self;
     _usernameTextField.leftView = [[UIView alloc] initWithFrame:CGRectMake(0, 0, 15, _usernameTextField.height)];
     _usernameTextField.leftViewMode = UITextFieldViewModeAlways;
@@ -55,6 +55,14 @@
     
     _signupButton.top = KScreenHeight - _loginButton.height;
     _signupButton.width = KScreenWidth;
+    
+    _usernameTextField.placeholder = NSLocalizedString(@"login.usernameTextField.hyphenateID", @"HyphenateID");
+    _passwordTextField.placeholder = NSLocalizedString(@"login.passwordTextField.password", @"Password");
+    [_loginButton setTitle:NSLocalizedString(@"login.loginButton.login", @"LOG IN") forState:UIControlStateNormal];
+    [_signupButton setTitle:NSLocalizedString(@"login.signupButton.signup", @"SIGN UP") forState:UIControlStateNormal];
+    
+    [_usernameTextField adaptForDarkMode];
+    [_passwordTextField adaptForDarkMode];
 }
 
 - (void)viewWillAppear:(BOOL)animated

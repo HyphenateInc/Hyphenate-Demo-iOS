@@ -27,6 +27,28 @@
 - (void)viewDidLoad
 {
     [super viewDidLoad];
+    [self testUserInfo];
+}
+
+- (void)testUserInfo {
+    
+    [AgoraChatClient.sharedClient.userInfoManager fetchUserInfoById:@[AgoraChatClient.sharedClient.currentUsername] completion:^(NSDictionary *aUserDatas, AgoraError *aError) {
+        AgoraUserInfo *userInfo = aUserDatas[AgoraChatClient.sharedClient.currentUsername];
+        NSDictionary *dic = @{@"address":@"北京市海淀区",@"tel":@"01011112222"};
+        NSError *parseError;
+        NSData *jsonData = [NSJSONSerialization dataWithJSONObject:dic options:NSJSONWritingPrettyPrinted error:&parseError];
+        if (parseError) {
+          //解析出错
+        }
+        NSString * dicStr = [[NSString alloc] initWithData:jsonData encoding:NSUTF8StringEncoding];
+        
+        userInfo.ext = dicStr;
+        [AgoraChatClient.sharedClient.userInfoManager updateOwnUserInfo:userInfo completion:^(AgoraUserInfo *aUserInfo, AgoraError *aError) {
+            NSLog(@"aUserInfo.userId:%@ aUserInfo:%@",aUserInfo.userId,aUserInfo.ext);
+            
+        }];
+        
+    }];
 }
 
 - (void)reloadNotificationStatus
@@ -65,10 +87,9 @@
 {
     
     static NSString *ident = @"Cell";
-    UITableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:ident];
+    AgoraChatCustomBaseCell *cell = [tableView dequeueReusableCellWithIdentifier:ident];
     if (!cell) {
-        
-        cell = [[UITableViewCell alloc] initWithStyle:UITableViewCellStyleValue1 reuseIdentifier:ident];
+        cell = [[AgoraChatCustomBaseCell alloc] initWithStyle:UITableViewCellStyleValue1 reuseIdentifier:ident];
     }
     
     if (indexPath.row == 0) {

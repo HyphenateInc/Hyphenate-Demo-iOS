@@ -8,7 +8,6 @@
  */
 
 #import "AgoraChatBaseCell.h"
-
 #import "AgoraChatBaseBubbleView.h"
 #import "AgoraChatTextBubbleView.h"
 #import "AgoraChatImageBubbleView.h"

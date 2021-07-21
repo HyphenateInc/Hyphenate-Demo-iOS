@@ -14,6 +14,7 @@
 - (void)awakeFromNib {
     [super awakeFromNib];
     // Initialization code
+    self.leftLabel.textColor = UIColor.blackColor;
 }
 
 - (void)setSelected:(BOOL)selected animated:(BOOL)animated {

@@ -11,7 +11,7 @@
 #import "AgoraGroupUIProtocol.h"
 @class AgoraUserModel;
 
-@interface AgoraGroupMemberCell : UITableViewCell
+@interface AgoraGroupMemberCell : AgoraChatCustomBaseCell
 
 @property (nonatomic, assign) BOOL isGroupOwner;
 

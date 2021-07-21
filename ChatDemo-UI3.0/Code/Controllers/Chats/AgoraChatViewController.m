@@ -72,9 +72,7 @@ static NSString *recallCellIndentifier = @"recallCellIndentifier";
 - (void)viewDidLoad
 {
     [super viewDidLoad];
-    
-    self.view.backgroundColor = UIColor.whiteColor;
-    
+        
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(endChatWithConversationId:) name:KAgora_END_CHAT object:nil];
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(deleteAllMessages:) name:KNOTIFICATIONNAME_DELETEALLMESSAGE object:nil];
     
@@ -184,9 +182,9 @@ static NSString *recallCellIndentifier = @"recallCellIndentifier";
     return _chatToolBar;
 }
 
-- (UITableView *)tableView {
+- (AgoraChatBaseTableview *)tableView {
     if (!_tableView) {
-        _tableView = [[UITableView alloc] initWithFrame:CGRectZero];
+        _tableView = [[AgoraChatBaseTableview alloc] initWithFrame:CGRectZero];
         _tableView.tableFooterView = [[UIView alloc] init];
         _tableView.delegate = self;
         _tableView.separatorStyle = UITableViewCellSeparatorStyleNone;
@@ -594,7 +592,7 @@ static NSString *recallCellIndentifier = @"recallCellIndentifier";
     [self.navigationController pushViewController:locationController animated:YES];
 }
 
-- (void)didCellLongPressed:(AgoraChatBaseCell *)cell
+- (void)didCellLongPressed:(AgoraChatCustomBaseCell *)cell
 {
     NSIndexPath *indexPath = [self.tableView indexPathForCell:cell];
     AgoraMessageModel *model = [self.messages objectAtIndex:indexPath.row];

@@ -25,7 +25,7 @@
 
 @property (strong, nonatomic) IBOutlet UICollectionView *selectConllection;
 
-@property (strong, nonatomic) IBOutlet UITableView *tableView;
+@property (strong, nonatomic) IBOutlet AgoraChatBaseTableview *tableView;
 
 
 @property (strong, nonatomic) NSMutableArray<AgoraUserModel *> *selectContacts;
@@ -73,6 +73,10 @@
     [self.selectConllection registerNib:[UINib nibWithNibName:@"AgoraMemberCollection_Edit_Cell" bundle:nil] forCellWithReuseIdentifier:@"AgoraMemberCollection_Edit_Cell"];
     self.tableView.sectionIndexBackgroundColor = [UIColor clearColor];
     self.tableView.tableFooterView = [UIView new];
+    self.selectConllection.backgroundColor = UIColor.whiteColor;
+    self.tableView.backgroundColor = UIColor.whiteColor;
+    
+    
     [self setupNavBar];
     [self loadUnSelectContacts];
     [self setupSearchBar];

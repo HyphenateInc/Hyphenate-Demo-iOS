@@ -9,7 +9,7 @@
 
 #import <UIKit/UIKit.h>
 
-@interface AgoraMemberCell : UITableViewCell
+@interface AgoraMemberCell : AgoraChatCustomBaseCell
 
 @property (nonatomic, weak) IBOutlet UIImageView *imgView;
 @property (nonatomic, weak) IBOutlet UILabel *leftLabel;

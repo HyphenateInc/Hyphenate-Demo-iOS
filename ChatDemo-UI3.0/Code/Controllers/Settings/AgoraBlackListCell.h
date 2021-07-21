@@ -10,7 +10,7 @@
 
 NS_ASSUME_NONNULL_BEGIN
 
-@interface AgoraBlackListCell : UITableViewCell
+@interface AgoraBlackListCell : AgoraChatCustomBaseCell
 @property (nonatomic,copy) void(^unBlockCompletion)(NSString *unBlockUserId);
 - (void)updateCellWithObj:(id)obj;
 

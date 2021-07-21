@@ -16,7 +16,6 @@
 
 #import "AgoraChatroomCell.h"
 #import "UIViewController+HUD.h"
-#import "NSObject+AgoraAlertView.h"
 
 @interface AgoraChatroomsViewController ()
 
@@ -27,6 +26,7 @@
 - (void)viewDidLoad
 {
     [super viewDidLoad];
+    
     
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(destroyChatroom:) name:KAgora_DESTROY_CHATROOM_NOTIFICATION object:nil];
     

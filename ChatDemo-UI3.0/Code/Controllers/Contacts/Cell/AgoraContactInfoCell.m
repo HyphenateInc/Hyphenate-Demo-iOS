@@ -26,6 +26,7 @@
 - (void)awakeFromNib {
     [super awakeFromNib];
     // Initialization code
+    [self.titleLabel setTextColor:[UIColor blackColor]];
 }
 
 - (void)setInfoDic:(NSDictionary *)infoDic {

@@ -9,7 +9,7 @@
 
 #import <UIKit/UIKit.h>
 
-@interface AgoraChatroomCell : UITableViewCell
+@interface AgoraChatroomCell : AgoraChatCustomBaseCell
 
 @property (nonatomic, weak) IBOutlet UILabel *nameLabel;
 
