@@ -36,7 +36,7 @@
     if (@available(iOS 13.0, *)) {
         self.navigationController.navigationBar.barTintColor = [UIColor colorWithDynamicProvider:^UIColor * _Nonnull(UITraitCollection * _Nonnull traitCollection) {
             if (traitCollection.userInterfaceStyle == UIUserInterfaceStyleDark) {
-                return UIColor.grayColor;
+                return UIColor.whiteColor;
             } else {
                 return UIColor.whiteColor;
             }

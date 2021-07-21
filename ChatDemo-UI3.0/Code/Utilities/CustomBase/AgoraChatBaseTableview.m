@@ -13,7 +13,7 @@
 - (instancetype)initWithFrame:(CGRect)frame {
     self = [super initWithFrame:frame];
     if (self) {
-        [self backGroudColorForDarkMode];
+        [self backgroudColorForDarkMode];
     }
     return self;
 }
@@ -21,11 +21,11 @@
 
 - (void)awakeFromNib {
     [super awakeFromNib];
-    [self backGroudColorForDarkMode];
+    [self backgroudColorForDarkMode];
 }
 
 
-- (void)backGroudColorForDarkMode {
+- (void)backgroudColorForDarkMode {
     if (@available(iOS 13.0, *)) {
         self.backgroundColor = [UIColor colorWithDynamicProvider:^UIColor * _Nonnull(UITraitCollection * _Nonnull traitCollection) {
             if (traitCollection.userInterfaceStyle == UIUserInterfaceStyleDark) {

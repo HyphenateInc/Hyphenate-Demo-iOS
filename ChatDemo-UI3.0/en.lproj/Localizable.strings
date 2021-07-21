@@ -68,11 +68,15 @@
 "login.endAutoLogin.failure" = "Automatic login failed";
 "login.endAutoLogin.succeed" = "Automatic login succeed";
 
+"login.passwordTextField.password" = "Password";
+"login.usernameTextField.hyphenateID" = "Hyphenate ID";
+"login.loginButton.login" = "LOG IN";
+"login.signupButton.signup" = "SIGN UP";
+
+
 //register
 "register.userName.outOfLimit" = "Username length out of limit, maximum 64 bytes";
 "register.password.outOfLimit" = "Password length out of limit, maximum 64 bytes";
-
-
 
 
 //chat

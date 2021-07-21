@@ -30,10 +30,11 @@
 - (void)customColorForDarkMode {
     self.backgroundColor = UIColor.whiteColor;
     self.contentView.backgroundColor = UIColor.whiteColor;
-    self.accessoryView.backgroundColor = UIColor.whiteColor;
 
     self.textLabel.textColor = [UIColor blackColor];
     self.detailTextLabel.textColor = [UIColor grayColor];
+    
+    self.selectionStyle = UITableViewCellSelectionStyleNone;
 }
 
 

@@ -12,6 +12,8 @@ NS_ASSUME_NONNULL_BEGIN
 
 @interface UITextField (DarkMode)
 
+- (void)adaptForDarkMode;
+
 @end
 
 NS_ASSUME_NONNULL_END

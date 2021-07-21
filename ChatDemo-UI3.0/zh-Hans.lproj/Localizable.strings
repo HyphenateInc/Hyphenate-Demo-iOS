@@ -68,6 +68,13 @@
 "login.endAutoLogin.failure" = "自动登录失败";
 "login.endAutoLogin.succeed" = "自动登录成功";
 
+
+"login.passwordTextField.password" = "密 码";
+"login.usernameTextField.hyphenateID" = "账 号";
+"login.loginButton.login" = "登 录";
+"login.signupButton.signup" = "注 册";
+
+
 //register
 "register.userName.outOfLimit" = "用户名长度不能超过64字节";
 "register.password.outOfLimit" = "密码长度不能超过64字节";

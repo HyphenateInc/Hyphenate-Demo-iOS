@@ -50,4 +50,8 @@
     
 }
 
+- (void)adaptForDarkMode {
+    self.backgroundColor = UIColor.whiteColor;
+}
+
 @end
