@@ -14,6 +14,7 @@
 #define kLabelHeight 20.0
 #define kTimeLabelWidth 80.0
 #define kUnReadLabelHeight 20.0
+#define kHeadImageViewHeight 50.0
 
 @interface AgoraChatsCell ()
 
@@ -47,7 +48,7 @@
     [self.headImageView mas_makeConstraints:^(MASConstraintMaker *make) {
         make.centerY.equalTo(self.contentView);
         make.left.mas_equalTo(kAgroaPadding * 2);
-        make.size.mas_equalTo(50.0);
+        make.size.mas_equalTo(kHeadImageViewHeight);
     }];
     
     [self.nameLabel mas_makeConstraints:^(MASConstraintMaker *make) {
@@ -163,7 +164,9 @@
 - (UIImageView *)headImageView {
     if (_headImageView == nil) {
         _headImageView = UIImageView.new;
-        _headImageView.contentMode = UIViewContentModeCenter;
+        _headImageView.contentMode = UIViewContentModeScaleAspectFit;
+        _headImageView.clipsToBounds = YES;
+        _headImageView.layer.cornerRadius = kHeadImageViewHeight * 0.5;
     }
     return  _headImageView;
 }
@@ -218,4 +221,4 @@
 #undef kLabelHeight
 #undef kTimeLabelWidth
 #undef kUnReadLabelHeight
-
+#undef kHeadImageViewHeight

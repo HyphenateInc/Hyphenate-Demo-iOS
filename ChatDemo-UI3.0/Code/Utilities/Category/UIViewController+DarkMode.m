@@ -21,17 +21,18 @@
 
 
 - (void)viewDidLoadDarkMode {
-    self.navigationController.navigationBar.titleTextAttributes = @{NSForegroundColorAttributeName:[UIColor colorWithDynamicProvider:^UIColor * _Nonnull(UITraitCollection * _Nonnull traitCollection) {
-        if (@available(iOS 12.0, *)) {
+    if (@available(iOS 13.0, *)) {
+        self.navigationController.navigationBar.titleTextAttributes = @{NSForegroundColorAttributeName:[UIColor colorWithDynamicProvider:^UIColor * _Nonnull(UITraitCollection * _Nonnull traitCollection) {
+
             if (traitCollection.userInterfaceStyle == UIUserInterfaceStyleDark) {
                 return UIColor.blackColor;
             } else {
                 return UIColor.blackColor;
             }
-        } else {
-            return UIColor.blackColor;
-        }
-    }]};
+        }]};
+    } else {
+        // Fallback on earlier versions
+    }
     
     if (@available(iOS 13.0, *)) {
         self.navigationController.navigationBar.barTintColor = [UIColor colorWithDynamicProvider:^UIColor * _Nonnull(UITraitCollection * _Nonnull traitCollection) {

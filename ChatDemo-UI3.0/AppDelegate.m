@@ -78,7 +78,6 @@
     [self _registerAPNS];
     [self registerNotifications];
     
-
     return YES;
 }
 
