@@ -159,6 +159,8 @@ static NSString *kGroupName = @"GroupName";
     
     UIApplication *application = [UIApplication sharedApplication];
     [application setApplicationIconBadgeNumber:unreadCount];
+    
+    
 }
 
 - (void)didReceiveLocalNotification:(UILocalNotification *)notification

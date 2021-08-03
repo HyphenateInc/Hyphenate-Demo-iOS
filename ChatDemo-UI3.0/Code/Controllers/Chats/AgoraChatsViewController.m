@@ -232,26 +232,29 @@ NSString *CellIdentifier = @"AgoraChatsCellIdentifier";
 
 
 #pragma mark - action
-
 - (void)tableViewDidTriggerHeaderRefresh
 {
     WEAK_SELF
     dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), ^{
-        NSArray *conversations = [[AgoraChatClient sharedClient].chatManager getAllConversations];
-        NSArray* sorted = [weakSelf _sortConversationList:conversations];
-        dispatch_async(dispatch_get_main_queue(), ^{
-            [weakSelf.dataSource removeAllObjects];
-            for (AgoraConversation *conversation in sorted) {
-                AgoraConversationModel *model = [[AgoraConversationModel alloc] initWithConversation:conversation];
-                NSLog(@"%s conversation.conversationId:%@",__func__,conversation.conversationId);
+        [[AgoraChatClient sharedClient].chatManager getConversationsFromServer:^(NSArray *aCoversations, AgoraError *aError) {
+            NSArray* sorted = [weakSelf _sortConversationList:aCoversations];
+            dispatch_async(dispatch_get_main_queue(), ^{
+                [weakSelf.dataSource removeAllObjects];
 
-                [weakSelf.dataSource addObject:model];
-            }
-            [self tableViewDidFinishTriggerHeader:YES];
-            [weakSelf.tableView reloadData];
-        });
+                
+        
+                for (AgoraConversation *conversation in sorted) {
+                    AgoraConversationModel *model = [[AgoraConversationModel alloc] initWithConversation:conversation];
+
+                    [weakSelf.dataSource addObject:model];
+                }
+                [self tableViewDidFinishTriggerHeader:YES];
+                [weakSelf.tableView reloadData];
+            });
+        }];
     });
 }
+
 
 #pragma mark - AgoraChatManagerDelegate
 
