@@ -15,6 +15,10 @@
 + (NSArray<NSArray *> *)sortContacts:(NSArray *)contacts
                        sectionTitles:(NSArray **)sectionTitles
                         searchSource:(NSArray **)searchSource {
+    if (contacts.count == 0) {
+        return @[];
+    }
+    
     UILocalizedIndexedCollation *indexCollation = [UILocalizedIndexedCollation currentCollation];
     NSMutableArray *_sectionTitles = [NSMutableArray arrayWithArray:indexCollation.sectionTitles];
     NSMutableArray *_contacts = [NSMutableArray arrayWithCapacity:_sectionTitles.count];

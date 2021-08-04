@@ -28,6 +28,7 @@ NSString *CellIdentifier = @"AgoraChatsCellIdentifier";
 @property (strong, nonatomic) NSMutableArray *dataSource;
 @property (strong, nonatomic) NSMutableArray *searchSource;
 @property (strong, nonatomic) UIView *networkStateView;
+@property (assign, nonatomic) BOOL hasLaunched;
 
 @end
 
@@ -52,7 +53,23 @@ NSString *CellIdentifier = @"AgoraChatsCellIdentifier";
     self.tableView.autoresizingMask = UIViewAutoresizingFlexibleTopMargin |UIViewAutoresizingFlexibleHeight;
     _isSearchState = NO;
     
+    [self recordHasLaunch];
+    
     [self tableViewDidTriggerHeaderRefresh];
+}
+
+- (void)recordHasLaunch {
+    NSUserDefaults *userDefault = NSUserDefaults.standardUserDefaults;
+    BOOL hasLaunched = [userDefault boolForKey:[AgoraChatClient.sharedClient currentUsername]];
+    if(!hasLaunched) {
+        [userDefault setBool:YES forKey:[AgoraChatClient.sharedClient currentUsername]];
+        [userDefault synchronize];
+    }
+    
+    self.hasLaunched = hasLaunched;
+    
+    NSLog(@"\n%s \n[AgoraChatClient.sharedClient currentUsername]:%@ \nhasLaunched:%@",__func__,[AgoraChatClient.sharedClient currentUsername],@(self.hasLaunched));
+
 }
 
 - (void)viewWillAppear:(BOOL)animated
@@ -232,22 +249,54 @@ NSString *CellIdentifier = @"AgoraChatsCellIdentifier";
 
 
 #pragma mark - action
+
 - (void)tableViewDidTriggerHeaderRefresh
 {
+    if (self.hasLaunched) {
+        [self fetchDataFromLocal];
+    }else {
+        [self fetchDataFromServer];
+    }
+}
+
+- (void)fetchDataFromLocal {
+    WEAK_SELF
+    dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), ^{
+        NSArray *conversations = [[AgoraChatClient sharedClient].chatManager getAllConversations];
+        NSArray* sorted = [weakSelf _sortConversationList:conversations];
+        dispatch_async(dispatch_get_main_queue(), ^{
+            NSMutableArray *cArray = NSMutableArray.new;
+            NSLog(@"\n%s  =====================currentUsername:%@",__func__,AgoraChatClient.sharedClient.currentUsername);
+
+            for (AgoraConversation *conversation in sorted) {
+                AgoraConversationModel *model = [[AgoraConversationModel alloc] initWithConversation:conversation];
+                NSLog(@"%s conversation.conversationId:%@",__func__,conversation.conversationId);
+
+                [cArray addObject:model];
+            }
+            self.dataSource = cArray;
+            [self tableViewDidFinishTriggerHeader:YES];
+            [weakSelf.tableView reloadData];
+        });
+    });
+}
+
+
+- (void)fetchDataFromServer {
     WEAK_SELF
     dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), ^{
         [[AgoraChatClient sharedClient].chatManager getConversationsFromServer:^(NSArray *aCoversations, AgoraError *aError) {
             NSArray* sorted = [weakSelf _sortConversationList:aCoversations];
             dispatch_async(dispatch_get_main_queue(), ^{
-                [weakSelf.dataSource removeAllObjects];
+                NSMutableArray *cArray = NSMutableArray.new;
 
-                
-        
                 for (AgoraConversation *conversation in sorted) {
                     AgoraConversationModel *model = [[AgoraConversationModel alloc] initWithConversation:conversation];
 
-                    [weakSelf.dataSource addObject:model];
+                    [cArray addObject:model];
                 }
+                self.dataSource = cArray;
+
                 [self tableViewDidFinishTriggerHeader:YES];
                 [weakSelf.tableView reloadData];
             });

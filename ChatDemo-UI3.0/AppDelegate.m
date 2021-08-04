@@ -39,12 +39,10 @@
         [[UINavigationBar appearance] setTintColor:AlmostBlackColor];
         [[UINavigationBar appearance] setTranslucent:NO];
     }
-        
-  
-    
+            
     // init HyphenateSDK
     AgoraOptions *options = [AgoraOptions optionsWithAppkey:@"easemob-demo#easeim"];
-    //    AgoraOptions *options = [AgoraOptions optionsWithAppkey:@"easemob-demo#chatdemoui"];
+//    AgoraOptions *options = [AgoraOptions optionsWithAppkey:@"easemob-demo#chatdemoui"];
     
 //    AgoraOptions *options = [AgoraOptions optionsWithAppkey:@"1193210624041558#chatdemo"];
     // Hyphenate cert keys
@@ -80,6 +78,7 @@
     
     return YES;
 }
+
 
 - (void)loginStateChange:(NSNotification *)notification
 {
