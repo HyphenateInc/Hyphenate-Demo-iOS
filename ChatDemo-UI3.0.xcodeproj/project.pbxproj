@@ -171,7 +171,6 @@
 		7FB1589226A19AE300B995F3 /* UITextField+DarkMode.m in Sources */ = {isa = PBXBuildFile; fileRef = 7FB1589126A19AE300B995F3 /* UITextField+DarkMode.m */; };
 		7FB158F526A80F2600B995F3 /* AgoraLoginViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 7FB158F426A80F2600B995F3 /* AgoraLoginViewController.xib */; };
 		7FE43CDF26A0445700893D63 /* AgoraChatCustomTableViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 7FE43CDE26A0445700893D63 /* AgoraChatCustomTableViewController.m */; };
-		C448516A1F42BDEA00DD8401 /* GoogleService-Info.plist in Resources */ = {isa = PBXBuildFile; fileRef = C44851691F42BDEA00DD8401 /* GoogleService-Info.plist */; };
 		D20E26D71DCA011C00B3FAC6 /* icon_info.png in Resources */ = {isa = PBXBuildFile; fileRef = D20E26D41DCA011C00B3FAC6 /* icon_info.png */; };
 		D20E26D81DCA011C00B3FAC6 /* icon_info@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = D20E26D51DCA011C00B3FAC6 /* icon_info@2x.png */; };
 		D20E26D91DCA011C00B3FAC6 /* icon_info@3x.png in Resources */ = {isa = PBXBuildFile; fileRef = D20E26D61DCA011C00B3FAC6 /* icon_info@3x.png */; };
@@ -734,7 +733,6 @@
 		7FB158F426A80F2600B995F3 /* AgoraLoginViewController.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = AgoraLoginViewController.xib; sourceTree = "<group>"; };
 		7FE43CDD26A0445700893D63 /* AgoraChatCustomTableViewController.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = AgoraChatCustomTableViewController.h; sourceTree = "<group>"; };
 		7FE43CDE26A0445700893D63 /* AgoraChatCustomTableViewController.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = AgoraChatCustomTableViewController.m; sourceTree = "<group>"; };
-		C44851691F42BDEA00DD8401 /* GoogleService-Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = "GoogleService-Info.plist"; sourceTree = "<group>"; };
 		D16326FFC6F317D24E92E388 /* Pods-ChatDemo-UI3.0.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-ChatDemo-UI3.0.release.xcconfig"; path = "Pods/Target Support Files/Pods-ChatDemo-UI3.0/Pods-ChatDemo-UI3.0.release.xcconfig"; sourceTree = "<group>"; };
 		D20E26D41DCA011C00B3FAC6 /* icon_info.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = icon_info.png; sourceTree = "<group>"; };
 		D20E26D51DCA011C00B3FAC6 /* icon_info@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "icon_info@2x.png"; sourceTree = "<group>"; };
@@ -1494,7 +1492,6 @@
 				D28345101D8FD1D400FD48A9 /* LaunchScreen.storyboard */,
 				D2AA4DCE1D9227A400967E0E /* Main.storyboard */,
 				D28345131D8FD1D400FD48A9 /* Info.plist */,
-				C44851691F42BDEA00DD8401 /* GoogleService-Info.plist */,
 				D28345021D8FD1D400FD48A9 /* Supporting Files */,
 			);
 			path = "ChatDemo-UI3.0";
@@ -2207,7 +2204,6 @@
 				3AEBE3EF1E792ED400B82986 /* AgoraGroupPermissionCell.xib in Resources */,
 				D2BF7E481D914DB30090AA66 /* Button_Delete@2x.png in Resources */,
 				7F6CC89226568C2400BA60BB /* AgoraChatRecordView.xib in Resources */,
-				C448516A1F42BDEA00DD8401 /* GoogleService-Info.plist in Resources */,
 				7F6CC84B26568B4600BA60BB /* AgoraMemberSelectViewController.xib in Resources */,
 				D2835FFD1D94FFD800EC7A4A /* Icon_Audio_disable@3x.png in Resources */,
 				D2BF7EE41D914DB30090AA66 /* Chats_active@2x.png in Resources */,
@@ -2862,7 +2858,7 @@
 				ASSETCATALOG_COMPILER_LAUNCHIMAGE_NAME = LaunchImage;
 				CLANG_WARN_DOCUMENTATION_COMMENTS = NO;
 				CODE_SIGN_ENTITLEMENTS = "ChatDemo-UI3.0/ChatDemo-UI3.0.entitlements";
-				CODE_SIGN_IDENTITY = "iPhone Distribution";
+				CODE_SIGN_IDENTITY = "iPhone Distribution: EaseMob Inc.";
 				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Distribution";
 				CODE_SIGN_STYLE = Manual;
 				DEVELOPMENT_TEAM = 499WYUV8Q2;
