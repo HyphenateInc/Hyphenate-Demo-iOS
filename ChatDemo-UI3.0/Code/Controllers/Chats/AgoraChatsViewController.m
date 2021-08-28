@@ -53,20 +53,22 @@ NSString *CellIdentifier = @"AgoraChatsCellIdentifier";
     self.tableView.autoresizingMask = UIViewAutoresizingFlexibleTopMargin |UIViewAutoresizingFlexibleHeight;
     _isSearchState = NO;
     
-    [self recordHasLaunch];
     
     [self tableViewDidTriggerHeaderRefresh];
 }
 
-- (void)recordHasLaunch {
+- (void)queryHasLaunch {
+    
     NSUserDefaults *userDefault = NSUserDefaults.standardUserDefaults;
     BOOL hasLaunched = [userDefault boolForKey:[AgoraChatClient.sharedClient currentUsername]];
     if(!hasLaunched) {
+        self.hasLaunched = hasLaunched;
         [userDefault setBool:YES forKey:[AgoraChatClient.sharedClient currentUsername]];
         [userDefault synchronize];
+    }else {
+        self.hasLaunched = hasLaunched;
     }
     
-    self.hasLaunched = hasLaunched;
     
     NSLog(@"\n%s \n[AgoraChatClient.sharedClient currentUsername]:%@ \nhasLaunched:%@",__func__,[AgoraChatClient.sharedClient currentUsername],@(self.hasLaunched));
 
@@ -252,6 +254,8 @@ NSString *CellIdentifier = @"AgoraChatsCellIdentifier";
 
 - (void)tableViewDidTriggerHeaderRefresh
 {
+    [self queryHasLaunch];
+    
     if (self.hasLaunched) {
         [self fetchDataFromLocal];
     }else {
@@ -440,6 +444,7 @@ NSString *CellIdentifier = @"AgoraChatsCellIdentifier";
     }
     return _searchSource;
 }
+
 
 
 @end

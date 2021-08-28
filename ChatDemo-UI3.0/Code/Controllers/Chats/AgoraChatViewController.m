@@ -65,6 +65,7 @@ static NSString *recallCellIndentifier = @"recallCellIndentifier";
     if (self) {
         _currentConversation = [[AgoraChatClient sharedClient].chatManager getConversation:conversationId type:type createIfNotExist:YES];
         [_currentConversation markAllMessagesAsRead:nil];
+        
     }
     return self;
 }

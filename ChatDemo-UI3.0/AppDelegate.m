@@ -20,6 +20,11 @@
 
 //@import Firebase;
 
+#define EaseIMAppKey @"easemob-demo#easeim"
+#define ChatDemoUIAppKey @"easemob-demo#chatdemoui"
+#define MeiDongAppKey @"1193210624041558#chat-demo"
+
+
 @interface AppDelegate () <AgoraChatClientDelegate,UNUserNotificationCenterDelegate>
 
 @end
@@ -41,10 +46,8 @@
     }
             
     // init HyphenateSDK
-    AgoraOptions *options = [AgoraOptions optionsWithAppkey:@"easemob-demo#easeim"];
-//    AgoraOptions *options = [AgoraOptions optionsWithAppkey:@"easemob-demo#chatdemoui"];
+    AgoraOptions *options = [AgoraOptions optionsWithAppkey:MeiDongAppKey];
     
-//    AgoraOptions *options = [AgoraOptions optionsWithAppkey:@"1193210624041558#chatdemo"];
     // Hyphenate cert keys
     NSString *apnsCertName = nil;
 #if ChatDemo_DEBUG
