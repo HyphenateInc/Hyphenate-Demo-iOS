@@ -28,7 +28,7 @@
 #import "NSObject+AgoraAlertView.h"
 #import "AgoraChatToolBar.h"
 #import "AgoraChatRecallCell.h"
-
+#import <AVKit/AVKit.h>
 
 static NSString *recallCellIndentifier = @"recallCellIndentifier";
 
@@ -574,10 +574,16 @@ static NSString *recallCellIndentifier = @"recallCellIndentifier";
             [self _sendHasReadResponseForMessages:@[model.message] isRead:YES];
         }
         NSURL *videoURL = [NSURL fileURLWithPath:videoBody.localPath];
-        MPMoviePlayerViewController *moviePlayerController = [[MPMoviePlayerViewController alloc] initWithContentURL:videoURL];
-        [moviePlayerController.moviePlayer prepareToPlay];
-        moviePlayerController.moviePlayer.movieSourceType = MPMovieSourceTypeFile;
-        [self presentMoviePlayerViewControllerAnimated:moviePlayerController];
+        AVPlayerViewController *playerViewController = [[AVPlayerViewController alloc] init];
+        playerViewController.player = [AVPlayer playerWithURL:videoURL];
+        playerViewController.videoGravity = AVLayerVideoGravityResizeAspect;
+        playerViewController.showsPlaybackControls = YES;
+        playerViewController.modalPresentationStyle = 0;
+        [self presentViewController:playerViewController animated:YES completion:^{
+            [playerViewController.player play];
+        }];
+        
+        
     } else if (videoBody.downloadStatus == AgoraDownloadStatusDownloading) {
         return;
     } else {
