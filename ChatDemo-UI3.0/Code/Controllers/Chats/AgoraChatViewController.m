@@ -372,10 +372,10 @@ static NSString *recallCellIndentifier = @"recallCellIndentifier";
 {
     [self.chatToolBar endEditing:YES];
 #if TARGET_IPHONE_SIMULATOR
-
+    
 #elif TARGET_OS_IPHONE
     self.imagePickerController.sourceType = UIImagePickerControllerSourceTypeCamera;
-    self.imagePickerController.mediaTypes = @[(NSString *)kUTTypeImage, (NSString *)kUTTypeMovie];
+    self.imagePickerController.mediaTypes = @[(NSString *)kUTTypeImage];
     [self presentViewController:self.imagePickerController animated:YES completion:NULL];
 #endif
 
@@ -384,7 +384,7 @@ static NSString *recallCellIndentifier = @"recallCellIndentifier";
 - (void)didSelectPhotos
 {
     [self.chatToolBar endEditing:YES];
-    self.imagePickerController.sourceType = UIImagePickerControllerSourceTypeSavedPhotosAlbum;
+    self.imagePickerController.sourceType = UIImagePickerControllerSourceTypePhotoLibrary;
     [self presentViewController:self.imagePickerController animated:YES completion:NULL];
 }
 
