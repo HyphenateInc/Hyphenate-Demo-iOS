@@ -10,13 +10,13 @@
 #import "AgoraMessageModel.h"
 
 @interface AgoraMessageModel ()
-@property (strong, nonatomic) Message *message;
+@property (strong, nonatomic) AgoraChatMessage *message;
 
 @end
 
 @implementation AgoraMessageModel
 
-- (instancetype)initWithMessage:(Message*)message
+- (instancetype)initWithMessage:(AgoraChatMessage*)message
 {
     self = [super init];
     if (self) {

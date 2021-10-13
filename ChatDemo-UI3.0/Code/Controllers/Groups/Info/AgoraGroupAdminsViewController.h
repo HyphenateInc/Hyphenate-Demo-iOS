@@ -11,6 +11,6 @@
 
 @interface AgoraGroupAdminsViewController : AgoraBaseRefreshTableController
 
-- (instancetype)initWithGroup:(AgoraGroup *)aGroup;
+- (instancetype)initWithGroup:(AgoraChatGroup *)aGroup;
 
 @end

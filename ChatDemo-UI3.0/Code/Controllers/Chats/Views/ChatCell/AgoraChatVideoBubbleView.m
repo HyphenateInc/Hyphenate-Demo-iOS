@@ -50,7 +50,7 @@
 - (CGSize)sizeThatFits:(CGSize)size
 {
     CGSize retSize;
-    VideoMessageBody *body = (VideoMessageBody*)self.model.message.body;
+    AgoraChatVideoMessageBody *body = (AgoraChatVideoMessageBody*)self.model.message.body;
     if (self.model.message.ext) {
         retSize = CGSizeMake(0, 0);
     } else {
@@ -79,7 +79,7 @@
 {
     [super setModel:model];
     
-    VideoMessageBody *videoBody = (VideoMessageBody *)model.message.body;
+    AgoraChatVideoMessageBody *videoBody = (AgoraChatVideoMessageBody *)model.message.body;
     if ([videoBody.thumbnailLocalPath length] > 0) {
         NSData *thumbnailImageData = [NSData dataWithContentsOfFile:videoBody.thumbnailLocalPath];
         if (thumbnailImageData.length) {
@@ -93,7 +93,7 @@
 + (CGFloat)heightForBubbleWithMessageModel:(AgoraMessageModel *)model
 {
     CGSize retSize;
-    VideoMessageBody *body = (VideoMessageBody*)model.message.body;
+    AgoraChatVideoMessageBody *body = (AgoraChatVideoMessageBody*)model.message.body;
     if (model.message.ext) {
         retSize = CGSizeMake(0, 0);
     } else {

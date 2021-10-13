@@ -11,38 +11,38 @@
 
 @interface AgoraSDKHelper : NSObject
 
-+ (Message *)initTextMessage:(NSString *)text
++ (AgoraChatMessage *)initTextMessage:(NSString *)text
                             to:(NSString *)to
                       chatType:(AgoraChatType)chatType
                     messageExt:(NSDictionary *)messageExt;
 
-+ (Message *)initCmdMessage:(NSString *)action
++ (AgoraChatMessage *)initCmdMessage:(NSString *)action
                            to:(NSString *)to
                      chatType:(AgoraChatType)chatType
                    messageExt:(NSDictionary *)messageExt
                     cmdParams:(NSArray *)params;
 
-+ (Message *)initLocationMessageWithLatitude:(double)latitude
++ (AgoraChatMessage *)initLocationMessageWithLatitude:(double)latitude
                                      longitude:(double)longitude
                                        address:(NSString *)address
                                             to:(NSString *)to
                                       chatType:(AgoraChatType)chatType
                                     messageExt:(NSDictionary *)messageExt;
 
-+ (Message *)initImageData:(NSData *)imageData
++ (AgoraChatMessage *)initImageData:(NSData *)imageData
                  displayName:(NSString *)displayName
                           to:(NSString *)receiver
                     chatType:(AgoraChatType)chatType
                   messageExt:(NSDictionary *)messageExt;
 
-+ (Message *)initVoiceMessageWithLocalPath:(NSString *)localPath
++ (AgoraChatMessage *)initVoiceMessageWithLocalPath:(NSString *)localPath
                                  displayName:(NSString *)displayName
                                     duration:(NSInteger)duration
                                           to:(NSString *)receiver
                                     chatType:(AgoraChatType)chatType
                                   messageExt:(NSDictionary *)messageExt;
 
-+ (Message *)initVideoMessageWithLocalURL:(NSURL *)url
++ (AgoraChatMessage *)initVideoMessageWithLocalURL:(NSURL *)url
                                 displayName:(NSString *)displayName
                                    duration:(NSInteger)duration
                                          to:(NSString *)receiver

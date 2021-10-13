@@ -22,7 +22,7 @@ end
     pod 'MJRefresh'
     pod 'Masonry'
     pod 'WHToast'
-    pod 'AgoraChat'
+#    pod 'AgoraChat'
 
 end
 

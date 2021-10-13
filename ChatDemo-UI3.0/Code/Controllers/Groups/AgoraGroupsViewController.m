@@ -66,7 +66,7 @@
 - (void)loadGroupsFromCache {
     NSArray *myGroups = [[AgoraChatClient sharedClient].groupManager getJoinedGroups];
     [self.dataArray removeAllObjects];
-    for (AgoraGroup *group in myGroups) {
+    for (AgoraChatGroup *group in myGroups) {
         AgoraGroupModel *model = [[AgoraGroupModel alloc] initWithObject:group];
         if (model) {
             [self.dataArray addObject:model];
@@ -103,7 +103,7 @@
 - (void)refreshGroupList:(NSNotification *)notification {
     NSArray *groupList = [[AgoraChatClient sharedClient].groupManager getJoinedGroups];
     [self.dataArray removeAllObjects];
-    for (AgoraGroup *group in groupList) {
+    for (AgoraChatGroup *group in groupList) {
         AgoraGroupModel *model = [[AgoraGroupModel alloc] initWithObject:group];
         if (model) {
             [self.dataArray addObject:model];
@@ -146,13 +146,13 @@
 - (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath {
     [tableView deselectRowAtIndexPath:indexPath animated:YES];
     AgoraGroupModel *model = self.dataArray[indexPath.row];
-    AgoraConversation *conversation = [[AgoraChatClient sharedClient].chatManager getConversation:model.hyphenateId type:AgoraConversationTypeGroupChat createIfNotExist:YES];
+    AgoraChatConversation *conversation = [[AgoraChatClient sharedClient].chatManager getConversation:model.hyphenateId type:AgoraChatConversationTypeGroupChat createIfNotExist:YES];
     NSMutableDictionary *ext = [NSMutableDictionary dictionaryWithDictionary:conversation.ext];
     [ext setObject:model.subject forKey:@"subject"];
     [ext setObject:[NSNumber numberWithBool:model.group.isPublic] forKey:@"isPublic"];
     conversation.ext = ext;
     
-    AgoraChatViewController *chatViewController = [[AgoraChatViewController alloc] initWithConversationId:model.hyphenateId conversationType:AgoraConversationTypeGroupChat];
+    AgoraChatViewController *chatViewController = [[AgoraChatViewController alloc] initWithConversationId:model.hyphenateId conversationType:AgoraChatConversationTypeGroupChat];
     [self.navigationController pushViewController:chatViewController animated:YES];
 }
 
@@ -182,12 +182,12 @@
         [MBProgressHUD showHUDAddedTo:[UIApplication sharedApplication].keyWindow animated:YES];
     }
     
-    [[AgoraChatClient sharedClient].groupManager getJoinedGroupsFromServerWithPage:self.page pageSize:50 completion:^(NSArray *aList, AgoraError *aError) {
+    [[AgoraChatClient sharedClient].groupManager getJoinedGroupsFromServerWithPage:self.page pageSize:50 completion:^(NSArray *aList, AgoraChatError *aError) {
         [MBProgressHUD hideHUDForView:[UIApplication sharedApplication].keyWindow animated:YES];
         [weakSelf tableViewDidFinishTriggerHeader:aIsHeader];
         if (!aError && aList.count > 0) {
             [weakSelf.dataArray removeAllObjects];
-            for (AgoraGroup *group in aList) {
+            for (AgoraChatGroup *group in aList) {
                 AgoraGroupModel *model = [[AgoraGroupModel alloc] initWithObject:group];
                 if (model) {
                     [weakSelf.dataArray addObject:model];

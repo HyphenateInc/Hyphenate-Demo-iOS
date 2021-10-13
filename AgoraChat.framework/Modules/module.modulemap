@@ -1,0 +1,6 @@
+framework module AgoraChat {
+  umbrella header "AgoraChat.h"
+
+  export *
+  module * { export * }
+}

@@ -28,7 +28,7 @@
     {
         _myNickName = newName;
         
-        [AgoraUserInfoManagerHelper updateUserInfoWithUserId:newName withType:AgoraUserInfoTypeNickName completion:^(AgoraUserInfo * _Nonnull aUserInfo) {
+        [AgoraChatUserInfoManagerHelper updateUserInfoWithUserId:newName withType:AgoraChatUserInfoTypeNickName completion:^(AgoraChatUserInfo * _Nonnull aUserInfo) {
             dispatch_async(dispatch_get_main_queue(), ^{
                 if (self.callBack) {
                     self.callBack(newName);

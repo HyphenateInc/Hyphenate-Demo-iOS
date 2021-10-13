@@ -55,7 +55,7 @@ typedef NS_ENUM(NSUInteger, AgoraFetchPublicGroupState) {
 #pragma mark - Load Data
 - (void)fetchApplyedGroups {
     NSArray *joinedGroups = [[AgoraChatClient sharedClient].groupManager getJoinedGroups];
-    for (AgoraGroup *group in joinedGroups) {
+    for (AgoraChatGroup *group in joinedGroups) {
         [self.applyedGroups addObject:group.groupId];
     }
 }
@@ -64,7 +64,7 @@ typedef NS_ENUM(NSUInteger, AgoraFetchPublicGroupState) {
 
     __weak typeof(self) weakSelf = self;
     [MBProgressHUD showHUDAddedTo:[UIApplication sharedApplication].keyWindow animated:YES];
-    [[AgoraChatClient sharedClient].groupManager getPublicGroupsFromServerWithCursor:_cursor pageSize:KPUBLICGROUP_PAGE_COUNT completion:^(AgoraCursorResult *aResult, AgoraError *aError) {
+    [[AgoraChatClient sharedClient].groupManager getPublicGroupsFromServerWithCursor:_cursor pageSize:KPUBLICGROUP_PAGE_COUNT completion:^(AgoraChatCursorResult *aResult, AgoraChatError *aError) {
         [MBProgressHUD hideHUDForView:[UIApplication sharedApplication].keyWindow animated:YES];
         [self tableViewDidFinishTriggerHeader:YES];
         
@@ -84,7 +84,7 @@ typedef NS_ENUM(NSUInteger, AgoraFetchPublicGroupState) {
 
 - (NSArray *)getGroupsWithResultList:(NSArray *)list {
     NSMutableArray *tGroups = NSMutableArray.new;
-    for (AgoraGroup *group in list) {
+    for (AgoraChatGroup *group in list) {
         AgoraGroupModel *model = [[AgoraGroupModel alloc] initWithObject:group];
         if (model) {
             [tGroups addObject:model];
@@ -115,7 +115,7 @@ typedef NS_ENUM(NSUInteger, AgoraFetchPublicGroupState) {
     [MBProgressHUD showHUDAddedTo:[UIApplication sharedApplication].keyWindow
                          animated:YES];
     [[AgoraChatClient sharedClient].groupManager joinPublicGroup:groupId
-                                               completion:^(AgoraGroup *aGroup, AgoraError *aError) {
+                                               completion:^(AgoraChatGroup *aGroup, AgoraChatError *aError) {
                                                    [MBProgressHUD hideAllHUDsForView:[UIApplication sharedApplication].keyWindow animated:YES];
                                                    if (!aError) {
                                                        [weakSelf updateUI];
@@ -134,7 +134,7 @@ typedef NS_ENUM(NSUInteger, AgoraFetchPublicGroupState) {
                          animated:YES];
     [[AgoraChatClient sharedClient].groupManager requestToJoinPublicGroup:groupId
                                                            message:message
-                                                        completion:^(AgoraGroup *aGroup, AgoraError *aError) {
+                                                        completion:^(AgoraChatGroup *aGroup, AgoraChatError *aError) {
                                                             if (!aError) {
                                                                 [MBProgressHUD hideAllHUDsForView:[UIApplication sharedApplication].keyWindow animated:YES];
 
@@ -221,7 +221,7 @@ typedef NS_ENUM(NSUInteger, AgoraFetchPublicGroupState) {
         NSUInteger index = [self.publicGroups indexOfObject:groupModel];
         self.selectIndexPath = [NSIndexPath indexPathForRow:index inSection:0];
     }
-    if (groupModel.group.setting.style == AgoraGroupStylePublicOpenJoin) {
+    if (groupModel.group.setting.style == AgoraChatGroupStylePublicOpenJoin) {
         [self joinToPublicGroup:groupModel.group.groupId];
     }
     else {

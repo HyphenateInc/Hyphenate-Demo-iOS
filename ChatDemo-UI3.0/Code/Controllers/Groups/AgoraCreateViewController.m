@@ -152,7 +152,7 @@
 //    }
 //    __weak typeof(self.publicGroupsVc) weakVc = self.publicGroupsVc;
 //    WEAK_SELF
-//    [[AgoraChatClient sharedClient].groupManager searchPublicGroupWithId:searchBar.text completion:^(AgoraGroup *aGroup, AgoraError *aError) {
+//    [[AgoraChatClient sharedClient].groupManager searchPublicGroupWithId:searchBar.text completion:^(AgoraChatGroup *aGroup, AgoraChatError *aError) {
 //
 //        AgoraPublicGroupsViewController *strongVc = weakVc;
 //        dispatch_async(dispatch_get_main_queue(), ^(){

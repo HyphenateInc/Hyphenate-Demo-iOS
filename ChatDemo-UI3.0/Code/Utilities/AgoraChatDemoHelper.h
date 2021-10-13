@@ -14,7 +14,7 @@
 #import "AgoraChatsViewController.h"
 #import "AgoraSettingsViewController.h"
 
-@interface AgoraChatDemoHelper : NSObject<AgoraChatClientDelegate, AgoraContactManagerDelegate, AgoraGroupManagerDelegate, AgoraChatManagerDelegate, AgoraChatroomManagerDelegate>
+@interface AgoraChatDemoHelper : NSObject<AgoraChatClientDelegate, AgoraChatContactManagerDelegate, AgoraChatGroupManagerDelegate, AgoraChatManagerDelegate, AgoraChatroomManagerDelegate>
 
 @property (nonatomic, weak) AgoraContactsViewController *contactsVC;
 

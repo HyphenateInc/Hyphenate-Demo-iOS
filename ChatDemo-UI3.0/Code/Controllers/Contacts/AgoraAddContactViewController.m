@@ -133,7 +133,7 @@
     [MBProgressHUD showHUDAddedTo:self.navigationController.view animated:YES];
     [[AgoraChatClient sharedClient].contactManager addContact:contactName
                                                message:requestMessage
-                                            completion:^(NSString *aUsername, AgoraError *aError) {
+                                            completion:^(NSString *aUsername, AgoraChatError *aError) {
                                                 [MBProgressHUD hideHUDForView:weakSelf.navigationController.view animated:YES];
                                                 if (!aError) {
                                                     weakSelf.textField.text = @"";

@@ -15,7 +15,7 @@
 @property (nonatomic, strong) NSString *subject;
 @property (nonatomic, strong) NSString *avatarURLPath;
 @property (nonatomic, strong, readonly) UIImage *defaultAvatarImage;
-@property (nonatomic, strong) AgoraGroup *group;
+@property (nonatomic, strong) AgoraChatGroup *group;
 
 - (instancetype)initWithObject:(NSObject *)obj;
 @end

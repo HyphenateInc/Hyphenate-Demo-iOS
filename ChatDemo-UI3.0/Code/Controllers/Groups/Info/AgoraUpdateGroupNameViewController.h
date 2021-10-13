@@ -12,7 +12,7 @@
 
 #import <UIKit/UIKit.h>
 
-#import <AgoraChat/AgoraGroup.h>
+#import <AgoraChat/AgoraChatGroup.h>
 
 @interface AgoraUpdateGroupNameViewController : UIViewController
 @property (nonatomic,copy) void (^updateGroupNameBlock)(NSString *groupName);

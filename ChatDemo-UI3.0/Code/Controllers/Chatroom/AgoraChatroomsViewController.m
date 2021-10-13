@@ -103,12 +103,12 @@
     [tableView deselectRowAtIndexPath:indexPath animated:YES];
     AgoraChatroom *chatroom = self.dataArray[indexPath.row];
     
-    AgoraConversation *conversation = [[AgoraChatClient sharedClient].chatManager getConversation:chatroom.chatroomId type:AgoraConversationTypeChatRoom createIfNotExist:YES];
+    AgoraChatConversation *conversation = [[AgoraChatClient sharedClient].chatManager getConversation:chatroom.chatroomId type:AgoraChatConversationTypeChatRoom createIfNotExist:YES];
     NSMutableDictionary *ext = [NSMutableDictionary dictionaryWithDictionary:conversation.ext];
     [ext setObject:chatroom.subject forKey:@"subject"];
     conversation.ext = ext;
     
-    AgoraChatViewController *chatViewController = [[AgoraChatViewController alloc] initWithConversationId:chatroom.chatroomId conversationType:AgoraConversationTypeChatRoom];
+    AgoraChatViewController *chatViewController = [[AgoraChatViewController alloc] initWithConversationId:chatroom.chatroomId conversationType:AgoraChatConversationTypeChatRoom];
     chatViewController.title = chatroom.subject;
     [self.navigationController pushViewController:chatViewController animated:YES];
 }
@@ -153,7 +153,7 @@
 {
     __weak typeof(self) weakSelf = self;
     [MBProgressHUD showHUDAddedTo:self.view animated:YES];
-    [[AgoraChatClient sharedClient].roomManager getChatroomsFromServerWithPage:self.page pageSize:50 completion:^(AgoraPageResult *aResult, AgoraError *aError) {
+    [[AgoraChatClient sharedClient].roomManager getChatroomsFromServerWithPage:self.page pageSize:50 completion:^(AgoraChatPageResult *aResult, AgoraChatError *aError) {
         [MBProgressHUD hideHUDForView:self.view animated:YES];
         [weakSelf tableViewDidFinishTriggerHeader:aIsHeader];
         

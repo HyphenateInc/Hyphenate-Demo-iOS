@@ -124,7 +124,7 @@ typedef enum : NSUInteger {
 
 
 - (IBAction)chatAction:(id)sender {
-    AgoraChatViewController *chatViewController = [[AgoraChatViewController alloc] initWithConversationId:_model.hyphenateId conversationType:AgoraConversationTypeChat];
+    AgoraChatViewController *chatViewController = [[AgoraChatViewController alloc] initWithConversationId:_model.hyphenateId conversationType:AgoraChatConversationTypeChat];
     [self.navigationController pushViewController:chatViewController animated:YES];
 }
 
@@ -242,7 +242,7 @@ typedef enum : NSUInteger {
 - (void)deleteContact {
     
     [MBProgressHUD showHUDAddedTo:self.view animated:YES];
-    [[AgoraChatClient sharedClient].contactManager deleteContact:_model.hyphenateId isDeleteConversation:YES completion:^(NSString *aUsername, AgoraError *aError) {
+    [[AgoraChatClient sharedClient].contactManager deleteContact:_model.hyphenateId isDeleteConversation:YES completion:^(NSString *aUsername, AgoraChatError *aError) {
         
         [MBProgressHUD hideAllHUDsForView:self.view animated:YES];
         
@@ -259,7 +259,7 @@ typedef enum : NSUInteger {
 }
 
 - (void)addBlackList {
-    [[AgoraChatClient sharedClient].contactManager addUserToBlackList:_model.hyphenateId completion:^(NSString *aUsername, AgoraError *aError) {
+    [[AgoraChatClient sharedClient].contactManager addUserToBlackList:_model.hyphenateId completion:^(NSString *aUsername, AgoraChatError *aError) {
         if ((!aError)) {
             if (self.addBlackListBlock) {
                 self.addBlackListBlock();

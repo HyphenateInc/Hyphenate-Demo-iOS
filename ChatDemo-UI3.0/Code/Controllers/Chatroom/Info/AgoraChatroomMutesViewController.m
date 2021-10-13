@@ -99,7 +99,7 @@
 
         [self showHudInView:self.view hint:NSLocalizedString(@"hud.wait", @"Pleae wait...")];
         __weak typeof(self) weakSelf = self;
-        [[AgoraChatClient sharedClient].roomManager unmuteMembers:@[userName] fromChatroom:weakSelf.chatroom.chatroomId completion:^(AgoraChatroom *aChatroom, AgoraError *aError) {
+        [[AgoraChatClient sharedClient].roomManager unmuteMembers:@[userName] fromChatroom:weakSelf.chatroom.chatroomId completion:^(AgoraChatroom *aChatroom, AgoraChatError *aError) {
             [weakSelf hideHud];
             if (!aError) {
                 weakSelf.chatroom = aChatroom;
@@ -135,7 +135,7 @@
     NSInteger pageSize = 50;
     __weak typeof(self) weakSelf = self;
     [self showHudInView:self.view hint:NSLocalizedString(@"hud.load", @"Load data...")];
-    [[AgoraChatClient sharedClient].roomManager getChatroomMuteListFromServerWithId:self.chatroom.chatroomId pageNumber:aPage pageSize:pageSize completion:^(NSArray *aList, AgoraError *aError) {
+    [[AgoraChatClient sharedClient].roomManager getChatroomMuteListFromServerWithId:self.chatroom.chatroomId pageNumber:aPage pageSize:pageSize completion:^(NSArray *aList, AgoraChatError *aError) {
         [weakSelf hideHud];
         [weakSelf tableViewDidFinishTriggerHeader:aIsHeader];
         

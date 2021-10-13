@@ -72,7 +72,7 @@ static AgoraChatDemoHelper *helper = nil;
 
 #pragma mark - AgoraChatClientDelegate
 
-- (void)autoLoginDidCompleteWithError:(AgoraError *)aError {
+- (void)autoLoginDidCompleteWithError:(AgoraChatError *)aError {
     if (!aError) {
         [_contactsVC reloadGroupNotifications];
         [_contactsVC reloadContactRequests];
@@ -175,14 +175,14 @@ static AgoraChatDemoHelper *helper = nil;
     [_contactsVC reloadContactRequests];
 }
 
-#pragma mark - AgoraGroupManagerDelegate
+#pragma mark - AgoraChatGroupManagerDelegate
 
-- (void)didLeaveGroup:(AgoraGroup *)aGroup
-               reason:(AgoraGroupLeaveReason)aReason {
+- (void)didLeaveGroup:(AgoraChatGroup *)aGroup
+               reason:(AgoraChatGroupLeaveReason)aReason {
     NSString *msgstr = nil;
-    if (aReason == AgoraGroupLeaveReasonBeRemoved) {
+    if (aReason == AgoraChatGroupLeaveReasonBeRemoved) {
         msgstr = [NSString stringWithFormat:@"Your are kicked out from group: %@ [%@]", aGroup.subject, aGroup.groupId];
-    } else if (aReason == AgoraGroupLeaveReasonDestroyed) {
+    } else if (aReason == AgoraChatGroupLeaveReasonDestroyed) {
         msgstr = [NSString stringWithFormat:@"Group: %@ [%@] is destroyed", aGroup.subject, aGroup.groupId];
     }
     
@@ -209,7 +209,7 @@ static AgoraChatDemoHelper *helper = nil;
     }
 }
 
-- (void)joinGroupRequestDidReceive:(AgoraGroup *)aGroup
+- (void)joinGroupRequestDidReceive:(AgoraChatGroup *)aGroup
                               user:(NSString *)aUsername
                             reason:(NSString *)aReason {
     if (!aGroup || !aUsername) {
@@ -249,7 +249,7 @@ static AgoraChatDemoHelper *helper = nil;
     }
 }
 
-- (void)didJoinGroup:(AgoraGroup *)aGroup
+- (void)didJoinGroup:(AgoraChatGroup *)aGroup
              inviter:(NSString *)aInviter
              message:(NSString *)aMessage
 {
@@ -277,7 +277,7 @@ static AgoraChatDemoHelper *helper = nil;
     [self showAlertWithMessage:aReason];
 }
 
-- (void)joinGroupRequestDidApprove:(AgoraGroup *)aGroup
+- (void)joinGroupRequestDidApprove:(AgoraChatGroup *)aGroup
 {
     NSString *msgstr = [NSString stringWithFormat:NSLocalizedString(@"group.agreedAndJoined", @"agreed to join the group of \'%@\'"), aGroup.subject];
     [self showAlertWithMessage:msgstr];
@@ -291,7 +291,7 @@ static AgoraChatDemoHelper *helper = nil;
         return;
     }
 
-    [[AgoraChatClient sharedClient].groupManager getGroupSpecificationFromServerWithId:aGroupId completion:^(AgoraGroup *aGroup, AgoraError *aError) {
+    [[AgoraChatClient sharedClient].groupManager getGroupSpecificationFromServerWithId:aGroupId completion:^(AgoraChatGroup *aGroup, AgoraChatError *aError) {
         if (![[AgoraApplyManager defaultManager] isExistingRequest:aInviter
                                                         groupId:aGroupId
                                                      applyStyle:AgoraApplyStyle_groupInvitation])
@@ -316,7 +316,7 @@ static AgoraChatDemoHelper *helper = nil;
     }];
 }
 
-- (void)groupInvitationDidDecline:(AgoraGroup *)aGroup
+- (void)groupInvitationDidDecline:(AgoraChatGroup *)aGroup
                           invitee:(NSString *)aInvitee
                            reason:(NSString *)aReason
 {
@@ -325,7 +325,7 @@ static AgoraChatDemoHelper *helper = nil;
     [alertView show];
 }
 
-- (void)groupInvitationDidAccept:(AgoraGroup *)aGroup
+- (void)groupInvitationDidAccept:(AgoraChatGroup *)aGroup
                          invitee:(NSString *)aInvitee
 {
     [[NSNotificationCenter defaultCenter] postNotificationName:KAgora_REFRESH_GROUP_INFO object:aGroup];
@@ -334,7 +334,7 @@ static AgoraChatDemoHelper *helper = nil;
     [alertView show];
 }
 
-- (void)groupMuteListDidUpdate:(AgoraGroup *)aGroup
+- (void)groupMuteListDidUpdate:(AgoraChatGroup *)aGroup
              addedMutedMembers:(NSArray *)aMutedMembers
                     muteExpire:(NSInteger)aMuteExpire
 {
@@ -349,7 +349,7 @@ static AgoraChatDemoHelper *helper = nil;
     [alertView show];
 }
 
-- (void)groupMuteListDidUpdate:(AgoraGroup *)aGroup
+- (void)groupMuteListDidUpdate:(AgoraChatGroup *)aGroup
            removedMutedMembers:(NSArray *)aMutedMembers
 {
     [[NSNotificationCenter defaultCenter] postNotificationName:KAgora_REFRESH_GROUP_INFO object:aGroup];
@@ -362,7 +362,7 @@ static AgoraChatDemoHelper *helper = nil;
     [alertView show];
 }
 
-- (void)groupAdminListDidUpdate:(AgoraGroup *)aGroup
+- (void)groupAdminListDidUpdate:(AgoraChatGroup *)aGroup
                      addedAdmin:(NSString *)aAdmin
 {
     [[NSNotificationCenter defaultCenter] postNotificationName:KAgora_REFRESH_GROUP_INFO object:aGroup];
@@ -372,7 +372,7 @@ static AgoraChatDemoHelper *helper = nil;
     [alertView show];
 }
 
-- (void)groupAdminListDidUpdate:(AgoraGroup *)aGroup
+- (void)groupAdminListDidUpdate:(AgoraChatGroup *)aGroup
                    removedAdmin:(NSString *)aAdmin
 {
     [[NSNotificationCenter defaultCenter] postNotificationName:KAgora_REFRESH_GROUP_INFO object:aGroup];
@@ -382,7 +382,7 @@ static AgoraChatDemoHelper *helper = nil;
     [alertView show];
 }
 
-- (void)groupOwnerDidUpdate:(AgoraGroup *)aGroup
+- (void)groupOwnerDidUpdate:(AgoraChatGroup *)aGroup
                    newOwner:(NSString *)aNewOwner
                    oldOwner:(NSString *)aOldOwner
 {
@@ -393,7 +393,7 @@ static AgoraChatDemoHelper *helper = nil;
     [alertView show];
 }
 
-- (void)userDidJoinGroup:(AgoraGroup *)aGroup
+- (void)userDidJoinGroup:(AgoraChatGroup *)aGroup
                     user:(NSString *)aUsername
 {
     [[NSNotificationCenter defaultCenter] postNotificationName:KAgora_REFRESH_GROUP_INFO object:aGroup];
@@ -403,7 +403,7 @@ static AgoraChatDemoHelper *helper = nil;
     [alertView show];
 }
 
-- (void)userDidLeaveGroup:(AgoraGroup *)aGroup
+- (void)userDidLeaveGroup:(AgoraChatGroup *)aGroup
                      user:(NSString *)aUsername
 {
     [[NSNotificationCenter defaultCenter] postNotificationName:KAgora_REFRESH_GROUP_INFO object:aGroup];
@@ -413,7 +413,7 @@ static AgoraChatDemoHelper *helper = nil;
     [alertView show];
 }
 
-- (void)groupAnnouncementDidUpdate:(AgoraGroup *)aGroup announcement:(NSString *)aAnnouncement
+- (void)groupAnnouncementDidUpdate:(AgoraChatGroup *)aGroup announcement:(NSString *)aAnnouncement
 {
     [[NSNotificationCenter defaultCenter] postNotificationName:KAgora_REFRESH_GROUP_INFO object:aGroup];
     

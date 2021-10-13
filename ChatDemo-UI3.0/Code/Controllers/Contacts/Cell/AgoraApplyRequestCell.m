@@ -69,7 +69,7 @@
     switch (_model.style) {
         case AgoraApplyStyle_contact:
         {
-            [[AgoraChatClient sharedClient].contactManager declineFriendRequestFromUser:_model.applyHyphenateId completion:^(NSString *aUsername, AgoraError *aError) {
+            [[AgoraChatClient sharedClient].contactManager declineFriendRequestFromUser:_model.applyHyphenateId completion:^(NSString *aUsername, AgoraChatError *aError) {
                 [weakSelf declineApplyFinished:aError];
             }];
 
@@ -77,14 +77,14 @@
         }
         case AgoraApplyStyle_joinGroup:
         {
-            [[AgoraChatClient sharedClient].groupManager declineJoinGroupRequest:_model.groupId sender:_model.applyHyphenateId reason:nil completion:^(AgoraGroup *aGroup, AgoraError *aError) {
+            [[AgoraChatClient sharedClient].groupManager declineJoinGroupRequest:_model.groupId sender:_model.applyHyphenateId reason:nil completion:^(AgoraChatGroup *aGroup, AgoraChatError *aError) {
                 [weakSelf declineApplyFinished:aError];
             }];
             break;
         }
         default:
         {
-            [[AgoraChatClient sharedClient].groupManager declineGroupInvitation:_model.groupId inviter:_model.applyHyphenateId reason:nil completion:^(AgoraError *aError) {
+            [[AgoraChatClient sharedClient].groupManager declineGroupInvitation:_model.groupId inviter:_model.applyHyphenateId reason:nil completion:^(AgoraChatError *aError) {
                 [weakSelf declineApplyFinished:aError];
             }];
             break;
@@ -99,21 +99,21 @@
     switch (_model.style) {
         case AgoraApplyStyle_contact:
         {
-            [[AgoraChatClient sharedClient].contactManager approveFriendRequestFromUser:_model.applyHyphenateId completion:^(NSString *aUsername, AgoraError *aError) {
+            [[AgoraChatClient sharedClient].contactManager approveFriendRequestFromUser:_model.applyHyphenateId completion:^(NSString *aUsername, AgoraChatError *aError) {
                 [weakSelf acceptApplyFinished:aError];
             }];
             break;
         }
         case AgoraApplyStyle_joinGroup:
         {
-            [[AgoraChatClient sharedClient].groupManager approveJoinGroupRequest:_model.groupId sender:_model.applyHyphenateId completion:^(AgoraGroup *aGroup, AgoraError *aError) {
+            [[AgoraChatClient sharedClient].groupManager approveJoinGroupRequest:_model.groupId sender:_model.applyHyphenateId completion:^(AgoraChatGroup *aGroup, AgoraChatError *aError) {
                 [weakSelf acceptApplyFinished:aError];
             }];
             break;
         }
         default:
         {
-            [[AgoraChatClient sharedClient].groupManager acceptInvitationFromGroup:_model.groupId inviter:_model.applyHyphenateId completion:^(AgoraGroup *aGroup, AgoraError *aError) {
+            [[AgoraChatClient sharedClient].groupManager acceptInvitationFromGroup:_model.groupId inviter:_model.applyHyphenateId completion:^(AgoraChatGroup *aGroup, AgoraChatError *aError) {
                 [weakSelf acceptApplyFinished:aError];
             }];
             break;
@@ -121,7 +121,7 @@
     }
 }
 
-- (void)declineApplyFinished:(AgoraError *)error {
+- (void)declineApplyFinished:(AgoraChatError *)error {
     [MBProgressHUD hideAllHUDsForView:[UIApplication sharedApplication].keyWindow animated:YES];
     if (!error) {
         [[AgoraApplyManager defaultManager] removeApplyRequest:_model];
@@ -135,7 +135,7 @@
     }
 }
 
-- (void)acceptApplyFinished:(AgoraError *)error {
+- (void)acceptApplyFinished:(AgoraChatError *)error {
     [MBProgressHUD hideAllHUDsForView:[UIApplication sharedApplication].keyWindow animated:YES];
     if (!error) {
         [[AgoraApplyManager defaultManager] removeApplyRequest:_model];

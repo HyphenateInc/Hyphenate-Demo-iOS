@@ -65,7 +65,7 @@
     {
         _currentDisplayName = newDisplay;
     
-        [[AgoraChatClient sharedClient] updatePushNotifiationDisplayName:_currentDisplayName completion:^(NSString *aDisplayName, AgoraError *aError) {}];
+        [[AgoraChatClient sharedClient] updatePushNotifiationDisplayName:_currentDisplayName completion:^(NSString *aDisplayName, AgoraChatError *aError) {}];
         if (self.callBack) {
             self.callBack(_currentDisplayName);
         }

@@ -46,7 +46,7 @@
     }
             
     // init HyphenateSDK
-    AgoraOptions *options = [AgoraOptions optionsWithAppkey:MeiDongAppKey];
+    AgoraChatOptions *options = [AgoraChatOptions optionsWithAppkey:MeiDongAppKey];
     
     // Hyphenate cert keys
     NSString *apnsCertName = nil;
@@ -63,6 +63,7 @@
     [options setUsingHttpsOnly:YES];
     
     [[AgoraChatClient sharedClient] initializeSDKWithOptions:options];
+    
     
     [[NSNotificationCenter defaultCenter] addObserver:self
                                              selector:@selector(loginStateChange:)
@@ -233,7 +234,7 @@
 
 #pragma mark - AgoraChatClientDelegate
 
-- (void)autoLoginDidCompleteWithError:(AgoraError *)aError
+- (void)autoLoginDidCompleteWithError:(AgoraChatError *)aError
 {
 #if ChatDemo_DEBUG
     NSString *alertMsg = aError == nil ? NSLocalizedString(@"login.endAutoLogin.succeed", @"Automatic login succeed") : NSLocalizedString(@"login.endAutoLogin.failure", @"Automatic login failed");

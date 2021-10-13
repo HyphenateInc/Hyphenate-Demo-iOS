@@ -30,23 +30,23 @@
     NSMutableArray *sortArray = NSMutableArray.new;
     dispatch_semaphore_t sem = dispatch_semaphore_create(0);
     NSMutableArray *userInfos = NSMutableArray.new;
-    [AgoraUserInfoManagerHelper fetchUserInfoWithUserIds:contacts completion:^(NSDictionary * _Nonnull userInfoDic) {
+    [AgoraChatUserInfoManagerHelper fetchUserInfoWithUserIds:contacts completion:^(NSDictionary * _Nonnull userInfoDic) {
         for (int i = 0; i< contacts.count; ++i) {
-            AgoraUserInfo *userInfo = userInfoDic[contacts[i]];
+            AgoraChatUserInfo *userInfo = userInfoDic[contacts[i]];
             if (userInfo) {
                 [userInfos addObject:userInfo];
             }
         }
     
         [userInfos sortUsingComparator:^NSComparisonResult(id  _Nonnull obj1, id  _Nonnull obj2) {
-            AgoraUserInfo *usr1 = (AgoraUserInfo *)obj1;
-            AgoraUserInfo *usr2 = (AgoraUserInfo *)obj2;
+            AgoraChatUserInfo *usr1 = (AgoraChatUserInfo *)obj1;
+            AgoraChatUserInfo *usr2 = (AgoraChatUserInfo *)obj2;
 
             return [usr1.nickName caseInsensitiveCompare:usr2.nickName];
         }];
         
         for (int k = 0; k < userInfos.count; ++k) {
-            AgoraUserInfo *userInfo = userInfos[k];
+            AgoraChatUserInfo *userInfo = userInfos[k];
             if (userInfo) {
                 [sortArray addObject:userInfo.userId];
             }

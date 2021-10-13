@@ -12,8 +12,8 @@
 @interface AgoraConversationModel : NSObject
 
 @property (nonatomic, copy) NSString* title;
-@property (nonatomic, strong) AgoraConversation *conversation;
+@property (nonatomic, strong) AgoraChatConversation *conversation;
 
-- (instancetype)initWithConversation:(AgoraConversation*)conversation;
+- (instancetype)initWithConversation:(AgoraChatConversation*)conversation;
 
 @end

@@ -15,13 +15,13 @@
 
 @interface AgoraGroupMutesViewController ()
 
-@property (nonatomic, strong) AgoraGroup *group;
+@property (nonatomic, strong) AgoraChatGroup *group;
 
 @end
 
 @implementation AgoraGroupMutesViewController
 
-- (instancetype)initWithGroup:(AgoraGroup *)aGroup
+- (instancetype)initWithGroup:(AgoraChatGroup *)aGroup
 {
     self = [super init];
     if (self) {
@@ -101,7 +101,7 @@
         
         __weak typeof(self) weakSelf = self;
         dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), ^{
-            AgoraError *error = nil;
+            AgoraChatError *error = nil;
             weakSelf.group = [[AgoraChatClient sharedClient].groupManager unmuteMembers:@[userName] fromGroup:weakSelf.group.groupId error:&error];
             
             dispatch_async(dispatch_get_main_queue(), ^{
@@ -140,7 +140,7 @@
     NSInteger pageSize = 50;
     __weak typeof(self) weakSelf = self;
     [self showHudInView:self.view hint:NSLocalizedString(@"hud.load", @"Load data...")];
-    [[AgoraChatClient sharedClient].groupManager getGroupMuteListFromServerWithId:self.group.groupId pageNumber:self.page pageSize:pageSize completion:^(NSArray *aMembers, AgoraError *aError) {
+    [[AgoraChatClient sharedClient].groupManager getGroupMuteListFromServerWithId:self.group.groupId pageNumber:self.page pageSize:pageSize completion:^(NSArray *aMembers, AgoraChatError *aError) {
         [weakSelf hideHud];
         [weakSelf tableViewDidFinishTriggerHeader:aIsHeader];
         if (!aError) {

@@ -27,7 +27,7 @@ static NSString *cellIndentifier = @"AgoraBlackListCellIndentifier";
 
 #pragma mark private method
 - (void)updateUI {
-    [[AgoraChatClient sharedClient].contactManager getBlackListFromServerWithCompletion:^(NSArray *aList, AgoraError *aError) {
+    [[AgoraChatClient sharedClient].contactManager getBlackListFromServerWithCompletion:^(NSArray *aList, AgoraChatError *aError) {
         if (aError == nil) {
             dispatch_async(dispatch_get_main_queue(), ^{
                 [self tableViewDidFinishTriggerHeader:YES];
@@ -44,7 +44,7 @@ static NSString *cellIndentifier = @"AgoraBlackListCellIndentifier";
 }
 
 - (void)unBlockWithUserId:(NSString *)userId {
-    [[AgoraChatClient sharedClient].contactManager removeUserFromBlackList:userId completion:^(NSString *aUsername, AgoraError *aError) {
+    [[AgoraChatClient sharedClient].contactManager removeUserFromBlackList:userId completion:^(NSString *aUsername, AgoraChatError *aError) {
         if (aError == nil) {
             [self updateUI];
         }else {

@@ -9,7 +9,7 @@
 
 #import "AgoraChatroomInfoViewController.h"
 
-#import <AgoraChat/AgoraGroup.h>
+#import <AgoraChat/AgoraChatGroup.h>
 #import "UIViewController+HUD.h"
 #import "AgoraAlertView.h"
 #import "AgoraMemberCell.h"
@@ -271,7 +271,7 @@
         return;
     }
     
-    AgoraError *error = nil;
+    AgoraChatError *error = nil;
     
     if (alertView.tag == ALERTVIEW_CHANGE_OWNER) {
         [self showHudInView:self.view hint:NSLocalizedString(@"hud.wait", @"Pleae wait...")];
@@ -338,7 +338,7 @@
 {
     __weak typeof(self) weakSelf = self;
     [self showHudInView:self.view hint:NSLocalizedString(@"chatroom.destroy", @"destroy the chatroom")];
-    [[AgoraChatClient sharedClient].roomManager destroyChatroom:self.chatroom.chatroomId completion:^(AgoraError *aError) {
+    [[AgoraChatClient sharedClient].roomManager destroyChatroom:self.chatroom.chatroomId completion:^(AgoraChatError *aError) {
         [weakSelf hideHud];
         if (aError) {
             [weakSelf showHint:NSLocalizedString(@"chatroom.destroyFail", @"destroy the chatroom failure")];
@@ -355,7 +355,7 @@
 {
     __weak typeof(self) weakSelf = self;
     [self showHudInView:self.view hint:NSLocalizedString(@"chatroom.leave", @"leave the chatroom")];
-    [[AgoraChatClient sharedClient].roomManager leaveChatroom:self.chatroom.chatroomId completion:^(AgoraError *aError) {
+    [[AgoraChatClient sharedClient].roomManager leaveChatroom:self.chatroom.chatroomId completion:^(AgoraChatError *aError) {
         [weakSelf hideHud];
         if (aError) {
             [weakSelf showHint:NSLocalizedString(@"chatroom.leaveFail", @"leave the chatroom failure")];
@@ -375,7 +375,7 @@
         self.chatroom = (AgoraChatroom *)aNotification.object;
     }
     
-    if (self.chatroom.permissionType == AgoraGroupPermissionTypeOwner) {
+    if (self.chatroom.permissionType == AgoraChatGroupPermissionTypeOwner) {
         [self.leaveButton removeFromSuperview];
         [self.footerView addSubview:self.destroyButton];
     } else {
@@ -390,7 +390,7 @@
 {
     __weak typeof(self) weakSelf = self;
     [self showHudInView:self.view hint:NSLocalizedString(@"hud.load", @"Load data...")];
-    [[AgoraChatClient sharedClient].roomManager getChatroomSpecificationFromServerWithId:self.chatroomId completion:^(AgoraChatroom *aChatroom, AgoraError *aError) {
+    [[AgoraChatClient sharedClient].roomManager getChatroomSpecificationFromServerWithId:self.chatroomId completion:^(AgoraChatroom *aChatroom, AgoraChatError *aError) {
         [weakSelf hideHud];
         [weakSelf tableViewDidFinishTriggerHeader:YES];
         
@@ -402,7 +402,7 @@
         }
     }];
     
-    [[AgoraChatClient sharedClient].roomManager getChatroomAnnouncementWithId:self.chatroomId completion:^(NSString *aAnnouncement, AgoraError *aError) {
+    [[AgoraChatClient sharedClient].roomManager getChatroomAnnouncementWithId:self.chatroomId completion:^(NSString *aAnnouncement, AgoraChatError *aError) {
         if (!aError) {
             [weakSelf reloadUI:nil];
         }

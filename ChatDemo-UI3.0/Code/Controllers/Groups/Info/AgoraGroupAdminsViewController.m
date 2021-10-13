@@ -16,13 +16,13 @@
 
 @interface AgoraGroupAdminsViewController ()
 
-@property (nonatomic, strong) AgoraGroup *group;
+@property (nonatomic, strong) AgoraChatGroup *group;
 
 @end
 
 @implementation AgoraGroupAdminsViewController
 
-- (instancetype)initWithGroup:(AgoraGroup *)aGroup
+- (instancetype)initWithGroup:(AgoraChatGroup *)aGroup
 {
     self = [super init];
     if (self) {
@@ -97,7 +97,7 @@
 
 - (BOOL)tableView:(UITableView *)tableView canEditRowAtIndexPath:(NSIndexPath *)indexPath
 {
-    if (self.group.permissionType == AgoraGroupPermissionTypeOwner) {
+    if (self.group.permissionType == AgoraChatGroupPermissionTypeOwner) {
         return YES;
     }
     
@@ -138,7 +138,7 @@
     
     __weak typeof(self) weakSelf = self;
     dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), ^{
-        AgoraError *error = nil;
+        AgoraChatError *error = nil;
         if (buttonIndex == 0) { //remove
             weakSelf.group = [[AgoraChatClient sharedClient].groupManager removeOccupants:@[userName] fromGroup:weakSelf.group.groupId error:&error];
         } else if (buttonIndex == 1) { //blacklist
@@ -177,8 +177,8 @@
 - (void)updateUI:(NSNotification *)aNotification
 {
     id obj = aNotification.object;
-    if (obj && [obj isKindOfClass:[AgoraGroup class]]) {
-        self.group = (AgoraGroup *)obj;
+    if (obj && [obj isKindOfClass:[AgoraChatGroup class]]) {
+        self.group = (AgoraChatGroup *)obj;
     }
     
     [self.dataArray removeAllObjects];
@@ -193,8 +193,8 @@
     __weak typeof(self) weakSelf = self;
     [self showHudInView:self.view hint:NSLocalizedString(@"hud.load", @"Load data...")];
     dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), ^(){
-        AgoraError *error = nil;
-        AgoraGroup *group = [[AgoraChatClient sharedClient].groupManager getGroupSpecificationFromServerWithId:weakSelf.group.groupId error:&error];
+        AgoraChatError *error = nil;
+        AgoraChatGroup *group = [[AgoraChatClient sharedClient].groupManager getGroupSpecificationFromServerWithId:weakSelf.group.groupId error:&error];
         dispatch_async(dispatch_get_main_queue(), ^{
             [weakSelf hideHud];
         });

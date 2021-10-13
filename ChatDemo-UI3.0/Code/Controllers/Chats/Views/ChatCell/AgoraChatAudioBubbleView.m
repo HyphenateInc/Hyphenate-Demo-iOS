@@ -87,9 +87,9 @@
 {
     [super setModel:model];
     
-    VoiceMessageBody *body = (VoiceMessageBody*)model.message.body;
+    AgoraChatVoiceMessageBody *body = (AgoraChatVoiceMessageBody*)model.message.body;
     _durationLabel.text = [self formatDuration:body.duration];
-    _durationLabel.textColor = model.message.direction == MessageDirectionSend ? WhiteColor : AlmostBlackColor;
+    _durationLabel.textColor = model.message.direction == AgoraChatMessageDirectionSend ? WhiteColor : AlmostBlackColor;
     
     if (model.isPlaying) {
         [self startPlayAudio];
@@ -102,7 +102,7 @@
 
 - (void)playAudio
 {
-    VoiceMessageBody *body = (VoiceMessageBody*)self.model.message.body;
+    AgoraChatVoiceMessageBody *body = (AgoraChatVoiceMessageBody*)self.model.message.body;
     [_progressView setProgress:_progress animated:YES];
     _progress = _progress + 1/(body.duration/TIMER_TI);
     if (_progress >= 1) {

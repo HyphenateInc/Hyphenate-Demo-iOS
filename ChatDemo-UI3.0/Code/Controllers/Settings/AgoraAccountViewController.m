@@ -28,7 +28,7 @@
 
 @property (nonatomic, copy) NSString *myName;
 
-@property (nonatomic, strong) AgoraUserInfo *userInfo;
+@property (nonatomic, strong) AgoraChatUserInfo *userInfo;
 
 @end
 
@@ -82,7 +82,7 @@
 #pragma mark - Actions
 
 - (void)loadData {
-    [AgoraUserInfoManagerHelper fetchOwnUserInfoCompletion:^(AgoraUserInfo * _Nonnull ownUserInfo) {
+    [AgoraChatUserInfoManagerHelper fetchOwnUserInfoCompletion:^(AgoraChatUserInfo * _Nonnull ownUserInfo) {
             self.userInfo = ownUserInfo;
             self.myName = self.userInfo.nickName ?:self.userInfo.userId;
 
@@ -109,7 +109,7 @@
 {
     [MBProgressHUD showHUDAddedTo:self.view animated:YES];
     WEAK_SELF
-    [[AgoraChatClient sharedClient] logout:YES completion:^(AgoraError *aError) {
+    [[AgoraChatClient sharedClient] logout:YES completion:^(AgoraChatError *aError) {
         
         [MBProgressHUD hideHUDForView:self.view animated:YES];
         if (!aError) {

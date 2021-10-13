@@ -85,8 +85,8 @@
 		7F3E7FA0267B2314009CEAB6 /* UIColor+Util.m in Sources */ = {isa = PBXBuildFile; fileRef = 7F3E7F9F267B2314009CEAB6 /* UIColor+Util.m */; };
 		7F3E7FA3267B4024009CEAB6 /* AgoraGroupOwnerAdminListController.m in Sources */ = {isa = PBXBuildFile; fileRef = 7F3E7FA2267B4024009CEAB6 /* AgoraGroupOwnerAdminListController.m */; };
 		7F663CA1265B9FDA003F74B8 /* AgoraChatToolBar.m in Sources */ = {isa = PBXBuildFile; fileRef = 7F663CA0265B9FDA003F74B8 /* AgoraChatToolBar.m */; };
-		7F663CEA265E5DF7003F74B8 /* AgoraUserInfoManagerHelper.m in Sources */ = {isa = PBXBuildFile; fileRef = 7F663CE9265E5DF7003F74B8 /* AgoraUserInfoManagerHelper.m */; };
-		7F663CF3265F7F86003F74B8 /* AgoraUserInfo+expireTime.m in Sources */ = {isa = PBXBuildFile; fileRef = 7F663CF2265F7F86003F74B8 /* AgoraUserInfo+expireTime.m */; };
+		7F663CEA265E5DF7003F74B8 /* AgoraChatUserInfoManagerHelper.m in Sources */ = {isa = PBXBuildFile; fileRef = 7F663CE9265E5DF7003F74B8 /* AgoraChatUserInfoManagerHelper.m */; };
+		7F663CF3265F7F86003F74B8 /* AgoraChatUserInfo+expireTime.m in Sources */ = {isa = PBXBuildFile; fileRef = 7F663CF2265F7F86003F74B8 /* AgoraChatUserInfo+expireTime.m */; };
 		7F6CC84B26568B4600BA60BB /* AgoraMemberSelectViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 7F6CC84126568B4600BA60BB /* AgoraMemberSelectViewController.xib */; };
 		7F6CC84C26568B4600BA60BB /* AgoraMemberSelectViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 7F6CC84226568B4600BA60BB /* AgoraMemberSelectViewController.m */; };
 		7F6CC84E26568B4600BA60BB /* AgoraCreateNewGroupViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 7F6CC84426568B4600BA60BB /* AgoraCreateNewGroupViewController.m */; };
@@ -166,6 +166,8 @@
 		7F6CC93826568DDF00BA60BB /* AgoraVoiceConverter.mm in Sources */ = {isa = PBXBuildFile; fileRef = 7F6CC93726568DDF00BA60BB /* AgoraVoiceConverter.mm */; };
 		7F6CC93C26568E0F00BA60BB /* AgoraRealtimeSearchUtils.m in Sources */ = {isa = PBXBuildFile; fileRef = 7F6CC93A26568E0F00BA60BB /* AgoraRealtimeSearchUtils.m */; };
 		7F6CC96026575DB200BA60BB /* NSObject+AgoraAlertView.m in Sources */ = {isa = PBXBuildFile; fileRef = 7F6CC95F26575DB200BA60BB /* NSObject+AgoraAlertView.m */; };
+		7F71B3C226DA1BAE009FC5EB /* AgoraChat.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 7F663E06265FD32A003F74B8 /* AgoraChat.framework */; };
+		7F71B3C326DA1BAE009FC5EB /* AgoraChat.framework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = 7F663E06265FD32A003F74B8 /* AgoraChat.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
 		7F94E3BB266FA1BA0010D60F /* AgoraChatsCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 7F94E3BA266FA1BA0010D60F /* AgoraChatsCell.m */; };
 		7FB1588326A18C4300B995F3 /* AgoraChatBaseTextField.m in Sources */ = {isa = PBXBuildFile; fileRef = 7FB1588226A18C4300B995F3 /* AgoraChatBaseTextField.m */; };
 		7FB1589226A19AE300B995F3 /* UITextField+DarkMode.m in Sources */ = {isa = PBXBuildFile; fileRef = 7FB1589126A19AE300B995F3 /* UITextField+DarkMode.m */; };
@@ -447,6 +449,20 @@
 		D2F372AD1DD0755400C726E7 /* Location@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = D2F372AC1DD0755400C726E7 /* Location@2x.png */; };
 /* End PBXBuildFile section */
 
+/* Begin PBXCopyFilesBuildPhase section */
+		7F71B3C426DA1BAE009FC5EB /* Embed Frameworks */ = {
+			isa = PBXCopyFilesBuildPhase;
+			buildActionMask = 2147483647;
+			dstPath = "";
+			dstSubfolderSpec = 10;
+			files = (
+				7F71B3C326DA1BAE009FC5EB /* AgoraChat.framework in Embed Frameworks */,
+			);
+			name = "Embed Frameworks";
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXCopyFilesBuildPhase section */
+
 /* Begin PBXFileReference section */
 		1633BADC43B42D35B0A0969D /* Pods-ChatDemo-UI3.0.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-ChatDemo-UI3.0.debug.xcconfig"; path = "Pods/Target Support Files/Pods-ChatDemo-UI3.0/Pods-ChatDemo-UI3.0.debug.xcconfig"; sourceTree = "<group>"; };
 		3A4BB1AD1ED3DD6F00B07FCA /* AgoraChatroomCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = AgoraChatroomCell.h; sourceTree = "<group>"; };
@@ -576,10 +592,10 @@
 		7F663C9E265B9308003F74B8 /* AgoraChatDemoUIDefine.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = AgoraChatDemoUIDefine.h; sourceTree = "<group>"; };
 		7F663C9F265B9FDA003F74B8 /* AgoraChatToolBar.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = AgoraChatToolBar.h; sourceTree = "<group>"; };
 		7F663CA0265B9FDA003F74B8 /* AgoraChatToolBar.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = AgoraChatToolBar.m; sourceTree = "<group>"; };
-		7F663CE8265E5DF7003F74B8 /* AgoraUserInfoManagerHelper.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = AgoraUserInfoManagerHelper.h; sourceTree = "<group>"; };
-		7F663CE9265E5DF7003F74B8 /* AgoraUserInfoManagerHelper.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = AgoraUserInfoManagerHelper.m; sourceTree = "<group>"; };
-		7F663CF1265F7F86003F74B8 /* AgoraUserInfo+expireTime.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "AgoraUserInfo+expireTime.h"; sourceTree = "<group>"; };
-		7F663CF2265F7F86003F74B8 /* AgoraUserInfo+expireTime.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = "AgoraUserInfo+expireTime.m"; sourceTree = "<group>"; };
+		7F663CE8265E5DF7003F74B8 /* AgoraChatUserInfoManagerHelper.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = AgoraChatUserInfoManagerHelper.h; sourceTree = "<group>"; };
+		7F663CE9265E5DF7003F74B8 /* AgoraChatUserInfoManagerHelper.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = AgoraChatUserInfoManagerHelper.m; sourceTree = "<group>"; };
+		7F663CF1265F7F86003F74B8 /* AgoraChatUserInfo+expireTime.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "AgoraChatUserInfo+expireTime.h"; sourceTree = "<group>"; };
+		7F663CF2265F7F86003F74B8 /* AgoraChatUserInfo+expireTime.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = "AgoraChatUserInfo+expireTime.m"; sourceTree = "<group>"; };
 		7F663E06265FD32A003F74B8 /* AgoraChat.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; path = AgoraChat.framework; sourceTree = "<group>"; };
 		7F6CC84026568B4600BA60BB /* AgoraCreateNewGroupViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = AgoraCreateNewGroupViewController.h; sourceTree = "<group>"; };
 		7F6CC84126568B4600BA60BB /* AgoraMemberSelectViewController.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = AgoraMemberSelectViewController.xib; sourceTree = "<group>"; };
@@ -1047,6 +1063,7 @@
 				D24327EA1DAA395F00EDCDAB /* libopencore-amrwb.a in Frameworks */,
 				D24327E91DAA395F00EDCDAB /* libopencore-amrnb.a in Frameworks */,
 				30E5DE31A68CB65C97673D9B /* libPods-ChatDemo-UI3.0.a in Frameworks */,
+				7F71B3C226DA1BAE009FC5EB /* AgoraChat.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -1653,8 +1670,8 @@
 				7F6CC90426568D8E00BA60BB /* AgoraApplyManager.m */,
 				7F6CC90726568D8E00BA60BB /* AgoraChatDemoHelper.h */,
 				7F6CC90626568D8E00BA60BB /* AgoraChatDemoHelper.m */,
-				7F663CE8265E5DF7003F74B8 /* AgoraUserInfoManagerHelper.h */,
-				7F663CE9265E5DF7003F74B8 /* AgoraUserInfoManagerHelper.m */,
+				7F663CE8265E5DF7003F74B8 /* AgoraChatUserInfoManagerHelper.h */,
+				7F663CE9265E5DF7003F74B8 /* AgoraChatUserInfoManagerHelper.m */,
 				7F6CC90926568D8E00BA60BB /* AgoraColorUtils.h */,
 				7F6CC90826568D8E00BA60BB /* AgoraNotificationNames.h */,
 				7F6CC90B26568D8E00BA60BB /* AgoraRealtimeSearchUtil.h */,
@@ -1663,8 +1680,8 @@
 				7F6CC90C26568D8E00BA60BB /* AgoraSDKHelper.m */,
 				711158FF1DB7278B005158BB /* NSArray+AgoraSortContacts.h */,
 				711159001DB7278B005158BB /* NSArray+AgoraSortContacts.m */,
-				7F663CF1265F7F86003F74B8 /* AgoraUserInfo+expireTime.h */,
-				7F663CF2265F7F86003F74B8 /* AgoraUserInfo+expireTime.m */,
+				7F663CF1265F7F86003F74B8 /* AgoraChatUserInfo+expireTime.h */,
+				7F663CF2265F7F86003F74B8 /* AgoraChatUserInfo+expireTime.m */,
 				7F3E7F9E267B2314009CEAB6 /* UIColor+Util.h */,
 				7F3E7F9F267B2314009CEAB6 /* UIColor+Util.m */,
 				7F0516D226A0118600B2C795 /* CustomBase */,
@@ -2057,7 +2074,7 @@
 				D28344FC1D8FD1D400FD48A9 /* Frameworks */,
 				D28344FD1D8FD1D400FD48A9 /* Resources */,
 				8F507D0BE0F752ED869E3A49 /* [CP] Copy Pods Resources */,
-				550867AAB4FED5E1DC15C670 /* [CP] Embed Pods Frameworks */,
+				7F71B3C426DA1BAE009FC5EB /* Embed Frameworks */,
 			);
 			buildRules = (
 			);
@@ -2458,24 +2475,6 @@
 			shellScript = "diff \"${PODS_PODFILE_DIR_PATH}/Podfile.lock\" \"${PODS_ROOT}/Manifest.lock\" > /dev/null\nif [ $? != 0 ] ; then\n    # print error to STDERR\n    echo \"error: The sandbox is not in sync with the Podfile.lock. Run 'pod install' or update your CocoaPods installation.\" >&2\n    exit 1\nfi\n# This output is used by Xcode 'outputs' to avoid re-running this script phase.\necho \"SUCCESS\" > \"${SCRIPT_OUTPUT_FILE_0}\"\n";
 			showEnvVarsInLog = 0;
 		};
-		550867AAB4FED5E1DC15C670 /* [CP] Embed Pods Frameworks */ = {
-			isa = PBXShellScriptBuildPhase;
-			buildActionMask = 2147483647;
-			files = (
-			);
-			inputPaths = (
-				"${PODS_ROOT}/Target Support Files/Pods-ChatDemo-UI3.0/Pods-ChatDemo-UI3.0-frameworks.sh",
-				"${PODS_ROOT}/AgoraChat/AgoraChat.framework",
-			);
-			name = "[CP] Embed Pods Frameworks";
-			outputPaths = (
-				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/AgoraChat.framework",
-			);
-			runOnlyForDeploymentPostprocessing = 0;
-			shellPath = /bin/sh;
-			shellScript = "\"${PODS_ROOT}/Target Support Files/Pods-ChatDemo-UI3.0/Pods-ChatDemo-UI3.0-frameworks.sh\"\n";
-			showEnvVarsInLog = 0;
-		};
 		8F507D0BE0F752ED869E3A49 /* [CP] Copy Pods Resources */ = {
 			isa = PBXShellScriptBuildPhase;
 			buildActionMask = 2147483647;
@@ -2552,14 +2551,14 @@
 				7F6CC8AD26568C3600BA60BB /* AgoraChatLocationBubbleView.m in Sources */,
 				7F6CC8F626568D2500BA60BB /* AgoraContactListSectionHeader.m in Sources */,
 				7F0516DA26A012DD00B2C795 /* AgoraChatBaseTableview.m in Sources */,
-				7F663CF3265F7F86003F74B8 /* AgoraUserInfo+expireTime.m in Sources */,
+				7F663CF3265F7F86003F74B8 /* AgoraChatUserInfo+expireTime.m in Sources */,
 				3AEBE3EE1E792ED400B82986 /* AgoraGroupPermissionCell.m in Sources */,
 				7166342C1DB0EB7C00C92E27 /* AgoraGroupCell.m in Sources */,
 				71D4A1FC1D9C9359006FACB7 /* AgoraGroupTitleCell.m in Sources */,
 				716634241DB0E86900C92E27 /* AgoraGroupsViewController.m in Sources */,
 				3A79D1191E77AB080085AB6E /* AgoraGroupTransferOwnerViewController.m in Sources */,
 				7F6CC86826568B8B00BA60BB /* AgoraMemberCollectionCell.m in Sources */,
-				7F663CEA265E5DF7003F74B8 /* AgoraUserInfoManagerHelper.m in Sources */,
+				7F663CEA265E5DF7003F74B8 /* AgoraChatUserInfoManagerHelper.m in Sources */,
 				3A4BB1CD1ED43D7700B07FCA /* AgoraChatroomMembersViewController.m in Sources */,
 				7F6CC92E26568DC300BA60BB /* AgoraCDDeviceManager+Microphone.m in Sources */,
 				7F6CC93826568DDF00BA60BB /* AgoraVoiceConverter.mm in Sources */,
@@ -2790,6 +2789,7 @@
 				CODE_SIGN_IDENTITY = "Apple Development";
 				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "Apple Development";
 				CODE_SIGN_STYLE = Automatic;
+				CURRENT_PROJECT_VERSION = 20210911;
 				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
 				DEVELOPMENT_TEAM = 499WYUV8Q2;
 				ENABLE_BITCODE = NO;
@@ -2811,6 +2811,7 @@
 					"$(PROJECT_DIR)/ChatDemo-UI3.0/Code/Utilities/DeviceHelper/VoiceConvert/opencore-amrwb",
 				);
 				MACOSX_DEPLOYMENT_TARGET = "";
+				MARKETING_VERSION = 3.8.6;
 				ONLY_ACTIVE_ARCH = YES;
 				OTHER_LDFLAGS = (
 					"$(inherited)",
@@ -2861,6 +2862,7 @@
 				CODE_SIGN_IDENTITY = "iPhone Distribution: EaseMob Inc.";
 				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Distribution";
 				CODE_SIGN_STYLE = Manual;
+				CURRENT_PROJECT_VERSION = 20210911;
 				DEVELOPMENT_TEAM = 499WYUV8Q2;
 				ENABLE_BITCODE = NO;
 				EXCLUDED_ARCHS = "";
@@ -2880,6 +2882,7 @@
 					"$(PROJECT_DIR)/ChatDemo-UI3.0/Code/Utilities/DeviceHelper/VoiceConvert/opencore-amrwb",
 				);
 				MACOSX_DEPLOYMENT_TARGET = "";
+				MARKETING_VERSION = 3.8.6;
 				ONLY_ACTIVE_ARCH = NO;
 				OTHER_LDFLAGS = (
 					"$(inherited)",

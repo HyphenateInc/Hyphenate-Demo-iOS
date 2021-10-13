@@ -10,7 +10,7 @@
 #import "AgoraGroupInfoViewController.h"
 
 
-#import <AgoraChat/AgoraGroup.h>
+#import <AgoraChat/AgoraChatGroup.h>
 #import "UIViewController+HUD.h"
 #import "AgoraUserModel.h"
 #import "AgoraAlertView.h"
@@ -30,7 +30,7 @@
 
 @interface AgoraGroupInfoViewController ()<AgoraGroupUIProtocol, UIAlertViewDelegate>
 
-@property (nonatomic, strong) AgoraGroup *group;
+@property (nonatomic, strong) AgoraChatGroup *group;
 @property (nonatomic, strong) NSString *groupId;
 
 @property (nonatomic, strong) UIBarButtonItem *addMemberItem;
@@ -128,7 +128,7 @@
         
         self.moreCellIndex = count - 1;
     } else if (section == 2) {
-        if (self.group.permissionType == AgoraGroupPermissionTypeOwner || self.group.permissionType == AgoraGroupPermissionTypeAdmin) {
+        if (self.group.permissionType == AgoraChatGroupPermissionTypeOwner || self.group.permissionType == AgoraChatGroupPermissionTypeAdmin) {
             count = 11;
         } else {
             count = 6;
@@ -273,7 +273,7 @@
             break;
         case 5:
         {
-            if (self.group.permissionType == AgoraGroupPermissionTypeOwner) {
+            if (self.group.permissionType == AgoraChatGroupPermissionTypeOwner) {
                 UIAlertView *alert = [[UIAlertView alloc] initWithTitle:nil message:NSLocalizedString(@"group.changeAnnouncement", @"Change announcement") delegate:self cancelButtonTitle:NSLocalizedString(@"cancel", @"Cancel") otherButtonTitles:NSLocalizedString(@"ok", @"OK"), nil];
                 alert.tag = ALERTVIEW_CHANGE_ANNOUNCAgoraENT;
                 [alert setAlertViewStyle:UIAlertViewStylePlainTextInput];
@@ -288,7 +288,7 @@
             break;
         case 6:
         {
-            if (self.group.permissionType == AgoraGroupPermissionTypeOwner) {
+            if (self.group.permissionType == AgoraChatGroupPermissionTypeOwner) {
                 AgoraGroupTransferOwnerViewController *transferController = [[AgoraGroupTransferOwnerViewController alloc] initWithGroup:self.group];
                 transferController.transferOwnerBlock = ^{
                     [self fetchGroupInfo];
@@ -301,7 +301,7 @@
             break;
         case 7:
         {
-            if (self.group.permissionType == AgoraGroupPermissionTypeOwner) {
+            if (self.group.permissionType == AgoraChatGroupPermissionTypeOwner) {
                 AgoraUpdateGroupNameViewController *updateController = [[AgoraUpdateGroupNameViewController alloc] initWithGroupId:self.groupId subject:self.group.subject];
                 updateController.updateGroupNameBlock = self.updateGroupNameBlock;
                 
@@ -350,7 +350,7 @@
     if (alertView.tag == ALERTVIEW_CHANGE_ANNOUNCAgoraENT) {
         WEAK_SELF
         [self showHudInView:self.view hint:NSLocalizedString(@"hud.wait", @"Pleae wait...")];
-        [[AgoraChatClient sharedClient].groupManager updateGroupAnnouncementWithId:_groupId announcement:textString completion:^(AgoraGroup *aGroup, AgoraError *aError) {
+        [[AgoraChatClient sharedClient].groupManager updateGroupAnnouncementWithId:_groupId announcement:textString completion:^(AgoraChatGroup *aGroup, AgoraChatError *aError) {
             [weakSelf hideHud];
             if (aError) {
                 [weakSelf showHint:NSLocalizedString(@"hud.fail", @"Failed to change owner")];
@@ -388,7 +388,7 @@
 
         NSString *username = [[AgoraChatClient sharedClient] currentUsername];
         NSString *messageStr = [NSString stringWithFormat:NSLocalizedString(@"group.invite", @"%@ invite you to group: %@ [%@]"), username, weakSelf.group.subject, weakSelf.group.groupId];
-        AgoraError *error = nil;
+        AgoraChatError *error = nil;
         weakSelf.group = [[AgoraChatClient sharedClient].groupManager addOccupants:source toGroup:weakSelf.groupId welcomeMessage:messageStr error:&error];
         dispatch_async(dispatch_get_main_queue(), ^{
             [MBProgressHUD hideAllHUDsForView:weakSelf.view animated:YES];
@@ -451,7 +451,7 @@
 
 - (void)leaveGroup
 {
-    if (self.group.permissionType == AgoraGroupPermissionTypeOwner) {
+    if (self.group.permissionType == AgoraChatGroupPermissionTypeOwner) {
         
         UIAlertController *alertController = [UIAlertController alertControllerWithTitle:NSLocalizedString(@"group.destroy", @"dissolution of the group") message:@"" preferredStyle:UIAlertControllerStyleAlert];
         
@@ -483,7 +483,7 @@
 - (void)dismissGroupWithGroupId:(NSString *)groupId {
     [self showHudInView:self.view hint:NSLocalizedString(@"group.destroy", @"dissolution of the group")];
     dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), ^(){
-        AgoraError *error = [[AgoraChatClient sharedClient].groupManager destroyGroup:groupId];
+        AgoraChatError *error = [[AgoraChatClient sharedClient].groupManager destroyGroup:groupId];
         dispatch_async(dispatch_get_main_queue(), ^{
             [self hideHud];
             if (error) {
@@ -501,7 +501,7 @@
 - (void)leaveGroupWithGroupId:(NSString *)groupId {
     [self showHudInView:self.view hint:NSLocalizedString(@"group.leave", @"Leave group")];
     dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), ^(){
-        AgoraError *error = nil;
+        AgoraChatError *error = nil;
         [[AgoraChatClient sharedClient].groupManager leaveGroup:groupId error:&error];
         dispatch_async(dispatch_get_main_queue(), ^{
             [self hideHud];
@@ -522,7 +522,7 @@
     
     __weak typeof(self) weakSelf = self;
     if (self.blockMsgSwitch.isOn) {
-        [[AgoraChatClient sharedClient].groupManager blockGroup:self.group.groupId completion:^(AgoraGroup *aGroup, AgoraError *aError) {
+        [[AgoraChatClient sharedClient].groupManager blockGroup:self.group.groupId completion:^(AgoraChatGroup *aGroup, AgoraChatError *aError) {
             [MBProgressHUD hideHUDForView:weakSelf.view animated:YES];
             
             weakSelf.group = aGroup;
@@ -532,7 +532,7 @@
             }
         }];
     } else {
-        [[AgoraChatClient sharedClient].groupManager unblockGroup:self.group.groupId completion:^(AgoraGroup *aGroup, AgoraError *aError) {
+        [[AgoraChatClient sharedClient].groupManager unblockGroup:self.group.groupId completion:^(AgoraChatGroup *aGroup, AgoraChatError *aError) {
             [MBProgressHUD hideHUDForView:weakSelf.view animated:YES];
             
             weakSelf.group = aGroup;
@@ -550,7 +550,7 @@
     [MBProgressHUD showHUDAddedTo:self.view animated:YES];
     
     __weak typeof(self) weakSelf = self;
-    [[AgoraChatClient sharedClient].groupManager updatePushServiceForGroup:self.group.groupId isPushEnabled:self.pushSwitch.isOn completion:^(AgoraGroup *aGroup, AgoraError *aError) {
+    [[AgoraChatClient sharedClient].groupManager updatePushServiceForGroup:self.group.groupId isPushEnabled:self.pushSwitch.isOn completion:^(AgoraChatGroup *aGroup, AgoraChatError *aError) {
         [MBProgressHUD hideHUDForView:weakSelf.view animated:YES];
         
         weakSelf.group = aGroup;
@@ -564,8 +564,8 @@
 - (void)updateUI:(NSNotification *)aNotif
 {
     id obj = aNotif.object;
-    if (obj && [obj isKindOfClass:[AgoraGroup class]]) {
-        self.group = (AgoraGroup *)obj;
+    if (obj && [obj isKindOfClass:[AgoraChatGroup class]]) {
+        self.group = (AgoraChatGroup *)obj;
     }
     
     [self reloadUI];
@@ -573,7 +573,7 @@
 
 - (void)reloadUI
 {
-    if (self.group.permissionType == AgoraGroupPermissionTypeOwner) {
+    if (self.group.permissionType == AgoraChatGroupPermissionTypeOwner) {
         [self.leaveButton setTitle:NSLocalizedString(@"group.destroy", @"Destroy Group") forState:UIControlStateNormal];
     } else {
         [self.leaveButton setTitle:NSLocalizedString(@"group.leave", @"Leave Group") forState:UIControlStateNormal];
@@ -593,7 +593,7 @@
 
 - (BOOL)isCanInvite
 {
-    return (self.group.permissionType == AgoraGroupPermissionTypeOwner || self.group.permissionType == AgoraGroupPermissionTypeAdmin || self.group.setting.style == AgoraGroupStylePrivateMemberCanInvite);
+    return (self.group.permissionType == AgoraChatGroupPermissionTypeOwner || self.group.permissionType == AgoraChatGroupPermissionTypeAdmin || self.group.setting.style == AgoraChatGroupStylePrivateMemberCanInvite);
 }
 
 #pragma mark - DataSource
@@ -607,12 +607,12 @@
 {
     __weak typeof(self) weakSelf = self;
     [self showHudInView:self.view hint:NSLocalizedString(@"hud.load", @"Load data...")];
-    [[AgoraChatClient sharedClient].groupManager getGroupSpecificationFromServerWithId:self.groupId completion:^(AgoraGroup *aGroup, AgoraError *aError) {
+    [[AgoraChatClient sharedClient].groupManager getGroupSpecificationFromServerWithId:self.groupId completion:^(AgoraChatGroup *aGroup, AgoraChatError *aError) {
         [weakSelf hideHud];
         
         if (!aError) {
             weakSelf.group = aGroup;
-            AgoraConversation *conversation = [[AgoraChatClient sharedClient].chatManager getConversation:aGroup.groupId type:AgoraConversationTypeGroupChat createIfNotExist:YES];
+            AgoraChatConversation *conversation = [[AgoraChatClient sharedClient].chatManager getConversation:aGroup.groupId type:AgoraChatConversationTypeGroupChat createIfNotExist:YES];
             if ([aGroup.groupId isEqualToString:conversation.conversationId]) {
                 NSMutableDictionary *ext = [NSMutableDictionary dictionaryWithDictionary:conversation.ext];
                 [ext setObject:aGroup.subject forKey:@"subject"];
@@ -627,7 +627,7 @@
         }
     }];
     
-    [[AgoraChatClient sharedClient].groupManager getGroupAnnouncementWithId:self.groupId completion:^(NSString *aAnnouncement, AgoraError *aError) {
+    [[AgoraChatClient sharedClient].groupManager getGroupAnnouncementWithId:self.groupId completion:^(NSString *aAnnouncement, AgoraChatError *aError) {
         if (!aError) {
             [weakSelf reloadUI];
         }
@@ -638,7 +638,7 @@
 {
     __weak typeof(self) weakSelf = self;
     [self showHudInView:self.view hint:NSLocalizedString(@"hud.load", @"Load data...")];
-    [[AgoraChatClient sharedClient].groupManager getGroupMemberListFromServerWithId:self.groupId cursor:@"" pageSize:10 completion:^(AgoraCursorResult *aResult, AgoraError *aError) {
+    [[AgoraChatClient sharedClient].groupManager getGroupMemberListFromServerWithId:self.groupId cursor:@"" pageSize:10 completion:^(AgoraChatCursorResult *aResult, AgoraChatError *aError) {
         [weakSelf hideHud];
         [weakSelf tableViewDidFinishTriggerHeader:YES];
         if (!aError) {

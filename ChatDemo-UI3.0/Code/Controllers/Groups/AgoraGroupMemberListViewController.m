@@ -16,7 +16,7 @@
 
 @property (nonatomic, strong) NSArray *occupants;
 
-@property (nonatomic, strong) AgoraGroup *group;
+@property (nonatomic, strong) AgoraChatGroup *group;
 
 @property (nonatomic, strong) NSMutableArray *selectMembers;
 
@@ -42,7 +42,7 @@
     return self;
 }
 
-- (instancetype)initWithGroup:(AgoraGroup *)group occupants:(NSArray<AgoraUserModel *> *)occupants {
+- (instancetype)initWithGroup:(AgoraChatGroup *)group occupants:(NSArray<AgoraUserModel *> *)occupants {
     self = [self initWithOccupants:occupants];
     if (self) {
         _group = group;
@@ -148,7 +148,7 @@
         return;
     }
     __weak typeof(self) weakSelf = self;
-    [[AgoraChatClient sharedClient].groupManager removeMembers:_selectMembers fromGroup:self.group.groupId completion:^(AgoraGroup *aGroup, AgoraError *aError) {
+    [[AgoraChatClient sharedClient].groupManager removeMembers:_selectMembers fromGroup:self.group.groupId completion:^(AgoraChatGroup *aGroup, AgoraChatError *aError) {
         if (!aError) {
             NSMutableArray *array = [NSMutableArray arrayWithArray:weakSelf.occupants];
             __block NSMutableArray *removeModels = [NSMutableArray array];

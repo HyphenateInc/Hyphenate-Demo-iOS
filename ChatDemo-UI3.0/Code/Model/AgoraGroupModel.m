@@ -12,10 +12,10 @@
 @implementation AgoraGroupModel
 
 - (instancetype)initWithObject:(NSObject *)obj {
-    if ([obj isKindOfClass:[AgoraGroup class]]) {
+    if ([obj isKindOfClass:[AgoraChatGroup class]]) {
         self = [super init];
         if (self) {
-            _group = (AgoraGroup *)obj;
+            _group = (AgoraChatGroup *)obj;
             _hyphenateId = _group.groupId;
             _subject = _group.subject;
             _defaultAvatarImage = [UIImage imageNamed:@"default_group_avatar.png"];

@@ -33,7 +33,7 @@
 - (CGSize)sizeThatFits:(CGSize)size
 {
     CGSize retSize;
-    ImageMessageBody *body = (ImageMessageBody*)self.model.message.body;
+    AgoraChatImageMessageBody *body = (AgoraChatImageMessageBody*)self.model.message.body;
     if (self.model.message.ext) {
         retSize = CGSizeMake(0, 0);
     } else {
@@ -69,7 +69,7 @@
 - (void)setModel:(AgoraMessageModel *)model
 {
     [super setModel:model];
-    ImageMessageBody *body = (ImageMessageBody*)model.message.body;
+    AgoraChatImageMessageBody *body = (AgoraChatImageMessageBody*)model.message.body;
     
     NSData *imageData = [NSData dataWithContentsOfFile:body.localPath];
     if (imageData.length) {
@@ -84,7 +84,7 @@
 + (CGFloat)heightForBubbleWithMessageModel:(AgoraMessageModel *)model
 {
     CGSize retSize;
-    ImageMessageBody *body = (ImageMessageBody*)model.message.body;
+    AgoraChatImageMessageBody *body = (AgoraChatImageMessageBody*)model.message.body;
     if (model.message.ext) {
         retSize = CGSizeMake(0, 0);
     } else {

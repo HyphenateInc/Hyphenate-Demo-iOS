@@ -40,7 +40,7 @@ typedef NS_ENUM(NSInteger, AgoraAudioSession){
         if (!covertRet) {
             if (completon) {
                 completon([NSError errorWithDomain:NSLocalizedString(@"error.initRecorderFail", @"File format conversion failed")
-                                              code:AgoraErrorFileTypeConvertionFailure
+                                              code:AgoraChatErrorFileTypeConvertionFailure
                                           userInfo:nil]);
             }
             return ;
@@ -88,7 +88,7 @@ typedef NS_ENUM(NSInteger, AgoraAudioSession){
     if ([self isRecording]) {
         if (completion) {
             error = [NSError errorWithDomain:NSLocalizedString(@"error.recordStoping", @"Record voice is not over yet")
-                                        code:AgoraErrorAudioRecordStoping
+                                        code:AgoraChatErrorAudioRecordStoping
                                     userInfo:nil];
             completion(error);
         }
@@ -133,7 +133,7 @@ typedef NS_ENUM(NSInteger, AgoraAudioSession){
     if(![self isRecording]){
         if (completion) {
             error = [NSError errorWithDomain:NSLocalizedString(@"error.recordNotBegin", @"Recording has not yet begun")
-                                        code:AgoraErrorAudioRecordNotStarted
+                                        code:AgoraChatErrorAudioRecordNotStarted
                                     userInfo:nil];
             completion(nil,0,error);
             return;
@@ -146,7 +146,7 @@ typedef NS_ENUM(NSInteger, AgoraAudioSession){
     if([_recorderEndDate timeIntervalSinceDate:_recorderStartDate] < [AgoraCDDeviceManager recordMinDuration]){
         if (completion) {
             error = [NSError errorWithDomain:NSLocalizedString(@"error.recordTooShort", @"Recording time is too short")
-                                        code:AgoraErrorAudioRecordDurationTooShort
+                                        code:AgoraChatErrorAudioRecordDurationTooShort
                                     userInfo:nil];
             completion(nil,0,error);
         }

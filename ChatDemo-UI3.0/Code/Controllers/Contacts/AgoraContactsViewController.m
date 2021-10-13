@@ -84,7 +84,7 @@
     }
     
     WEAK_SELF
-    [[AgoraChatClient sharedClient].contactManager getContactsFromServerWithCompletion:^(NSArray *aList, AgoraError *aError) {
+    [[AgoraChatClient sharedClient].contactManager getContactsFromServerWithCompletion:^(NSArray *aList, AgoraChatError *aError) {
         if (aError == nil) {
             [weakSelf tableViewDidFinishTriggerHeader:YES];
             dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), ^(){

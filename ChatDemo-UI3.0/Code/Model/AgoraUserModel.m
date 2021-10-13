@@ -10,7 +10,7 @@
 #import "AgoraUserModel.h"
 
 @interface AgoraUserModel ()
-@property(nonatomic, strong)AgoraUserInfo *userInfo;
+@property(nonatomic, strong)AgoraChatUserInfo *userInfo;
 
 @end
 
@@ -30,7 +30,7 @@
 
 - (void)fetchUserInfoData {
     dispatch_semaphore_t sema = dispatch_semaphore_create(0);
-    [AgoraUserInfoManagerHelper fetchUserInfoWithUserIds:@[_hyphenateId] completion:^(NSDictionary * _Nonnull userInfoDic) {
+    [AgoraChatUserInfoManagerHelper fetchUserInfoWithUserIds:@[_hyphenateId] completion:^(NSDictionary * _Nonnull userInfoDic) {
         self.userInfo = userInfoDic[_hyphenateId];
         dispatch_semaphore_signal(sema);
     }];

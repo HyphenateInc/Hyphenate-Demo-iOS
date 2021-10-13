@@ -109,11 +109,11 @@
 
 - (void)saveAction
 {
-    AgoraConversation *conversation = [[AgoraChatClient sharedClient].chatManager getConversation:self.groupId type:AgoraConversationTypeGroupChat createIfNotExist:NO];
+    AgoraChatConversation *conversation = [[AgoraChatClient sharedClient].chatManager getConversation:self.groupId type:AgoraChatConversationTypeGroupChat createIfNotExist:NO];
     
     __weak typeof(self) weakSelf = self;
     [MBProgressHUD showHUDAddedTo:self.view animated:YES];
-    [[AgoraChatClient sharedClient].groupManager updateGroupSubject:self.subjectField.text forGroup:self.groupId completion:^(AgoraGroup *aGroup, AgoraError *aError) {
+    [[AgoraChatClient sharedClient].groupManager updateGroupSubject:self.subjectField.text forGroup:self.groupId completion:^(AgoraChatGroup *aGroup, AgoraChatError *aError) {
         [MBProgressHUD hideAllHUDsForView:weakSelf.view animated:NO];
         
         if (!aError) {

@@ -56,7 +56,7 @@
 {
     CGSize textBlockMinSize = {TEXTLABEL_MAX_WIDTH, CGFLOAT_MAX};
     CGSize retSize;
-    NSString *text = [AgoraConvertToCommonEmoticonsHelper convertToSystemEmoticons:((TextMessageBody *)self.model.message.body).text];
+    NSString *text = [AgoraConvertToCommonEmoticonsHelper convertToSystemEmoticons:((AgoraChatTextMessageBody *)self.model.message.body).text];
     NSMutableParagraphStyle *paragraphStyle = [[NSMutableParagraphStyle alloc] init];
     [paragraphStyle setLineSpacing:[[self class] lineSpacing]];
     retSize = [text boundingRectWithSize:textBlockMinSize options:NSStringDrawingUsesLineFragmentOrigin
@@ -79,7 +79,7 @@
 - (void)setModel:(AgoraMessageModel *)model
 {
     [super setModel:model];
-    NSString *text = [AgoraConvertToCommonEmoticonsHelper convertToSystemEmoticons:((TextMessageBody *)self.model.message.body).text];
+    NSString *text = [AgoraConvertToCommonEmoticonsHelper convertToSystemEmoticons:((AgoraChatTextMessageBody *)self.model.message.body).text];
     NSMutableAttributedString * attributedString = [[NSMutableAttributedString alloc]
                                                     initWithString:text];
     NSMutableParagraphStyle * paragraphStyle = [[NSMutableParagraphStyle alloc] init];
@@ -87,7 +87,7 @@
     [attributedString addAttribute:NSParagraphStyleAttributeName
                              value:paragraphStyle
                              range:NSMakeRange(0, [text length])];
-    _textLabel.textColor = self.model.message.direction == MessageDirectionSend ? WhiteColor : AlmostBlackColor;
+    _textLabel.textColor = self.model.message.direction == AgoraChatMessageDirectionSend ? WhiteColor : AlmostBlackColor;
     [_textLabel setAttributedText:attributedString];
 }
 
@@ -100,7 +100,7 @@
     dispatch_once(&onceToken, ^{
         systemVersion = [[[UIDevice currentDevice] systemVersion] floatValue];
     });
-    NSString *text = [AgoraConvertToCommonEmoticonsHelper convertToSystemEmoticons:((TextMessageBody *)model.message.body).text];
+    NSString *text = [AgoraConvertToCommonEmoticonsHelper convertToSystemEmoticons:((AgoraChatTextMessageBody *)model.message.body).text];
     NSMutableParagraphStyle *paragraphStyle = [[NSMutableParagraphStyle alloc] init];
     [paragraphStyle setLineSpacing:[[self class] lineSpacing]];
     size = [text boundingRectWithSize:textBlockMinSize options:NSStringDrawingUsesLineFragmentOrigin

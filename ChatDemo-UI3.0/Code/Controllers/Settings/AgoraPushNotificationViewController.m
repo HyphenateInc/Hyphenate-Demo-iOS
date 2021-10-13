@@ -20,9 +20,9 @@
 
 @property (nonatomic, strong) UILabel *systemNotificationTip;
 
-@property (nonatomic) AgoraPushDisplayStyle pushDisplayStyle;
+@property (nonatomic) AgoraChatPushDisplayStyle pushDisplayStyle;
 
-@property (nonatomic) AgoraPushNoDisturbStatus noDisturbStatus;
+@property (nonatomic) AgoraChatPushNoDisturbStatus noDisturbStatus;
 
 @property (nonatomic, copy) NSString *pushNickname;
 
@@ -98,7 +98,7 @@
 - (void)loadPushOptions
 {
     WEAK_SELF
-    [[AgoraChatClient sharedClient] getPushNotificationOptionsFromServerWithCompletion:^(AgoraPushOptions *aOptions, AgoraError *aError) {
+    [[AgoraChatClient sharedClient] getPushNotificationOptionsFromServerWithCompletion:^(AgoraChatPushOptions *aOptions, AgoraChatError *aError) {
         
         if (!aError) {
             [weakSelf updatePushOptions:aOptions];
@@ -108,14 +108,14 @@
     }];
 }
 
-- (void)updatePushOptions:(AgoraPushOptions *)options
+- (void)updatePushOptions:(AgoraChatPushOptions *)options
 {
     _pushDisplayStyle = options.displayStyle;
     _noDisturbStatus = options.noDisturbStatus;
     _pushNickname = options.displayName;
     NSLog(@"%@",options.displayName);
-    BOOL display = _pushDisplayStyle == AgoraPushDisplayStyleSimpleBanner ? NO : YES;
-    BOOL noDisturb = _noDisturbStatus == AgoraPushNoDisturbStatusClose ? NO: YES;
+    BOOL display = _pushDisplayStyle == AgoraChatPushDisplayStyleSimpleBanner ? NO : YES;
+    BOOL noDisturb = _noDisturbStatus == AgoraChatPushNoDisturbStatusClose ? NO: YES;
     [self.displaySwitch setOn:display animated:YES];
     [self.pushSwitch setOn:noDisturb animated:YES];
     [self.tableView reloadData];
@@ -270,11 +270,11 @@
     __block UISwitch *uiSwitch = sender;
     WEAK_SELF
     dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), ^{
-        AgoraError *aError = nil;
+        AgoraChatError *aError = nil;
         if (uiSwitch.isOn) {
-            aError = [AgoraChatClient.sharedClient.pushManager updatePushDisplayStyle:AgoraPushDisplayStyleMessageSummary];
+            aError = [AgoraChatClient.sharedClient.pushManager updatePushDisplayStyle:AgoraChatPushDisplayStyleMessageSummary];
         } else {
-            aError = [AgoraChatClient.sharedClient.pushManager updatePushDisplayStyle:AgoraPushDisplayStyleSimpleBanner];
+            aError = [AgoraChatClient.sharedClient.pushManager updatePushDisplayStyle:AgoraChatPushDisplayStyleSimpleBanner];
         }
         
         if (aError) {
@@ -304,7 +304,7 @@
     __block UISwitch *uiSwitch = sender;
     WEAK_SELF
     dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), ^{
-        AgoraError *aError = nil;
+        AgoraChatError *aError = nil;
         if (uiSwitch.isOn) {
             aError = [AgoraChatClient.sharedClient.pushManager disableOfflinePushStart:0 end:24];
         } else {

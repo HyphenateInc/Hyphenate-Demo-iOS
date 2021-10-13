@@ -19,7 +19,7 @@
 
 @property (nonatomic, strong) UISwitch *callPushSwitch;
 
-@property (nonatomic) AgoraPushNoDisturbStatus pushStatus;
+@property (nonatomic) AgoraChatPushNoDisturbStatus pushStatus;
 @end
 
 @implementation AgoraSettingsViewController
@@ -32,8 +32,8 @@
 
 - (void)testUserInfo {
     
-    [AgoraChatClient.sharedClient.userInfoManager fetchUserInfoById:@[AgoraChatClient.sharedClient.currentUsername] completion:^(NSDictionary *aUserDatas, AgoraError *aError) {
-        AgoraUserInfo *userInfo = aUserDatas[AgoraChatClient.sharedClient.currentUsername];
+    [AgoraChatClient.sharedClient.userInfoManager fetchUserInfoById:@[AgoraChatClient.sharedClient.currentUsername] completion:^(NSDictionary *aUserDatas, AgoraChatError *aError) {
+        AgoraChatUserInfo *userInfo = aUserDatas[AgoraChatClient.sharedClient.currentUsername];
         NSDictionary *dic = @{@"address":@"北京市海淀区",@"tel":@"01011112222"};
         NSError *parseError;
         NSData *jsonData = [NSJSONSerialization dataWithJSONObject:dic options:NSJSONWritingPrettyPrinted error:&parseError];
@@ -43,7 +43,7 @@
         NSString * dicStr = [[NSString alloc] initWithData:jsonData encoding:NSUTF8StringEncoding];
         
         userInfo.ext = dicStr;
-        [AgoraChatClient.sharedClient.userInfoManager updateOwnUserInfo:userInfo completion:^(AgoraUserInfo *aUserInfo, AgoraError *aError) {
+        [AgoraChatClient.sharedClient.userInfoManager updateOwnUserInfo:userInfo completion:^(AgoraChatUserInfo *aUserInfo, AgoraChatError *aError) {
             NSLog(@"aUserInfo.userId:%@ aUserInfo:%@",aUserInfo.userId,aUserInfo.ext);
             
         }];

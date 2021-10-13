@@ -11,9 +11,9 @@
 
 @interface AgoraMessageModel : NSObject
 
-@property (strong, nonatomic,readonly) Message *message;
+@property (strong, nonatomic,readonly) AgoraChatMessage *message;
 
-@property (strong, nonatomic) AgoraUserInfo *userInfo;
+@property (strong, nonatomic) AgoraChatUserInfo *userInfo;
 
 @property (assign, nonatomic) BOOL isPlaying;
 
@@ -21,7 +21,7 @@
 
 @property (nonatomic ,assign) BOOL isRecall;
 
-- (instancetype)initWithMessage:(Message*)message;
+- (instancetype)initWithMessage:(AgoraChatMessage*)message;
 
 
 @end

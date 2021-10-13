@@ -15,6 +15,6 @@
 
 @property (nonatomic, assign) id<AgoraGroupUIProtocol> delegate;
 
-- (instancetype)initWithGroup:(AgoraGroup *)group occupants:(NSArray<AgoraUserModel *> *)occupants;
+- (instancetype)initWithGroup:(AgoraChatGroup *)group occupants:(NSArray<AgoraUserModel *> *)occupants;
 
 @end

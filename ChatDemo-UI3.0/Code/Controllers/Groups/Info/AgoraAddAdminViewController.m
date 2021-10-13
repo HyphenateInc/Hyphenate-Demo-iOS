@@ -220,8 +220,8 @@
     [MBProgressHUD showHUDAddedTo:self.view animated:YES];
     __weak typeof(self) weakSelf = self;
     dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), ^(){
-        AgoraError *error = nil;
-        AgoraGroup *group = nil;
+        AgoraChatError *error = nil;
+        AgoraChatGroup *group = nil;
         for (NSString *userName in weakSelf.selectedArray) {
             error = nil;
             [[AgoraChatClient sharedClient].groupManager addAdmin:userName toGroup:weakSelf.groupId error:&error];
@@ -255,8 +255,8 @@
     __weak typeof(self) weakSelf = self;
     [self showHudInView:self.view hint:NSLocalizedString(@"hud.load", @"Load data...")];
     dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), ^(){
-        AgoraError *error = nil;
-        AgoraGroup *group = [[AgoraChatClient sharedClient].groupManager getGroupSpecificationFromServerWithId:weakSelf.groupId error:&error];
+        AgoraChatError *error = nil;
+        AgoraChatGroup *group = [[AgoraChatClient sharedClient].groupManager getGroupSpecificationFromServerWithId:weakSelf.groupId error:&error];
         dispatch_async(dispatch_get_main_queue(), ^{
             [weakSelf hideHud];
         });
@@ -289,7 +289,7 @@
     NSInteger pageSize = 50;
     __weak typeof(self) weakSelf = self;
     [self showHudInView:self.view hint:NSLocalizedString(@"hud.load", @"Load data...")];
-    [[AgoraChatClient sharedClient].groupManager getGroupMemberListFromServerWithId:self.groupId cursor:aCursor pageSize:pageSize completion:^(AgoraCursorResult *aResult, AgoraError *aError) {
+    [[AgoraChatClient sharedClient].groupManager getGroupMemberListFromServerWithId:self.groupId cursor:aCursor pageSize:pageSize completion:^(AgoraChatCursorResult *aResult, AgoraChatError *aError) {
         weakSelf.cursor = aResult.cursor;
         [weakSelf hideHud];
         [weakSelf tableViewDidFinishTriggerHeader:aIsHeader];

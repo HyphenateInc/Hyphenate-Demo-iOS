@@ -123,7 +123,7 @@
     
     __weak typeof(self) weakSelf = self;
     dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), ^{
-        AgoraError *error = nil;
+        AgoraChatError *error = nil;
         if (buttonIndex == 0) { //Remove
             weakSelf.chatroom = [[AgoraChatClient sharedClient].roomManager removeMembers:@[userName] fromChatroom:weakSelf.chatroom.chatroomId error:&error];
         } else if (buttonIndex == 1) { //Blacklist
@@ -183,7 +183,7 @@
     NSInteger pageSize = 50;
     __weak typeof(self) weakSelf = self;
     [self showHudInView:self.view hint:NSLocalizedString(@"hud.load", @"Load data...")];
-    [[AgoraChatClient sharedClient].roomManager getChatroomMemberListFromServerWithId:self.chatroom.chatroomId cursor:aCursor pageSize:pageSize completion:^(AgoraCursorResult *aResult, AgoraError *aError) {
+    [[AgoraChatClient sharedClient].roomManager getChatroomMemberListFromServerWithId:self.chatroom.chatroomId cursor:aCursor pageSize:pageSize completion:^(AgoraChatCursorResult *aResult, AgoraChatError *aError) {
         [weakSelf hideHud];
         [weakSelf tableViewDidFinishTriggerHeader:aIsHeader];
         weakSelf.cursor = aResult.cursor;

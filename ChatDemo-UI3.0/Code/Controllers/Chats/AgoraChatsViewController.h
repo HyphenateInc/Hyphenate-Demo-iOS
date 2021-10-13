@@ -15,7 +15,7 @@
 
 - (void)setupNavigationItem:(UINavigationItem *)navigationItem;
 
-- (void)networkChanged:(AgoraConnectionState)connectionState;
+- (void)networkChanged:(AgoraChatConnectionState)connectionState;
 
 - (void)tableViewDidTriggerHeaderRefresh;
 

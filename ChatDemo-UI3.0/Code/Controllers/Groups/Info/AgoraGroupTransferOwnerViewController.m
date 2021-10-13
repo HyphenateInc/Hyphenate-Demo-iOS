@@ -15,7 +15,7 @@
 
 @interface AgoraGroupTransferOwnerViewController ()
 
-@property (nonatomic, strong) AgoraGroup *group;
+@property (nonatomic, strong) AgoraChatGroup *group;
 
 @property (nonatomic, strong) NSString *cursor;
 
@@ -26,7 +26,7 @@
 
 @implementation AgoraGroupTransferOwnerViewController
 
-- (instancetype)initWithGroup:(AgoraGroup *)aGroup
+- (instancetype)initWithGroup:(AgoraChatGroup *)aGroup
 {
     self = [super init];
     if (self) {
@@ -141,7 +141,7 @@
         NSString *newOwner = [self.dataArray objectAtIndex:self.selectedIndexPath.row];
         
         __weak typeof(self) weakSelf = self;
-        [[AgoraChatClient sharedClient].groupManager updateGroupOwner:self.group.groupId newOwner:newOwner completion:^(AgoraGroup *aGroup, AgoraError *aError) {
+        [[AgoraChatClient sharedClient].groupManager updateGroupOwner:self.group.groupId newOwner:newOwner completion:^(AgoraChatGroup *aGroup, AgoraChatError *aError) {
             [MBProgressHUD hideHUDForView:weakSelf.view animated:YES];
             weakSelf.group = aGroup;
             if (aError) {
@@ -164,8 +164,8 @@
     [self showHudInView:self.view hint:NSLocalizedString(@"hud.load", @"Load data...")];
     
     dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), ^(){
-        AgoraError *error = nil;
-        AgoraGroup *group = [[AgoraChatClient sharedClient].groupManager getGroupSpecificationFromServerWithId:weakSelf.group.groupId error:&error];
+        AgoraChatError *error = nil;
+        AgoraChatGroup *group = [[AgoraChatClient sharedClient].groupManager getGroupSpecificationFromServerWithId:weakSelf.group.groupId error:&error];
         dispatch_async(dispatch_get_main_queue(), ^{
             [weakSelf hideHud];
         });
@@ -198,7 +198,7 @@
     NSInteger pageSize = 50;
     __weak typeof(self) weakSelf = self;
     [self showHudInView:self.view hint:NSLocalizedString(@"hud.load", @"Load data...")];
-    [[AgoraChatClient sharedClient].groupManager getGroupMemberListFromServerWithId:self.group.groupId cursor:self.cursor pageSize:pageSize completion:^(AgoraCursorResult *aResult, AgoraError *aError) {
+    [[AgoraChatClient sharedClient].groupManager getGroupMemberListFromServerWithId:self.group.groupId cursor:self.cursor pageSize:pageSize completion:^(AgoraChatCursorResult *aResult, AgoraChatError *aError) {
         weakSelf.cursor = aResult.cursor;
         [weakSelf hideHud];
         [weakSelf tableViewDidFinishTriggerHeader:aIsHeader];

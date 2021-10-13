@@ -51,7 +51,7 @@
 - (void)setModel:(AgoraMessageModel *)model
 {
     _model = model;
-    _backImageView.backgroundColor = model.message.direction == MessageDirectionSend ? KermitGreenTwoColor : PaleGreyTwoColor;
+    _backImageView.backgroundColor = model.message.direction == AgoraChatMessageDirectionSend ? KermitGreenTwoColor : PaleGreyTwoColor;
 }
 
 + (CGFloat)heightForBubbleWithMessageModel:(AgoraMessageModel *)model

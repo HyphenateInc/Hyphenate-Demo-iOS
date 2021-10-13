@@ -26,7 +26,7 @@ static NSString *kMessageType = @"MessageType";
 static NSString *kConversationChatter = @"ConversationChatter";
 static NSString *kGroupName = @"GroupName";
 
-@interface AgoraMainViewController () <AgoraChatManagerDelegate, AgoraGroupManagerDelegate, AgoraChatClientDelegate>
+@interface AgoraMainViewController () <AgoraChatManagerDelegate, AgoraChatGroupManagerDelegate, AgoraChatClientDelegate>
 {
     AgoraContactsViewController *_contactsVC;
     AgoraChatsViewController *_chatsVC;
@@ -142,7 +142,7 @@ static NSString *kGroupName = @"GroupName";
 {
     NSArray *conversations = [[AgoraChatClient sharedClient].chatManager getAllConversations];
     NSInteger unreadCount = 0;
-    for (AgoraConversation *conversation in conversations) {
+    for (AgoraChatConversation *conversation in conversations) {
         unreadCount += conversation.unreadMessagesCount;
     }
     if (_chatsVC) {
@@ -228,7 +228,7 @@ static NSString *kGroupName = @"GroupName";
     [self setupUnreadMessageCount];
     
 #if !TARGET_IPHONE_SIMULATOR
-    for (Message *message in aMessages) {
+    for (AgoraChatMessage *message in aMessages) {
         
         UIApplicationState state = [[UIApplication sharedApplication] applicationState];
         switch (state) {
@@ -259,7 +259,7 @@ static NSString *kGroupName = @"GroupName";
 
 #pragma mark - AgoraChatClientDelegate
 
-- (void)connectionStateDidChange:(AgoraConnectionState)aConnectionState
+- (void)connectionStateDidChange:(AgoraChatConnectionState)aConnectionState
 {
     [_chatsVC networkChanged:aConnectionState];
 }
@@ -283,18 +283,18 @@ static NSString *kGroupName = @"GroupName";
 
 #pragma mark - private
 
-- (AgoraConversationType)conversationTypeFromMessageType:(AgoraChatType)type
+- (AgoraChatConversationType)conversationTypeFromMessageType:(AgoraChatType)type
 {
-    AgoraConversationType conversatinType = AgoraConversationTypeChat;
+    AgoraChatConversationType conversatinType = AgoraChatConversationTypeChat;
     switch (type) {
         case AgoraChatTypeChat:
-            conversatinType = AgoraConversationTypeChat;
+            conversatinType = AgoraChatConversationTypeChat;
             break;
         case AgoraChatTypeGroupChat:
-            conversatinType = AgoraConversationTypeGroupChat;
+            conversatinType = AgoraChatConversationTypeGroupChat;
             break;
         case AgoraChatTypeChatRoom:
-            conversatinType = AgoraConversationTypeChatRoom;
+            conversatinType = AgoraChatConversationTypeChatRoom;
             break;
         default:
             break;
@@ -318,21 +318,21 @@ static NSString *kGroupName = @"GroupName";
     [[AgoraCDDeviceManager sharedInstance] playVibration];
 }
 
-- (void)showBackgroundNotificationWithMessage:(Message *)message
+- (void)showBackgroundNotificationWithMessage:(AgoraChatMessage *)message
 {
-    AgoraPushOptions *options = [[AgoraChatClient sharedClient] pushOptions];
+    AgoraChatPushOptions *options = [[AgoraChatClient sharedClient] pushOptions];
     __block NSString *alertBody = @"";
     __block NSString *title = @"";
 
-    if (options.displayStyle == AgoraPushDisplayStyleMessageSummary) {
-        MessageBody *messageBody = message.body;
+    if (options.displayStyle == AgoraChatPushDisplayStyleMessageSummary) {
+        AgoraChatMessageBody *messageBody = message.body;
         NSString *messageStr = [self getMessageStrWithMessageBody:messageBody];
         
 
      
         
-        [AgoraUserInfoManagerHelper fetchUserInfoWithUserIds:@[message.from] completion:^(NSDictionary * _Nonnull userInfoDic) {
-            AgoraUserInfo *userInfo = userInfoDic[message.from];
+        [AgoraChatUserInfoManagerHelper fetchUserInfoWithUserIds:@[message.from] completion:^(NSDictionary * _Nonnull userInfoDic) {
+            AgoraChatUserInfo *userInfo = userInfoDic[message.from];
             title = userInfo.nickName;
             
             if (message.chatType == AgoraChatTypeGroupChat) {
@@ -352,7 +352,7 @@ static NSString *kGroupName = @"GroupName";
                     }
                 }
                 NSArray *groupArray = [[AgoraChatClient sharedClient].groupManager getJoinedGroups];
-                for (AgoraGroup *group in groupArray) {
+                for (AgoraChatGroup *group in groupArray) {
                     if ([group.groupId isEqualToString:message.conversationId]) {
                         title = [NSString stringWithFormat:@"%@(%@)", message.from, group.subject];
                     }
@@ -380,22 +380,22 @@ static NSString *kGroupName = @"GroupName";
 }
 
 
-- (NSString *)getMessageStrWithMessageBody:(MessageBody*)messageBody {
+- (NSString *)getMessageStrWithMessageBody:(AgoraChatMessageBody*)messageBody {
     NSString *resultString = @"";
     switch (messageBody.type) {
-        case MessageBodyTypeText:
-            resultString = ((TextMessageBody *)messageBody).text;
+        case AgoraChatMessageBodyTypeText:
+            resultString = ((AgoraChatTextMessageBody *)messageBody).text;
             break;
-        case MessageBodyTypeImage:
+        case AgoraChatMessageBodyTypeImage:
             resultString = NSLocalizedString(@"chat.image1", @"[image]");
             break;
-        case MessageBodyTypeLocation:
+        case AgoraChatMessageBodyTypeLocation:
             resultString = NSLocalizedString(@"chat.location1", @"[location]");
             break;
-        case MessageBodyTypeVoice:
+        case AgoraChatMessageBodyTypeVoice:
             resultString = NSLocalizedString(@"chat.voice1", @"[voice]");
             break;
-        case MessageBodyTypeVideo:
+        case AgoraChatMessageBodyTypeVideo:
             resultString = NSLocalizedString(@"chat.video1", @"[video]");
             break;
         default:
@@ -406,7 +406,7 @@ static NSString *kGroupName = @"GroupName";
 
 
 
-- (void)setNotifactionWithMessage:(Message *)message
+- (void)setNotifactionWithMessage:(AgoraChatMessage *)message
                         alertBody:(NSString *)alertBody {
     NSTimeInterval timeInterval = [[NSDate date] timeIntervalSinceDate:self.lastPlaySoundDate];
     BOOL playSound = NO;

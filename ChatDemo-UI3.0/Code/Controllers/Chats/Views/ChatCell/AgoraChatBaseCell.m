@@ -80,16 +80,16 @@
 {
     [super layoutSubviews];
     
-    _headImageView.left = _model.message.direction == MessageDirectionSend ? (self.width - _headImageView.width - HEAD_PADDING) : HEAD_PADDING;
+    _headImageView.left = _model.message.direction == AgoraChatMessageDirectionSend ? (self.width - _headImageView.width - HEAD_PADDING) : HEAD_PADDING;
     
-    _timeLabel.left = _model.message.direction == MessageDirectionSend ? (self.width - _timeLabel.width - TIME_PADDING) : TIME_PADDING;
+    _timeLabel.left = _model.message.direction == AgoraChatMessageDirectionSend ? (self.width - _timeLabel.width - TIME_PADDING) : TIME_PADDING;
     _timeLabel.top = self.height - BOTTOM_PADDING;
-    _timeLabel.textAlignment = _model.message.direction == MessageDirectionSend ? NSTextAlignmentRight : NSTextAlignmentLeft;
+    _timeLabel.textAlignment = _model.message.direction == AgoraChatMessageDirectionSend ? NSTextAlignmentRight : NSTextAlignmentLeft;
     
-    _nickLabel.left = _model.message.direction == MessageDirectionSend ? (self.width - _nickLabel.width - NICK_LEFT_PADDING) : NICK_LEFT_PADDING;
+    _nickLabel.left = _model.message.direction == AgoraChatMessageDirectionSend ? (self.width - _nickLabel.width - NICK_LEFT_PADDING) : NICK_LEFT_PADDING;
     
-    _bubbleView.left = _model.message.direction == MessageDirectionSend ? (self.width - _bubbleView.width - TIME_PADDING) : TIME_PADDING;
-    _bubbleView.top = _model.message.direction == MessageDirectionSend ? 5.f : NICK_PADDING + 5;
+    _bubbleView.left = _model.message.direction == AgoraChatMessageDirectionSend ? (self.width - _bubbleView.width - TIME_PADDING) : TIME_PADDING;
+    _bubbleView.top = _model.message.direction == AgoraChatMessageDirectionSend ? 5.f : NICK_PADDING + 5;
     
     _readLabel.left = KScreenWidth - 135;
     _readLabel.top = self.height - BOTTOM_PADDING;
@@ -111,27 +111,27 @@
 {
     if (self.delegate) {
         switch (model.message.body.type) {
-            case MessageBodyTypeText:
+            case AgoraChatMessageBodyTypeText:
                 if ([self.delegate respondsToSelector:@selector(didTextCellPressed:)]) {
                     [self.delegate didTextCellPressed:model];
                 }
                 break;
-            case MessageBodyTypeImage:
+            case AgoraChatMessageBodyTypeImage:
                 if ([self.delegate respondsToSelector:@selector(didImageCellPressed:)]) {
                     [self.delegate didImageCellPressed:model];
                 }
                 break;
-            case MessageBodyTypeVoice:
+            case AgoraChatMessageBodyTypeVoice:
                 if ([self.delegate respondsToSelector:@selector(didAudioCellPressed:)]) {
                     [self.delegate didAudioCellPressed:model];
                 }
                 break;
-            case MessageBodyTypeVideo:
+            case AgoraChatMessageBodyTypeVideo:
                 if ([self.delegate respondsToSelector:@selector(didVideoCellPressed:)]) {
                     [self.delegate didVideoCellPressed:model];
                 }
                 break;
-            case MessageBodyTypeLocation:
+            case AgoraChatMessageBodyTypeLocation:
                 if ([self.delegate respondsToSelector:@selector(didLocationCellPressed:)]) {
                     [self.delegate didLocationCellPressed:model];
                 }
@@ -171,19 +171,19 @@
 {
     _model = model;
     switch (model.message.body.type) {
-        case MessageBodyTypeText:
+        case AgoraChatMessageBodyTypeText:
             _bubbleView = [[AgoraChatTextBubbleView alloc] init];
             break;
-        case MessageBodyTypeImage:
+        case AgoraChatMessageBodyTypeImage:
             _bubbleView = [[AgoraChatImageBubbleView alloc] init];
             break;
-        case MessageBodyTypeVoice:
+        case AgoraChatMessageBodyTypeVoice:
             _bubbleView = [[AgoraChatAudioBubbleView alloc] init];
             break;
-        case MessageBodyTypeVideo:
+        case AgoraChatMessageBodyTypeVideo:
             _bubbleView = [[AgoraChatVideoBubbleView alloc] init];
             break;
-        case MessageBodyTypeLocation:
+        case AgoraChatMessageBodyTypeLocation:
             _bubbleView = [[AgoraChatLocationBubbleView alloc] init];
             break;
         default:
@@ -194,7 +194,7 @@
     [self.contentView addSubview:_bubbleView];
 }
 
-- (NSString *)_getMessageTime:(Message*)message
+- (NSString *)_getMessageTime:(AgoraChatMessage*)message
 {
     NSString *messageTime = @"";
     if (message) {
@@ -212,8 +212,8 @@
 - (void)_setViewsDisplay
 {
     _timeLabel.hidden = NO;
-    if (_model.message.direction == MessageDirectionSend) {
-        if (_model.message.status == MessageStatusFailed || _model.message.status == MessageStatusPending) {
+    if (_model.message.direction == AgoraChatMessageDirectionSend) {
+        if (_model.message.status == AgoraChatMessageStatusFailed || _model.message.status == AgoraChatMessageStatusPending) {
             _notDeliveredLabel.text = NSLocalizedString(@"chat.not.delivered", @"Not Delivered");
             _checkView.hidden = YES;
             _readLabel.hidden = YES;
@@ -222,7 +222,7 @@
             _resendButton.hidden = NO;
             _notDeliveredLabel.hidden = NO;
             
-        } else if (_model.message.status == MessageStatusSucceed) {
+        } else if (_model.message.status == AgoraChatMessageStatusSucceed) {
             if (_model.message.isReadAcked) {
                 _readLabel.text = NSLocalizedString(@"chat.read", @"Read");
                 _checkView.hidden = NO;
@@ -234,7 +234,7 @@
             _notDeliveredLabel.hidden = YES;
             _activityView.hidden = YES;
             _readLabel.hidden = NO;
-        } else if (_model.message.status == MessageStatusDelivering) {
+        } else if (_model.message.status == AgoraChatMessageStatusDelivering) {
             _activityView.hidden = YES;
             _readLabel.hidden = YES;
             _checkView.hidden = YES;
@@ -278,25 +278,25 @@
 {
     CGFloat height = 100.f;
     switch (model.message.body.type) {
-        case MessageBodyTypeText:
+        case AgoraChatMessageBodyTypeText:
             height = [AgoraChatTextBubbleView heightForBubbleWithMessageModel:model] + 26.f;
             break;
-        case MessageBodyTypeImage:
+        case AgoraChatMessageBodyTypeImage:
             height = [AgoraChatImageBubbleView heightForBubbleWithMessageModel:model] + 26.f;
             break;
-        case MessageBodyTypeLocation:
+        case AgoraChatMessageBodyTypeLocation:
             height = [AgoraChatLocationBubbleView heightForBubbleWithMessageModel:model] + 26.f;
             break;
-        case MessageBodyTypeVoice:
+        case AgoraChatMessageBodyTypeVoice:
             height = [AgoraChatAudioBubbleView heightForBubbleWithMessageModel:model] + 26.f;
             break;
-        case MessageBodyTypeVideo:
+        case AgoraChatMessageBodyTypeVideo:
             height = [AgoraChatVideoBubbleView heightForBubbleWithMessageModel:model] + 26.f;
             break;
         default:
             break;
     }
-    if (model.message.direction == MessageDirectionReceive) {
+    if (model.message.direction == AgoraChatMessageDirectionReceive) {
         return height + NICK_PADDING;
     }
     return height;
@@ -305,7 +305,7 @@
 + (NSString *)cellIdentifierForMessageModel:(AgoraMessageModel *)model
 {
     NSString *identifier = @"MessageCell";
-    if (model.message.direction == MessageDirectionSend) {
+    if (model.message.direction == AgoraChatMessageDirectionSend) {
         identifier = [identifier stringByAppendingString:@"Sender"];
     }
     else{
@@ -313,19 +313,19 @@
     }
     
     switch (model.message.body.type) {
-        case MessageBodyTypeText:
+        case AgoraChatMessageBodyTypeText:
             identifier = [identifier stringByAppendingString:@"Text"];
             break;
-        case MessageBodyTypeImage:
+        case AgoraChatMessageBodyTypeImage:
             identifier = [identifier stringByAppendingString:@"Image"];
             break;
-        case MessageBodyTypeVoice:
+        case AgoraChatMessageBodyTypeVoice:
             identifier = [identifier stringByAppendingString:@"Audio"];
             break;
-        case MessageBodyTypeLocation:
+        case AgoraChatMessageBodyTypeLocation:
             identifier = [identifier stringByAppendingString:@"Location"];
             break;
-        case MessageBodyTypeVideo:
+        case AgoraChatMessageBodyTypeVideo:
             identifier = [identifier stringByAppendingString:@"Video"];
             break;
         default:

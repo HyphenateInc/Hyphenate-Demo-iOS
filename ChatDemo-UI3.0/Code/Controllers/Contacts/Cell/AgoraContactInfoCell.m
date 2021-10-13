@@ -63,7 +63,7 @@
     WEAK_SELF
     if (_blockSwitch.isOn) {
         [[AgoraChatClient sharedClient].contactManager addUserToBlackList:_hyphenateId
-                                                        completion:^(NSString *aUsername, AgoraError *aError) {
+                                                        completion:^(NSString *aUsername, AgoraChatError *aError) {
                                                             if (!aError) {
                                                                 if (weakSelf.delegate &&
                                                                     [weakSelf.delegate respondsToSelector:@selector(needRefreshContactsFromServer:)])
@@ -77,7 +77,7 @@
                                                         }];
     } else {
         [[AgoraChatClient sharedClient].contactManager removeUserFromBlackList:_hyphenateId
-                                                             completion:^(NSString *aUsername, AgoraError *aError) {
+                                                             completion:^(NSString *aUsername, AgoraChatError *aError) {
                                                                  if (!aError) {
                                                                      if (weakSelf.delegate &&
                                                                          [weakSelf.delegate respondsToSelector:@selector(needRefreshContactsFromServer:)])

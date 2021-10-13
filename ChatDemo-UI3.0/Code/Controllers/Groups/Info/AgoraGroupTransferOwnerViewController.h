@@ -12,6 +12,6 @@
 @interface AgoraGroupTransferOwnerViewController : AgoraBaseRefreshTableController
 @property (nonatomic,copy) void(^transferOwnerBlock)(void);
 
-- (instancetype)initWithGroup:(AgoraGroup *)aGroup;
+- (instancetype)initWithGroup:(AgoraChatGroup *)aGroup;
 
 @end

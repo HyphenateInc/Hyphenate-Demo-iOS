@@ -45,7 +45,7 @@
 #pragma mark private method
 - (void)loadOptions
 {
-    AgoraOptions *options = [[AgoraChatClient sharedClient] options];
+    AgoraChatOptions *options = [[AgoraChatClient sharedClient] options];
     _autoAcceptInvitation = options.isAutoAcceptGroupInvitation;
     [self.autoAcceptSitch setOn:_autoAcceptInvitation animated:YES];
     [self.tableView reloadData];
@@ -53,13 +53,13 @@
 
 - (void)autoAcceptAction:(UISwitch *)sender
 {
-    AgoraOptions *options = [[AgoraChatClient sharedClient] options];
+    AgoraChatOptions *options = [[AgoraChatClient sharedClient] options];
     options.isAutoAcceptGroupInvitation = sender.isOn;
 }
 
 
 - (void)fetchBlockList {
-    [[AgoraChatClient sharedClient].contactManager getBlackListFromServerWithCompletion:^(NSArray *aList, AgoraError *aError) {
+    [[AgoraChatClient sharedClient].contactManager getBlackListFromServerWithCompletion:^(NSArray *aList, AgoraChatError *aError) {
         NSLog(@"%s aList :%@",__func__,aList);
         
         if (aError == nil) {

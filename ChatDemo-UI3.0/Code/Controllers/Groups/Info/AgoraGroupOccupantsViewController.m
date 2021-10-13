@@ -16,7 +16,7 @@
 @interface AgoraGroupOccupantsViewController ()
 
 @property (nonatomic, strong) NSString *groupId;
-@property (nonatomic, strong) AgoraGroup *group;
+@property (nonatomic, strong) AgoraChatGroup *group;
 @property (nonatomic, strong) NSString *cursor;
 
 @property (nonatomic, strong) NSMutableArray *ownerAndAdmins;
@@ -109,7 +109,7 @@
         return NO;
     }
     
-    if (self.group.permissionType == AgoraGroupPermissionTypeOwner || self.group.permissionType == AgoraGroupPermissionTypeAdmin) {
+    if (self.group.permissionType == AgoraChatGroupPermissionTypeOwner || self.group.permissionType == AgoraChatGroupPermissionTypeAdmin) {
         return YES;
     }
     
@@ -160,7 +160,7 @@
     
     __weak typeof(self) weakSelf = self;
     dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), ^{
-        AgoraError *error = nil;
+        AgoraChatError *error = nil;
         if (buttonIndex == 0) { //Remove
             weakSelf.group = [[AgoraChatClient sharedClient].groupManager removeOccupants:@[userName] fromGroup:weakSelf.group.groupId error:&error];
             if (!error) {
@@ -211,7 +211,7 @@
 
 - (BOOL)_isShowCellAccessoryView
 {
-    if (self.group.permissionType == AgoraGroupPermissionTypeOwner || self.group.permissionType == AgoraGroupPermissionTypeAdmin) {
+    if (self.group.permissionType == AgoraChatGroupPermissionTypeOwner || self.group.permissionType == AgoraChatGroupPermissionTypeAdmin) {
         return YES;
     }
     
@@ -235,12 +235,12 @@
 {
     __weak typeof(self) weakSelf = self;
     [self showHudInView:self.view hint:NSLocalizedString(@"hud.load", @"Load data...")];
-    [[AgoraChatClient sharedClient].groupManager getGroupSpecificationFromServerWithId:self.groupId completion:^(AgoraGroup *aGroup, AgoraError *aError) {
+    [[AgoraChatClient sharedClient].groupManager getGroupSpecificationFromServerWithId:self.groupId completion:^(AgoraChatGroup *aGroup, AgoraChatError *aError) {
         [weakSelf hideHud];
         
         if (!aError) {
             weakSelf.group = aGroup;
-            AgoraConversation *conversation = [[AgoraChatClient sharedClient].chatManager getConversation:aGroup.groupId type:AgoraConversationTypeGroupChat createIfNotExist:YES];
+            AgoraChatConversation *conversation = [[AgoraChatClient sharedClient].chatManager getConversation:aGroup.groupId type:AgoraChatConversationTypeGroupChat createIfNotExist:YES];
             if ([aGroup.groupId isEqualToString:conversation.conversationId]) {
                 NSMutableDictionary *ext = [NSMutableDictionary dictionaryWithDictionary:conversation.ext];
                 [ext setObject:aGroup.subject forKey:@"subject"];
@@ -267,7 +267,7 @@
     NSInteger pageSize = 50;
     __weak typeof(self) weakSelf = self;
     [self showHudInView:self.view hint:NSLocalizedString(@"hud.load", @"Load data...")];
-    [[AgoraChatClient sharedClient].groupManager getGroupMemberListFromServerWithId:self.groupId cursor:aCursor pageSize:pageSize completion:^(AgoraCursorResult *aResult, AgoraError *aError) {
+    [[AgoraChatClient sharedClient].groupManager getGroupMemberListFromServerWithId:self.groupId cursor:aCursor pageSize:pageSize completion:^(AgoraChatCursorResult *aResult, AgoraChatError *aError) {
         weakSelf.cursor = aResult.cursor;
         [weakSelf hideHud];
         [weakSelf tableViewDidFinishTriggerHeader:aIsHeader];

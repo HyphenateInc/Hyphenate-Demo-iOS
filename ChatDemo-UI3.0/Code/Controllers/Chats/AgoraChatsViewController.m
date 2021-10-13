@@ -19,7 +19,7 @@
 
 NSString *CellIdentifier = @"AgoraChatsCellIdentifier";
 
-@interface AgoraChatsViewController () <AgoraChatManagerDelegate, AgoraGroupManagerDelegate, UISearchBarDelegate, UITableViewDelegate, UITableViewDataSource, UISearchDisplayDelegate>
+@interface AgoraChatsViewController () <AgoraChatManagerDelegate, AgoraChatGroupManagerDelegate, UISearchBarDelegate, UITableViewDelegate, UITableViewDataSource, UISearchDisplayDelegate>
 {
     BOOL _isSearchState;
 }
@@ -105,7 +105,7 @@ NSString *CellIdentifier = @"AgoraChatsCellIdentifier";
 
 
 - (void)updateUIAfterLeaveGroupWithConversationId:(NSString *)conversationId {
-    [[AgoraChatClient sharedClient].chatManager deleteConversation:conversationId isDeleteMessages:YES completion:^(NSString *aConversationId, AgoraError *aError) {
+    [[AgoraChatClient sharedClient].chatManager deleteConversation:conversationId isDeleteMessages:YES completion:^(NSString *aConversationId, AgoraChatError *aError) {
         if (aError == nil) {
             [self tableViewDidTriggerHeaderRefresh];
         }
@@ -165,7 +165,7 @@ NSString *CellIdentifier = @"AgoraChatsCellIdentifier";
     if (editingStyle == UITableViewCellEditingStyleDelete) {
         AgoraConversationModel *model = [self.dataSource objectAtIndex:indexPath.row];
         WEAK_SELF
-        [[AgoraChatClient sharedClient].chatManager deleteConversation:model.conversation.conversationId isDeleteMessages:YES completion:^(NSString *aConversationId, AgoraError *aError) {
+        [[AgoraChatClient sharedClient].chatManager deleteConversation:model.conversation.conversationId isDeleteMessages:YES completion:^(NSString *aConversationId, AgoraChatError *aError) {
             [weakSelf.dataSource removeObjectAtIndex:indexPath.row];
             [tableView deleteRowsAtIndexPaths:@[indexPath] withRowAnimation:UITableViewRowAnimationFade];
         }];
@@ -272,7 +272,7 @@ NSString *CellIdentifier = @"AgoraChatsCellIdentifier";
             NSMutableArray *cArray = NSMutableArray.new;
             NSLog(@"\n%s  =====================currentUsername:%@",__func__,AgoraChatClient.sharedClient.currentUsername);
 
-            for (AgoraConversation *conversation in sorted) {
+            for (AgoraChatConversation *conversation in sorted) {
                 AgoraConversationModel *model = [[AgoraConversationModel alloc] initWithConversation:conversation];
                 NSLog(@"%s conversation.conversationId:%@",__func__,conversation.conversationId);
 
@@ -289,12 +289,12 @@ NSString *CellIdentifier = @"AgoraChatsCellIdentifier";
 - (void)fetchDataFromServer {
     WEAK_SELF
     dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), ^{
-        [[AgoraChatClient sharedClient].chatManager getConversationsFromServer:^(NSArray *aCoversations, AgoraError *aError) {
+        [[AgoraChatClient sharedClient].chatManager getConversationsFromServer:^(NSArray *aCoversations, AgoraChatError *aError) {
             NSArray* sorted = [weakSelf _sortConversationList:aCoversations];
             dispatch_async(dispatch_get_main_queue(), ^{
                 NSMutableArray *cArray = NSMutableArray.new;
 
-                for (AgoraConversation *conversation in sorted) {
+                for (AgoraChatConversation *conversation in sorted) {
                     AgoraConversationModel *model = [[AgoraConversationModel alloc] initWithConversation:conversation];
 
                     [cArray addObject:model];
@@ -323,7 +323,7 @@ NSString *CellIdentifier = @"AgoraChatsCellIdentifier";
         NSArray* sorted = [self _sortConversationList:aConversationList];
         dispatch_async(dispatch_get_main_queue(), ^{
             [weakSelf.dataSource removeAllObjects];
-            for (AgoraConversation *conversation in sorted) {
+            for (AgoraChatConversation *conversation in sorted) {
                 AgoraConversationModel *model = [[AgoraConversationModel alloc] initWithConversation:conversation];
                 [weakSelf.dataSource addObject:model];
             }
@@ -338,7 +338,7 @@ NSString *CellIdentifier = @"AgoraChatsCellIdentifier";
     [self tableViewDidTriggerHeaderRefresh];
 }
 
-#pragma mark - AgoraGroupManagerDelegate
+#pragma mark - AgoraChatGroupManagerDelegate
 
 - (void)groupListDidUpdate:(NSArray *)aGroupList
 {
@@ -346,12 +346,12 @@ NSString *CellIdentifier = @"AgoraChatsCellIdentifier";
 }
 
 
-- (void)didLeaveGroup:(AgoraGroup *)aGroup reason:(AgoraGroupLeaveReason)aReason {
-    if (aReason == AgoraGroupLeaveReasonDestroyed) {
+- (void)didLeaveGroup:(AgoraChatGroup *)aGroup reason:(AgoraChatGroupLeaveReason)aReason {
+    if (aReason == AgoraChatGroupLeaveReasonDestroyed) {
         NSArray *conversations = [[AgoraChatClient sharedClient].chatManager getAllConversations];
-        for (AgoraConversation *con in conversations) {
+        for (AgoraChatConversation *con in conversations) {
             if ([con.conversationId isEqualToString:aGroup.groupId]) {
-                [[AgoraChatClient sharedClient].chatManager deleteConversation:con.conversationId isDeleteMessages:YES completion:^(NSString *aConversationId, AgoraError *aError) {
+                [[AgoraChatClient sharedClient].chatManager deleteConversation:con.conversationId isDeleteMessages:YES completion:^(NSString *aConversationId, AgoraChatError *aError) {
                     [self tableViewDidTriggerHeaderRefresh];
                 }];
             }
@@ -366,9 +366,9 @@ NSString *CellIdentifier = @"AgoraChatsCellIdentifier";
     navigationItem.titleView = self.searchBar;
 }
 
-- (void)networkChanged:(AgoraConnectionState)connectionState
+- (void)networkChanged:(AgoraChatConnectionState)connectionState
 {
-    if (connectionState == AgoraConnectionDisconnected) {
+    if (connectionState == AgoraChatConnectionDisconnected) {
         self.tableView.tableHeaderView = self.networkStateView;
     } else {
         self.tableView.tableHeaderView = nil;
@@ -380,9 +380,9 @@ NSString *CellIdentifier = @"AgoraChatsCellIdentifier";
 - (NSArray*)_sortConversationList:(NSArray *)aConversationList
 {
     NSArray* sorted = [aConversationList sortedArrayUsingComparator:
-                       ^(AgoraConversation *obj1, AgoraConversation* obj2){
-                           Message *message1 = [obj1 latestMessage];
-                           Message *message2 = [obj2 latestMessage];
+                       ^(AgoraChatConversation *obj1, AgoraChatConversation * obj2){
+                           AgoraChatMessage *message1 = [obj1 latestMessage];
+                           AgoraChatMessage *message2 = [obj2 latestMessage];
                            if(message1.timestamp > message2.timestamp) {
                                return(NSComparisonResult)NSOrderedAscending;
                            }else {

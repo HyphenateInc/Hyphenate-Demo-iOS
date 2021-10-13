@@ -13,16 +13,16 @@
 
 @implementation AgoraSDKHelper
 
-+ (Message *)initTextMessage:(NSString *)text
++ (AgoraChatMessage *)initTextMessage:(NSString *)text
                             to:(NSString *)receiver
                       chatType:(AgoraChatType)chatType
                     messageExt:(NSDictionary *)messageExt
 
 {
-    TextMessageBody *body = [[TextMessageBody alloc] initWithText:text];
+    AgoraChatTextMessageBody *body = [[AgoraChatTextMessageBody alloc] initWithText:text];
 
     NSString *sender = [[AgoraChatClient sharedClient] currentUsername];
-    Message *message = [[Message alloc] initWithConversationID:receiver
+    AgoraChatMessage *message = [[AgoraChatMessage alloc] initWithConversationID:receiver
                                                               from:sender
                                                                 to:receiver
                                                               body:body
@@ -32,20 +32,20 @@
     return message;
 }
 
-+ (Message *)initCmdMessage:(NSString *)action
++ (AgoraChatMessage *)initCmdMessage:(NSString *)action
                            to:(NSString *)receiver
                      chatType:(AgoraChatType)chatType
                    messageExt:(NSDictionary *)messageExt
                     cmdParams:(NSArray *)params
 {
-    CmdMessageBody *body = [[CmdMessageBody alloc] initWithAction:action];
+    AgoraChatCmdMessageBody *body = [[AgoraChatCmdMessageBody alloc] initWithAction:action];
     
     if (params) {
         body.params = params;
     }
 
     NSString *sender = [[AgoraChatClient sharedClient] currentUsername];
-    Message *message = [[Message alloc] initWithConversationID:receiver
+    AgoraChatMessage *message = [[AgoraChatMessage alloc] initWithConversationID:receiver
                                                               from:sender
                                                                 to:receiver
                                                               body:body
@@ -55,19 +55,19 @@
     return message;
 }
 
-+ (Message *)initLocationMessageWithLatitude:(double)latitude
++ (AgoraChatMessage *)initLocationMessageWithLatitude:(double)latitude
                                      longitude:(double)longitude
                                        address:(NSString *)address
                                             to:(NSString *)receiver
                                       chatType:(AgoraChatType)chatType
                                     messageExt:(NSDictionary *)messageExt
 {
-    LocationMessageBody *body = [[LocationMessageBody alloc] initWithLatitude:latitude
+    AgoraChatLocationMessageBody *body = [[AgoraChatLocationMessageBody alloc] initWithLatitude:latitude
                                                                         longitude:longitude
                                                                           address:address];
 
     NSString *sender = [[AgoraChatClient sharedClient] currentUsername];
-    Message *message = [[Message alloc] initWithConversationID:receiver
+    AgoraChatMessage *message = [[AgoraChatMessage alloc] initWithConversationID:receiver
                                                               from:sender
                                                                 to:receiver
                                                               body:body
@@ -77,13 +77,13 @@
     return message;
 }
 
-+ (Message *)initImageData:(NSData *)imageData
++ (AgoraChatMessage *)initImageData:(NSData *)imageData
                  displayName:(NSString *)displayName
                           to:(NSString *)receiver
                     chatType:(AgoraChatType)chatType
                   messageExt:(NSDictionary *)messageExt
 {
-    ImageMessageBody *body = [[ImageMessageBody alloc] initWithData:imageData displayName:displayName];
+    AgoraChatImageMessageBody *body = [[AgoraChatImageMessageBody alloc] initWithData:imageData displayName:displayName];
     
     if (CGSizeEqualToSize(body.size, CGSizeZero)) {
         if (imageData.length) {
@@ -93,7 +93,7 @@
     }
     
     NSString *sender = [[AgoraChatClient sharedClient] currentUsername];
-    Message *message = [[Message alloc] initWithConversationID:receiver
+    AgoraChatMessage *message = [[AgoraChatMessage alloc] initWithConversationID:receiver
                                                               from:sender
                                                                 to:receiver
                                                               body:body
@@ -104,21 +104,21 @@
     return message;
 }
 
-+ (Message *)initVoiceMessageWithLocalPath:(NSString *)localPath
++ (AgoraChatMessage *)initVoiceMessageWithLocalPath:(NSString *)localPath
                                  displayName:(NSString *)displayName
                                     duration:(NSInteger)duration
                                           to:(NSString *)receiver
                                     chatType:(AgoraChatType)chatType
                                   messageExt:(NSDictionary *)messageExt
 {
-    VoiceMessageBody *body = [[VoiceMessageBody alloc] initWithLocalPath:localPath displayName:displayName];
+    AgoraChatVoiceMessageBody *body = [[AgoraChatVoiceMessageBody alloc] initWithLocalPath:localPath displayName:displayName];
     
     if (duration > 0) {
         body.duration = (int)duration;
     }
     
     NSString *sender = [[AgoraChatClient sharedClient] currentUsername];
-    Message *message = [[Message alloc] initWithConversationID:receiver
+    AgoraChatMessage *message = [[AgoraChatMessage alloc] initWithConversationID:receiver
                                                               from:sender
                                                                 to:receiver
                                                               body:body
@@ -128,21 +128,21 @@
     return message;
 }
 
-+ (Message *)initVideoMessageWithLocalURL:(NSURL *)url
++ (AgoraChatMessage *)initVideoMessageWithLocalURL:(NSURL *)url
                                 displayName:(NSString *)displayName
                                    duration:(NSInteger)duration
                                          to:(NSString *)receiver
                                    chatType:(AgoraChatType)chatType
                                  messageExt:(NSDictionary *)messageExt
 {
-    VideoMessageBody *body = [[VideoMessageBody alloc] initWithLocalPath:[url path] displayName:displayName];
+    AgoraChatVideoMessageBody *body = [[AgoraChatVideoMessageBody alloc] initWithLocalPath:[url path] displayName:displayName];
     
     if (duration > 0) {
         body.duration = (int)duration;
     }
     
     NSString *sender = [[AgoraChatClient sharedClient] currentUsername];
-    Message *message = [[Message alloc] initWithConversationID:receiver
+    AgoraChatMessage *message = [[AgoraChatMessage alloc] initWithConversationID:receiver
                                                               from:sender
                                                                 to:receiver
                                                               body:body

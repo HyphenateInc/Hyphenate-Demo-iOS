@@ -94,7 +94,7 @@
     [MBProgressHUD showHUDAddedTo:self.view animated:YES];
     [[AgoraChatClient sharedClient] loginWithUsername:_usernameTextField.text
                                       password:_passwordTextField.text
-                                    completion:^(NSString *aUsername, AgoraError *aError) {
+                                    completion:^(NSString *aUsername, AgoraChatError *aError) {
                                         [MBProgressHUD hideAllHUDsForView:self.view animated:YES];
                                         if (!aError) {
                                             [[AgoraChatClient sharedClient].options setIsAutoLogin:YES];
@@ -103,19 +103,19 @@
                                             NSString *alertStr = NSLocalizedString(@"login.failure", @"Login failure");
                                             switch (aError.code)
                                             {
-                                                case AgoraErrorUserNotFound:
+                                                case AgoraChatErrorUserNotFound:
                                                     alertStr = aError.errorDescription;
                                                     break;
-                                                case AgoraErrorNetworkUnavailable:
+                                                case AgoraChatErrorNetworkUnavailable:
                                                     alertStr = NSLocalizedString(@"error.connectNetworkFail", @"No network connection!");
                                                     break;
-                                                case AgoraErrorServerNotReachable:
+                                                case AgoraChatErrorServerNotReachable:
                                                     alertStr = NSLocalizedString(@"error.connectServerFail", @"Connect to the server failed!");
                                                     break;
-                                                case AgoraErrorUserAuthenticationFailed:
+                                                case AgoraChatErrorUserAuthenticationFailed:
                                                     alertStr = NSLocalizedString(@"login.failure.password.notmatch", @"Password does not match username");
                                                     break;
-                                                case AgoraErrorServerTimeout:
+                                                case AgoraChatErrorServerTimeout:
                                                     alertStr = NSLocalizedString(@"error.connectServerTimeout", @"Connect to the server timed out!");
                                                     break;
                                                 default:
@@ -140,7 +140,7 @@
     [MBProgressHUD showHUDAddedTo:self.view animated:YES];
     [[AgoraChatClient sharedClient] registerWithUsername:_usernameTextField.text
                                          password:_passwordTextField.text
-                                       completion:^(NSString *aUsername, AgoraError *aError) {
+                                       completion:^(NSString *aUsername, AgoraChatError *aError) {
                                            NSString *alertStr = nil;
                                            [MBProgressHUD hideAllHUDsForView:weakSelf.view animated:YES];
                                            if (!aError) {
@@ -149,16 +149,16 @@
                                                alertStr = NSLocalizedString(@"login.signup.failure", @"Sign up failure");
                                                switch (aError.code)
                                                {
-                                                   case AgoraErrorServerNotReachable:
+                                                   case AgoraChatErrorServerNotReachable:
                                                        alertStr = NSLocalizedString(@"error.connectServerFail", @"Connect to the server failed!");
                                                        break;
-                                                   case AgoraErrorNetworkUnavailable:
+                                                   case AgoraChatErrorNetworkUnavailable:
                                                        alertStr = NSLocalizedString(@"error.connectNetworkFail", @"No network connection!");
                                                        break;
-                                                   case AgoraErrorServerTimeout:
+                                                   case AgoraChatErrorServerTimeout:
                                                        alertStr = NSLocalizedString(@"error.connectServerTimeout", @"Connect to the server timed out!");
                                                        break;
-                                                   case AgoraErrorUserAlreadyExist:
+                                                   case AgoraChatErrorUserAlreadyExist:
                                                        alertStr = NSLocalizedString(@"login.taken", @"Username taken");
                                                        break;
                                                    default:

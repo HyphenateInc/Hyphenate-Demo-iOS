@@ -41,7 +41,7 @@
 - (CGSize)sizeThatFits:(CGSize)size
 {
     CGSize textBlockMinSize = {95, 25};
-    LocationMessageBody *body = (LocationMessageBody*)self.model.message.body;
+    AgoraChatLocationMessageBody *body = (AgoraChatLocationMessageBody*)self.model.message.body;
     CGSize addressSize = [body.address boundingRectWithSize:textBlockMinSize
                                                     options:NSStringDrawingUsesLineFragmentOrigin
                                                  attributes:@{NSFontAttributeName:_addressLabel.font}
@@ -59,7 +59,7 @@
 - (void)setModel:(AgoraMessageModel *)model
 {
     [super setModel:model];
-    LocationMessageBody *body = (LocationMessageBody*)model.message.body;
+    AgoraChatLocationMessageBody *body = (AgoraChatLocationMessageBody*)model.message.body;
     _addressLabel.text = body.address;
 }
 

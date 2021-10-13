@@ -177,13 +177,13 @@
         [alertView show];
         return;
     }
-    AgoraGroupOptions *options = [[AgoraGroupOptions alloc] init];
+    AgoraChatGroupOptions *options = [[AgoraChatGroupOptions alloc] init];
     options.maxUsersCount = KAgora_GROUP_MAgoraBERSCOUNT;
     if (_isPublic) {
-        options.style = _isAllowMemberInvite ? AgoraGroupStylePublicOpenJoin : AgoraGroupStylePublicJoinNeedApproval;
+        options.style = _isAllowMemberInvite ? AgoraChatGroupStylePublicOpenJoin : AgoraChatGroupStylePublicJoinNeedApproval;
     }
     else {
-        options.style = _isAllowMemberInvite ? AgoraGroupStylePrivateMemberCanInvite : AgoraGroupStylePrivateOnlyOwnerInvite;
+        options.style = _isAllowMemberInvite ? AgoraChatGroupStylePrivateMemberCanInvite : AgoraChatGroupStylePrivateOnlyOwnerInvite;
     }
     
     NSString *descreiption = [NSString stringWithFormat:NSLocalizedString(@"group.creategroup", @"%@ create a group[%@]"),[AgoraChatClient sharedClient].currentUsername, _groupSubjectTextField.text];
@@ -197,7 +197,7 @@
                                                         invitees:_invitees
                                                          message:message
                                                          setting:options
-                                                      completion:^(AgoraGroup *aGroup, AgoraError *aError) {
+                                                      completion:^(AgoraChatGroup *aGroup, AgoraChatError *aError) {
                                                           [MBProgressHUD hideAllHUDsForView:weakSelf.navigationController.view animated:YES];
                                                           _createBtn.userInteractionEnabled = YES;
                                                           if (!aError) {

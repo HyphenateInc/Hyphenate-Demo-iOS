@@ -49,7 +49,7 @@ static NSString *recallCellIndentifier = @"recallCellIndentifier";
 @property (strong, nonatomic) UIButton *detailButton;
 @property (strong, nonatomic) NSIndexPath *longPressIndexPath;
 
-@property (strong, nonatomic) AgoraConversation *currentConversation;
+@property (strong, nonatomic) AgoraChatConversation *currentConversation;
 @property (strong, nonatomic) AgoraMessageModel *prevAudioModel;
 //need delete Conversation
 @property (assign, nonatomic) BOOL isDeleteConversation;
@@ -59,7 +59,7 @@ static NSString *recallCellIndentifier = @"recallCellIndentifier";
 
 @implementation AgoraChatViewController
 
-- (instancetype)initWithConversationId:(NSString*)conversationId conversationType:(AgoraConversationType)type
+- (instancetype)initWithConversationId:(NSString*)conversationId conversationType:(AgoraChatConversationType)type
 {
     self = [super init];
     if (self) {
@@ -89,7 +89,7 @@ static NSString *recallCellIndentifier = @"recallCellIndentifier";
     [[AgoraChatClient sharedClient].roomManager addDelegate:self delegateQueue:nil];
     
     
-    if (_currentConversation.type == AgoraConversationTypeChatRoom) {
+    if (_currentConversation.type == AgoraChatConversationTypeChatRoom) {
         [self _joinChatroom:_currentConversation.conversationId];
     }
 }
@@ -155,20 +155,20 @@ static NSString *recallCellIndentifier = @"recallCellIndentifier";
 {
     self.navigationItem.leftBarButtonItem = [[UIBarButtonItem alloc] initWithCustomView:self.backButton];
     
-    if (_currentConversation.type == AgoraConversationTypeChat) {
+    if (_currentConversation.type == AgoraChatConversationTypeChat) {
 //        self.navigationItem.rightBarButtonItems = @[[[UIBarButtonItem alloc] initWithCustomView:self.photoButton],[[UIBarButtonItem alloc] initWithCustomView:self.camButton]];
         self.navigationItem.rightBarButtonItem = nil;
-        [AgoraUserInfoManagerHelper fetchUserInfoWithUserIds:@[_currentConversation.conversationId] completion:^(NSDictionary * _Nonnull userInfoDic) {
-            AgoraUserInfo *userInfo = userInfoDic[_currentConversation.conversationId];
+        [AgoraChatUserInfoManagerHelper fetchUserInfoWithUserIds:@[_currentConversation.conversationId] completion:^(NSDictionary * _Nonnull userInfoDic) {
+            AgoraChatUserInfo *userInfo = userInfoDic[_currentConversation.conversationId];
             dispatch_async(dispatch_get_main_queue(), ^{
                 self.title = userInfo.nickName ?:userInfo.userId;
             });
         }];
         
-    } else if (_currentConversation.type == AgoraConversationTypeGroupChat) {
+    } else if (_currentConversation.type == AgoraChatConversationTypeGroupChat) {
         self.navigationItem.rightBarButtonItem = [[UIBarButtonItem alloc] initWithCustomView:self.detailButton];
         self.title = [[AgoraConversationModel alloc] initWithConversation:self.currentConversation].title;
-    } else if (_currentConversation.type == AgoraConversationTypeChatRoom) {
+    } else if (_currentConversation.type == AgoraChatConversationTypeChatRoom) {
         self.navigationItem.rightBarButtonItem = [[UIBarButtonItem alloc] initWithCustomView:self.detailButton];
         self.title = [[AgoraConversationModel alloc] initWithConversation:self.currentConversation].title;
     }
@@ -350,7 +350,7 @@ static NSString *recallCellIndentifier = @"recallCellIndentifier";
 
 - (void)didSendText:(NSString *)text
 {
-    Message *message = [AgoraSDKHelper initTextMessage:text
+    AgoraChatMessage *message = [AgoraSDKHelper initTextMessage:text
                                                    to:_currentConversation.conversationId
                                              chatType:[self _messageType]
                                            messageExt:nil];
@@ -359,7 +359,7 @@ static NSString *recallCellIndentifier = @"recallCellIndentifier";
 
 - (void)didSendAudio:(NSString *)recordPath duration:(NSInteger)duration
 {
-    Message *message = [AgoraSDKHelper initVoiceMessageWithLocalPath:recordPath
+    AgoraChatMessage *message = [AgoraSDKHelper initVoiceMessageWithLocalPath:recordPath
                                                         displayName:@"audio"
                                                            duration:duration
                                                                  to:_currentConversation.conversationId
@@ -412,7 +412,7 @@ static NSString *recallCellIndentifier = @"recallCellIndentifier";
                 NSLog(@"failed to remove file, error:%@.", error);
             }
         }
-        Message *message = [AgoraSDKHelper initVideoMessageWithLocalURL:mp4
+        AgoraChatMessage *message = [AgoraSDKHelper initVideoMessageWithLocalURL:mp4
                                                            displayName:@"video.mp4"
                                                               duration:0
                                                                     to:_currentConversation.conversationId
@@ -425,7 +425,7 @@ static NSString *recallCellIndentifier = @"recallCellIndentifier";
         if (url == nil) {
             UIImage *orgImage = info[UIImagePickerControllerOriginalImage];
             NSData *data = UIImageJPEGRepresentation(orgImage, 1);
-            Message *message = [AgoraSDKHelper initImageData:data
+            AgoraChatMessage *message = [AgoraSDKHelper initImageData:data
                                                 displayName:@"image.png"
                                                          to:_currentConversation.conversationId
                                                    chatType:[self _messageType]
@@ -441,7 +441,7 @@ static NSString *recallCellIndentifier = @"recallCellIndentifier";
                                 // Warning - large image size
                             }
                             if (data != nil) {
-                                Message *message = [AgoraSDKHelper initImageData:data
+                                AgoraChatMessage *message = [AgoraSDKHelper initImageData:data
                                                                     displayName:@"image.png"
                                                                              to:_currentConversation.conversationId
                                                                     chatType:[self _messageType]
@@ -464,7 +464,7 @@ static NSString *recallCellIndentifier = @"recallCellIndentifier";
                         if (fileData.length > 10 * 1000 * 1000) {
                             // Warning - large image size
                         }
-                        Message *message = [AgoraSDKHelper initImageData:fileData
+                        AgoraChatMessage *message = [AgoraSDKHelper initImageData:fileData
                                                             displayName:@"image.png"
                                                                      to:_currentConversation.conversationId
                                                                chatType:[self _messageType]
@@ -489,7 +489,7 @@ static NSString *recallCellIndentifier = @"recallCellIndentifier";
                    longitude:(double)longitude
                   andAddress:(NSString *)address
 {
-    Message *message = [AgoraSDKHelper initLocationMessageWithLatitude:latitude
+    AgoraChatMessage *message = [AgoraSDKHelper initLocationMessageWithLatitude:latitude
                                                             longitude:longitude
                                                               address:address
                                                                    to:_currentConversation.conversationId
@@ -510,8 +510,8 @@ static NSString *recallCellIndentifier = @"recallCellIndentifier";
     if ([self _shouldSendHasReadAckForMessage:model.message read:YES]) {
         [self _sendHasReadResponseForMessages:@[model.message] isRead:YES];
     }
-    ImageMessageBody *body = (ImageMessageBody*)model.message.body;
-    if (model.message.direction == MessageDirectionSend && body.localPath.length > 0) {
+    AgoraChatImageMessageBody *body = (AgoraChatImageMessageBody*)model.message.body;
+    if (model.message.direction == AgoraChatMessageDirectionSend && body.localPath.length > 0) {
         UIImage *image = [UIImage imageWithContentsOfFile:body.localPath];
         [[AgoraMessageReadManager shareInstance] showBrowserWithImages:@[image]];
     } else {
@@ -521,16 +521,16 @@ static NSString *recallCellIndentifier = @"recallCellIndentifier";
 
 - (void)didAudioCellPressed:(AgoraMessageModel *)model
 {
-    VoiceMessageBody *body = (VoiceMessageBody*)model.message.body;
-    AgoraDownloadStatus downloadStatus = [body downloadStatus];
-    if (downloadStatus == AgoraDownloadStatusDownloading) {
+    AgoraChatVoiceMessageBody *body = (AgoraChatVoiceMessageBody*)model.message.body;
+    AgoraChatDownloadStatus downloadStatus = [body downloadStatus];
+    if (downloadStatus == AgoraChatDownloadStatusDownloading) {
         return;
-    } else if (downloadStatus == AgoraDownloadStatusFailed) {
+    } else if (downloadStatus == AgoraChatDownloadStatusFailed) {
         [[AgoraChatClient sharedClient].chatManager downloadMessageAttachment:model.message progress:nil completion:nil];
         return;
     }
     
-    if (body.type == MessageBodyTypeVoice) {
+    if (body.type == AgoraChatMessageBodyTypeVoice) {
         if ([self _shouldSendHasReadAckForMessage:model.message read:YES]) {
             [self _sendHasReadResponseForMessages:@[model.message] isRead:YES];
         }
@@ -568,8 +568,8 @@ static NSString *recallCellIndentifier = @"recallCellIndentifier";
 
 - (void)didVideoCellPressed:(AgoraMessageModel*)model
 {
-    VideoMessageBody *videoBody = (VideoMessageBody *)model.message.body;
-    if (videoBody.downloadStatus == AgoraDownloadStatusSuccessed) {
+    AgoraChatVideoMessageBody *videoBody = (AgoraChatVideoMessageBody *)model.message.body;
+    if (videoBody.downloadStatus == AgoraChatDownloadStatusSuccessed) {
         if ([self _shouldSendHasReadAckForMessage:model.message read:YES]) {
             [self _sendHasReadResponseForMessages:@[model.message] isRead:YES];
         }
@@ -584,17 +584,17 @@ static NSString *recallCellIndentifier = @"recallCellIndentifier";
         }];
         
         
-    } else if (videoBody.downloadStatus == AgoraDownloadStatusDownloading) {
+    } else if (videoBody.downloadStatus == AgoraChatDownloadStatusDownloading) {
         return;
     } else {
-        [[AgoraChatClient sharedClient].chatManager downloadMessageAttachment:model.message progress:nil completion:^(Message *message, AgoraError *error) {
+        [[AgoraChatClient sharedClient].chatManager downloadMessageAttachment:model.message progress:nil completion:^(AgoraChatMessage *message, AgoraChatError *error) {
         }];
     }
 }
 
 - (void)didLocationCellPressed:(AgoraMessageModel*)model
 {
-    LocationMessageBody *body = (LocationMessageBody*)model.message.body;
+    AgoraChatLocationMessageBody *body = (AgoraChatLocationMessageBody*)model.message.body;
     AgoraLocationViewController *locationController = [[AgoraLocationViewController alloc] initWithLocation:CLLocationCoordinate2DMake(body.latitude, body.longitude)];
     [self.navigationController pushViewController:locationController animated:YES];
 }
@@ -603,7 +603,7 @@ static NSString *recallCellIndentifier = @"recallCellIndentifier";
 {
     NSIndexPath *indexPath = [self.tableView indexPathForCell:cell];
     AgoraMessageModel *model = [self.messages objectAtIndex:indexPath.row];
-    if (model.message.body.type == MessageBodyTypeText) {
+    if (model.message.body.type == AgoraChatMessageBodyTypeText) {
         UIActionSheet *sheet = [[UIActionSheet alloc] initWithTitle:nil
                                                            delegate:self
                                                   cancelButtonTitle:NSLocalizedString(@"chat.cancel", @"Cancel")
@@ -628,7 +628,7 @@ static NSString *recallCellIndentifier = @"recallCellIndentifier";
 {
     WEAK_SELF
     [self.tableView reloadData];
-    [[AgoraChatClient sharedClient].chatManager resendMessage:model.message progress:nil completion:^(Message *message, AgoraError *error) {
+    [[AgoraChatClient sharedClient].chatManager resendMessage:model.message progress:nil completion:^(AgoraChatMessage *message, AgoraChatError *error) {
         NSLog(@"%@",error.errorDescription);
         [weakSelf.tableView reloadData];
     }];
@@ -644,8 +644,8 @@ static NSString *recallCellIndentifier = @"recallCellIndentifier";
                 UIPasteboard *pasteboard = [UIPasteboard generalPasteboard];
                 if (_longPressIndexPath.row > 0) {
                     AgoraMessageModel *model = [self.messages objectAtIndex:_longPressIndexPath.row];
-                    if (model.message.body.type == MessageBodyTypeText) {
-                        TextMessageBody *body = (TextMessageBody*)model.message.body;
+                    if (model.message.body.type == AgoraChatMessageBodyTypeText) {
+                        AgoraChatTextMessageBody *body = (AgoraChatTextMessageBody*)model.message.body;
                         pasteboard.string = body.text;
                     }
                 }
@@ -716,11 +716,11 @@ static NSString *recallCellIndentifier = @"recallCellIndentifier";
     dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), ^{
         [_currentConversation loadMessagesStartFromId:nil
                                          count:20
-                               searchDirection:MessageSearchDirectionUp
-                                    completion:^(NSArray *aMessages, AgoraError *aError) {
+                               searchDirection:AgoraChatMessageSearchDirectionUp
+                                    completion:^(NSArray *aMessages, AgoraChatError *aError) {
                                         if (!aError) {
                                             [weakSelf.messages removeAllObjects];
-                                            for (Message * message in aMessages) {
+                                            for (AgoraChatMessage * message in aMessages) {
                                                 [weakSelf _addMessageToDataSource:message];
                                             }
                                             [weakSelf.refresh endRefreshing];
@@ -743,13 +743,13 @@ static NSString *recallCellIndentifier = @"recallCellIndentifier";
 
 - (void)enterDetailView
 {
-    if (_currentConversation.type == AgoraConversationTypeGroupChat) {
+    if (_currentConversation.type == AgoraChatConversationTypeGroupChat) {
         AgoraGroupInfoViewController *groupInfoViewController = [[AgoraGroupInfoViewController alloc] initWithGroupId:_currentConversation.conversationId];
         groupInfoViewController.updateGroupNameBlock = ^(NSString *groupName) {
             self.title = groupName;
         };
         [self.navigationController pushViewController:groupInfoViewController animated:YES];
-    } else if (_currentConversation.type == AgoraConversationTypeChatRoom) {
+    } else if (_currentConversation.type == AgoraChatConversationTypeChatRoom) {
         AgoraChatroomInfoViewController *infoController = [[AgoraChatroomInfoViewController alloc] initWithChatroomId:self.currentConversation.conversationId];
         [self.navigationController pushViewController:infoController animated:YES];
     }
@@ -759,10 +759,10 @@ static NSString *recallCellIndentifier = @"recallCellIndentifier";
 {
     
     [[NSNotificationCenter defaultCenter] postNotificationName:KNOTIFICATION_UPDATEUNREADCOUNT object:nil];
-    if (_currentConversation.type == AgoraConversationTypeChatRoom) {
+    if (_currentConversation.type == AgoraChatConversationTypeChatRoom) {
         [self showHudInView:[UIApplication sharedApplication].keyWindow hint:NSLocalizedString(@"chatroom.leaving", @"Leaving the chatroom...")];
         WEAK_SELF
-        [[AgoraChatClient sharedClient].roomManager leaveChatroom:_currentConversation.conversationId completion:^(AgoraError *aError) {
+        [[AgoraChatClient sharedClient].roomManager leaveChatroom:_currentConversation.conversationId completion:^(AgoraChatError *aError) {
             [weakSelf hideHud];
             if (aError) {
                 [self showAlertWithMessage:[NSString stringWithFormat:@"Leave chatroom '%@' failed [%@]", weakSelf.currentConversation.conversationId, aError.errorDescription] ];
@@ -789,7 +789,7 @@ static NSString *recallCellIndentifier = @"recallCellIndentifier";
     if ([sender isKindOfClass:[NSNotification class]]) {
         NSString *groupId = (NSString *)[(NSNotification *)sender object];
         BOOL isDelete = [groupId isEqualToString:self.currentConversation.conversationId];
-        if (self.currentConversation.type != AgoraConversationTypeChat && isDelete) {
+        if (self.currentConversation.type != AgoraChatConversationTypeChat && isDelete) {
             [self.currentConversation deleteAllMessages:nil];
             [self.messages removeAllObjects];
             
@@ -807,7 +807,7 @@ static NSString *recallCellIndentifier = @"recallCellIndentifier";
             self.isDeleteConversation = YES;
             [self backAction];
         }
-    } else if ([obj isKindOfClass:[AgoraChatroom class]] && self.currentConversation.type == AgoraConversationTypeChatRoom) {
+    } else if ([obj isKindOfClass:[AgoraChatroom class]] && self.currentConversation.type == AgoraChatConversationTypeChatRoom) {
         AgoraChatroom *chatroom = (AgoraChatroom *)obj;
         if ([chatroom.chatroomId isEqualToString:self.conversationId]) {
             [self.navigationController popToViewController:self animated:YES];
@@ -831,10 +831,10 @@ static NSString *recallCellIndentifier = @"recallCellIndentifier";
 {
     __weak typeof(self) weakSelf = self;
     [self showHudInView:self.view hint:NSLocalizedString(@"chatroom.joining", @"Joining the chatroom")];
-    [[AgoraChatClient sharedClient].roomManager joinChatroom:aChatroomId completion:^(AgoraChatroom *aChatroom, AgoraError *aError) {
+    [[AgoraChatClient sharedClient].roomManager joinChatroom:aChatroomId completion:^(AgoraChatroom *aChatroom, AgoraChatError *aError) {
         [self hideHud];
         if (aError) {
-            if (aError.code == AgoraErrorChatroomAlreadyJoined) {
+            if (aError.code == AgoraChatErrorChatroomAlreadyJoined) {
                 [[AgoraChatClient sharedClient].roomManager leaveChatroom:aChatroomId completion:nil];
             }
             
@@ -850,24 +850,24 @@ static NSString *recallCellIndentifier = @"recallCellIndentifier";
     }];
 }
 
-- (void)_sendMessage:(Message*)message
+- (void)_sendMessage:(AgoraChatMessage*)message
 {
     [self _addMessageToDataSource:message];
     [self.tableView reloadData];
     WEAK_SELF
-    [[AgoraChatClient sharedClient].chatManager sendMessage:message progress:nil completion:^(Message *message, AgoraError *error) {
+    [[AgoraChatClient sharedClient].chatManager sendMessage:message progress:nil completion:^(AgoraChatMessage *message, AgoraChatError *error) {
         [weakSelf.tableView reloadData];
     }];
     [self _scrollViewToBottom:YES];
 }
 
-- (void)_addMessageToDataSource:(Message*)message
+- (void)_addMessageToDataSource:(AgoraChatMessage*)message
 {
     AgoraMessageModel *model = [[AgoraMessageModel alloc] initWithMessage:message];
-    __block AgoraUserInfo *userInfo = nil;
+    __block AgoraChatUserInfo *userInfo = nil;
     dispatch_semaphore_t sem = dispatch_semaphore_create(0);
 
-    [AgoraUserInfoManagerHelper fetchUserInfoWithUserIds:@[message.from] completion:^(NSDictionary * _Nonnull userInfoDic) {
+    [AgoraChatUserInfoManagerHelper fetchUserInfoWithUserIds:@[message.from] completion:^(NSDictionary * _Nonnull userInfoDic) {
         userInfo = userInfoDic[message.from];
         dispatch_semaphore_signal(sem);
     }];
@@ -898,11 +898,11 @@ static NSString *recallCellIndentifier = @"recallCellIndentifier";
         }
         [_currentConversation loadMessagesStartFromId:messageId
                                          count:20
-                               searchDirection:MessageSearchDirectionUp
-                                    completion:^(NSArray *aMessages, AgoraError *aError) {
+                               searchDirection:AgoraChatMessageSearchDirectionUp
+                                    completion:^(NSArray *aMessages, AgoraChatError *aError) {
                                         if (!aError) {
                                             [aMessages enumerateObjectsWithOptions:NSEnumerationReverse usingBlock:^(id  _Nonnull obj, NSUInteger idx, BOOL * _Nonnull stop) {
-                                                AgoraMessageModel *model = [[AgoraMessageModel alloc] initWithMessage:(Message*)obj];
+                                                AgoraMessageModel *model = [[AgoraMessageModel alloc] initWithMessage:(AgoraChatMessage*)obj];
                                                 [weakSelf.messages insertObject:model atIndex:0];
                                             }];
                                             [weakSelf.refresh endRefreshing];
@@ -970,7 +970,7 @@ static NSString *recallCellIndentifier = @"recallCellIndentifier";
     NSMutableArray *unreadMessages = [NSMutableArray array];
     for (NSInteger i = 0; i < [messages count]; i++)
     {
-        Message *message = messages[i];
+        AgoraChatMessage *message = messages[i];
         BOOL isSend = [self _shouldSendHasReadAckForMessage:message
                                                       read:isRead];
         if (isSend) {
@@ -978,13 +978,13 @@ static NSString *recallCellIndentifier = @"recallCellIndentifier";
         }
     }
     if ([unreadMessages count]) {
-        for (Message *message in unreadMessages) {
+        for (AgoraChatMessage *message in unreadMessages) {
             [[AgoraChatClient sharedClient].chatManager sendMessageReadAck:message completion:nil];
         }
     }
 }
 
-- (BOOL)_shouldSendHasReadAckForMessage:(Message *)message
+- (BOOL)_shouldSendHasReadAckForMessage:(AgoraChatMessage *)message
                                   read:(BOOL)read
 {
     NSString *account = [[AgoraChatClient sharedClient] currentUsername];
@@ -992,10 +992,10 @@ static NSString *recallCellIndentifier = @"recallCellIndentifier";
         return NO;
     }
     
-    MessageBody *body = message.body;
-    if (((body.type == MessageBodyTypeVideo) ||
-         (body.type == MessageBodyTypeVoice) ||
-         (body.type == MessageBodyTypeImage)) &&
+    AgoraChatMessageBody *body = message.body;
+    if (((body.type == AgoraChatMessageBodyTypeVideo) ||
+         (body.type == AgoraChatMessageBodyTypeVoice) ||
+         (body.type == AgoraChatMessageBodyTypeImage)) &&
         !read) {
         return NO;
     } else {
@@ -1016,13 +1016,13 @@ static NSString *recallCellIndentifier = @"recallCellIndentifier";
 {
     AgoraChatType type = AgoraChatTypeChat;
     switch (_currentConversation.type) {
-        case AgoraConversationTypeChat:
+        case AgoraChatConversationTypeChat:
             type = AgoraChatTypeChat;
             break;
-        case AgoraConversationTypeGroupChat:
+        case AgoraChatConversationTypeGroupChat:
             type = AgoraChatTypeGroupChat;
             break;
-        case AgoraConversationTypeChatRoom:
+        case AgoraChatConversationTypeChatRoom:
             type = AgoraChatTypeChatRoom;
             break;
         default:
@@ -1035,7 +1035,7 @@ static NSString *recallCellIndentifier = @"recallCellIndentifier";
 
 - (void)messagesDidReceive:(NSArray *)aMessages
 {
-    for (Message *message in aMessages) {
+    for (AgoraChatMessage *message in aMessages) {
         if ([self.currentConversation.conversationId isEqualToString:message.conversationId]) {
             [self _addMessageToDataSource:message];
             [self _sendHasReadResponseForMessages:@[message]
@@ -1049,8 +1049,8 @@ static NSString *recallCellIndentifier = @"recallCellIndentifier";
     [self _scrollViewToBottom:YES];
 }
 
-- (void)messageAttachmentStatusDidChange:(Message *)aMessage
-                                   error:(AgoraError *)aError
+- (void)messageAttachmentStatusDidChange:(AgoraChatMessage *)aMessage
+                                   error:(AgoraChatError *)aError
 {
     if ([self.currentConversation.conversationId isEqualToString:aMessage.conversationId]) {
         [self.tableView reloadData];
@@ -1059,7 +1059,7 @@ static NSString *recallCellIndentifier = @"recallCellIndentifier";
 
 - (void)messagesDidRead:(NSArray *)aMessages
 {
-    for (Message *message in aMessages) {
+    for (AgoraChatMessage *message in aMessages) {
         if ([self.currentConversation.conversationId isEqualToString:message.conversationId]) {
             [self.tableView reloadData];
             break;
@@ -1071,14 +1071,14 @@ static NSString *recallCellIndentifier = @"recallCellIndentifier";
     NSLog(@"%s aMessages:%@",__func__,aMessages);
 
     [aMessages enumerateObjectsUsingBlock:^(id  _Nonnull obj, NSUInteger idx, BOOL * _Nonnull stop) {
-        Message *msg = (Message *)obj;
+        AgoraChatMessage *msg = (AgoraChatMessage *)obj;
         NSLog(@"%s msg.ext:%@",__func__,msg.ext);
 
         [self.messages enumerateObjectsUsingBlock:^(id  _Nonnull obj, NSUInteger idx, BOOL * _Nonnull stop) {
             if ([obj isKindOfClass:[AgoraMessageModel class]]) {
                 AgoraMessageModel *model = (AgoraMessageModel *)obj;
                 if ([model.message.messageId isEqualToString:msg.messageId]) {
-                    Message *message = [[Message alloc] initWithConversationID:msg.conversationId from:msg.from to:msg.to body:msg.body ext:@{MSG_EXT_RECALL:@(YES)}];
+                    AgoraChatMessage *message = [[AgoraChatMessage alloc] initWithConversationID:msg.conversationId from:msg.from to:msg.to body:msg.body ext:@{MSG_EXT_RECALL:@(YES)}];
                     message.chatType = (AgoraChatType)self.currentConversation.type;
                     message.isRead = YES;
                     message.messageId = msg.messageId;

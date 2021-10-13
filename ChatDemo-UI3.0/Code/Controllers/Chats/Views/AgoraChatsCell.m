@@ -84,7 +84,7 @@
 - (void)setConversationModel:(AgoraConversationModel *)model
 {
     _model = model;
-    if (model.conversation.type == AgoraConversationTypeChat) {
+    if (model.conversation.type == AgoraChatConversationTypeChat) {
         [_headImageView imageWithUsername:model.conversation.conversationId placeholderImage:[UIImage imageNamed:@"default_avatar"]];
     } else {
         _headImageView.image = [UIImage imageNamed:@"default_group_avatar"];
@@ -108,29 +108,29 @@
 
 #pragma mark - private
 
-- (NSString *)_latestMessageContentWithConversation:(AgoraConversation *)conversation
+- (NSString *)_latestMessageContentWithConversation:(AgoraChatConversation *)conversation
 {
     NSString *latestMessageTitle = @"";
-    Message *lastMessage = [conversation latestMessage];
+    AgoraChatMessage *lastMessage = [conversation latestMessage];
     if (lastMessage) {
-        MessageBody *messageBody = lastMessage.body;
+        AgoraChatMessageBody *messageBody = lastMessage.body;
         switch (messageBody.type) {
-            case MessageBodyTypeImage:{
+            case AgoraChatMessageBodyTypeImage:{
                 latestMessageTitle = NSLocalizedString(@"chat.image1", @"[image]");
             } break;
-            case MessageBodyTypeText:{
-                latestMessageTitle = [AgoraConvertToCommonEmoticonsHelper convertToSystemEmoticons:((TextMessageBody *)messageBody).text];
+            case AgoraChatMessageBodyTypeText:{
+                latestMessageTitle = [AgoraConvertToCommonEmoticonsHelper convertToSystemEmoticons:((AgoraChatTextMessageBody *)messageBody).text];
             } break;
-            case MessageBodyTypeVoice:{
+            case AgoraChatMessageBodyTypeVoice:{
                 latestMessageTitle = NSLocalizedString(@"chat.voice1", @"[voice]");
             } break;
-            case MessageBodyTypeLocation: {
+            case AgoraChatMessageBodyTypeLocation: {
                 latestMessageTitle = NSLocalizedString(@"chat.location1", @"[location]");
             } break;
-            case MessageBodyTypeVideo: {
+            case AgoraChatMessageBodyTypeVideo: {
                 latestMessageTitle = NSLocalizedString(@"chat.video1", @"[video]");
             } break;
-            case MessageBodyTypeFile: {
+            case AgoraChatMessageBodyTypeFile: {
                 latestMessageTitle = NSLocalizedString(@"chat.file1", @"[file]");
             } break;
             default: {
@@ -140,10 +140,10 @@
     return latestMessageTitle;
 }
 
-- (NSString *)_latestMessageTimeWithConversation:(AgoraConversation*)conversation
+- (NSString *)_latestMessageTimeWithConversation:(AgoraChatConversation*)conversation
 {
     NSString *latestMessageTime = @"";
-    Message *lastMessage = [conversation latestMessage];;
+    AgoraChatMessage *lastMessage = [conversation latestMessage];;
     if (lastMessage) {
         double timeInterval = lastMessage.timestamp ;
         if(timeInterval > 140000000000) {
