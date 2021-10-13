@@ -10,8 +10,6 @@ source 'https://github.com/CocoaPods/Specs.git'
 
 target 'ChatDemo-UI3.0' do
   
-#    pod 'Hyphenate'
-
 post_install do |installer|
   installer.pods_project.build_configurations.each do |config|
     config.build_settings["EXCLUDED_ARCHS[sdk=iphonesimulator*]"] = "arm64"
@@ -22,7 +20,7 @@ end
     pod 'MJRefresh'
     pod 'Masonry'
     pod 'WHToast'
-#    pod 'AgoraChat'
+    pod 'AgoraChat'
 
 end
 
