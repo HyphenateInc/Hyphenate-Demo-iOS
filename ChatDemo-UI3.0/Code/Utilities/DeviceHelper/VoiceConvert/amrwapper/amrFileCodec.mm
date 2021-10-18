@@ -11,29 +11,29 @@
 static int amrEncodeMode[] = {4750, 5150, 5900, 6700, 7400, 7950, 10200, 12200}; // amr 
 static void SkipToPCMAudioData(FILE* fpwave)
 {
-	EM_RIFFHEADER riff;
-	EM_FMTBLOCK fmt;
-	EM_XCHUNKHEADER chunk;
-	EM_WAVEFORMATX wfx;
+	Agora_RIFFHEADER riff;
+	Agora_FMTBLOCK fmt;
+	Agora_XCHUNKHEADER chunk;
+	Agora_WAVEFORMATX wfx;
 	int bDataBlock = 0;
 	
-	fread(&riff, 1, sizeof(EM_RIFFHEADER), fpwave);
+	fread(&riff, 1, sizeof(Agora_RIFFHEADER), fpwave);
 	
-	fread(&chunk, 1, sizeof(EM_XCHUNKHEADER), fpwave);
+	fread(&chunk, 1, sizeof(Agora_XCHUNKHEADER), fpwave);
 	if ( chunk.nChunkSize>16 )
 	{
-		fread(&wfx, 1, sizeof(EM_WAVEFORMATX), fpwave);
+		fread(&wfx, 1, sizeof(Agora_WAVEFORMATX), fpwave);
 	}
 	else
 	{
 		memcpy(fmt.chFmtID, chunk.chChunkID, 4);
 		fmt.nFmtSize = chunk.nChunkSize;
-		fread(&fmt.wf, 1, sizeof(EM_WAVEFORMAT), fpwave);
+		fread(&fmt.wf, 1, sizeof(Agora_WAVEFORMAT), fpwave);
 	}
 	
 	while(!bDataBlock)
 	{
-		fread(&chunk, 1, sizeof(EM_XCHUNKHEADER), fpwave);
+		fread(&chunk, 1, sizeof(Agora_XCHUNKHEADER), fpwave);
 		if ( !memcmp(chunk.chChunkID, "data", 4) )
 		{
 			bDataBlock = 1;
@@ -103,7 +103,7 @@ static size_t ReadPCMFrame(short speech[], FILE* fpwave, int nChannels, int nBit
 	return nRead;
 }
 
-int EM_EncodeWAVEFileToAMRFile(const char* pchWAVEFilename, const char* pchAMRFileName, int nChannels, int nBitsPerSample)
+int Agora_EncodeWAVEFileToAMRFile(const char* pchWAVEFilename, const char* pchAMRFileName, int nChannels, int nBitsPerSample)
 {
 	FILE* fpwave;
 	FILE* fpamr;
@@ -176,37 +176,37 @@ static void WriteWAVEFileHeader(FILE* fpwave, int nFrame)
 {
 	char tag[10] = "";
 	
-	EM_RIFFHEADER riff;
+	Agora_RIFFHEADER riff;
 	strcpy(tag, "RIFF");
 	memcpy(riff.chRiffID, tag, 4);
 	riff.nRiffSize = 4                                     // WAVE
-	+ sizeof(EM_XCHUNKHEADER)               // fmt 
-	+ sizeof(EM_WAVEFORMATX)           // EM_WAVEFORMATX
-	+ sizeof(EM_XCHUNKHEADER)               // DATA
+	+ sizeof(Agora_XCHUNKHEADER)               // fmt 
+	+ sizeof(Agora_WAVEFORMATX)           // Agora_WAVEFORMATX
+	+ sizeof(Agora_XCHUNKHEADER)               // DATA
 	+ nFrame*160*sizeof(short);    //
 	strcpy(tag, "WAVE");
 	memcpy(riff.chRiffFormat, tag, 4);
-	fwrite(&riff, 1, sizeof(EM_RIFFHEADER), fpwave);
+	fwrite(&riff, 1, sizeof(Agora_RIFFHEADER), fpwave);
 	
-	EM_XCHUNKHEADER chunk;
-	EM_WAVEFORMATX wfx;
+	Agora_XCHUNKHEADER chunk;
+	Agora_WAVEFORMATX wfx;
 	strcpy(tag, "fmt ");
 	memcpy(chunk.chChunkID, tag, 4);
-	chunk.nChunkSize = sizeof(EM_WAVEFORMATX);
-	fwrite(&chunk, 1, sizeof(EM_XCHUNKHEADER), fpwave);
-	memset(&wfx, 0, sizeof(EM_WAVEFORMATX));
+	chunk.nChunkSize = sizeof(Agora_WAVEFORMATX);
+	fwrite(&chunk, 1, sizeof(Agora_XCHUNKHEADER), fpwave);
+	memset(&wfx, 0, sizeof(Agora_WAVEFORMATX));
 	wfx.nFormatTag = 1;
 	wfx.nChannels = 1;
 	wfx.nSamplesPerSec = 8000; // 8khz
 	wfx.nAvgBytesPerSec = 16000;
 	wfx.nBlockAlign = 2;
 	wfx.nBitsPerSample = 16; // 16
-	fwrite(&wfx, 1, sizeof(EM_WAVEFORMATX), fpwave);
+	fwrite(&wfx, 1, sizeof(Agora_WAVEFORMATX), fpwave);
 	
 	strcpy(tag, "data");
 	memcpy(chunk.chChunkID, tag, 4);
 	chunk.nChunkSize = nFrame*160*sizeof(short);
-	fwrite(&chunk, 1, sizeof(EM_XCHUNKHEADER), fpwave);
+	fwrite(&chunk, 1, sizeof(Agora_XCHUNKHEADER), fpwave);
 }
 
 static const int myround(const double x)
@@ -271,7 +271,7 @@ static int ReadAMRFrame(FILE* fpamr, unsigned char frameBuffer[], int stdFrameSi
 	return 1;
 }
 
-int EM_DecodeAMRFileToWAVEFile(const char* pchAMRFileName, const char* pchWAVEFilename)
+int Agora_DecodeAMRFileToWAVEFile(const char* pchAMRFileName, const char* pchWAVEFilename)
 {
 
     

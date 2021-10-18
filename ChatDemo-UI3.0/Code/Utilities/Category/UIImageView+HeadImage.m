@@ -8,7 +8,6 @@
  */
 
 #import "UIImageView+HeadImage.h"
-#import "EMUserProfileManager.h"
 
 @implementation UIImageView (HeadImage)
 
@@ -17,11 +16,18 @@
     if (placeholderImage == nil) {
         placeholderImage = [UIImage imageNamed:@"default_avatar"];
     }
-    UserProfileEntity *profileEntity = [[EMUserProfileManager sharedInstance] getUserProfileByUsername:username];
-    if (profileEntity) {
-        [self sd_setImageWithURL:[NSURL URLWithString:profileEntity.imageUrl] placeholderImage:placeholderImage];
-    } else {
-        [self sd_setImageWithURL:nil placeholderImage:placeholderImage];
-    }
+
+    
+    dispatch_async(dispatch_get_global_queue(0, 0), ^{
+        [AgoraChatUserInfoManagerHelper fetchUserInfoWithUserIds:@[username] completion:^(NSDictionary * _Nonnull userInfoDic) {
+            AgoraChatUserInfo *userInfo = userInfoDic[username];
+            if (userInfo.avatarUrl) {
+                [self sd_setImageWithURL:[NSURL URLWithString:userInfo.avatarUrl] placeholderImage:placeholderImage];
+            }else {
+                [self sd_setImageWithURL:nil placeholderImage:placeholderImage];
+            }
+        }];
+    });
 }
+
 @end

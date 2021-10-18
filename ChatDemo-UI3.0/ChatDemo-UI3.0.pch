@@ -17,17 +17,24 @@
 
 #ifdef __OBJC__
 
-#import <Hyphenate/Hyphenate.h>
-
-#import "EMChatDemoUIDefine.h"
-#import "EaseCallManager.h"
-#import "EMColorUtils.h"
+#import <AgoraChat/AgoraChat.h>
+#import "AgoraChatDemoUIDefine.h"
+#import "AgoraColorUtils.h"
 #import "UIView+HyphenateView.h"
 #import "UIImageView+WebCache.h"
 #import "MBProgressHUD.h"
-#import "NSObject+EMAlertView.h"
+#import "NSObject+AgoraAlertView.h"
 #import <AVFoundation/AVFoundation.h>
 #import <UIKit/UIKit.h>
 #import <Foundation/Foundation.h>
+#import <Masonry/Masonry.h>
+#import "AgoraChatUserInfoManagerHelper.h"
+#import <WHToast/WHToast.h>
+#import "AgoraChatDemoEnum.h"
+#import "UIColor+Util.h"
+#import "AgoraNotificationNames.h"
+#import "AgoraCategory.h"
+#import "AgoraCustomBase.h"
+
 
 #endif

@@ -10,9 +10,9 @@
 #ifndef ChatDemo_UI2_0_DemoErrorCode_h
 #define ChatDemo_UI2_0_DemoErrorCode_h
 
-#define EMErrorAudioRecordDurationTooShort -100
-#define EMErrorFileTypeConvertionFailure -101
-#define EMErrorAudioRecordStoping -102
-#define EMErrorAudioRecordNotStarted -103
+#define AgoraChatErrorAudioRecordDurationTooShort -100
+#define AgoraChatErrorFileTypeConvertionFailure -101
+#define AgoraChatErrorAudioRecordStoping -102
+#define AgoraChatErrorAudioRecordNotStarted -103
 
 #endif
